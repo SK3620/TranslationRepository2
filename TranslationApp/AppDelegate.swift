@@ -6,14 +6,20 @@
 //
 
 import UIKit
+import GoogleMaps
+import GooglePlaces
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    // SVProgressHUDをXcode11以上で実行するための環境調整コード
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        if let APIKEY = KeyManager().getValue(key: "apiKey") as? String {
+                    GMSServices.provideAPIKey(APIKEY)
+                    GMSPlacesClient.provideAPIKey(APIKEY)
+                }    // Override point for customization after application launch.
         return true
     }
 
