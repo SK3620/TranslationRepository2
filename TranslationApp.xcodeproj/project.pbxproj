@@ -13,6 +13,7 @@
 		83071D0028B91AC70003734C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071CFE28B91AC70003734C /* Main.storyboard */; };
 		83071D0228B91AC90003734C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0128B91AC90003734C /* Assets.xcassets */; };
 		83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0328B91AC90003734C /* LaunchScreen.storyboard */; };
+		837CD1B328BE264F00823D17 /* RealmDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* RealmDataBase.swift */; };
 		839FBA2F28BA016C00BB64A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA2E28BA016C00BB64A5 /* ViewController.swift */; };
 		839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */; };
 		839FBA3328BA101200BB64A5 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3228BA101200BB64A5 /* HistoryViewController.swift */; };
@@ -23,7 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6C871AA8DD6035EBD8E5DDDD /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
+		5D9DE1D8CC49425ABEBE6168 /* Pods-TranslationApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.release.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.release.xcconfig"; sourceTree = "<group>"; };
 		83071CF528B91AC70003734C /* TranslationApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TranslationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83071CF828B91AC70003734C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83071CFA28B91AC70003734C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -31,14 +32,15 @@
 		83071D0128B91AC90003734C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83071D0428B91AC90003734C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83071D0628B91AC90003734C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		837CD1B228BE264F00823D17 /* RealmDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDataBase.swift; sourceTree = "<group>"; };
 		839FBA2E28BA016C00BB64A5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
 		839FBA3228BA101200BB64A5 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		839FBA3428BA113300BB64A5 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
 		839FBA3828BA5C8900BB64A5 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
+		9B990D3E4E35096E1B039F92 /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
 		DF6352FE1C9E5A38D56ECC84 /* Pods_TranslationApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TranslationApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F6F786C37DBB924B7D63AE39 /* Pods-TranslationApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.release.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,22 +56,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		604556CD1E6F6D751039ABE5 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				6C871AA8DD6035EBD8E5DDDD /* Pods-TranslationApp.debug.xcconfig */,
-				F6F786C37DBB924B7D63AE39 /* Pods-TranslationApp.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		83071CEC28B91AC70003734C = {
 			isa = PBXGroup;
 			children = (
 				83071CF728B91AC70003734C /* TranslationApp */,
 				83071CF628B91AC70003734C /* Products */,
-				604556CD1E6F6D751039ABE5 /* Pods */,
 				BAAA99D207548717DC5E2C85 /* Frameworks */,
+				C1EE7F81A77D0C5F9E5E2A03 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -96,6 +89,7 @@
 				83071D0628B91AC90003734C /* Info.plist */,
 				839FBA3828BA5C8900BB64A5 /* APIKey.plist */,
 				839FBA3A28BA602700BB64A5 /* KeyManager.swift */,
+				837CD1B228BE264F00823D17 /* RealmDataBase.swift */,
 			);
 			path = TranslationApp;
 			sourceTree = "<group>";
@@ -106,6 +100,15 @@
 				DF6352FE1C9E5A38D56ECC84 /* Pods_TranslationApp.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C1EE7F81A77D0C5F9E5E2A03 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9B990D3E4E35096E1B039F92 /* Pods-TranslationApp.debug.xcconfig */,
+				5D9DE1D8CC49425ABEBE6168 /* Pods-TranslationApp.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +123,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				489A88EFDB934BE969100175 /* [CP] Embed Pods Frameworks */,
+				C7B64EFD7EB76E3DA18BDE0B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -201,6 +205,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C7B64EFD7EB76E3DA18BDE0B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		EF4087A04CBF702AE2FC5C68 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -234,6 +255,7 @@
 				839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
 				83071CF928B91AC70003734C /* AppDelegate.swift in Sources */,
+				837CD1B328BE264F00823D17 /* RealmDataBase.swift in Sources */,
 				839FBA3328BA101200BB64A5 /* HistoryViewController.swift in Sources */,
 				839FBA3528BA113300BB64A5 /* CreateFolderViewController.swift in Sources */,
 				83071CFB28B91AC70003734C /* SceneDelegate.swift in Sources */,
@@ -378,7 +400,7 @@
 		};
 		83071D0A28B91AC90003734C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6C871AA8DD6035EBD8E5DDDD /* Pods-TranslationApp.debug.xcconfig */;
+			baseConfigurationReference = 9B990D3E4E35096E1B039F92 /* Pods-TranslationApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -408,7 +430,7 @@
 		};
 		83071D0B28B91AC90003734C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F6F786C37DBB924B7D63AE39 /* Pods-TranslationApp.release.xcconfig */;
+			baseConfigurationReference = 5D9DE1D8CC49425ABEBE6168 /* Pods-TranslationApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
