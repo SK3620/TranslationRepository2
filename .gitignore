@@ -1,0 +1,4 @@
+Pods/*
+*.xcworkspace
+
+APIKey .gitignore
