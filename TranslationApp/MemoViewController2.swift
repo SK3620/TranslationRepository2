@@ -1,20 +1,20 @@
 //
-//  ViewController.swift
+//  MemoViewController2.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/08/27.
+//  Created by 鈴木健太 on 2022/09/12.
 //
 
 import UIKit
 
+class MemoViewController2: UIViewController {
 
-
-class ViewController: UIViewController {
-
+    @IBOutlet weak var label2: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
- 
+
+        label2.text = "成功"
         // Do any additional setup after loading the view.
     }
     

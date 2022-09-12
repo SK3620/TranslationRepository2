@@ -9,6 +9,7 @@ import UIKit
 import SVProgressHUD
 import RealmSwift
 
+
 class CreateFolderViewController: UIViewController {
     
     @IBOutlet weak var view2: UIView!
@@ -21,15 +22,18 @@ class CreateFolderViewController: UIViewController {
     
 //    Realmインスタンス取得
     let realm = try! Realm()
-    var realmDataBase: RealmDataBase!
+    var translationFolder: TranslationFolder!
+    var array = [String]()
+    var historyViewController: HistoryViewController!
+    var tabBarController2: TabBarController!
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
-        view2.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
-        
+//        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
+//        view2.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
        
 //        ボタン外枠の色と太さ設定
 //        cancelButton.layer.borderColor = UIColor.gray.cgColor
@@ -52,33 +56,60 @@ class CreateFolderViewController: UIViewController {
     
 //    保存ボタン
     @IBAction func saveButton(_ sender: Any) {
-        if textField.text! != "" {
-            self.realmDataBase = RealmDataBase()
+    
+        
+        let translationFolderArr = realm.objects(TranslationFolder.self)
+        if translationFolderArr.isEmpty {
+            
+        } else {
+            for number in 0...translationFolderArr.count - 1 {
+                self.array.append(translationFolderArr[number].folderName)
+            }
+        }
+        
+        if self.array.contains(self.textField.text!) != true && textField.text! != "" {
+            
+            self.translationFolder = TranslationFolder()
             let textFieldText = textField.text!
             SVProgressHUD.show()
             
 //            プライマリーキーであるidに値を設定（他のidと被らないように）
-            let allRealmData = realm.objects(RealmDataBase.self)
-            if allRealmData.count != 0 {
-                self.realmDataBase.id = allRealmData.max(ofProperty: "id")! + 1
+            let allTranslationFolder = realm.objects(TranslationFolder.self)
+            if allTranslationFolder.count != 0 {
+                self.translationFolder.id = allTranslationFolder.max(ofProperty: "id")! + 1
             }
             
             //            （保存時の）現在の日付を取得　またここでidも上記を理由に保存されていると思う。
             let date = Date()
             try! realm.write{
-                self.realmDataBase.folderName = textFieldText
-                self.realmDataBase.date = date
-                self.realm.add(self.realmDataBase)
+                self.translationFolder.folderName = textFieldText
+                self.translationFolder.date = date
+                self.realm.add(self.translationFolder)
             }
             
             SVProgressHUD.showSuccess(withStatus: "新規フォルダー : \(textFieldText) を追加しました。")
             
+            tabBarController2.tableViewReload()
+            
+//            let navigationController = self.tabBarController2.viewControllers![0] as! UINavigationController
+//            print("インスタンス確認 : \(navigationController)")
+//
+//            let historyViewController = navigationController.presentedViewController! as! HistoryViewController
+//            print("インスタンス確認 : \(historyViewController)")
+            
+            
+            
             self.dismiss(animated: true)
             self.textField?.text = nil
             
-        } else {
+            
+            
+        } else if textField.text == "" {
             SVProgressHUD.show()
             SVProgressHUD.showError(withStatus: "フォルダー名を入力してください")
+        } else if self.array.contains(self.textField.text!) {
+            SVProgressHUD.show()
+            SVProgressHUD.showError(withStatus: "同じフォルダー名は作成できません")
         }
     }
     

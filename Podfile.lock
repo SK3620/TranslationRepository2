@@ -1,10 +1,4 @@
 PODS:
-  - GoogleMaps (7.0.0):
-    - GoogleMaps/Maps (= 7.0.0)
-  - GoogleMaps/Base (7.0.0)
-  - GoogleMaps/Maps (7.0.0):
-    - GoogleMaps/Base
-  - GooglePlaces (7.0.0)
   - Realm (10.20.0):
     - Realm/Headers (= 10.20.0)
   - Realm/Headers (10.20.0)
@@ -13,26 +7,20 @@ PODS:
   - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
-  - GoogleMaps
-  - GooglePlaces
   - RealmSwift (= 10.20.0)
-  - SVProgressHUD (= 2.2.5)
+  - SVProgressHUD
 
 SPEC REPOS:
   trunk:
-    - GoogleMaps
-    - GooglePlaces
     - Realm
     - RealmSwift
     - SVProgressHUD
 
 SPEC CHECKSUMS:
-  GoogleMaps: 6e9c923ca035989709fcb5771544fda4cc5fa2a4
-  GooglePlaces: 8dba710bed6160a2e4b85e84aaafdbcc0b4010d8
   Realm: ae32bdc1da7d19c7617e0400201a77acd4a211b9
   RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 8a74a96925109e303279568439a6baa77c32636c
+PODFILE CHECKSUM: 2e2f9eb9957aa83d7ae6eb7aacb31d58a748be70
 
 COCOAPODS: 1.11.3
