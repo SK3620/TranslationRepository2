@@ -361,6 +361,24 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 //                  translation.id = allTranslation.max(ofProperty: "id")! + 1
 //                }
                 
+                let result4 = Histroy()
+                
+                let allHistory = self.realm.objects(Histroy.self)
+                if allHistory.count != 0 {
+                    result4.id = allHistory.max(ofProperty: "id")! + 1
+                }
+                
+                let date2 = Date()
+                
+                try! realm.write{
+                    result4.inputData2 = translateTextViewText!
+                    result4.resultData2 = translateLabelText!
+                    result4.date2 = date2
+                    self.realm.add(result4)
+                }
+                
+                
+                
                 
                 print("データ : \(translationFolderArr)")
                 SVProgressHUD.showSuccess(withStatus: "'\(textStringForButton2)' へ保存しました")

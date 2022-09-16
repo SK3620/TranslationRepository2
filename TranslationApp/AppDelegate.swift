@@ -45,9 +45,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     migration.create(TranslationFolder.className(), value: ["memo": ""])
                 }
             })
+        let config3 = Realm.Configuration(
+            schemaVersion: 4, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 4 {
+                    migration.create(Record.className(), value: ["date": ""])
+                }
+            })
         
-        Realm.Configuration.defaultConfiguration = config2
+        let config4 = Realm.Configuration(
+            schemaVersion: 5, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 5 {
+                    migration.renameProperty(onType: Record.className(), from: "date", to: "date3")
+                }
+            })
+        
+        let config5 = Realm.Configuration(
+            schemaVersion: 6, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 6 {
+                    migration.create(Record.className(), value: ["date4": Date()])
+                }
+            })
+        Realm.Configuration.defaultConfiguration = config5
         let realm = try! Realm()
+        
+        
+        
+        
         
         if let APIKEY = KeyManager().getValue(key: "apiKey2") as? String {
             print("DEBUG : \(APIKEY)")

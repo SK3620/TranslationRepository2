@@ -38,4 +38,43 @@ class Translation: Object {
     }
 }
 
+class Histroy: Object{
+    
+    @objc dynamic var inputData2 = ""
+    
+    @objc dynamic var resultData2 = ""
+    
+    @objc dynamic var date2 = Date()
+    
+    @objc dynamic var id = 0
+    
+    override
+    static func primaryKey() -> String? {
+        return "id"
+    }
+}
+
+class Record: Object{
+    
+    @objc dynamic var folderName = ""
+    
+    @objc dynamic var number = ""
+    
+    @objc dynamic var times = ""
+    
+    @objc dynamic var nextReviewDate = ""
+    
+    @objc dynamic var memo = ""
+    
+    @objc dynamic var date3 = ""
+    
+    @objc dynamic var id = 0
+    
+    @objc dynamic var date4 = Date()
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+}
+
 

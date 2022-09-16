@@ -8,6 +8,8 @@ target 'TranslationApp' do
   # Pods for TranslationApp
   pod 'RealmSwift', '10.20.0'
   pod 'SVProgressHUD'
+  pod 'FSCalendar'
+  pod 'CalculateCalendarLogic'
 end
 
 

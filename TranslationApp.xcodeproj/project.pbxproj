@@ -27,6 +27,14 @@
 		839FBA3E28BA676E00BB64A5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 839FBA3D28BA676E00BB64A5 /* Alamofire */; };
 		83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317128CF037200FDA0E1 /* MemoViewController.swift */; };
 		83AF317428CF320B00FDA0E1 /* MemoViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */; };
+		83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317528CF863100FDA0E1 /* RirekiViewController.swift */; };
+		83B9C1FB28CFF10B006138E2 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */; };
+		83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */; };
+		83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */; };
+		83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FF28D3050E006138E2 /* CustomCell2.swift */; };
+		83B9C20228D3050E006138E2 /* CustomCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C20028D3050E006138E2 /* CustomCell2.xib */; };
+		83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20328D3132D006138E2 /* EditViewController.swift */; };
+		83B9C20628D39997006138E2 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20528D39997006138E2 /* AddViewController.swift */; };
 		83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C15AF928BF451F00280694 /* FolderListViewController.swift */; };
 		83F021AD28C0C714009FFDD2 /* CustomHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021AC28C0C714009FFDD2 /* CustomHeaderFooterView.swift */; };
 		83F021AF28C0C726009FFDD2 /* CustomHeaderFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83F021AE28C0C726009FFDD2 /* CustomHeaderFooterView.xib */; };
@@ -69,6 +77,14 @@
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
 		83AF317128CF037200FDA0E1 /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 		83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController2.swift; sourceTree = "<group>"; };
+		83AF317528CF863100FDA0E1 /* RirekiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RirekiViewController.swift; sourceTree = "<group>"; };
+		83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
+		83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellTableViewCell.xib; sourceTree = "<group>"; };
+		83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		83B9C1FF28D3050E006138E2 /* CustomCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell2.swift; sourceTree = "<group>"; };
+		83B9C20028D3050E006138E2 /* CustomCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCell2.xib; sourceTree = "<group>"; };
+		83B9C20328D3132D006138E2 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		83B9C20528D39997006138E2 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		83C15AF928BF451F00280694 /* FolderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListViewController.swift; sourceTree = "<group>"; };
 		83F021AC28C0C714009FFDD2 /* CustomHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderFooterView.swift; sourceTree = "<group>"; };
 		83F021AE28C0C726009FFDD2 /* CustomHeaderFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomHeaderFooterView.xib; sourceTree = "<group>"; };
@@ -121,6 +137,14 @@
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
+				83B9C20528D39997006138E2 /* AddViewController.swift */,
+				83B9C20328D3132D006138E2 /* EditViewController.swift */,
+				83B9C1FF28D3050E006138E2 /* CustomCell2.swift */,
+				83B9C20028D3050E006138E2 /* CustomCell2.xib */,
+				83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */,
+				83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */,
+				83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */,
+				83AF317528CF863100FDA0E1 /* RirekiViewController.swift */,
 				83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */,
 				8388DA5928C9E25D008DE6FF /* TabBarController.swift */,
 				83C15AF928BF451F00280694 /* FolderListViewController.swift */,
@@ -226,8 +250,10 @@
 				83F021AF28C0C726009FFDD2 /* CustomHeaderFooterView.xib in Resources */,
 				839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */,
 				83071D0228B91AC90003734C /* Assets.xcassets in Resources */,
+				83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */,
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
 				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
+				83B9C20228D3050E006138E2 /* CustomCell2.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,9 +306,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */,
+				83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */,
+				83B9C20628D39997006138E2 /* AddViewController.swift in Sources */,
 				839FBA2F28BA016C00BB64A5 /* ViewController.swift in Sources */,
 				839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
+				83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */,
 				83F021AD28C0C714009FFDD2 /* CustomHeaderFooterView.swift in Sources */,
 				83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */,
 				83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */,
@@ -290,8 +320,10 @@
 				837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */,
 				839FBA3328BA101200BB64A5 /* HistoryViewController.swift in Sources */,
 				839FBA3528BA113300BB64A5 /* CreateFolderViewController.swift in Sources */,
+				83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */,
 				8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */,
 				83071CFB28B91AC70003734C /* SceneDelegate.swift in Sources */,
+				83B9C1FB28CFF10B006138E2 /* CustomCellTableViewCell.swift in Sources */,
 				83AF317428CF320B00FDA0E1 /* MemoViewController2.swift in Sources */,
 				8388DA5C28CA3770008DE6FF /* Edit1ViewController.swift in Sources */,
 				83F021B128C0CC56009FFDD2 /* History2ViewController.swift in Sources */,

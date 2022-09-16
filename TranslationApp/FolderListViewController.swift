@@ -99,7 +99,7 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.textLabel?.text = realmDataBase
 //        複数行可能
         cell.textLabel?.numberOfLines = 0
-        cell.detailTextLabel?.text = dateString
+        cell.detailTextLabel?.text = "作成日:\(dateString)"
             
            
         }

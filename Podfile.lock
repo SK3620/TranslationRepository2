@@ -1,4 +1,6 @@
 PODS:
+  - CalculateCalendarLogic (0.5.0)
+  - FSCalendar (2.8.4)
   - Realm (10.20.0):
     - Realm/Headers (= 10.20.0)
   - Realm/Headers (10.20.0)
@@ -7,20 +9,26 @@ PODS:
   - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
+  - CalculateCalendarLogic
+  - FSCalendar
   - RealmSwift (= 10.20.0)
   - SVProgressHUD
 
 SPEC REPOS:
   trunk:
+    - CalculateCalendarLogic
+    - FSCalendar
     - Realm
     - RealmSwift
     - SVProgressHUD
 
 SPEC CHECKSUMS:
+  CalculateCalendarLogic: d14189787cd47766e64281b2686608afea07ae4d
+  FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Realm: ae32bdc1da7d19c7617e0400201a77acd4a211b9
   RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 2e2f9eb9957aa83d7ae6eb7aacb31d58a748be70
+PODFILE CHECKSUM: d82110b302385a62cb364f11bd6a080b43faf74f
 
 COCOAPODS: 1.11.3
