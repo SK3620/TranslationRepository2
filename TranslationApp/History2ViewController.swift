@@ -14,6 +14,13 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var folderNameLabel: UILabel!
     @IBOutlet weak var memoButton: UIButton!
+    @IBOutlet weak var deleteAllButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var recordButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
+    
+    
+
     
     
     
@@ -24,6 +31,9 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     var expandSectionSet = Set<Int>()
     var sections = [String]()
     var tableDataList = [String]()
+    var intArr = [Int]()
+    
+    var number = 0
     
    
     
@@ -46,6 +56,23 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         memoButton.layer.borderColor = borderColor
         memoButton.layer.borderWidth = 3
         memoButton.layer.cornerRadius = 10
+        
+        saveButton.layer.borderColor = borderColor
+        saveButton.layer.borderWidth = 3
+        saveButton.layer.cornerRadius = 10
+        
+        recordButton.layer.borderColor = borderColor
+        recordButton.layer.borderWidth = 3
+        recordButton.layer.cornerRadius = 10
+        
+        deleteAllButton.layer.borderColor = borderColor
+        deleteAllButton.layer.borderWidth = 3
+        deleteAllButton.layer.cornerRadius = 10
+        
+        backButton.layer.borderColor = borderColor
+        backButton.layer.borderWidth = 3
+        backButton.layer.cornerRadius = 10
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,8 +109,13 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             print("配列2 \(a)")
         }
         
+        if translationFolderArr[0].results.count != 0 {
+            self.deleteAllButton.isEnabled = true
+        }
        
     }
+    
+
     
     
     
@@ -93,12 +125,17 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func  numberOfSections(in tableView: UITableView) -> Int {
-        print("確認7 : \(translationFolderArr!)")
-        return sections.count
+        
+        return self.sections.count > 0 ? sections.count : 0
+    
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if sections.count != 0 {
         return expandSectionSet.contains(section) ? 1 : 0
+        }
+        return 0
     }
     
     
@@ -125,11 +162,59 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             header.delegate = self
 //        headerの型はCustomHeaderFooterViewクラス型で、そのクラスには、delegateプロパティが宣言されている。そのdelegateプロぱにSingleAcordiontableViewHeaderFooterViewDelegate型（こいつはプロトコル）を指定している。このプロトコルには、一つのメソッドが定義されている。
         
+        header.button2.addTarget(self, action: #selector(tapCellButton(_:)), for: .touchUpInside)
+        header.button2.tag = section
+        
         print("確認16 tableView終わり")
     //        デリゲート設定
             return header
 //        headerはCVustomHeaderFooterViewクラスで、このクラスはUIViewクラスを継承したUITableViewHeaderFooterViewを継承しているからreturn headerできる。
         }
+    
+    @objc func tapCellButton(_ sender: UIButton){
+        
+        if number == 0{
+        let alert = UIAlertController(title: "保存しました", message: "ホーム画面の'単語・フレーズ'に保存されました" + " " + "以降この表示はでません", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+            
+            number = 1
+        }
+        
+        //        let image3 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
+        //        let image4 = UIImage(systemName: "doc.text", withConfiguration: image3)
+        //        self.button2.setImage(image4, for: .normal)
+        
+        
+        let inputData3 = translationFolderArr[0].results[sender.tag].inputData
+        let resultData3 = translationFolderArr[0].results[sender.tag].resultData
+        
+        print("確認40 : \(sender.tag)")
+        
+        let record2 = Record2()
+        let date5 = Date()
+        
+        record2.inputData3 = inputData3
+        record2.resultData3 = resultData3
+        record2.date5 = date5
+        
+        let allRecord2Arr = self.realm.objects(Record2.self)
+        if allRecord2Arr.count != 0 {
+            record2.id = allRecord2Arr.max(ofProperty: "id")! + 1
+        }
+    
+        
+        do {
+            let realm = try Realm()
+           try realm.write{
+               realm.add(record2)
+            }
+        } catch {
+            print("エラー")
+        }
+    }
+    
+   
     
     @IBAction func backButtton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
@@ -192,8 +277,59 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         present(memoViewController, animated: true, completion: nil)
     }
     
+    
+    @IBAction func deleteAllButtonAction(_ sender: Any) {
+        
+        
+        let alert = UIAlertController(title: "削除", message: "本当に全て削除してもよろしいですか？", preferredStyle: .alert)
+        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in
+          
+            self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+            
+            let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
+            self.translationFolderArr = self.translationFolderArr.filter(predict)
+            
+            
+            for number1 in 1...self.translationFolderArr[0].results.count{
+            var number2 = number1
+            number2 = 0
+            self.intArr.append(number2)
+        }
+            
+            do {
+                let realm = try Realm()
+                try realm.write{
+                    for number3 in self.intArr{
+                        realm.delete(self.translationFolderArr[0].results[number3])
+                    }
+                }
+            } catch {
+                print("エラー")
+            }
+            self.intArr = []
+            self.sections = []
+            self.tableDataList = []
+            
+            self.deleteAllButton.isEnabled = false
+            
+            self.tableView.reloadData()
+            print("リロードされた")
+            
+        })
+        //        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
+        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
+        })
+        
+        alert.addAction(delete)
+        alert.addAction(cencel)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+   
 
 }
+
 
 extension History2ViewController: SingleAccordionTableViewHeaderFooterViewDelegate{
     

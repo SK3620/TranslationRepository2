@@ -77,7 +77,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         
         let dateString: String = formatter.string(from: translationFolderArr1.date)
-        cell.detailTextLabel?.text = dateString
+        cell.detailTextLabel?.text = "作成日:\(dateString)"
         }
         return cell
     }
@@ -102,13 +102,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 //    セルがタップされた時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if self.number == 1 {
-            tableView.deselectRow(at: indexPath, animated: true)
-            number = 0
-            return
-            
-        } else if number == 0 {
-            
+//        if self.number == 1 {
+//            tableView.deselectRow(at: indexPath, animated: true)
+//            number = 0
+//            return
+//
+//        } else if number == 0 {
+//
             var translationFolderArr = try! Realm().objects(TranslationFolder.self)
             
             self.folderNameString = translationFolderArr[indexPath.row].folderName
@@ -125,7 +125,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             print("確認11 \(translationFolderArr)")
             
-           
+        tableView.deselectRow(at: indexPath, animated: true)
                   
             if translationFolderArr[0].results.count != 0 {
                 //        self.performSegue(withIdentifier: "ToHistory2", sender: nil)
@@ -142,10 +142,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 SVProgressHUD.show()
                 SVProgressHUD.showError(withStatus: "'\(self.folderNameString!)' フォルダー内に保存されたデータがありません")
                 number = 1
-        
+                
             }
         }
-        //
+        
     }
     
     //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -159,9 +159,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     //        }
     //    }
     
-    
-    
-    
+//}
+
+
+
     
     
     
@@ -169,4 +170,4 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     
-}
+

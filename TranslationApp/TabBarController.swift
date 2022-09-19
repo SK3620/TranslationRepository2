@@ -28,8 +28,10 @@ class TabBarController: UITabBarController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("遷移しました")
         
+        if segue.identifier == "ToCreateViewContoller" {
         let createFolderController = segue.destination as! CreateFolderViewController
         createFolderController.tabBarController2 = self
+        }
         
     }
     

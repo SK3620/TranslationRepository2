@@ -12,13 +12,18 @@ class CustomCellTableViewCell: UITableViewCell {
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var label2: UILabel!
     @IBOutlet weak var label3: UILabel!
-    @IBOutlet weak var selectButton: UIButton!
+    @IBOutlet weak var copyButton: UIButton!
     
 
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        let image1 = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+        let image2 = UIImage(systemName: "doc.on.doc", withConfiguration: image1)
+        self.copyButton.setImage(image2, for: .normal)
+        self.copyButton.setTitle("copy", for: .normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

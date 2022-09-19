@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let config = Realm.Configuration(
+        var config = Realm.Configuration(
             schemaVersion: 1, // schemaVersionを2から3に増加。
             migrationBlock: { migration, oldSchemaVersion in
                 // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         
-        let config1 = Realm.Configuration(
+         config = Realm.Configuration(
             schemaVersion: 2, // schemaVersionを2から3に増加。
             migrationBlock: { migration, oldSchemaVersion in
                 // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         
-        let config2 = Realm.Configuration(
+        config = Realm.Configuration(
             schemaVersion: 3, // schemaVersionを2から3に増加。
             migrationBlock: { migration, oldSchemaVersion in
                 // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     migration.create(TranslationFolder.className(), value: ["memo": ""])
                 }
             })
-        let config3 = Realm.Configuration(
+        config = Realm.Configuration(
             schemaVersion: 4, // schemaVersionを2から3に増加。
             migrationBlock: { migration, oldSchemaVersion in
                 // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         
-        let config4 = Realm.Configuration(
+         config = Realm.Configuration(
             schemaVersion: 5, // schemaVersionを2から3に増加。
             migrationBlock: { migration, oldSchemaVersion in
                 // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         
-        let config5 = Realm.Configuration(
+        config = Realm.Configuration(
             schemaVersion: 6, // schemaVersionを2から3に増加。
             migrationBlock: { migration, oldSchemaVersion in
                 // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
@@ -71,8 +71,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     migration.create(Record.className(), value: ["date4": Date()])
                 }
             })
-        Realm.Configuration.defaultConfiguration = config5
-        let realm = try! Realm()
+        Realm.Configuration.defaultConfiguration = config
+        
         
         
         

@@ -17,6 +17,10 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     let realm = try! Realm()
     var historyArr: Results<Histroy> = try! Realm().objects(Histroy.self).sorted(byKeyPath: "date2", ascending: true)
     
+    var intArr = [Int]()
+    var inputDataCopy: String!
+    var resultDataCopy: String!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +72,17 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         cell.setData(inputData2, resultData2, dateString, indexPath.row + 1)
         
+//        buttonにタグを設定　tapされたボタンのcellを判定 addTargetを追加
+        cell.copyButton.addTarget(self, action: #selector(tapCellButton(_:)), for: .touchUpInside)
+        cell.copyButton.tag = indexPath.row
+      
         return cell
+    }
+    
+    @objc func tapCellButton(_ sender: UIButton){
+//        外部引数_にはたっぷされたボタン自体が入る そいつがsenderでsenderはUIButtonが持つtagプロパティを利用する
+        UIPasteboard.general.string = self.historyArr[sender.tag].inputData2 + "\n" + "\n" + self.historyArr[sender.tag].resultData2
+        
     }
 
 
@@ -97,9 +111,34 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func button1Action(_ sender: Any) {
         
         let alert = UIAlertController(title: "履歴の削除", message: "本当に全ての履歴を削除してもよろしいですか？", preferredStyle: .alert)
-        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in print("削除ボタンがタップされた。")
+        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in  for number1 in 1...self.historyArr.count{
+            var number2 = number1
+            number2 = 0
+            self.intArr.append(number2)
+            print(self.intArr)
+        }
+            
+            do {
+                let realm = try Realm()
+                try realm.write{
+                    for number3 in self.intArr{
+                        realm.delete(self.historyArr[number3])
+                    }
+                }
+            } catch {
+                print("エラー")
+            }
+            self.intArr = []
+            self.historyArr = self.realm.objects(Histroy.self)
+            
+            self.button1.isEnabled = false
+            self.label1.isHidden = true
+            
+            self.rirekiTableView.reloadData()
+            print("リロードされた")
+            
         })
-//        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
+        //        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
         let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
         })
         
@@ -108,39 +147,54 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         self.present(alert, animated: true, completion: nil)
         
-        print("確認21 : \(self.historyArr)")
         
-      
-        for number in 0...self.historyArr.count - 1 {
-            try! realm.write{
-                self.realm.delete(self.historyArr[number])
-            }
-        }
-        
+    }
+    
+    
+    
+    
+    
+    //
+    //        for number in 0...self.historyArr.count - 1{
+    //            try! realm.write{
+    //                print("確認 : \(number)")
+    //                self.realm.delete(self.historyArr[number])
+    //                print("削除")
+    //            }
+    //        }
+    
+    
+    
+    //
+    //                    try! realm.write{
+    //                        for number in 0...2 {
+    //                            self.realm.delete(self.historyArr[number])
+    //                        }
+    //                    }
+    //
+    
+    
+  
+
+func confirm(){
+    if self.historyArr.count == 0 {
         button1.isEnabled = false
         label1.isHidden = true
-        
-        self.rirekiTableView.reloadData()
+    } else {
+        button1.isEnabled = true
+        label1.isHidden = false
     }
-    
-    func confirm(){
-        if self.historyArr.count == 0 {
-            button1.isEnabled = false
-            label1.isHidden = true
-        } else {
-            button1.isEnabled = true
-            label1.isHidden = false
-        }
-    }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
+}
+
+/*
+ // MARK: - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+ // Get the new view controller using segue.destination.
+ // Pass the selected object to the new view controller.
      }
      */
     
 }
+

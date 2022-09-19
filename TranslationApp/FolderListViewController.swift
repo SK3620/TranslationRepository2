@@ -16,7 +16,8 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var folderNameLabel: UILabel!
     @IBOutlet weak var confirmButton: UIButton!
     @IBOutlet weak var label: UILabel!
-  
+    @IBOutlet weak var backButton: UIButton!
+    
     
     
     var number: Int = 0
@@ -43,6 +44,10 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
         confirmButton.layer.borderColor = borderColor
         confirmButton.layer.cornerRadius = 10
 
+        backButton.layer.borderWidth = 2.5
+        backButton.layer.borderColor = borderColor
+        backButton.layer.cornerRadius = 10
+        
         listTableView.delegate = self
         listTableView.dataSource = self
         

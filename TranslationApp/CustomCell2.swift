@@ -30,6 +30,7 @@ class CustomCell2: UITableViewCell {
 //        editButton.layer.borderColor = UIColor.gray.cgColor
 //        editButton.layer.borderWidth = 2.5
 //        editButton.layer.cornerRadius = 10
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

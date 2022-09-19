@@ -107,7 +107,7 @@ class AddViewController: UIViewController {
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        let dateString: String = formatter.string(from: record.date4)
+        let _: String = formatter.string(from: record.date4)
         
        
         

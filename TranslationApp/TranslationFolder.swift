@@ -77,4 +77,30 @@ class Record: Object{
     }
 }
 
+class Record2: Object{
+    
+    @objc dynamic var inputData3 = ""
+    
+    @objc dynamic var resultData3 = ""
+    
+    @objc dynamic var id = 0
+    
+    @objc dynamic var date5 = Date()
+    
+    override static func primaryKey() -> String? {
+        "id"
+    }
+}
+
+class Memo: Object {
+    
+    @objc dynamic var memo2 = ""
+    
+    @objc dynamic var id = 0
+    
+    override static func primaryKey() -> String? {
+        "id"
+    }
+}
+
 
