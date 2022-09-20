@@ -84,7 +84,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        acordionButton.setTitle("全表示", for: .normal)
+        acordionButton.setTitle("表示", for: .normal)
         
         print("お呼ばれしました。")
         
@@ -134,8 +134,11 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     func  numberOfSections(in tableView: UITableView) -> Int {
         print("確認45")
+        if self.translationFolderArr[0].results.count == 0 {
+            self.acordionButton.isEnabled = false
+            self.deleteAllButton.isEnabled = false
+        }
         return self.sections.count > 0 ? sections.count : 0
-    
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -258,16 +261,16 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         editViewController.textView1String = translationFolderArr[0].results[indexPath.section].inputData
         editViewController.textView2String = translationFolderArr[0].results[indexPath.section].resultData
         editViewController.translationIdNumber = translationFolderArr[0].results[indexPath.section].id
-
-//        if let sheet = editViewController?.sheetPresentationController {
-//            sheet.detents = [.medium()]
-//        }
+        
+        //        if let sheet = editViewController?.sheetPresentationController {
+        //            sheet.detents = [.medium()]
+        //        }
         
         present(editViewController, animated: true, completion: nil)
         
         
         
-//        let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment")
+        //        let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment")
         //        if let sheet = commentViewController?.sheetPresentationController {
         //            sheet.detents = [.medium()]
         //        }
@@ -290,10 +293,9 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func deleteAllButtonAction(_ sender: Any) {
         
-        
         let alert = UIAlertController(title: "削除", message: "本当に全て削除してもよろしいですか？", preferredStyle: .alert)
         let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in
-          
+            
             self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
             
             let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
@@ -301,10 +303,10 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             
             
             for number1 in 1...self.translationFolderArr[0].results.count{
-            var number2 = number1
-            number2 = 0
-            self.intArr.append(number2)
-        }
+                var number2 = number1
+                number2 = 0
+                self.intArr.append(number2)
+            }
             
             do {
                 let realm = try Realm()
@@ -334,27 +336,34 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         alert.addAction(cencel)
         
         self.present(alert, animated: true, completion: nil)
+        
     }
     
-//    ボタンタップでアコーディオン全表示、非表示切り替え
+    //    ボタンタップでアコーディオン全表示、非表示切り替え
     
     @IBAction func changeAcordionButton(_ sender: Any) {
         
-        if self.numberForAcordion == 0 {
-            for number in 0...self.translationFolderArr[0].results.count - 1 {
-                self.expandSectionSet.insert(number)
-                print(expandSectionSet)
-                numberForAcordion = 1
+        if self.translationFolderArr[0].results.count != 0 {
+            
+            self.acordionButton.isEnabled = true
+            
+            if self.numberForAcordion == 0 {
+                for number in 0...self.translationFolderArr[0].results.count - 1 {
+                    self.expandSectionSet.insert(number)
+                    print(expandSectionSet)
+                    numberForAcordion = 1
+                    self.acordionButton.setTitle("非表示", for: .normal)
+                }
+            } else {
+                self.expandSectionSet.removeAll()
+                self.acordionButton.setTitle("表示", for: .normal)
+                tableView.reloadData()
+                numberForAcordion = 0
             }
-        } else {
-            self.expandSectionSet.removeAll()
-            self.acordionButton.setTitle("非表示", for: .normal)
             tableView.reloadData()
-            numberForAcordion = 0
         }
-        tableView.reloadData()
+        
     }
-    
     
 }
 
