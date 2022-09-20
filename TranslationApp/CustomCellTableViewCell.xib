@@ -41,6 +41,9 @@
                         </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain"/>
+                        <connections>
+                            <action selector="copyButtonAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="CYv-5v-tRR"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

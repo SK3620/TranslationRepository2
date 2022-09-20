@@ -146,8 +146,6 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
         alert.addAction(cencel)
         
         self.present(alert, animated: true, completion: nil)
-        
-        
     }
     
     

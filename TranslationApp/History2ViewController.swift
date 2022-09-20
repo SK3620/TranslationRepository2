@@ -18,6 +18,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var acordionButton: UIButton!
     
     
 
@@ -34,6 +35,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     var intArr = [Int]()
     
     var number = 0
+    var numberForAcordion = 0
     
    
     
@@ -57,6 +59,10 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         memoButton.layer.borderWidth = 3
         memoButton.layer.cornerRadius = 10
         
+        acordionButton.layer.borderColor = borderColor
+        acordionButton.layer.borderWidth = 3
+        acordionButton.layer.cornerRadius = 10
+
         saveButton.layer.borderColor = borderColor
         saveButton.layer.borderWidth = 3
         saveButton.layer.cornerRadius = 10
@@ -77,6 +83,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        acordionButton.setTitle("全表示", for: .normal)
         
         print("お呼ばれしました。")
         
@@ -125,13 +133,13 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func  numberOfSections(in tableView: UITableView) -> Int {
-        
+        print("確認45")
         return self.sections.count > 0 ? sections.count : 0
     
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+        print("確認46")
         if sections.count != 0 {
         return expandSectionSet.contains(section) ? 1 : 0
         }
@@ -140,6 +148,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("確認47")
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = tableDataList[indexPath.section]
         
@@ -157,6 +166,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         print("確認16 tableView始め")
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as! CustomHeaderFooterView
             header.section = section
+        print("確認41 : \(header.section)")
         header.inputDataLabel.text = String(section + 1) + ": " + sections[section]
     //        セクション保持
             header.delegate = self
@@ -326,8 +336,26 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         self.present(alert, animated: true, completion: nil)
     }
     
-   
-
+//    ボタンタップでアコーディオン全表示、非表示切り替え
+    
+    @IBAction func changeAcordionButton(_ sender: Any) {
+        
+        if self.numberForAcordion == 0 {
+            for number in 0...self.translationFolderArr[0].results.count - 1 {
+                self.expandSectionSet.insert(number)
+                print(expandSectionSet)
+                numberForAcordion = 1
+            }
+        } else {
+            self.expandSectionSet.removeAll()
+            self.acordionButton.setTitle("非表示", for: .normal)
+            tableView.reloadData()
+            numberForAcordion = 0
+        }
+        tableView.reloadData()
+    }
+    
+    
 }
 
 
@@ -340,9 +368,11 @@ extension History2ViewController: SingleAccordionTableViewHeaderFooterViewDelega
     func singleAccordionTableViewHeaderFooterView(_ header: CustomHeaderFooterView, section: Int) {
         if expandSectionSet.contains(section){
             expandSectionSet.remove(section)
+            print(expandSectionSet)
         } else {
             expandSectionSet.insert(section)
             print("確認16 extensionはじめ")
+            print(expandSectionSet)
         }
 //        上記のようにカスタムセクションのデリゲートでセクションの開閉状態を保持します。
         //    セクションタップ時に指定のセクションのリロード処理を呼んであげます。

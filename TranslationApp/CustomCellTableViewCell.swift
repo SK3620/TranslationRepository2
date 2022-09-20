@@ -20,10 +20,8 @@ class CustomCellTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        let image1 = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
-        let image2 = UIImage(systemName: "doc.on.doc", withConfiguration: image1)
-        self.copyButton.setImage(image2, for: .normal)
-        self.copyButton.setTitle("copy", for: .normal)
+        self.changeIcon()
+      
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -39,6 +37,22 @@ class CustomCellTableViewCell: UITableViewCell {
         self.label3.text = "\(indexPath_row)" + "  " + date2
     }
     
+    @IBAction func copyButtonAction(_ sender: Any) {
+        
+        let image1 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
+        let image2 = UIImage(systemName: "checkmark", withConfiguration: image1)
+        self.copyButton.setImage(image2, for: .normal)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: changeIcon)
+        
+    }
     
+    func changeIcon(){
+        let image1 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
+        let image2 = UIImage(systemName: "doc.on.doc", withConfiguration: image1)
+        self.copyButton.setImage(image2, for: .normal)
+        self.copyButton.setTitle("copy", for: .normal)
+        
+    }
     
 }

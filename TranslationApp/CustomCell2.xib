@@ -109,12 +109,15 @@
                     <constraint firstAttribute="bottom" secondItem="PXp-kA-x3l" secondAttribute="bottom" id="TiD-Yd-Ohk"/>
                     <constraint firstItem="lcp-ho-C3j" firstAttribute="leading" secondItem="brW-ON-mcN" secondAttribute="leading" id="WTU-o1-owD"/>
                     <constraint firstItem="10w-qt-kfR" firstAttribute="leading" secondItem="brW-ON-mcN" secondAttribute="leading" id="Yhp-cc-PAM"/>
+                    <constraint firstItem="zh4-nY-LHM" firstAttribute="top" secondItem="Q1b-S1-oHc" secondAttribute="bottom" constant="2" id="ZMD-8L-PGY"/>
                     <constraint firstItem="Q1b-S1-oHc" firstAttribute="centerY" secondItem="brW-ON-mcN" secondAttribute="centerY" id="ZdQ-Yx-IuW"/>
                     <constraint firstItem="ZE4-cx-Pza" firstAttribute="centerY" secondItem="10w-qt-kfR" secondAttribute="centerY" id="cDv-Gw-e2N"/>
                     <constraint firstItem="qLK-pi-SRN" firstAttribute="top" secondItem="10w-qt-kfR" secondAttribute="bottom" constant="2" id="dkf-gp-8Tc"/>
                     <constraint firstItem="lcp-ho-C3j" firstAttribute="top" secondItem="brW-ON-mcN" secondAttribute="bottom" constant="2" id="g82-dz-9Qb"/>
                     <constraint firstItem="LYR-e0-M1B" firstAttribute="top" secondItem="lcp-ho-C3j" secondAttribute="bottom" constant="2" id="jCh-A5-Isx"/>
+                    <constraint firstAttribute="bottom" secondItem="qLK-pi-SRN" secondAttribute="bottom" constant="31" id="nUm-OI-uUh"/>
                     <constraint firstItem="10w-qt-kfR" firstAttribute="top" secondItem="LYR-e0-M1B" secondAttribute="bottom" constant="2" id="oHz-9n-ZL0"/>
+                    <constraint firstItem="lcp-ho-C3j" firstAttribute="top" secondItem="brW-ON-mcN" secondAttribute="bottom" constant="2" id="osu-mM-3IV"/>
                     <constraint firstItem="Q1b-S1-oHc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="qyY-js-rdw"/>
                     <constraint firstAttribute="bottom" secondItem="qiL-8B-2yk" secondAttribute="bottom" constant="31" id="umX-xv-dfD"/>
                     <constraint firstItem="qLK-pi-SRN" firstAttribute="top" secondItem="10w-qt-kfR" secondAttribute="bottom" constant="2" id="y0R-sf-gjT"/>
@@ -123,11 +126,11 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="label1" destination="ZE4-cx-Pza" id="VUb-lM-uJQ"/>
-                <outlet property="label2" destination="Q1b-S1-oHc" id="mI5-tu-v35"/>
-                <outlet property="label3" destination="zh4-nY-LHM" id="nGa-Xm-7n5"/>
-                <outlet property="label4" destination="NWc-an-nFq" id="KLi-hS-IAw"/>
-                <outlet property="label5" destination="qiL-8B-2yk" id="eRb-AC-s5s"/>
+                <outlet property="label1" destination="Q1b-S1-oHc" id="TC5-24-nkv"/>
+                <outlet property="label2" destination="zh4-nY-LHM" id="Ixt-bN-Egn"/>
+                <outlet property="label3" destination="NWc-an-nFq" id="jA8-ld-ba2"/>
+                <outlet property="label4" destination="ZE4-cx-Pza" id="bu4-cK-iGw"/>
+                <outlet property="label5" destination="qiL-8B-2yk" id="Zcg-UB-DD6"/>
             </connections>
             <point key="canvasLocation" x="128.98550724637681" y="220.64732142857142"/>
         </tableViewCell>

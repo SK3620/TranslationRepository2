@@ -51,7 +51,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="20" height="74"/>
                                             <color key="backgroundColor" red="0.96512832230000001" green="0.95921286159999997" blue="0.98990253490000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             <state key="normal" title="Button"/>
-                                            <buttonConfiguration key="configuration" style="plain" image="check"/>
+                                            <buttonConfiguration key="configuration" style="plain"/>
                                             <connections>
                                                 <action selector="button2Action:" destination="iN0-l3-epB" eventType="touchUpInside" id="nph-Np-U9s"/>
                                             </connections>
@@ -113,7 +113,6 @@
         </view>
     </objects>
     <resources>
-        <image name="check" width="128" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

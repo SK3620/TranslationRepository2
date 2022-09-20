@@ -7,7 +7,6 @@
 
 import UIKit
 import RealmSwift
-import XCTest
 
 class Memo2ViewController: UIViewController, UITextViewDelegate {
     
@@ -23,13 +22,30 @@ class Memo2ViewController: UIViewController, UITextViewDelegate {
         // Do any additional setup after loading the view.
         
         textView.delegate = self
+        
+        let doneToolbar = UIToolbar()
+        doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
+        doneToolbar.items = [spacer, doneButton]
+        self.textView.inputAccessoryView = doneToolbar
+    }
+    
+    @objc func doneButtonTaped(sender: UIButton){
+        textView.endEditing(true)
+      
+    }
+
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        if self.memo2Arr.count != 0 {
         self.textView.text = memo2Arr[0].memo2
-        
+        }
     }
     
     

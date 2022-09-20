@@ -41,8 +41,9 @@ class CustomHeaderFooterView: UITableViewHeaderFooterView {
 //    ここでdelegateメソッドを実行（ここでは引数に値を指定してあげることで呼び出している）
 //    要するにここは呼び出しだけであって、func (){ 中身 }　の中身の実際の処理は別のところで記述している。
     @IBAction func didTap (_ sender: Any) {
-        delegate?.singleAccordionTableViewHeaderFooterView(self, section: section)
         print("確認16 ボタンがタップされた")
+        delegate?.singleAccordionTableViewHeaderFooterView(self, section: self.section)
+       
     
     }
     
