@@ -73,6 +73,28 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
         button4.layer.borderColor = color
         button4.layer.borderWidth = 2.5
         button4.layer.cornerRadius = 10
+        
+        //キーボードに完了のツールバーを作成
+        let doneToolbar = UIToolbar()
+        doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
+        doneToolbar.items = [spacer, doneButton]
+        let someArr = [self.textView1, self.textView2]
+        for someNumber in someArr{
+        someNumber!.inputAccessoryView = doneToolbar
+        }
+    }
+    
+    @objc func doneButtonTaped(sender: UIButton){
+        textView1.endEditing(true)
+        textView2.endEditing(true)
+    }
+    
+   
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -9,7 +9,8 @@ import UIKit
 import RealmSwift
 import SVProgressHUD
 
-class History2ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+
+class History2ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var folderNameLabel: UILabel!
@@ -19,11 +20,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var acordionButton: UIButton!
-    
-    
+    @IBOutlet weak var searchBar: UISearchBar!
 
-    
-    
     
     let realm = try! Realm()
     var translationFolderArr: Results<TranslationFolder>!
@@ -33,6 +31,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     var sections = [String]()
     var tableDataList = [String]()
     var intArr = [Int]()
+    var inputData3: String!
+    var resultData3: String!
     
     var number = 0
     var numberForAcordion = 0
@@ -44,7 +44,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         print("確認11 : \(self.folderNameString)")
         
-        
+        self.searchBar.backgroundImage = UIImage()
         //        xibファイルの登録
         let nib = UINib(nibName: "CustomHeaderFooterView", bundle: nil)
         //        再利用するための準備　ヘッダーの登録
@@ -52,7 +52,13 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
         // Do any additional setup after loading the view.
+        
+//        何も入力されていなくてもreturnキー押せるようにする
+        searchBar.enablesReturnKeyAutomatically  = false
+        
+        folderNameLabel.numberOfLines = 2
         
         let borderColor = UIColor.gray.cgColor
         memoButton.layer.borderColor = borderColor
@@ -79,6 +85,19 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         backButton.layer.borderWidth = 3
         backButton.layer.cornerRadius = 10
         
+       
+        //キーボードに完了のツールバーを作成
+        let doneToolbar = UIToolbar()
+        doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
+        doneToolbar.items = [spacer, doneButton]
+        self.searchBar.inputAccessoryView = doneToolbar
+        
+    }
+    
+    @objc func doneButtonTaped(sender: UIButton){
+        self.searchBar.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,9 +140,67 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             self.deleteAllButton.isEnabled = true
         }
        
+        if self.searchBar.text != "" {
+            self.search()
+        }
     }
     
+//    検索ボタン押下時の呼び出しメソッド
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.search()
+    }
+    //        検索バーに入力があったら呼ばれる
 
+    func search(){
+        self.sections.removeAll()
+        self.tableDataList.removeAll()
+
+        if self.searchBar.text == "" {
+            
+            self.deleteAllButton.isEnabled = true
+            //            空だったら、全て表示する。（通常表示）
+            translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+
+            let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
+            translationFolderArr = self.translationFolderArr.filter(predict)
+
+            for number in 0...translationFolderArr[0].results.count - 1 {
+                self.sections.append(translationFolderArr[0].results[number].inputData)
+                self.tableDataList.append(translationFolderArr[0].results[number].resultData)
+            }
+        } else {
+            
+            self.deleteAllButton.isEnabled = false
+
+            let results1 = translationFolderArr[0].results.filter("inputData CONTAINS '\(self.searchBar.text!)'")
+
+            let results2 = translationFolderArr[0].results.filter("resultData CONTAINS '\(self.searchBar.text!)'")
+
+            print(searchBar.text!)
+
+            if results1.count != 0 {
+                for results in 0...results1.count - 1 {
+                    self.sections.append(results1[results].inputData)
+                    self.tableDataList.append(results1[results].resultData)
+                }
+            }
+
+            if results2.count != 0 {
+
+                for results in 0...results2.count - 1 {
+                    self.sections.append(results2[results].inputData)
+                    self.tableDataList.append(results2[results].resultData)
+                }
+            }
+
+
+        }
+        self.tableView.reloadData()
+    }
     
     
     
@@ -156,10 +233,16 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         cell.textLabel?.text = tableDataList[indexPath.section]
         
         let image1 = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
-        let image2 = UIImage(systemName: "hand.tap", withConfiguration: image1)
+        var image2 = UIImage(systemName: "hand.tap", withConfiguration: image1)
+        
+        if self.searchBar.text != "" {
+            image2 = UIImage()
+        }
+        
         cell.imageView?.image = image2
 
         cell.textLabel?.numberOfLines = 0
+        
        
         return cell
     }
@@ -168,39 +251,48 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         print("確認16 tableView始め")
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header") as! CustomHeaderFooterView
-            header.section = section
+        
+        header.button2.isEnabled = true
+        header.button2.isHidden = false
+        
+        header.section = section
         print("確認41 : \(header.section)")
         header.inputDataLabel.text = String(section + 1) + ": " + sections[section]
+       
     //        セクション保持
             header.delegate = self
+      
 //        headerの型はCustomHeaderFooterViewクラス型で、そのクラスには、delegateプロパティが宣言されている。そのdelegateプロぱにSingleAcordiontableViewHeaderFooterViewDelegate型（こいつはプロトコル）を指定している。このプロトコルには、一つのメソッドが定義されている。
         
         header.button2.addTarget(self, action: #selector(tapCellButton(_:)), for: .touchUpInside)
         header.button2.tag = section
         
+        if self.searchBar.text != "" {
+            header.button2.isEnabled = false
+            header.button2.isHidden = true
+            
+        }
+        
         print("確認16 tableView終わり")
     //        デリゲート設定
             return header
-//        headerはCVustomHeaderFooterViewクラスで、このクラスはUIViewクラスを継承したUITableViewHeaderFooterViewを継承しているからreturn headerできる。
-        }
+        //        headerはCVustomHeaderFooterViewクラスで、このクラスはUIViewクラスを継承したUITableViewHeaderFooterViewを継承しているからreturn headerできる。
+    }
     
     @objc func tapCellButton(_ sender: UIButton){
         
         if number == 0{
-        let alert = UIAlertController(title: "保存しました", message: "ホーム画面の'単語・フレーズ'に保存されました" + " " + "以降この表示はでません", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "保存しました", message: "ホーム画面の'単語・フレーズ'に保存されました" + " " + "以降この表示はでません", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
             
             number = 1
         }
         
-        //        let image3 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
-        //        let image4 = UIImage(systemName: "doc.text", withConfiguration: image3)
-        //        self.button2.setImage(image4, for: .normal)
+        print("確認40 \(sender.tag)")
         
-        
-        let inputData3 = translationFolderArr[0].results[sender.tag].inputData
-        let resultData3 = translationFolderArr[0].results[sender.tag].resultData
+        self.inputData3 = translationFolderArr[0].results[sender.tag].inputData
+        self.resultData3 = translationFolderArr[0].results[sender.tag].resultData
         
         print("確認40 : \(sender.tag)")
         
@@ -215,66 +307,74 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         if allRecord2Arr.count != 0 {
             record2.id = allRecord2Arr.max(ofProperty: "id")! + 1
         }
-    
+        
         
         do {
             let realm = try Realm()
-           try realm.write{
-               realm.add(record2)
+            try realm.write{
+                realm.add(record2)
             }
         } catch {
             print("エラー")
         }
     }
     
-   
+    
     
     @IBAction func backButtton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if self.searchBar.text == "" {
         return UITableViewCell.EditingStyle.delete
-        
-//        .deleteだけでもよき
+        } else {
+            return UITableViewCell.EditingStyle.none
+        }
+        //        .deleteだけでもよき
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCell.EditingStyle.delete {
-//            tableDataList.remove(at: indexPath.section * 2 + 1)
-//            sections.remove(at: indexPath.section * 2)
-            
-            try! realm.write {
-                self.realm.delete(self.translationFolderArr[0].results[indexPath.section])
-                sections.remove(at: indexPath.section)
-                tableDataList.remove(at: indexPath.section)
-                tableView.deselectRow(at: indexPath, animated: true)
+        if self.searchBar.text == "" {
+            if editingStyle == UITableViewCell.EditingStyle.delete {
+                //            tableDataList.remove(at: indexPath.section * 2 + 1)
+                //            sections.remove(at: indexPath.section * 2)
+                
+                try! realm.write {
+                    self.realm.delete(self.translationFolderArr[0].results[indexPath.section])
+                    sections.remove(at: indexPath.section)
+                    tableDataList.remove(at: indexPath.section)
+                    tableView.deselectRow(at: indexPath, animated: true)
+                }
+                tableView.reloadData()
             }
-            tableView.reloadData()
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let editViewController = self.storyboard?.instantiateViewController(withIdentifier: "Edit1") as! Edit1ViewController
-        
-        editViewController.textView1String = translationFolderArr[0].results[indexPath.section].inputData
-        editViewController.textView2String = translationFolderArr[0].results[indexPath.section].resultData
-        editViewController.translationIdNumber = translationFolderArr[0].results[indexPath.section].id
-        
-        //        if let sheet = editViewController?.sheetPresentationController {
-        //            sheet.detents = [.medium()]
-        //        }
-        
-        present(editViewController, animated: true, completion: nil)
-        
-        
-        
-        //        let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment")
-        //        if let sheet = commentViewController?.sheetPresentationController {
-        //            sheet.detents = [.medium()]
-        //        }
-        //        present(commentViewController!, animated: true, completion: nil)
+        if self.searchBar.text == "" {
+            
+            let editViewController = self.storyboard?.instantiateViewController(withIdentifier: "Edit1") as! Edit1ViewController
+            
+            editViewController.textView1String = translationFolderArr[0].results[indexPath.section].inputData
+            editViewController.textView2String = translationFolderArr[0].results[indexPath.section].resultData
+            editViewController.translationIdNumber = translationFolderArr[0].results[indexPath.section].id
+            
+            //        if let sheet = editViewController?.sheetPresentationController {
+            //            sheet.detents = [.medium()]
+            //        }
+            
+            present(editViewController, animated: true, completion: nil)
+            
+            
+            
+            //        let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment")
+            //        if let sheet = commentViewController?.sheetPresentationController {
+            //            sheet.detents = [.medium()]
+            //        }
+            //        present(commentViewController!, animated: true, completion: nil)
+        }
     }
     
     @IBAction func memoButtonAction(_ sender: Any) {
@@ -385,6 +485,7 @@ extension History2ViewController: SingleAccordionTableViewHeaderFooterViewDelega
         }
 //        上記のようにカスタムセクションのデリゲートでセクションの開閉状態を保持します。
         //    セクションタップ時に指定のセクションのリロード処理を呼んであげます。
+        
             tableView.reloadSections([section], with: .automatic)
         
         print("確認16 extension終わり")

@@ -9,21 +9,20 @@ import UIKit
 import RealmSwift
 import SVProgressHUD
 
-class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
   
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var folderNameString: String?
     var number: Int = 0
+    var resultsArr = [TranslationFolder]()
     
     let realm = try! Realm()
 //    データ一覧を取得
     var translationFolderArr: Results<TranslationFolder> = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
     
-    func printMethod(){
-        print("プリントメソッドが実行された")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +31,27 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
         // Do any additional setup after loading the view.
         
-        
-        
+        //        何も入力されていなくてもreturnキー押せるようにする
+                searchBar.enablesReturnKeyAutomatically  = false
+    
+        //キーボードに完了のツールバーを作成
+        let doneToolbar = UIToolbar()
+        doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
+        doneToolbar.items = [spacer, doneButton]
+        self.searchBar.inputAccessoryView = doneToolbar
         
     }
+    
+    @objc func doneButtonTaped(sender: UIButton){
+        self.searchBar.endEditing(true)
+        
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -47,11 +61,27 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         self.number = 0
     }
+    
 
     func tableViewReload(){
         translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
         self.tableView.reloadData()
     }
+    
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        if self.translationFolderArr.count != 0 {
+//            for number1 in 0...translationFolderArr.count - 1 {
+//                self.resultsArr.append(translationFolderArr[number1])
+//            }
+//
+//            for number2 in self.resultsArr {
+//                for number3 in 0...number2.results.count - 1 {
+//                    let inputData = number2.results[number3].inputData
+//                    let resultData = number2.results[number3].resultData
+//                }
+//            }
+//        }
+//    }
     
    
     
@@ -67,6 +97,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         if indexPath.section == 0 {
+            cell.textLabel?.numberOfLines = 0
 //        セルに内容設定
 //        cell.textLabel?.text = realmDataBaseArr[indexPath.row].folderName
             let translationFolderArr1 = self.translationFolderArr[indexPath.row]

@@ -23,9 +23,14 @@ class CustomHeaderFooterView: UITableViewHeaderFooterView {
     @IBOutlet weak var button2: UIButton!
     
     
+    
+
     //    このセクションには多分、指定された（タップされた？）セクションの情報が入ってくる。
     
     override func awakeFromNib() {
+        
+      
+        
         contentView.backgroundColor = .systemBackground
         inputDataLabel.numberOfLines = 0;
         
@@ -34,7 +39,7 @@ class CustomHeaderFooterView: UITableViewHeaderFooterView {
         self.button.setImage(image2, for: .normal)
         
        changeIcon()
-        
+       
         print("確認16 awakeFromNibが呼ばれた")
     }
     
@@ -52,10 +57,7 @@ class CustomHeaderFooterView: UITableViewHeaderFooterView {
         let image5 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
         let image6 = UIImage(systemName: "checkmark", withConfiguration: image5)
         self.button2.setImage(image6, for: .normal)
-        
-      
-        
-        
+    
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: changeIcon)
     }
     
@@ -66,6 +68,7 @@ class CustomHeaderFooterView: UITableViewHeaderFooterView {
         
     }
 }
+
 
 
 

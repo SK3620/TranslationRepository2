@@ -14,6 +14,11 @@ import RealmSwift
 class TranslateViewController: UIViewController, UITextViewDelegate {
 
     // DeepL APIのレスポンス用構造体
+//    Codableとは、API通信等で取得したJSONやプロパティリストを任意のデータ型に変換するプロトコル →データをアプリを実装しやすいデータ型に変換することで処理が楽になる
+//    データ型とは要は、StringやIntのこと　swiftで扱えるようにする
+    
+
+//    APIから取得したデータをJSONで受け取って、Codableで構造体に変換します。
     struct DeepLResult: Codable {
         let translations: [Translation]
         struct Translation: Codable {
@@ -78,6 +83,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         button2.layer.borderColor = borderColor
         button2.isEnabled = false
         button2.isHidden = true
+        button2.titleLabel?.numberOfLines = 1
         
         button3.layer.cornerRadius = 10
         button3.layer.borderWidth = 2
@@ -97,7 +103,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         languageLabel1.text = "日本語\nJapanese"
         languageLabel2.text = "英語\nEnglish"
 
-//        translateTextView.delegate = self
+        translateTextView.delegate = self
 
         // Do any additional setup after loading the view.
         
@@ -109,12 +115,16 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         //キーボードに完了のツールバーを作成
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        
+        // 左側のBarButtonItemはflexibleSpace。これがないと右に寄らない。flexibleSpaceはBlank space to add between other items
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
+//        The items displayed on the toolbar.
         doneToolbar.items = [spacer, doneButton]
         let someArr = [self.translateTextView, self.translateLabel]
         for someNumber in someArr{
-        someNumber!.inputAccessoryView = doneToolbar
+//            // textViewのキーボードにツールバーを設定
+            someNumber!.inputAccessoryView = doneToolbar
         }
     }
     
@@ -160,6 +170,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     
     
     
+
     @IBAction func translateButton(_ sender: Any) {
         if self.translateTextView.text == "" {
             SVProgressHUD.show()
@@ -185,14 +196,14 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     }
     
     
-//    func textViewDidChange(_ textView: UITextView) {
-//        if self.languageLabel1.text == "日本語"{
-//        translateJapanese()
-//        } else {
-//            func translateEnglish(){
-//            }
-//        }
-//    }
+    func textViewDidChange(_ textView: UITextView) {
+        if self.languageLabel1.text == "日本語"{
+        translateJapanese()
+        } else {
+            func translateEnglish(){
+            }
+        }
+    }
     
     func translateEnglish(){
         let authKey1 = KeyManager().getValue(key: "apiKey") as! String
@@ -202,7 +213,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         //            前後のスペースと改行を削除
         let authKey = authKey1.trimmingCharacters(in: .newlines)
         
-        // APIリクエストするパラメータを作成
+        // APIリクエストするパラメータを作成　リクエストするために必要な情報を定義　リクエスト成功時に、翻訳結果が返される
         let parameters: [String: String] = [
             "text": self.translateTextView.text,
             "auth_key": authKey,
@@ -214,18 +225,20 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         let headers: HTTPHeaders = [
             "Content-Type": "application/x-www-form-urlencoded"
         ]
-        // DeepL APIを実行
+        // DeepL APIリクエストを実行
+//        AF = Almofireのこと
+//        Almofireはapi情報を取得するための便利なライブラリ　通常はswift側で用意されているURLSessionを使う。
+//        requestメソッドでAPIを呼ぶ
         AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self){ response in
             
             if case .success = response.result {
                 do {
                     // 結果をデコード
+//                    一般的に、アプリがAPIサーバーと通信する場合、データはJSON形式でやりとりすることが多いかと思います。Foundationフレームワークの JSONEncoder クラスを使用すると、Swiftの値をJSONに変換することができ、JSONDecoder クラスはJSONをSwiftの値にデコードすることができます
                     let result = try self.decoder.decode(DeepLResult.self, from: response.data!)
                     // 結果のテキストを取得&画面に反映
                     self.translateLabel.text =  result.translations[0].text
                   
-                    // 結果をNCMBに保存する処理を呼び出し
-                    //                                        saveResult()
                 } catch {
                     debugPrint("デコード失敗")
                 }
