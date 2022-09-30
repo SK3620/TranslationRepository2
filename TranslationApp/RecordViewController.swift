@@ -31,6 +31,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     var dateString: String = ""
     var dateString2: String = ""
     var number = 0
+    var tabBarController1: TabBarController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +56,9 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        self.tabBarController1.setBarButtonItem3()
+        
         super.viewWillAppear(true)
         if self.number == 1 {
         let predicate = NSPredicate(format: "date3 == %@", self.dateString)

@@ -20,6 +20,20 @@ class EditViewController: UIViewController {
     @IBOutlet weak var button1: UIButton!
     @IBOutlet weak var button2: UIButton!
     
+    var datePicker: UIDatePicker = UIDatePicker()
+    var pickerView1: UIPickerView = UIPickerView()
+    var pickerView3: UIPickerView = UIPickerView()
+    
+    var translationFolderArr: Results<TranslationFolder>!
+    
+    var folderNames = [String]()
+    
+    var toolBar: UIToolbar!
+    
+    var number: Int!
+    
+    var numbers = [String]()
+    
     let realm = try! Realm()
     let recordArr = try! Realm().objects(Record.self)
     var recordArrFilter2: Record!
@@ -37,7 +51,71 @@ class EditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for number in 1...30 {
+            let number = String(number)
+            self.numbers.append(number)
+        }
+        
+        translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+       if translationFolderArr.count != 0 {
+           for number in 0...translationFolderArr.count - 1{
+               self.folderNames.append(translationFolderArr[number].folderName)
+           }
+       }
+        
+        pickerView1.delegate = self
+        pickerView1.dataSource = self
+        pickerView1.showsSelectionIndicator = true
+        // 決定バーの生成
+        let toolbar1 = UIToolbar()
+        toolbar1.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+       let doneItem1 = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(done1))
+       let cancelItem1 = UIBarButtonItem(title: "キャンセル", style: .done, target: self, action: #selector(cancel1))
+       toolbar1.setItems([cancelItem1, spaceItem, doneItem1], animated: true)
+       // インプットビュー設定
+       textField1.inputView = pickerView1
+       textField1.inputAccessoryView = toolbar1
+        
+        
+        
+        pickerView3.delegate = self
+        pickerView3.dataSource = self
+        pickerView3.showsSelectionIndicator = true
+        // 決定バーの生成
+        let toolbar3 = UIToolbar()
+        toolbar3.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+       let doneItem3 = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(done3))
+       let cancelItem3 = UIBarButtonItem(title: "キャンセル", style: .done, target: self, action: #selector(cancel3))
+       toolbar3.setItems([cancelItem3, spaceItem, doneItem3], animated: true)
+       // インプットビュー設定
+       textField3.inputView = pickerView3
+       textField3.inputAccessoryView = toolbar3
+        
+        
+        
+        
        
+       
+        // ピッカー設定
+        datePicker.datePickerMode = UIDatePicker.Mode.date
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.timeZone = NSTimeZone.local
+        datePicker.locale = Locale.current
+        // 決定バーの生成
+        let toolbar4 = UIToolbar()
+         toolbar4.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let doneItem4 = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(done4))
+        let cancelItem4 = UIBarButtonItem(title: "キャンセル", style: .done, target: self, action: #selector(cancel4))
+        toolbar4.setItems([cancelItem4, spaceItem, doneItem4], animated: true)
+        // インプットビュー設定
+        textField4.inputView = datePicker
+        textField4.inputAccessoryView = toolbar4
+//        デフォルト設定
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: Date())
+        datePicker.date = formatter.date(from: dateString)!
         
         let color = UIColor.gray.cgColor
         
@@ -82,18 +160,47 @@ class EditViewController: UIViewController {
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
         doneToolbar.items = [spacer, doneButton]
-        let someArr = [textField1, textField2, textField3, textField4]
+        let someArr = [textField2]
         for someNumber in someArr{
         someNumber!.inputAccessoryView = doneToolbar
         }
         textView1.inputAccessoryView = doneToolbar
     }
     
-    @objc func doneButtonTaped(sender: UIButton){
+    @objc func done1(){
         textField1.endEditing(true)
-        textField2.endEditing(true)
+        textField1.text = "\(self.folderNames[pickerView1.selectedRow(inComponent: 0)])"
+    }
+    
+    @objc func cancel1(){
+        textField1.endEditing(true)
+        textField1.text = ""
+    }
+    
+    @objc func done3(){
         textField3.endEditing(true)
+        textField3.text = "\(self.numbers[pickerView3.selectedRow(inComponent: 0)])"
+    }
+    
+    @objc func cancel3(){
+        textField3.endEditing(true)
+        textField3.text = ""
+    }
+    
+    @objc func done4(){
         textField4.endEditing(true)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M.dd"
+        let dateString = formatter.string(from: datePicker.date)
+        textField4.text = dateString
+    }
+    
+    @objc func cancel4(){
+        textField4.endEditing(true)
+        textField4.text = ""
+    }
+    @objc func doneButtonTaped(sender: UIButton){
+        textField2.endEditing(true)
         textView1.endEditing(true)
     }
         // Do any additional setup after loading the view.
@@ -146,8 +253,31 @@ class EditViewController: UIViewController {
     @IBAction func button1Action(_ sender: Any) {
         self.dismiss(animated: true)
     }
-    
-  
-    
 
 }
+
+
+extension EditViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+//        ドラムロールの列数
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+//        ドラムロールの行数
+        return pickerView == pickerView1 ? self.folderNames.count : 30
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return pickerView == pickerView1 ? self.folderNames[row] : self.numbers[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView == pickerView1 {
+            self.textField1.text = self.folderNames[row]
+        } else {
+            self.textField3.text = self.numbers[row]
+        }
+    }}

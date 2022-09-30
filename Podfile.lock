@@ -1,5 +1,6 @@
 PODS:
   - CalculateCalendarLogic (0.5.0)
+  - ContextMenuSwift (1.0.0)
   - FSCalendar (2.8.4)
   - Realm (10.20.0):
     - Realm/Headers (= 10.20.0)
@@ -10,6 +11,7 @@ PODS:
 
 DEPENDENCIES:
   - CalculateCalendarLogic
+  - ContextMenuSwift
   - FSCalendar
   - RealmSwift (= 10.20.0)
   - SVProgressHUD
@@ -17,6 +19,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - CalculateCalendarLogic
+    - ContextMenuSwift
     - FSCalendar
     - Realm
     - RealmSwift
@@ -24,11 +27,12 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   CalculateCalendarLogic: d14189787cd47766e64281b2686608afea07ae4d
+  ContextMenuSwift: c89068a89ccd9210dfcaee3bdc558e65aa74899b
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Realm: ae32bdc1da7d19c7617e0400201a77acd4a211b9
   RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: d82110b302385a62cb364f11bd6a080b43faf74f
+PODFILE CHECKSUM: cae30046b027e23d5ffa3b3bbdb8dc06cf762c54
 
 COCOAPODS: 1.11.3

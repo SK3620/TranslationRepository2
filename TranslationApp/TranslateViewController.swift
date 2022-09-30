@@ -18,7 +18,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 //    データ型とは要は、StringやIntのこと　swiftで扱えるようにする
     
 
-//    APIから取得したデータをJSONで受け取って、Codableで構造体に変換します。
+//    APIから取得したデータをJSONで受け取って、swiftで使えれるようにCodableで構造体に変換します。
     struct DeepLResult: Codable {
         let translations: [Translation]
         struct Translation: Codable {
@@ -32,6 +32,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     var translationFolder: TranslationFolder?
     var translation: Translation!
     var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+    
+    var tabBarController1: TabBarController!
     
     @IBOutlet weak var translateTextView: UITextView!
     @IBOutlet weak var translateLabel: UITextView!
@@ -84,6 +86,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         button2.isEnabled = false
         button2.isHidden = true
         button2.titleLabel?.numberOfLines = 1
+        // ボタンの横幅に応じてフォントサイズを自動調整する設定
+        button2.titleLabel?.adjustsFontSizeToFitWidth = true
         
         button3.layer.cornerRadius = 10
         button3.layer.borderWidth = 2
@@ -142,7 +146,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-       
+        self.tabBarController1.setBarButtonItem0()
         
         if let textString = self.textStringForButton2{
             let translationFolderArr2 = realm.objects(TranslationFolder.self)
@@ -174,7 +178,9 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     @IBAction func translateButton(_ sender: Any) {
         if self.translateTextView.text == "" {
             SVProgressHUD.show()
-            SVProgressHUD.showError(withStatus: "文字を入力して下さい")
+            SVProgressHUD.showError(withStatus: "赤枠内にテキストを入力して、翻訳して下さい")
+            translateTextView.layer.borderColor = UIColor.red.cgColor
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: changeIcon)
             return
         } else if self.languageLabel1.text == "日本語\nJapanese" {
        translateJapanese()
@@ -197,13 +203,13 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     
     
     func textViewDidChange(_ textView: UITextView) {
-        if self.languageLabel1.text == "日本語"{
-        translateJapanese()
+        if self.languageLabel1.text == "日本語\nJapanese"{
+            translateJapanese()
         } else {
-            func translateEnglish(){
-            }
+            translateEnglish()
         }
     }
+    
     
     func translateEnglish(){
         let authKey1 = KeyManager().getValue(key: "apiKey") as! String
@@ -415,7 +421,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         } else if self.translateTextView.text == "" {
             error1()
             SVProgressHUD.show()
-            SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストを入力して下さい")
+            SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストが入っていません")
         } else {
             error2()
         }
@@ -427,6 +433,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         self.translateTextView.layer.borderWidth = 2.5
         self.translateTextView.layer.borderColor = borderColor1
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: changeIcon)
+        
     }
     
     func error2(){
@@ -434,8 +442,22 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         let borderColor1 = UIColor.red.cgColor
         self.translateLabel.layer.borderWidth = 2.5
         self.translateLabel.layer.borderColor = borderColor1
-        SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストを入力して下さい")
+        SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストが入っていません")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: changeIcon)
     }
+    
+    
+    func changeIcon(){
+        let borderColor1 = UIColor.gray.cgColor
+        self.translateTextView.layer.borderWidth = 2.5
+        self.translateTextView.layer.borderColor = borderColor1
+        
+        self.translateLabel.layer.borderWidth = 2.5
+        self.translateLabel.layer.borderColor = borderColor1
+    }
+    
+    
     
     
     @IBAction func deleteButton1(_ sender: Any) {

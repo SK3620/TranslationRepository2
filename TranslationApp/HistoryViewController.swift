@@ -8,16 +8,19 @@
 import UIKit
 import RealmSwift
 import SVProgressHUD
+import Alamofire
 
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
   
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var editButton: UIButton!
     
     var folderNameString: String?
     var number: Int = 0
     var resultsArr = [TranslationFolder]()
+    var tabBarController1: TabBarController!
     
     let realm = try! Realm()
 //    データ一覧を取得
@@ -28,6 +31,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         
         tableView.fillerRowHeight = UITableView.automaticDimension
+        
+        searchBar.backgroundImage = UIImage()
+        tableView.layer.borderColor = UIColor.systemGray4.cgColor
+        tableView.layer.borderWidth = 0.5
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -55,14 +62,43 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        editButton.setTitle("編集", for: .normal)
+        tableView.isEditing = false
+        
+        self.tabBarController1.setBarButtonItem1()
+        
         self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+        if translationFolderArr.count == 0 {
+            editButton.isEnabled = false
+        }
         tableView.reloadData()
         print("実行された")
         
         self.number = 0
     }
     
-
+//     検索ボタン押下時の呼び出しメソッド
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if self.searchBar.text == "" {
+            self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true).sorted(byKeyPath: "date", ascending: true)
+            
+        } else {
+            self.translationFolderArr = self.translationFolderArr.filter("folderName CONTAINS '\(self.searchBar.text!)'").sorted(byKeyPath: "date", ascending: true)
+            
+           if translationFolderArr.count == 0 {
+               self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true).sorted(byKeyPath: "date", ascending: true)
+            }
+        }
+        
+        tableView.reloadData()
+        
+    }
+    
     func tableViewReload(){
         translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
         self.tableView.reloadData()
@@ -90,6 +126,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if translationFolderArr.count == 0 {
+            tableView.isEditing = false
+            editButton.setTitle("編集", for: .normal)
+            editButton.isEnabled = false
+        } else {
+            editButton.isEnabled = true
+        }
         return translationFolderArr.count
     }
 
@@ -176,6 +219,17 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
             }
         }
+    
+    @IBAction func editButtonAction(_ sender: Any) {
+        if tableView.isEditing {
+            tableView.isEditing = false
+            editButton.setTitle("編集", for: .normal)
+        } else {
+            tableView.isEditing = true
+            editButton.setTitle("完了", for: .normal)
+        }
+    }
+    
         
     }
     

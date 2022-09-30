@@ -10,6 +10,7 @@ target 'TranslationApp' do
   pod 'SVProgressHUD'
   pod 'FSCalendar'
   pod 'CalculateCalendarLogic'
+  pod 'ContextMenuSwift'
 end
 
 

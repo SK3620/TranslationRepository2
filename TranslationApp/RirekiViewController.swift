@@ -7,12 +7,16 @@
 
 import UIKit
 import RealmSwift
+import ContextMenuSwift
 
 class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
   
     @IBOutlet weak var rirekiTableView: UITableView!
-    @IBOutlet weak var button1: UIButton!
-    @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var view1: UIView!
+    
+    
+   
     
     let realm = try! Realm()
     var historyArr: Results<Histroy> = try! Realm().objects(Histroy.self).sorted(byKeyPath: "date2", ascending: true)
@@ -20,19 +24,11 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var intArr = [Int]()
     var inputDataCopy: String!
     var resultDataCopy: String!
+    var tabBarController1: TabBarController!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        label1.text = "左スワイプで削除"
-        
-        let borderColor = UIColor.gray.cgColor
-        button1.layer.borderColor = borderColor
-        button1.layer.borderWidth = 2.5
-        button1.layer.cornerRadius = 10
-        
-        button1.isEnabled = false
         
         rirekiTableView.delegate = self
         rirekiTableView.dataSource = self
@@ -47,16 +43,28 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        editButton.setTitle("編集", for: .normal)
+        rirekiTableView.isEditing = false
+        
+        self.tabBarController1.setBarButtonItem2()
+        
         self.historyArr = realm.objects(Histroy.self).sorted(byKeyPath: "date2", ascending: true)
+        if historyArr.count == 0 {
+            editButton.isEnabled = false
+        } else {
+            editButton.isEnabled = true
+        }
         self.rirekiTableView.reloadData()
         
-        confirm()
+       
     }
     
     
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellTableViewCell
         
@@ -81,12 +89,22 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @objc func tapCellButton(_ sender: UIButton){
 //        外部引数_にはたっぷされたボタン自体が入る そいつがsenderでsenderはUIButtonが持つtagプロパティを利用する
+        editButton.setTitle("編集", for: .normal)
+        rirekiTableView.isEditing = false
         UIPasteboard.general.string = self.historyArr[sender.tag].inputData2 + "\n" + "\n" + self.historyArr[sender.tag].resultData2
         
     }
 
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if historyArr.count == 0 {
+            editButton.isEnabled = false
+            editButton.setTitle("編集", for: .normal)
+            rirekiTableView.isEditing = false
+        } else {
+            editButton.isEnabled = true
+            rirekiTableView.isEditing = false
+        }
         return self.historyArr.count
       }
     
@@ -103,7 +121,7 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 
             }
-            confirm()
+           
             tableView.reloadData()
         }
     }
@@ -131,9 +149,6 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.intArr = []
             self.historyArr = self.realm.objects(Histroy.self)
             
-            self.button1.isEnabled = false
-            self.label1.isHidden = true
-            
             self.rirekiTableView.reloadData()
             print("リロードされた")
             
@@ -149,7 +164,91 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     
+    @IBAction func editButtonAction(_ sender: Any) {
+
+        if self.editButton.titleLabel!.text! == "完了" {
+            rirekiTableView.isEditing = false
+            editButton.setTitle("編集", for: .normal)
+            return
+        }
+//        コンテキストメニューの内容を作成
+        let delete = ContextMenuItemWithImage(title: "一部削除する", image: UIImage())
+        let deleteAll = ContextMenuItemWithImage(title: "全て削除する", image: UIImage())
+       
+//        表示するアイテムを決定
+        CM.items = [delete, deleteAll]
+//        表示します
+        CM.showMenu(viewTargeted: self.view1, delegate: self, animated: true)
     
+    }
+}
+
+extension RirekiViewController: ContextMenuDelegate {
+    func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) -> Bool {
+        print("コンテキストメニューの", index, "番目のセルが選択された！")
+    print("そのセルには", item.title, "というテキストが書いてあるよ!")
+        
+        switch index {
+        case 0:
+            self.rirekiTableView.isEditing = true
+            self.editButton.setTitle("完了", for: .normal)
+        case 1:
+           setUIAlertController()
+        default:
+            print("他の値")
+            
+        }
+        
+        //サンプルではtrueを返していたのでとりあえずtrueを返してみる
+        return true
+        
+    }
+    
+    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {
+    }
+    
+    func contextMenuDidAppear(_ contextMenu: ContextMenu) {
+    }
+    
+    func contextMenuDidDisappear(_ contextMenu: ContextMenu) {
+    }
+    
+    func setUIAlertController(){
+        let alert = UIAlertController(title: "履歴の削除", message: "本当に全ての履歴を削除してもよろしいですか？", preferredStyle: .alert)
+        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in  for number1 in 1...self.historyArr.count{
+            var number2 = number1
+            number2 = 0
+            self.intArr.append(number2)
+            print(self.intArr)
+        }
+            
+            do {
+                let realm = try Realm()
+                try realm.write{
+                    for number3 in self.intArr{
+                        realm.delete(self.historyArr[number3])
+                    }
+                }
+            } catch {
+                print("エラー")
+            }
+            self.intArr = []
+            self.historyArr = self.realm.objects(Histroy.self)
+            
+            self.rirekiTableView.reloadData()
+            print("リロードされた")
+            
+        })
+        //        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
+        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
+        })
+        
+        alert.addAction(delete)
+        alert.addAction(cencel)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+}
     
     
     //
@@ -170,20 +269,6 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     //                        }
     //                    }
     //
-    
-    
-  
-
-func confirm(){
-    if self.historyArr.count == 0 {
-        button1.isEnabled = false
-        label1.isHidden = true
-    } else {
-        button1.isEnabled = true
-        label1.isHidden = false
-    }
-}
-
 /*
  // MARK: - Navigation
  
@@ -194,5 +279,5 @@ func confirm(){
      }
      */
     
-}
+
 

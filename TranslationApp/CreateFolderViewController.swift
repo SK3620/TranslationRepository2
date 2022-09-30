@@ -10,7 +10,7 @@ import SVProgressHUD
 import RealmSwift
 
 
-class CreateFolderViewController: UIViewController {
+class CreateFolderViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var view2: UIView!
     @IBOutlet weak var cancelButton: UIButton!
@@ -26,6 +26,7 @@ class CreateFolderViewController: UIViewController {
     var array = [String]()
     var historyViewController: HistoryViewController!
     var tabBarController2: TabBarController!
+    var maxCharactersLength: Int = 22
   
     
     override func viewDidLoad() {
@@ -41,6 +42,8 @@ class CreateFolderViewController: UIViewController {
 //
 //        SaveButton.layer.borderColor = UIColor.gray.cgColor
 //        SaveButton.layer.borderWidth = 1.0
+        
+        self.textField.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +55,16 @@ class CreateFolderViewController: UIViewController {
     
     @IBAction func cancelButton(_ sender: Any) {
         self.dismiss(animated: true)
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        // テキストフィールドのセレクションが変更される度に実行される
+             // ここでテキストの最大文字数とスペースの規制を行う
+        guard let textField_text = self.textField.text else {return}
+        
+        if textField_text.count > self.maxCharactersLength {
+            textField.text = String(textField_text.prefix(self.maxCharactersLength))
+        }
     }
     
 //    保存ボタン

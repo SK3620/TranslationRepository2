@@ -71,6 +71,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     migration.create(Record.className(), value: ["date4": Date()])
                 }
             })
+        
+        config = Realm.Configuration(
+            schemaVersion: 7, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 7 {
+                    migration.create(Record2.className(), value: ["isLiked": false])
+                }
+            })
+        
+        config = Realm.Configuration(
+            schemaVersion: 8, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 8 {
+                    migration.create(Record2.className(), value: ["isChecked": 0])
+                }
+            })
+        
+        config = Realm.Configuration(
+            schemaVersion: 8, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 8 {
+                    migration.create(Translation.className(), value: ["isChecked": 0])
+                }
+            })
+        
+        config = Realm.Configuration(
+            schemaVersion: 9, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 9 {
+                    migration.create(Record2.className(), value: ["isDisplayed": 0])
+                }
+            })
+        
         Realm.Configuration.defaultConfiguration = config
         
         

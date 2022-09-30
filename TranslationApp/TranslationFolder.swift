@@ -33,6 +33,8 @@ class Translation: Object {
     
     @objc dynamic var id = 0
     
+    @objc dynamic var isChecked: Int = 0
+    
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -86,6 +88,10 @@ class Record2: Object{
     @objc dynamic var id = 0
     
     @objc dynamic var date5 = Date()
+    
+    @objc dynamic var isChecked: Int = 0
+    
+    @objc dynamic var isDisplayed: Int = 0
     
     override static func primaryKey() -> String? {
         "id"

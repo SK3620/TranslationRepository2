@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+
 class CustomCellTableViewCell: UITableViewCell {
     
     @IBOutlet weak var label1: UILabel!
@@ -14,6 +16,7 @@ class CustomCellTableViewCell: UITableViewCell {
     @IBOutlet weak var label3: UILabel!
     @IBOutlet weak var copyButton: UIButton!
     
+   
 
     
     override func awakeFromNib() {

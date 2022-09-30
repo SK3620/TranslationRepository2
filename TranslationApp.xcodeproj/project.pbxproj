@@ -25,6 +25,9 @@
 		839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = 839FBA3828BA5C8900BB64A5 /* APIKey.plist */; };
 		839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3A28BA602700BB64A5 /* KeyManager.swift */; };
 		83A564C928D7630300C3A9B9 /* PhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A564C828D7630300C3A9B9 /* PhraseViewController.swift */; };
+		83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */; };
+		83AC1DC928E4427D00576CF4 /* CustomPhraseWordViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */; };
+		83AC1DCD28E6220A00576CF4 /* NavigationController0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */; };
 		83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317128CF037200FDA0E1 /* MemoViewController.swift */; };
 		83AF317428CF320B00FDA0E1 /* MemoViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */; };
 		83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317528CF863100FDA0E1 /* RirekiViewController.swift */; };
@@ -77,6 +80,9 @@
 		839FBA3828BA5C8900BB64A5 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
 		83A564C828D7630300C3A9B9 /* PhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseViewController.swift; sourceTree = "<group>"; };
+		83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhraseWordViewCell.swift; sourceTree = "<group>"; };
+		83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomPhraseWordViewCell.xib; sourceTree = "<group>"; };
+		83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController0.swift; sourceTree = "<group>"; };
 		83AF317128CF037200FDA0E1 /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 		83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController2.swift; sourceTree = "<group>"; };
 		83AF317528CF863100FDA0E1 /* RirekiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RirekiViewController.swift; sourceTree = "<group>"; };
@@ -147,26 +153,29 @@
 				83B9C20028D3050E006138E2 /* CustomCell2.xib */,
 				83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */,
 				83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */,
+				83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */,
+				83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */,
 				83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */,
 				83AF317528CF863100FDA0E1 /* RirekiViewController.swift */,
 				83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */,
 				8388DA5928C9E25D008DE6FF /* TabBarController.swift */,
+				83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */,
 				83C15AF928BF451F00280694 /* FolderListViewController.swift */,
 				839FBA3428BA113300BB64A5 /* CreateFolderViewController.swift */,
 				839FBA3228BA101200BB64A5 /* HistoryViewController.swift */,
 				839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */,
 				839FBA2E28BA016C00BB64A5 /* ViewController.swift */,
+				83F021B028C0CC56009FFDD2 /* History2ViewController.swift */,
+				83F021AC28C0C714009FFDD2 /* CustomHeaderFooterView.swift */,
+				83F021AE28C0C726009FFDD2 /* CustomHeaderFooterView.xib */,
+				8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */,
+				83AF317128CF037200FDA0E1 /* MemoViewController.swift */,
+				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
 				83071D0128B91AC90003734C /* Assets.xcassets */,
 				83071D0328B91AC90003734C /* LaunchScreen.storyboard */,
 				83071D0628B91AC90003734C /* Info.plist */,
 				839FBA3828BA5C8900BB64A5 /* APIKey.plist */,
 				839FBA3A28BA602700BB64A5 /* KeyManager.swift */,
-				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
-				83F021AE28C0C726009FFDD2 /* CustomHeaderFooterView.xib */,
-				83F021AC28C0C714009FFDD2 /* CustomHeaderFooterView.swift */,
-				83F021B028C0CC56009FFDD2 /* History2ViewController.swift */,
-				8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */,
-				83AF317128CF037200FDA0E1 /* MemoViewController.swift */,
 				8388DA5528C9C237008DE6FF /* TranslationImage.png */,
 			);
 			path = TranslationApp;
@@ -257,6 +266,7 @@
 				83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */,
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
 				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
+				83AC1DC928E4427D00576CF4 /* CustomPhraseWordViewCell.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCell2.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -314,8 +324,10 @@
 				83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */,
 				83B9C20628D39997006138E2 /* AddViewController.swift in Sources */,
 				839FBA2F28BA016C00BB64A5 /* ViewController.swift in Sources */,
+				83AC1DCD28E6220A00576CF4 /* NavigationController0.swift in Sources */,
 				839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */,
 				83A564C928D7630300C3A9B9 /* PhraseViewController.swift in Sources */,
+				83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
 				83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */,
 				83F021AD28C0C714009FFDD2 /* CustomHeaderFooterView.swift in Sources */,

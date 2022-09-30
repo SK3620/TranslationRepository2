@@ -33,6 +33,8 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.folderNameLabel.text = self.string
+        
         let borderColor = UIColor.gray.cgColor
         let borderColor1 = UIColor.white.cgColor
         
@@ -115,20 +117,21 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
 //    セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        タップされたfolderName
-        if self.number == 0 {
-        let folderName = translationFolderArr[indexPath.row].folderName
-        self.folderNameLabel.text! += folderName
+//        if self.number == 0 {
+        var folderName = translationFolderArr[indexPath.row].folderName
+        self.folderNameLabel.text! = self.string + folderName
         self.confirmButton.isEnabled = true
             self.folderNameString = folderName
-            self.number += 1
-            print("DEBUG : \(self.folderNameString)")
-        } else if self.number == 1 {
-            tableView.deselectRow(at: indexPath, animated: true)
-            self.confirmButton.isEnabled = false
-            self.folderNameLabel.text = self.string
-            self.folderNameString = ""
-            self.number = 0
-        }
+//            self.number += 1
+//            print("DEBUG : \(self.folderNameString)")
+//        } else if self.number == 1 {
+////            tableView.deselectRow(at: indexPath, animated: true)
+////            self.confirmButton.isEnabled = false
+//            let folderName = translationFolderArr[indexPath.row].folderName
+//            self.folderNameLabel.text! += folderName
+//            self.folderNameString = folderName
+//            self.number = 0
+//        }
         
     }
 

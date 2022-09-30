@@ -17,7 +17,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var memoButton: UIButton!
     @IBOutlet weak var deleteAllButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var recordButton: UIButton!
+//    @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var acordionButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -43,6 +43,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         
         print("確認11 : \(self.folderNameString)")
+        
+        
         
         self.searchBar.backgroundImage = UIImage()
         //        xibファイルの登録
@@ -73,9 +75,9 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         saveButton.layer.borderWidth = 3
         saveButton.layer.cornerRadius = 10
         
-        recordButton.layer.borderColor = borderColor
-        recordButton.layer.borderWidth = 3
-        recordButton.layer.cornerRadius = 10
+//        recordButton.layer.borderColor = borderColor
+//        recordButton.layer.borderWidth = 3
+//        recordButton.layer.cornerRadius = 10
         
         deleteAllButton.layer.borderColor = borderColor
         deleteAllButton.layer.borderWidth = 3
@@ -104,9 +106,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewWillAppear(true)
         
         acordionButton.setTitle("表示", for: .normal)
-        
-        print("お呼ばれしました。")
-        
+       
         self.folderNameLabel.text = self.folderNameString
         
         tableView.layer.cornerRadius = 10
@@ -153,7 +153,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.search()
     }
-    //        検索バーに入力があったら呼ばれる
+    //        検索バーに入力があったら呼ばれる　（文字列検索機能）
 
     func search(){
         self.sections.removeAll()
@@ -229,20 +229,36 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("確認47")
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = tableDataList[indexPath.section]
         
-        let image1 = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
-        var image2 = UIImage(systemName: "hand.tap", withConfiguration: image1)
-        
-        if self.searchBar.text != "" {
-            image2 = UIImage()
+        if self.searchBar.text == "" {
+            cell.selectionStyle = .default
+        } else {
+            cell.selectionStyle = .none
         }
         
-        cell.imageView?.image = image2
+        let image1 = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+        let image2 = UIImage(systemName: "hand.tap", withConfiguration: image1)
 
-        cell.textLabel?.numberOfLines = 0
+//        if indexPath.section == 0 && self.searchBar.text == "" {
+//            cell.imageView?.image = image2
+//        }
+//
+        if indexPath.section == 0 && self.searchBar.text == "" {
+        cell.imageView?.image = image2
+        }
         
+        if indexPath.section != 0 && self.searchBar.text == "" {
+            cell.imageView?.image = UIImage()
+        }
+        
+        if self.searchBar.text != "" {
+            cell.imageView?.image = UIImage()
+        }
+        
+        cell.textLabel?.numberOfLines = 0
        
         return cell
     }
@@ -254,6 +270,9 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         header.button2.isEnabled = true
         header.button2.isHidden = false
+        
+        header.button3.isHidden = false
+        header.button3.isEnabled = true
         
         header.section = section
         print("確認41 : \(header.section)")
@@ -267,18 +286,69 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         header.button2.addTarget(self, action: #selector(tapCellButton(_:)), for: .touchUpInside)
         header.button2.tag = section
         
+        
+        
+        header.button3.addTarget(self, action: #selector(tapStarButton(_:)), for: .touchUpInside)
+        header.button3.tag = section
+        
+        let result = translationFolderArr.first!.results[section].isChecked
+        switch result {
+        case 0:
+            let image0 = UIImage(systemName: "star")
+            header.button3.setImage(image0, for: .normal)
+        case 1:
+            let image1 = UIImage(systemName: "star.leadinghalf.filled")
+            header.button3.setImage(image1, for: .normal)
+        case 2:
+            let image2 = UIImage(systemName: "star.fill")
+            header.button3.setImage(image2, for: .normal)
+        default:
+            print("その他の値です")
+        }
+        
         if self.searchBar.text != "" {
             header.button2.isEnabled = false
             header.button2.isHidden = true
             
+            header.button3.isEnabled = false
+            header.button3.isHidden = true
         }
-        
         print("確認16 tableView終わり")
     //        デリゲート設定
             return header
         //        headerはCVustomHeaderFooterViewクラスで、このクラスはUIViewクラスを継承したUITableViewHeaderFooterViewを継承しているからreturn headerできる。
     }
     
+    
+//    ブックマーク（星ボタン）をタップするごとに、Realm(TransaltionFolderクラス）のisCheckedプロパティに数字を書き込み保存 tableView,reloadData()でfunc viewForHeaderInSectionメソッド実行時に、星ボタンの状態を変える。
+    @objc func tapStarButton(_ sender: UIButton){
+        
+        let translationArr = self.realm.objects(Translation.self)
+        let result = translationArr[sender.tag].isChecked
+        
+        switch result {
+        case 0:
+            try! Realm().write{
+                translationArr[sender.tag].isChecked = 1
+                realm.add(translationArr, update: .modified)
+            }
+        case 1:
+            try! Realm().write{
+                translationArr[sender.tag].isChecked = 2
+                realm.add(translationArr, update: .modified)
+            }
+        case 2:
+            try! Realm().write{
+                translationArr[sender.tag].isChecked = 0;               realm.add(translationArr, update: .modified)
+            }
+        default:
+            print("値ありません。")
+        }
+        tableView.reloadData()
+    }
+    
+    
+//    右のドキュメントシステムアイコンをタップしたら、Realm（TranslationFolderファイル）のRecord2クラスに書き込み保存
     @objc func tapCellButton(_ sender: UIButton){
         
         if number == 0{
@@ -334,6 +404,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         //        .deleteだけでもよき
     }
     
+//    セル削除メソッド
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if self.searchBar.text == "" {
             if editingStyle == UITableViewCell.EditingStyle.delete {
@@ -351,6 +422,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+//    セルをたっぷしたら、Edit1ViewControllerに画面遷移させて、そこで編集作業＋保存ボタンでRealmモデルクラス（TranslationFolderファイル）に保存
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if self.searchBar.text == "" {
@@ -391,6 +463,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     
+//    全削除ボタン
     @IBAction func deleteAllButtonAction(_ sender: Any) {
         
         let alert = UIAlertController(title: "削除", message: "本当に全て削除してもよろしいですか？", preferredStyle: .alert)
@@ -440,7 +513,6 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     //    ボタンタップでアコーディオン全表示、非表示切り替え
-    
     @IBAction func changeAcordionButton(_ sender: Any) {
         
         if self.translationFolderArr[0].results.count != 0 {

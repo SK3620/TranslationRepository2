@@ -19,24 +19,19 @@ class CustomHeaderFooterView: UITableViewHeaderFooterView {
     @IBOutlet weak var inputDataLabel: UILabel!
     var section = 0
    
-    @IBOutlet weak var button: UIButton!
+    
     @IBOutlet weak var button2: UIButton!
+    @IBOutlet weak var button3: UIButton!
     
-    
-    
-
-    //    このセクションには多分、指定された（タップされた？）セクションの情報が入ってくる。
-    
+   
     override func awakeFromNib() {
-        
-      
-        
+    
         contentView.backgroundColor = .systemBackground
         inputDataLabel.numberOfLines = 0;
         
-        let image1 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
-        let image2 = UIImage(systemName: "arrowtriangle.down", withConfiguration: image1)
-        self.button.setImage(image2, for: .normal)
+//        let image1 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
+//        let image2 = UIImage(systemName: "arrowtriangle.down", withConfiguration: image1)
+//        self.button.setImage(image2, for: .normal)
         
        changeIcon()
        
@@ -48,24 +43,21 @@ class CustomHeaderFooterView: UITableViewHeaderFooterView {
     @IBAction func didTap (_ sender: Any) {
         print("確認16 ボタンがタップされた")
         delegate?.singleAccordionTableViewHeaderFooterView(self, section: self.section)
-       
-    
     }
     
     @IBAction func button2Action(_ sender: Any) {
         print("ボタン押下")
-        let image5 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
-        let image6 = UIImage(systemName: "checkmark", withConfiguration: image5)
+//        let image5 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
+        let image6 = UIImage(systemName: "checkmark")
         self.button2.setImage(image6, for: .normal)
     
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: changeIcon)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: changeIcon)
     }
     
     func changeIcon(){
-        let image3 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
-        let image4 = UIImage(systemName: "doc.text", withConfiguration: image3)
+//        let image3 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
+        let image4 = UIImage(systemName: "doc.text")
         self.button2.setImage(image4, for: .normal)
-        
     }
 }
 
