@@ -31,10 +31,12 @@ class AddViewController: UIViewController {
     
     let realm = try! Realm()
     let recordArr = try! Realm().objects(Record.self)
+   
     var recordViewController: RecordViewController!
     var translationFolderArr: Results<TranslationFolder>!
     
     var dateString: String!
+    var dateString1: Int!
     var dateString2: String!
     var folderNames = [String]()
     
@@ -42,6 +44,8 @@ class AddViewController: UIViewController {
     
     var number: Int!
     var numbers = [String]()
+    
+    
     
 
     override func viewDidLoad() {
@@ -169,7 +173,11 @@ class AddViewController: UIViewController {
     
     @objc func done1(){
         textField1.endEditing(true)
+        if self.folderNames.count != 0 {
         textField1.text = "\(self.folderNames[pickerView1.selectedRow(inComponent: 0)])"
+        } else {
+            textField1.text = ""
+        }
     }
     
     @objc func cancel1(){
@@ -191,9 +199,14 @@ class AddViewController: UIViewController {
     @objc func done4(){
         textField4.endEditing(true)
         let formatter = DateFormatter()
-        formatter.dateFormat = "M.dd"
+        formatter.dateFormat = "yyyy.M.d"
         let dateString = formatter.string(from: datePicker.date)
         textField4.text = dateString
+        
+        formatter.dateFormat = "yyyyMd"
+        self.dateString1 = Int(formatter.string(from: datePicker.date))!
+        
+        print("日付\(Int(dateString1))")
     }
     
     @objc func cancel4(){
@@ -217,40 +230,62 @@ class AddViewController: UIViewController {
         let textField_text2 = self.textField2.text
         let textField_text3 = self.textField3.text
         let textField_text4 = self.textField4.text
+        let textField_text4ForSorting = dateString1
         let textView_text1 = self.textView1.text
         
        let record = Record()
-        
         record.folderName = textField_text1!
         record.number = textField_text2!
         record.times = textField_text3!
         record.nextReviewDate = textField_text4!
         record.memo = textView_text1!
         record.date3 = self.dateString
+        if textField_text4 != "" {
+        record.nextReviewDateForSorting = textField_text4ForSorting!
+        } else {
+            record.nextReviewDateForSorting = 0
+        }
+        
+//       let record1 = Record1()
+//        record1.folderName2 = textField_text1!
+//        record1.number2 = textField_text2!
+//        record1.times2 = textField_text3!
+//        record1.nextReviewDate2 = textField_text4!
+//        record1.memo2 = textView_text1!
+//        record1.date3_5 = self.dateString
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         let _: String = formatter.string(from: record.date4)
+//        let _: String = formatter.string(from: record1.date4_5)
         
        
         
         if self.recordArr.count != 0 {
             record.id = recordArr.max(ofProperty: "id")! + 1
         }
+//        if self.record1Arr.count != 0 {
+//            record1.id = record1Arr.max(ofProperty: "id")! + 1
+//        }
        
         do {
             let realm = try Realm()
             
             try realm.write {
                 realm.add(record)
+//                realm.add(record1)
                 
                 self.recordViewController.recordArrFilter0 = self.recordArr
                 self.recordViewController.number = 1
                 self.recordViewController.dateString = self.dateString
+                
+//                self.recordViewController.recordArrFilter00 = self.record1Arr
             }
         } catch {
             print("エラー発生")
         }
+       
+        print(recordArr)
         
         self.dismiss(animated: true)
         

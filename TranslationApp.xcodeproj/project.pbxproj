@@ -18,6 +18,8 @@
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* Edit1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */; };
+		83966BF728E8C1060098A39E /* CustomCellForHistory2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83966BF528E8C1060098A39E /* CustomCellForHistory2ViewController.swift */; };
+		83966BF828E8C1060098A39E /* CustomCellForHistory2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83966BF628E8C1060098A39E /* CustomCellForHistory2ViewController.xib */; };
 		839FBA2F28BA016C00BB64A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA2E28BA016C00BB64A5 /* ViewController.swift */; };
 		839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */; };
 		839FBA3328BA101200BB64A5 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3228BA101200BB64A5 /* HistoryViewController.swift */; };
@@ -31,6 +33,9 @@
 		83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317128CF037200FDA0E1 /* MemoViewController.swift */; };
 		83AF317428CF320B00FDA0E1 /* MemoViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */; };
 		83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317528CF863100FDA0E1 /* RirekiViewController.swift */; };
+		83B6AF1C28E71E8C00700DBF /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */; };
+		83B6AF1F28E7254000700DBF /* ReviewCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */; };
+		83B6AF2028E7254000700DBF /* ReviewCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */; };
 		83B9C1FB28CFF10B006138E2 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */; };
 		83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */; };
 		83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */; };
@@ -39,8 +44,6 @@
 		83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20328D3132D006138E2 /* EditViewController.swift */; };
 		83B9C20628D39997006138E2 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20528D39997006138E2 /* AddViewController.swift */; };
 		83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C15AF928BF451F00280694 /* FolderListViewController.swift */; };
-		83F021AD28C0C714009FFDD2 /* CustomHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021AC28C0C714009FFDD2 /* CustomHeaderFooterView.swift */; };
-		83F021AF28C0C726009FFDD2 /* CustomHeaderFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83F021AE28C0C726009FFDD2 /* CustomHeaderFooterView.xib */; };
 		83F021B128C0CC56009FFDD2 /* History2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021B028C0CC56009FFDD2 /* History2ViewController.swift */; };
 		E6FAEDC6536A5BB599B65D2D /* Pods_TranslationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */; };
 /* End PBXBuildFile section */
@@ -73,6 +76,8 @@
 		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edit1ViewController.swift; sourceTree = "<group>"; };
+		83966BF528E8C1060098A39E /* CustomCellForHistory2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForHistory2ViewController.swift; sourceTree = "<group>"; };
+		83966BF628E8C1060098A39E /* CustomCellForHistory2ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForHistory2ViewController.xib; sourceTree = "<group>"; };
 		839FBA2E28BA016C00BB64A5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
 		839FBA3228BA101200BB64A5 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
@@ -86,6 +91,9 @@
 		83AF317128CF037200FDA0E1 /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 		83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController2.swift; sourceTree = "<group>"; };
 		83AF317528CF863100FDA0E1 /* RirekiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RirekiViewController.swift; sourceTree = "<group>"; };
+		83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
+		83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCustomCell.swift; sourceTree = "<group>"; };
+		83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReviewCustomCell.xib; sourceTree = "<group>"; };
 		83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
 		83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellTableViewCell.xib; sourceTree = "<group>"; };
 		83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
@@ -94,8 +102,6 @@
 		83B9C20328D3132D006138E2 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		83B9C20528D39997006138E2 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		83C15AF928BF451F00280694 /* FolderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListViewController.swift; sourceTree = "<group>"; };
-		83F021AC28C0C714009FFDD2 /* CustomHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderFooterView.swift; sourceTree = "<group>"; };
-		83F021AE28C0C726009FFDD2 /* CustomHeaderFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomHeaderFooterView.xib; sourceTree = "<group>"; };
 		83F021B028C0CC56009FFDD2 /* History2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History2ViewController.swift; sourceTree = "<group>"; };
 		C116E1FDCFAEA5860B3B5F33 /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,6 +151,9 @@
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
+				83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */,
+				83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */,
+				83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */,
 				832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */,
 				83A564C828D7630300C3A9B9 /* PhraseViewController.swift */,
 				83B9C20528D39997006138E2 /* AddViewController.swift */,
@@ -154,7 +163,6 @@
 				83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */,
 				83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */,
 				83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */,
-				83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */,
 				83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */,
 				83AF317528CF863100FDA0E1 /* RirekiViewController.swift */,
 				83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */,
@@ -166,8 +174,6 @@
 				839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */,
 				839FBA2E28BA016C00BB64A5 /* ViewController.swift */,
 				83F021B028C0CC56009FFDD2 /* History2ViewController.swift */,
-				83F021AC28C0C714009FFDD2 /* CustomHeaderFooterView.swift */,
-				83F021AE28C0C726009FFDD2 /* CustomHeaderFooterView.xib */,
 				8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */,
 				83AF317128CF037200FDA0E1 /* MemoViewController.swift */,
 				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
@@ -177,6 +183,9 @@
 				839FBA3828BA5C8900BB64A5 /* APIKey.plist */,
 				839FBA3A28BA602700BB64A5 /* KeyManager.swift */,
 				8388DA5528C9C237008DE6FF /* TranslationImage.png */,
+				83966BF528E8C1060098A39E /* CustomCellForHistory2ViewController.swift */,
+				83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */,
+				83966BF628E8C1060098A39E /* CustomCellForHistory2ViewController.xib */,
 			);
 			path = TranslationApp;
 			sourceTree = "<group>";
@@ -260,13 +269,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */,
-				83F021AF28C0C726009FFDD2 /* CustomHeaderFooterView.xib in Resources */,
+				83B6AF2028E7254000700DBF /* ReviewCustomCell.xib in Resources */,
 				839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */,
 				83071D0228B91AC90003734C /* Assets.xcassets in Resources */,
 				83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */,
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
 				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
 				83AC1DC928E4427D00576CF4 /* CustomPhraseWordViewCell.xib in Resources */,
+				83966BF828E8C1060098A39E /* CustomCellForHistory2ViewController.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCell2.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,7 +331,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */,
+				83966BF728E8C1060098A39E /* CustomCellForHistory2ViewController.swift in Sources */,
 				83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */,
+				83B6AF1C28E71E8C00700DBF /* ReviewViewController.swift in Sources */,
 				83B9C20628D39997006138E2 /* AddViewController.swift in Sources */,
 				839FBA2F28BA016C00BB64A5 /* ViewController.swift in Sources */,
 				83AC1DCD28E6220A00576CF4 /* NavigationController0.swift in Sources */,
@@ -330,7 +342,6 @@
 				83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
 				83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */,
-				83F021AD28C0C714009FFDD2 /* CustomHeaderFooterView.swift in Sources */,
 				83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */,
 				83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */,
 				832D4CB028D848B5004C4D7C /* Memo2ViewController.swift in Sources */,
@@ -338,6 +349,7 @@
 				837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */,
 				839FBA3328BA101200BB64A5 /* HistoryViewController.swift in Sources */,
 				839FBA3528BA113300BB64A5 /* CreateFolderViewController.swift in Sources */,
+				83B6AF1F28E7254000700DBF /* ReviewCustomCell.swift in Sources */,
 				83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */,
 				8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */,
 				83071CFB28B91AC70003734C /* SceneDelegate.swift in Sources */,

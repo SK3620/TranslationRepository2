@@ -14,6 +14,8 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var rirekiTableView: UITableView!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var view1: UIView!
+    @IBOutlet weak var label1: UILabel!
+    
     
     
    
@@ -51,8 +53,10 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.historyArr = realm.objects(Histroy.self).sorted(byKeyPath: "date2", ascending: true)
         if historyArr.count == 0 {
             editButton.isEnabled = false
+            self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
         } else {
             editButton.isEnabled = true
+            label1.text = ""
         }
         self.rirekiTableView.reloadData()
         
@@ -101,9 +105,11 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
             editButton.isEnabled = false
             editButton.setTitle("編集", for: .normal)
             rirekiTableView.isEditing = false
+            label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
         } else {
             editButton.isEnabled = true
             rirekiTableView.isEditing = false
+            label1.text = ""
         }
         return self.historyArr.count
       }
@@ -234,7 +240,7 @@ extension RirekiViewController: ContextMenuDelegate {
             }
             self.intArr = []
             self.historyArr = self.realm.objects(Histroy.self)
-            
+            self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
             self.rirekiTableView.reloadData()
             print("リロードされた")
             

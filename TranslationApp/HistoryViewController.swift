@@ -122,7 +122,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "フォルダー 一覧　 (左スワイプで削除)"
+        return "フォルダー 一覧"
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

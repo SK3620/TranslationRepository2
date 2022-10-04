@@ -37,9 +37,12 @@ class EditViewController: UIViewController {
     let realm = try! Realm()
     let recordArr = try! Realm().objects(Record.self)
     var recordArrFilter2: Record!
+//    let record1Arr = try! Realm().objects(Record1.self)
+//    var record1ArrFilter2: Record1!
     
     var recordViewController: RecordViewController!
     var dateString: String!
+    var dateString1: Int!
     
     var label1_text: String!
     var textField1_text: String!
@@ -155,6 +158,7 @@ class EditViewController: UIViewController {
         self.textView1.text = self.textView1_text
         
         
+        
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -190,9 +194,12 @@ class EditViewController: UIViewController {
     @objc func done4(){
         textField4.endEditing(true)
         let formatter = DateFormatter()
-        formatter.dateFormat = "M.dd"
+        formatter.dateFormat = "yyyy.M.d"
         let dateString = formatter.string(from: datePicker.date)
         textField4.text = dateString
+        
+        formatter.dateFormat = "yyyyMd"
+        self.dateString1 = Int(formatter.string(from: datePicker.date))
     }
     
     @objc func cancel4(){
@@ -222,6 +229,7 @@ class EditViewController: UIViewController {
          textField2_text = self.textField2.text
          textField3_text = self.textField3.text
          textField4_text = self.textField4.text
+        let textField4_textForSorting = self.dateString1
          textView1_text = self.textView1.text
         
         do {
@@ -233,12 +241,27 @@ class EditViewController: UIViewController {
                 self.recordArrFilter2.times = textField3_text!
                 self.recordArrFilter2.nextReviewDate = textField4_text!
                 self.recordArrFilter2.memo = textView1_text!
+                self.recordArrFilter2.nextReviewDateForSorting = textField4_textForSorting!
                 realm.add(self.recordArrFilter2, update: .modified)
+                
+//                self.record1ArrFilter2.folderName2 = textField1_text!
+//                self.record1ArrFilter2.number2 = textField2_text!
+//                self.record1ArrFilter2.times2 = textField3_text!
+//                self.record1ArrFilter2.nextReviewDate2 = textField4_text!
+//                self.record1ArrFilter2.memo2 = textView1_text!
+//                realm.add(self.record1ArrFilter2, update: .modified)
+                
+                
             }
             
             self.recordViewController.recordArrFilter0 = self.recordArr
             self.recordViewController.number = 1
             self.recordViewController.dateString = self.dateString
+            
+//            self.recordViewController.recordArrFilter00 = self.record1Arr
+            
+            print("チェック \(recordArr)")
+//            print(record1Arr)
             
         } catch {
             print("エラー発生")

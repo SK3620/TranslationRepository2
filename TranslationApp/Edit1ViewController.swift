@@ -183,6 +183,7 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
             try! realm.write{
                 translationArr.inputData = textView1.text
                 translationArr.resultData = textView2.text
+                translationArr.inputAndResultData = textView1.text + textView2.text
                 self.realm.add(translationArr, update: .modified)
             }
             

@@ -108,6 +108,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         
+        config = Realm.Configuration(
+            schemaVersion: 10, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 10 {
+                    migration.create(Translation.className(), value: ["isDisplayed": 0])
+                }
+            })
+        
+        config = Realm.Configuration(
+            schemaVersion: 11, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 11 {
+                    migration.create(Translation.className(), value: ["inputAndResultData": ""])
+                }
+            })
+        
+        config = Realm.Configuration(
+            schemaVersion: 12, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 12 {
+                    migration.create(Record.className(), value: ["nextReviewDateForSorting": 0])
+                }
+            })
+        
         Realm.Configuration.defaultConfiguration = config
         
         

@@ -19,13 +19,18 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var reviewButton: UIButton!
     
     
     let realm = try! Realm()
     let recordArr = try! Realm().objects(Record.self)
+//    let record1Arr = try! Realm().objects(Record1.self)
     var recordArrFilter0: Results<Record>!
+//    var recordArrFilter00: Results<Record1>!
     var recordArrFilter: Results<Record>!
     var recordArrFilter2: Record!
+//    var record1ArrFilter: Results<Record1>!
+//    var record1ArrFilter2: Record1!
    
     
     var dateString: String = ""
@@ -39,6 +44,8 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         addButton.isEnabled = false
         label1.text = "日付タップ → 「＋」で記録しよう！"
         
+        reviewButton.isEnabled = false
+        reviewButton.isHidden = true
         
         self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
         tableView.layer.borderWidth = 2.5
@@ -62,13 +69,25 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         super.viewWillAppear(true)
         if self.number == 1 {
         let predicate = NSPredicate(format: "date3 == %@", self.dateString)
-        self.recordArrFilter = self.recordArrFilter0.filter(predicate).sorted(byKeyPath: "date4", ascending: true)
-        
+        self.recordArrFilter = self.recordArrFilter0.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
+            
+//            let predicate1 = NSPredicate(format: "date3_5 == %@", self.dateString)
+//            self.record1ArrFilter = self.recordArrFilter00.filter(predicate1).sorted(byKeyPath: "date4_5", ascending: true)
+//
+//            print("両方確認\(recordArrFilter)")
+//            print(record1ArrFilter)
+            
+            
         self.tableView.reloadData()
             self.number = 0
             print("ViewWillAppearが実行された。")
         }
-        print("ViewWillAppearが呼ばれませんでした。")
+    
+        tableView.reloadData()
+        
+        reviewButton.isHidden = false
+        reviewButton.isEnabled = true
+        
     }
     
    
@@ -98,6 +117,10 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         self.addButton.isEnabled = true
         self.label1.isHidden = true
         
+        reviewButton.setTitle("復習日・内容を確認する", for: .normal)
+        reviewButton.isHidden = false
+        reviewButton.isEnabled = true
+        
 //        このdate変数をCalendarクラスを利用して、年、月、日で分解させる
         let tmpCalendar = Calendar(identifier: .gregorian)
         let year = String(tmpCalendar.component(.year, from: date))
@@ -112,10 +135,18 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         self.dateString = dateString
         self.dateString2 = "\(year)年\(month)月\(day)日"
         
+//        if self.record1Arr.count != 0 {
+//        let predicate0 = NSPredicate(format: "date3_5 == %@", self.dateString)
+//            self.record1ArrFilter = self.record1Arr.filter(predicate0).sorted(byKeyPath: "date4_5", ascending: true)
+//            print("確認確認")
+//            print(record1ArrFilter)
+//        }
+        
         
         if self.recordArr.count != 0 {
         let predicate = NSPredicate(format: "date3 == %@", self.dateString)
         self.recordArrFilter = self.recordArr.filter(predicate).sorted(byKeyPath: "date4", ascending: true)
+            print(recordArrFilter)
             if recordArrFilter != nil {
             self.tableView.reloadData()
             }
@@ -168,8 +199,38 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         editViewContoller.textField3_text = recordArrFilter2.times
         editViewContoller.textField4_text = recordArrFilter2.nextReviewDate
         editViewContoller.textView1_text = recordArrFilter2.memo
+        editViewContoller.dateString1 = recordArrFilter2.nextReviewDateForSorting
         
         editViewContoller.recordArrFilter2 = self.recordArrFilter2
+        
+        print("確認だよー")
+        
+//        let predicate = NSPredicate(format: "id == %@", recordArrFilter2.id)
+//        let recordArrFilter2_id = Int(recordArrFilter2.id)
+//        print(recordArrFilter2_id)
+//        record1ArrFilter = self.record1ArrFilter.filter("id == \(recordArrFilter2_id)")
+//        print("確認だよー２")
+//        print(record1ArrFilter)
+//
+//        if record1ArrFilter.isEmpty != true {
+//            editViewContoller.record1ArrFilter2 = record1ArrFilter.first
+//            print(record1ArrFilter.first)
+//        } else {
+//            print("空でした。")
+//        }
+//
+//        if let record1ArrFilter2 = self.record1ArrFilter?[indexPath.row] {
+//            print(record1ArrFilter2)
+//            editViewContoller.record1ArrFilter2 = record1ArrFilter2
+//        } else {
+//            print("nilでした")
+//        }
+//
+//        self.record1ArrFilter[indexPath.row] != nil {
+//            self.record1ArrFilter2 = self.record1ArrFilter[indexPath.row]
+//        editViewContoller.record1ArrFilter2 = record1ArrFilter2
+//        }
+        
         
         present(editViewContoller, animated: true, completion: nil)
     }

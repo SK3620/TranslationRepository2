@@ -15,6 +15,7 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var view1: UIView!
+    @IBOutlet weak var label1: UILabel!
     
     
     
@@ -45,6 +46,9 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        label1.text = "お気に入りの単語・フレーズを追加しよう！"
+       
+        
         editButton.setTitle("編集", for: .normal)
         tableView.isEditing = false
         
@@ -66,6 +70,7 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
             for number in 0...self.record2Arr.count - 1 {
                 self.inputDataList.append(record2Arr[number].inputData3)
                 self.resultDataList.append(record2Arr[number].resultData3)
+                self.label1.text = ""
             }
         }
         self.tableView.reloadData()
@@ -82,6 +87,11 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
             tableView.isEditing = false
           
         }
+        
+        if self.inputDataList.isEmpty{
+            label1.text = "お気に入りの単語・フレーズを追加しよう！"
+        }
+        
         return self.inputDataList.count
        }
        
@@ -354,6 +364,7 @@ extension PhraseViewController: ContextMenuDelegate {
             } catch {
                 print("エラー")
             }
+            self.label1.text = "お気に入りの単語・フレーズを追加しよう！"
         })
         
         let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
@@ -363,6 +374,8 @@ extension PhraseViewController: ContextMenuDelegate {
         alert.addAction(cencel)
         
         self.present(alert, animated: true, completion: nil)
+        
+       
     }
     
     

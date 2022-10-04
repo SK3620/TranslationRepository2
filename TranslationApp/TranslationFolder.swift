@@ -35,6 +35,10 @@ class Translation: Object {
     
     @objc dynamic var isChecked: Int = 0
     
+    @objc dynamic var isDisplayed: Int = 0
+    
+    @objc dynamic var inputAndResultData = ""
+    
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -66,6 +70,8 @@ class Record: Object{
     
     @objc dynamic var nextReviewDate = ""
     
+    @objc dynamic var nextReviewDateForSorting: Int = 0
+    
     @objc dynamic var memo = ""
     
     @objc dynamic var date3 = ""
@@ -73,6 +79,29 @@ class Record: Object{
     @objc dynamic var id = 0
     
     @objc dynamic var date4 = Date()
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+}
+
+class Record1: Object {
+    
+    @objc dynamic var folderName2 = ""
+    
+    @objc dynamic var number2 = ""
+    
+    @objc dynamic var times2 = ""
+    
+    @objc dynamic var nextReviewDate2 = ""
+    
+    @objc dynamic var memo2 = ""
+    
+    @objc dynamic var date3_5 = ""
+    
+    @objc dynamic var id = 0
+    
+    @objc dynamic var date4_5 = Date()
     
     override static func primaryKey() -> String? {
         return "id"

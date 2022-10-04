@@ -151,8 +151,15 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         if let textString = self.textStringForButton2{
             let translationFolderArr2 = realm.objects(TranslationFolder.self)
             var FolderNameArr = [String]()
-            for number in 0...translationFolderArr2.count - 1{
-                FolderNameArr.append(translationFolderArr2[number].folderName)
+            if translationFolderArr2.count == 0 {
+                self.button2.isEnabled = false
+                self.button2.isHidden = true
+                self.button3.setTitle("上記を保存", for: .normal)
+                return
+            } else {
+                for number in 0...translationFolderArr2.count - 1{
+                    FolderNameArr.append(translationFolderArr2[number].folderName)
+                }
             }
             if FolderNameArr.contains(textString){
                 
@@ -351,10 +358,13 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 //                            Translationモデルのインスタンス作成
 //                let result1 = Translation(value: ["inputData": "\(translateTextViewText!)"])
 //                let result2 = Translation(value: ["resultData": "\(translateLabelText!)"])
+                let predict = NSPredicate(format: "folderName == %@", textStringForButton2)
+                translationFolderArr = realm.objects(TranslationFolder.self).filter(predict)
                 
                 let result3 = Translation()
                 result3.inputData = translateTextViewText!
                 result3.resultData = translateLabelText! + "\n" + "メモ : "
+                result3.inputAndResultData = translateTextViewText! + result3.resultData
                 let allTranslation = realm.objects(Translation.self)
                 if allTranslation.count != 0 {
                     result3.id = allTranslation.max(ofProperty: "id")! + 1
@@ -365,14 +375,15 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 //                print("辞書 : \(dictionary)"
 //                let result3 = Translation(value: dictionary)
 //                print("結果3 : \(result3)")
-                let predict = NSPredicate(format: "folderName == %@", textStringForButton2)
-                
-                translationFolderArr = realm.objects(TranslationFolder.self).filter(predict)
-                print("データ : \(translationFolderArr)")
                 
                 try! realm.write{
                     translationFolderArr.first!.results.append(result3)
                 }
+                
+                print(translationFolderArr)
+                
+                print("モデル確認")
+                print(result3)
 //                ここに追加しました。Translationクラスのid設定はここではだめ
 //                let translation = Translation()
 //                let allTranslation = realm.objects(Translation.self)
