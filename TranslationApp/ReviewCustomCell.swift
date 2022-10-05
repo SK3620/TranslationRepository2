@@ -29,11 +29,35 @@ class ReviewCustomCell: UITableViewCell {
     }
     
     func setData(_ reviewDate: String, _ folderName: String, _ content: String, _ memo: String, _ times: String){
+        if reviewDate != "" {
         self.reviewDate.text = reviewDate
-        self.folderName.text = folderName
-        self.content.text = content
-        self.memo.text = memo
-        self.times.text = times
+        } else {
+            self.reviewDate.text = " "
+        }
+        
+        if folderName != "" {
+            self.folderName.text = folderName
+        } else {
+            self.folderName.text = " "
+        }
+        
+        if content != "" {
+            self.content.text = content
+        } else {
+            self.content.text = " "
+        }
+        
+        if memo != "" {
+            self.memo.text = memo
+        } else {
+            self.memo.text = " "
+        }
+        
+        if times != "" {
+            self.times.text = content
+        } else {
+            self.times.text = " "
+        }
     }
     
 }

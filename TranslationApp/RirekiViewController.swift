@@ -34,6 +34,7 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         rirekiTableView.delegate = self
         rirekiTableView.dataSource = self
+        rirekiTableView.separatorColor = .gray
 
         let nib = UINib(nibName: "CustomCellTableViewCell", bundle: nil)
         rirekiTableView.register(nib, forCellReuseIdentifier: "CustomCell")

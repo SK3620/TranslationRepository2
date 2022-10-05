@@ -49,31 +49,31 @@ class CustomCell2: UITableViewCell {
         if recordArrFilter.folderName != "" {
             label1.text = recordArrFilter.folderName
         } else {
-            label1.text = ""
+            label1.text = " "
         }
         
         if recordArrFilter.number != "" {
             label2.text = recordArrFilter.number
         } else {
-            label2.text = ""
+            label2.text = " "
         }
         
         if recordArrFilter.times != "" {
             label3.text = recordArrFilter.times
         } else {
-            label3.text = ""
+            label3.text = " "
         }
         
         if recordArrFilter.nextReviewDate != "" {
             label4.text = recordArrFilter.nextReviewDate
         } else {
-            label4.text = ""
+            label4.text = " "
         }
         
         if recordArrFilter.memo != "" {
             label5.text = recordArrFilter.memo
         } else {
-            label5.text = ""
+            label5.text = " "
         }
         
     }

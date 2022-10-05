@@ -30,7 +30,7 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.separatorColor = .systemBlue
+        tableView.separatorColor = .gray
         
        
 

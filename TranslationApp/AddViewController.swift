@@ -27,7 +27,7 @@ class AddViewController: UIViewController {
     var datePicker: UIDatePicker = UIDatePicker()
     var pickerView1: UIPickerView = UIPickerView()
     var pickerView3: UIPickerView = UIPickerView()
-    
+
     
     let realm = try! Realm()
     let recordArr = try! Realm().objects(Record.self)
@@ -45,11 +45,15 @@ class AddViewController: UIViewController {
     var number: Int!
     var numbers = [String]()
     
+//    recordViewController画面で選択された日付を格納する
+    var selectedDate: Date!
     
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("選択された日付確認　: \(self.selectedDate)")
         
         self.textField3.delegate = self
         
@@ -291,19 +295,17 @@ class AddViewController: UIViewController {
         
     }
     
-
-
-/*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        self.recordViewController.calendar(recordViewController.fscalendar, numberOfEventsFor: self.selectedDate)
+        print("selecteddate確認 : \(self.selectedDate)")
+        print("ViewWillDissapearが呼ばれました。")
     }
-    */
-
+    
 }
+    
+  
+   
 
 extension AddViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
@@ -333,7 +335,7 @@ extension AddViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITex
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == self.textField3 && textField3.text != "" && textField3.text != "1" {
             let textField3_text: Int = Int(textField3.text!)!
-            self.label2.text = "〜 Tip 〜" + "\n" + "追加ボタンを押したら" + "\n" + "入力した前回の学習記録（\(textField3_text - 1)回目の学習記録) を削除するといいかも！" + "\n" + "学習記録カレンダーを見やすくしよう！"
+            self.label2.text = "〜 Tip 〜" + "\n" + "追加ボタンを押したら" + "\n" + "入力した前回の学習記録（\(textField3_text - 1)回目の学習記録) を「削除する」 or 「完了マークをつける」といいかも！" + "\n" + "学習記録カレンダーを見やすくしよう！"
         } else {
             label2.text = ""
         }

@@ -32,8 +32,12 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var datePicker: UIDatePicker = UIDatePicker()
     
+    var dateString: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.separatorColor = .gray
         
         let nib = UINib(nibName: "ReviewCustomCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "ReviewCustomCell")
@@ -46,6 +50,8 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         backButton.layer.borderWidth = 2.5
         backButton.layer.cornerRadius = 10
         
+        tableView.layer.borderColor = UIColor.systemGray4.cgColor
+        tableView.layer.borderWidth = 2.5
         
         // ピッカー設定
         datePicker.datePickerMode = UIDatePicker.Mode.date
@@ -116,7 +122,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         } else {
             self.folderName = []
-            self.label1.text = "登録されたデータがありません\n「戻る」→「+」ボタンで復習記録を追加しよう！"
+            self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
 
         tableView.reloadData()
@@ -148,7 +154,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         } else {
             self.folderName = []
-            self.label1.text = "登録されたデータがありません\n「戻る」→「+」ボタンで復習記録を追加しよう！"
+            self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
         
         tableView.reloadData()
@@ -213,6 +219,13 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.memo.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 print("実行確認")
+            }
+            
+            if self.resultsArr.count == 0 && self.recordArr.count == 0 {
+                label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
+            } else if self.resultsArr.count == 0 {
+                label1.text = "\(self.dateString)に登録されたデータはありません\n代わりに全てのデータを表示しています。"
+                self.resultsArr = self.recordArr
             }
             tableView.reloadData()
         }

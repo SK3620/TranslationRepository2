@@ -17,9 +17,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var folderNameLabel: UILabel!
     @IBOutlet weak var memoButton: UIButton!
-    @IBOutlet weak var deleteAllButton: UIButton!
+    @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
-//    @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var acordionButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -65,6 +64,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorColor = .gray
         searchBar.delegate = self
         tableView.allowsSelection = false
         // Do any additional setup after loading the view.
@@ -87,13 +87,10 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         saveButton.layer.borderWidth = 3
         saveButton.layer.cornerRadius = 10
         
-//        recordButton.layer.borderColor = borderColor
-//        recordButton.layer.borderWidth = 3
-//        recordButton.layer.cornerRadius = 10
-        
-        deleteAllButton.layer.borderColor = borderColor
-        deleteAllButton.layer.borderWidth = 3
-        deleteAllButton.layer.cornerRadius = 10
+        recordButton.layer.borderColor = borderColor
+        recordButton.layer.borderWidth = 3
+        recordButton.layer.cornerRadius = 10
+
         
         backButton.layer.borderColor = borderColor
         backButton.layer.borderWidth = 3
@@ -141,18 +138,6 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         tableView.reloadData()
-        
-        for i in sections{
-            print("配列 \(i)")
-        }
-        
-        for a in tableDataList{
-            print("配列2 \(a)")
-        }
-        
-        if translationFolderArr[0].results.count != 0 {
-            self.deleteAllButton.isEnabled = true
-        }
        
         if self.searchBar.text != "" {
             self.search()
@@ -184,42 +169,34 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             self.tableDataList.removeAll()
             
             if self.searchBar.text == "" {
-                deleteAllButton.isEnabled = true
+                
                 //            空だったら、全て表示する。（通常表示）
                 translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
                 
                 let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
                 translationFolderArr = self.translationFolderArr.filter(predict)
                 
-                if translationFolderArr.count != 0 {
-                    deleteAllButton.isEnabled  = true
-                } else {
-                    deleteAllButton.isEnabled = false
-                }
                 
                 for number in 0...translationFolderArr[0].results.count - 1 {
                     self.sections.append(translationFolderArr[0].results[number].inputData)
                     self.tableDataList.append(translationFolderArr[0].results[number].resultData)
-                }
-            } else {
-                
-                deleteAllButton.isEnabled = false
-                
-                let results1 = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
-                
-                self.translationArr = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
-                
-                
-                print(searchBar.text!)
-                
-                if results1.count != 0 {
-                    for results in 0...results1.count - 1 {
-                        self.sections.append(results1[results].inputData)
-                        self.tableDataList.append(results1[results].resultData)
+                    
+                    let results1 = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+                    
+                    self.translationArr = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+                    
+                    
+                    print(searchBar.text!)
+                    
+                    if results1.count != 0 {
+                        for results in 0...results1.count - 1 {
+                            self.sections.append(results1[results].inputData)
+                            self.tableDataList.append(results1[results].resultData)
+                        }
                     }
                 }
+                self.tableView.reloadData()
             }
-            self.tableView.reloadData()
         }
     }
     
@@ -237,18 +214,11 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     //    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchBar.text != "" {
-            acordionButton.isEnabled = false
-        } else {
-            acordionButton.isEnabled = true
-        }
-        
-        if searchBar.text == "" && translationFolderArr.first!.results.isEmpty {
+       
+        if translationFolderArr.first!.results.isEmpty {
             acordionButton.isEnabled = false
         }
-        print("実行可能\(translationFolderArr.first!.results.isEmpty)")
-        
-
+      
         return self.tableDataList.count
     }
     
@@ -441,6 +411,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         let edit = ContextMenuItemWithImage(title: "編集する", image: UIImage())
         let save = ContextMenuItemWithImage(title: "保存する", image: UIImage())
         let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage())
+       
         
         let cellForRow: IndexPath = IndexPath(row: sender.tag, section: 0)
         self.sender_tag = sender.tag
@@ -496,7 +467,17 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.reloadData()
     }
     
+    //    学習記録ボタンが押された時にRecordViewControllerへ値を渡す
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ToHistory2ViewController" {
+            let recordViewController = segue.destination as! RecordViewController
+            recordViewController.numberFromHistory2ViewController = 1
+            print("func prepareが実行された")
+        }
+    }
 }
+    
+    
 
 
 
@@ -553,30 +534,7 @@ extension History2ViewController: ContextMenuDelegate {
             print("保存ボタン")
             savePhraseButton()
         case 2:
-            try! realm.write {
-                if self.searchBar.text != "" {
-                    self.realm.delete(self.translationArr[sender_tag])
-                    sections.remove(at: sender_tag)
-                    tableDataList.remove(at: sender_tag)
-                } else {
-                self.realm.delete(self.translationFolderArr[0].results[sender_tag])
-                sections.remove(at: sender_tag)
-                tableDataList.remove(at: sender_tag)
-                }
-                
-              
-//
-                if translationFolderArr[0].results.count == 0 && searchBar.text == "" {
-                    deleteAllButton.isEnabled = false
-                } else {
-                    deleteAllButton.isEnabled = true
-                }
-                
-                if translationArr == nil && searchBar.text != "" {
-                    deleteAllButton.isEnabled = false
-                }
-            }
-            tableView.reloadData()
+            deleteButton()
         default:
             print("他の値")
             
@@ -603,6 +561,37 @@ extension History2ViewController: ContextMenuDelegate {
     
     
     
+    
+    func deleteButton(){
+        let alert = UIAlertController(title: "本当に削除しますか？", message: "保存した文章を\n左スワイプで削除することもできます", preferredStyle: .alert)
+        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in
+            try! self.realm.write {
+                if self.searchBar.text != "" {
+                    self.realm.delete(self.translationArr[self.sender_tag])
+                    self.sections.remove(at: self.sender_tag)
+                    self.tableDataList.remove(at: self.sender_tag)
+                } else {
+                    self.realm.delete(self.translationFolderArr[0].results[self.sender_tag])
+                    self.sections.remove(at: self.sender_tag)
+                    self.tableDataList.remove(at: self.sender_tag)
+                }
+                
+            }
+            self.tableView.reloadData()
+        })
+        
+        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
+        })
+        
+        alert.addAction(delete)
+        alert.addAction(cencel)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+                                   
+                                   
+                                   
+                                   
     //    右のドキュメントシステムアイコンをタップしたら、Realm（TranslationFolderファイル）のRecord2クラスに書き込み保存
     func savePhraseButton(){
         
@@ -672,12 +661,7 @@ extension History2ViewController: ContextMenuDelegate {
                     tableView.deselectRow(at: indexPath, animated: true)
                 }
             }
-            if translationFolderArr[0].results.count == 0 && searchBar.text == "" {
-                deleteAllButton.isEnabled = false
-            } else {
-                deleteAllButton.isEnabled = true
-            
-            }
+           
             tableView.reloadData()
         }
         
@@ -698,80 +682,81 @@ extension History2ViewController: ContextMenuDelegate {
         
         present(memoViewController, animated: true, completion: nil)
     }
+}
     
     
 //    全削除ボタン
-    @IBAction func deleteAllButtonAction(_ sender: Any) {
-        
-        let alert = UIAlertController(title: "削除", message: "本当に全て削除してもよろしいですか？", preferredStyle: .alert)
-        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in
-            
-            
-
-            self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-            
-            let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
-            self.translationFolderArr = self.translationFolderArr.filter(predict)
-            
-            
-            if self.searchBar.text != "" {
-                for number1 in 1...self.translationArr.count{
-                    var number2 = number1
-                    number2 = 0
-                    self.intArr.append(number2)
-                }
-                do {
-                    let realm = try Realm()
-                    try realm.write{
-                        for number3 in self.intArr{
-                            realm.delete(self.translationArr[number3])
-                        }
-                    }
-                } catch {
-                    print("エラー")
-                }
-            } else {
-            for number1 in 1...self.translationFolderArr[0].results.count{
-                var number2 = number1
-                number2 = 0
-                self.intArr.append(number2)
-            }
-            
-            do {
-                let realm = try Realm()
-                try realm.write{
-                    for number3 in self.intArr{
-                        realm.delete(self.translationFolderArr[0].results[number3])
-                    }
-                }
-            } catch {
-                print("エラー")
-            }
-            }
-            self.intArr = []
-            self.sections = []
-            self.tableDataList = []
-            
-            self.deleteAllButton.isEnabled = false
-            
-            self.tableView.reloadData()
-            print("リロードされた")
-            
-        })
-        //        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
-        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
-        })
-        
-        alert.addAction(delete)
-        alert.addAction(cencel)
-        
-        
-        self.present(alert, animated: true, completion: nil)
-        
-    }
-    
-    
-}
+//  @IBAction func deleteAllButtonAction(_ sender: Any) {
+//
+//        let alert = UIAlertController(title: "削除", message: "本当に全て削除してもよろしいですか？", preferredStyle: .alert)
+//        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in
+//
+//
+//
+//            self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+//
+//            let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
+//            self.translationFolderArr = self.translationFolderArr.filter(predict)
+//
+//
+//            if self.searchBar.text != "" {
+//                for number1 in 1...self.translationArr.count{
+//                    var number2 = number1
+//                    number2 = 0
+//                    self.intArr.append(number2)
+//                }
+//                do {
+//                    let realm = try Realm()
+//                    try realm.write{
+//                        for number3 in self.intArr{
+//                            realm.delete(self.translationArr[number3])
+//                        }
+//                    }
+//                } catch {
+//                    print("エラー")
+//                }
+//            } else {
+//            for number1 in 1...self.translationFolderArr[0].results.count{
+//                var number2 = number1
+//                number2 = 0
+//                self.intArr.append(number2)
+//            }
+//
+//            do {
+//                let realm = try Realm()
+//                try realm.write{
+//                    for number3 in self.intArr{
+//                        realm.delete(self.translationFolderArr[0].results[number3])
+//                    }
+//                }
+//            } catch {
+//                print("エラー")
+//            }
+//            }
+//            self.intArr = []
+//            self.sections = []
+//            self.tableDataList = []
+//
+//            self.deleteAllButton.isEnabled = false
+//
+//            self.tableView.reloadData()
+//            print("リロードされた")
+//
+//        })
+//        //        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
+//        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
+//        })
+//
+//        alert.addAction(delete)
+//        alert.addAction(cencel)
+//
+//
+//        self.present(alert, animated: true, completion: nil)
+//
+//    }
+//
+//
+//}
     
     //    ボタンタップでアコーディオン全表示、非表示切り替え
 //    @IBAction func changeAcordionButton(_ sender: Any) {

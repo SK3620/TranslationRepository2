@@ -35,9 +35,11 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     
     var dateString: String = ""
     var dateString2: String = ""
+    var selectedDate: Date!
     var number = 0
     var tabBarController1: TabBarController!
-
+    var numberFromHistory2ViewController: Int = 0
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,6 +57,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        tableView.separatorColor = .gray
         
         let nib = UINib(nibName: "CustomCell2", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "CustomCell2")
@@ -62,11 +65,15 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         // Do any additional setup after loading the view.
     }
     
+   
+    
     override func viewWillAppear(_ animated: Bool) {
-        
-        self.tabBarController1.setBarButtonItem3()
-        
         super.viewWillAppear(true)
+        if self.tabBarController1 != nil && self.numberFromHistory2ViewController != 1 {
+                 self.tabBarController1.setBarButtonItem3()
+        } else {
+            self.numberFromHistory2ViewController = 0
+        }
         if self.number == 1 {
         let predicate = NSPredicate(format: "date3 == %@", self.dateString)
         self.recordArrFilter = self.recordArrFilter0.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
@@ -87,6 +94,8 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         
         reviewButton.isHidden = false
         reviewButton.isEnabled = true
+        
+        self.fscalendar.reloadData()
         
     }
     
@@ -134,6 +143,9 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         
         self.dateString = dateString
         self.dateString2 = "\(year)年\(month)月\(day)日"
+        
+//        選択（タップ）された日付を格納する
+        self.selectedDate = date
         
 //        if self.record1Arr.count != 0 {
 //        let predicate0 = NSPredicate(format: "date3_5 == %@", self.dateString)
@@ -284,12 +296,14 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         addViewController.recordViewController = self
         addViewController.dateString = self.dateString
         addViewController.dateString2 = self.dateString2
+        addViewController.selectedDate = self.selectedDate
         
         self.present(addViewController, animated: true, completion: nil)
     }
     
+//    日付にドットマークをつけるメソッド　dateの数だけ呼ばれる（要するに、表示されている月、30回呼ばれる）
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-      
+        
         var resultsArr = [String]()
         if self.recordArr.count != 0 {
             for number in 0...recordArr.count - 1 {
@@ -301,12 +315,16 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
                
                 if resultsArr.contains(date){
                     resultsArr = []
-                    return 1
+                    let events = self.recordArr.filter("date3 == '\(date)'")
+                    return events.count
                 }
             }
         }
         return 0
+
     }
+    
+   
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
@@ -321,8 +339,17 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
             tableView.reloadData()
+            fscalendar.reloadData()
         }
     }
+    
+    @IBAction func ToReveiwViewController(_ sender: Any) {
+        let reviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "ReviewViewController") as! ReviewViewController
+        
+        
+        present(reviewViewController, animated: true, completion: nil)
+    }
+    
 }
 
 //extension RecordViewController: ToEditViewContollerDelegate{
