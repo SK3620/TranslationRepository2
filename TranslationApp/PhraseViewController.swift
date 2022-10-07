@@ -16,6 +16,7 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var label1: UILabel!
+//    @IBOutlet weak var searchBar: UISearchBar!
     
     
     
@@ -32,11 +33,16 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         tableView.separatorColor = .gray
         
-       
+//        self.searchBar.backgroundImage = UIImage()
 
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
+//        tableView.layer.borderColor = UIColor.gray.cgColor
+//        tableView.layer.borderWidth = 0.5
+      
+//        searchBar.delegate = self
+//        searchBar.enablesReturnKeyAutomatically = false
         
         let nib = UINib(nibName: "CustomPhraseWordViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "CustomPhraseWordCell")

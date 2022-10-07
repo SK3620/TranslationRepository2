@@ -45,16 +45,18 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-        editButton.setTitle("編集", for: .normal)
+    
+       
         rirekiTableView.isEditing = false
+        editButton.setTitle("編集", for: .normal)
+        
         
         self.tabBarController1.setBarButtonItem2()
         
         self.historyArr = realm.objects(Histroy.self).sorted(byKeyPath: "date2", ascending: true)
         if historyArr.count == 0 {
-            editButton.isEnabled = false
             self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
+            editButton.isEnabled = false
         } else {
             editButton.isEnabled = true
             label1.text = ""
@@ -94,7 +96,6 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @objc func tapCellButton(_ sender: UIButton){
 //        外部引数_にはたっぷされたボタン自体が入る そいつがsenderでsenderはUIButtonが持つtagプロパティを利用する
-        editButton.setTitle("編集", for: .normal)
         rirekiTableView.isEditing = false
         UIPasteboard.general.string = self.historyArr[sender.tag].inputData2 + "\n" + "\n" + self.historyArr[sender.tag].resultData2
         
@@ -103,9 +104,9 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if historyArr.count == 0 {
+            rirekiTableView.isEditing = false
             editButton.isEnabled = false
             editButton.setTitle("編集", for: .normal)
-            rirekiTableView.isEditing = false
             label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
         } else {
             editButton.isEnabled = true

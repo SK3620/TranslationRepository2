@@ -8,9 +8,9 @@
 import UIKit
 import RealmSwift
 
-//protocol ToEditViewContollerDelegate: AnyObject {
-//    func ToEditViewContoller()
-//}
+protocol ToEditViewContollerDelegate: AnyObject {
+    func ToEditViewContoller()
+}
 
 
 class CustomCell2: UITableViewCell {
@@ -20,6 +20,16 @@ class CustomCell2: UITableViewCell {
     @IBOutlet weak var label3: UILabel!
     @IBOutlet weak var label4: UILabel!
     @IBOutlet weak var label5: UILabel!
+    @IBOutlet weak var label6: UILabel!
+    @IBOutlet weak var view1: UIView!
+    
+    
+    
+    @IBOutlet weak var checkMarkButton: UIButton!
+    
+    
+
+    
     
 //    weak var delegate: ToEditViewContollerDelegate?
     
@@ -27,9 +37,7 @@ class CustomCell2: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-//        editButton.layer.borderColor = UIColor.gray.cgColor
-//        editButton.layer.borderWidth = 2.5
-//        editButton.layer.cornerRadius = 10
+       
         
     }
 

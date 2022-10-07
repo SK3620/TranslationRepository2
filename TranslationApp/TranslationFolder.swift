@@ -80,6 +80,10 @@ class Record: Object{
     
     @objc dynamic var date4 = Date()
     
+    @objc dynamic var inputDate: String = ""
+    
+    @objc dynamic var isChecked: Int = 0
+    
     override static func primaryKey() -> String? {
         return "id"
     }

@@ -16,6 +16,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var label: UILabel!
+    
     
     var folderNameString: String?
     var number: Int = 0
@@ -30,11 +32,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.fillerRowHeight = UITableView.automaticDimension
+        tableView.separatorColor = .gray
         
         searchBar.backgroundImage = UIImage()
-        tableView.layer.borderColor = UIColor.systemGray4.cgColor
-        tableView.layer.borderWidth = 0.5
+//        tableView.layer.borderColor = UIColor.gray.cgColor
+//        tableView.layer.borderWidth = 0.5
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -62,6 +64,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.label.text = "右上のボタンでフォルダーを作成しよう！"
         
         editButton.setTitle("編集", for: .normal)
         tableView.isEditing = false
@@ -122,7 +126,14 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "フォルダー 一覧"
+        if self.translationFolderArr.count == 0{
+            self.label.text = "右上のボタンでフォルダーを作成しよう！"
+            return ""
+        } else {
+            self.label.text = ""
+            return "フォルダー 一覧"
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

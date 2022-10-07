@@ -14,6 +14,10 @@ class ReviewCustomCell: UITableViewCell {
     @IBOutlet weak var content: UILabel!
     @IBOutlet weak var memo: UILabel!
     @IBOutlet weak var times: UILabel!
+    @IBOutlet weak var inputDate: UILabel!
+    
+    @IBOutlet weak var checkMarkButton: UIButton!
+    
     
     
     
@@ -28,7 +32,7 @@ class ReviewCustomCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setData(_ reviewDate: String, _ folderName: String, _ content: String, _ memo: String, _ times: String){
+    func setData(_ reviewDate: String, _ folderName: String, _ content: String, _ memo: String, _ times: String, _ inputDate: String){
         if reviewDate != "" {
         self.reviewDate.text = reviewDate
         } else {
@@ -54,9 +58,15 @@ class ReviewCustomCell: UITableViewCell {
         }
         
         if times != "" {
-            self.times.text = content
+            self.times.text = times
         } else {
             self.times.text = " "
+        }
+        
+        if inputDate != "" {
+            self.inputDate.text = inputDate
+        } else {
+            self.inputDate.text = " "
         }
     }
     

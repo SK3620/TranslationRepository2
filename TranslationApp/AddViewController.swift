@@ -53,7 +53,8 @@ class AddViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("選択された日付確認　: \(self.selectedDate)")
+        print("日付日付　\(self.dateString)")
+        print("日付日付2 \(self.dateString2)")
         
         self.textField3.delegate = self
         
@@ -244,25 +245,17 @@ class AddViewController: UIViewController {
         record.nextReviewDate = textField_text4!
         record.memo = textView_text1!
         record.date3 = self.dateString
+        record.inputDate = self.dateString2
         if textField_text4 != "" {
         record.nextReviewDateForSorting = textField_text4ForSorting!
         } else {
             record.nextReviewDateForSorting = 0
         }
         
-//       let record1 = Record1()
-//        record1.folderName2 = textField_text1!
-//        record1.number2 = textField_text2!
-//        record1.times2 = textField_text3!
-//        record1.nextReviewDate2 = textField_text4!
-//        record1.memo2 = textView_text1!
-//        record1.date3_5 = self.dateString
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         let _: String = formatter.string(from: record.date4)
-//        let _: String = formatter.string(from: record1.date4_5)
-        
        
         
         if self.recordArr.count != 0 {
@@ -294,6 +287,13 @@ class AddViewController: UIViewController {
         self.dismiss(animated: true)
         
     }
+    
+    func stringToDate(dateString: String, fromFormat: String) -> Date? {
+            let formatter = DateFormatter()
+            formatter.locale = .current
+            formatter.dateFormat = fromFormat
+            return formatter.date(from: dateString)
+        }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
@@ -335,7 +335,7 @@ extension AddViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITex
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == self.textField3 && textField3.text != "" && textField3.text != "1" {
             let textField3_text: Int = Int(textField3.text!)!
-            self.label2.text = "〜 Tip 〜" + "\n" + "追加ボタンを押したら" + "\n" + "入力した前回の学習記録（\(textField3_text - 1)回目の学習記録) を「削除する」 or 「完了マークをつける」といいかも！" + "\n" + "学習記録カレンダーを見やすくしよう！"
+            self.label2.text = "〜 Tip 〜" + "\n" + "入力した前回の学習記録欄（\(textField3_text - 1)回目の学習記録欄) に「復習完了マーク✅」をつけよう！"
         } else {
             label2.text = ""
         }

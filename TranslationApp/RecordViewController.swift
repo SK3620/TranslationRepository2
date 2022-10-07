@@ -11,6 +11,8 @@ import FSCalendar
 import CalculateCalendarLogic
 import Alamofire
 
+
+
 class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance, UITableViewDelegate, UITableViewDataSource {
    
     
@@ -39,6 +41,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     var number = 0
     var tabBarController1: TabBarController!
     var numberFromHistory2ViewController: Int = 0
+    
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,9 +118,56 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 
         if self.recordArrFilter != nil {
         cell.setData(self.recordArrFilter[indexPath.row])
+            
+            let result = self.recordArrFilter[indexPath.row].isChecked
+            switch result {
+            case 0:
+                cell.label6.text = "(復習未完了)"
+                cell.label6.textColor = .systemRed
+                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+                cell.checkMarkButton.tintColor = UIColor.systemGray
+                cell.view1.layer.borderColor = UIColor.systemBlue.cgColor
+                cell.view1.layer.borderWidth = 5
+               
+            case 1:
+                cell.label6.text = "(復習完了)"
+                cell.label6.textColor = .systemGreen
+                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+                cell.checkMarkButton.tintColor = UIColor.systemGreen
+                cell.view1.layer.borderColor = UIColor.systemBlue.cgColor
+                cell.view1.layer.borderWidth = 5
+            default:
+                print("他の値です")
+            }
         }
+        
+        cell.checkMarkButton.tag = indexPath.row
+        cell.checkMarkButton.addTarget(self, action: #selector(tapCheckMarkButton2(_:)), for: .touchUpInside)
+        
         return cell
     }
+    
+    @objc func tapCheckMarkButton2(_ sender: UIButton){
+        let result = self.recordArrFilter[sender.tag].isChecked
+        switch result{
+        case 0:
+            try! realm.write{
+                recordArrFilter[sender.tag].isChecked = 1
+                realm.add(recordArrFilter, update: .modified)
+            }
+        case 1:
+            try! realm.write{
+                recordArrFilter[sender.tag].isChecked = 0
+                realm.add(recordArrFilter, update: .modified)
+            }
+        default:
+            print("他の値です")
+        }
+        
+        tableView.reloadData()
+        
+    }
+        
     
 //    選択された日付を取得する　日付がタップされた時の処理
 //    選択された日付はdate変数に格納される
@@ -126,7 +176,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         self.addButton.isEnabled = true
         self.label1.isHidden = true
         
-        reviewButton.setTitle("復習日・内容を確認する", for: .normal)
+        reviewButton.setTitle("次回復習日・内容を確認する", for: .normal)
         reviewButton.isHidden = false
         reviewButton.isEnabled = true
         
@@ -142,7 +192,8 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         
         
         self.dateString = dateString
-        self.dateString2 = "\(year)年\(month)月\(day)日"
+        self.dateString2 = "\(year).\(month).\(day)"
+        
         
 //        選択（タップ）された日付を格納する
         self.selectedDate = date
@@ -344,21 +395,11 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     }
     
     @IBAction func ToReveiwViewController(_ sender: Any) {
-        let reviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "ReviewViewController") as! ReviewViewController
+            let reviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "ReviewViewController") as! ReviewViewController
+            
+            
+            present(reviewViewController, animated: true, completion: nil)
+        }
         
-        
-        present(reviewViewController, animated: true, completion: nil)
     }
-    
-}
 
-//extension RecordViewController: ToEditViewContollerDelegate{
-//    func ToEditViewContoller() {
-//        let editViewContoller = self.storyboard?.instantiateViewController(withIdentifier: "edit") as! EditViewController
-//
-//        editViewContoller.dateString = self.dateString
-//
-//        self.present(editViewContoller, animated: true, completion: nil)
-//    }
-//
-//}

@@ -101,16 +101,20 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
+        let doneButton =  UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTapped))
         doneToolbar.items = [spacer, doneButton]
         self.searchBar.inputAccessoryView = doneToolbar
         
     }
     
-    @objc func doneButtonTaped(sender: UIButton){
+    @objc func doneButtonTapped(sender: UIButton){
         self.searchBar.endEditing(true)
+        
     }
-    
+        
+        
+        
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
@@ -170,35 +174,43 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             
             if self.searchBar.text == "" {
                 
+                acordionButton.isEnabled = true
+               
+                
                 //            空だったら、全て表示する。（通常表示）
                 translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
                 
                 let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
                 translationFolderArr = self.translationFolderArr.filter(predict)
                 
-                
                 for number in 0...translationFolderArr[0].results.count - 1 {
                     self.sections.append(translationFolderArr[0].results[number].inputData)
                     self.tableDataList.append(translationFolderArr[0].results[number].resultData)
-                    
-                    let results1 = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
-                    
-                    self.translationArr = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
-                    
-                    
-                    print(searchBar.text!)
-                    
-                    if results1.count != 0 {
-                        for results in 0...results1.count - 1 {
-                            self.sections.append(results1[results].inputData)
-                            self.tableDataList.append(results1[results].resultData)
-                        }
+                }
+                
+            } else {
+                
+                acordionButton.isEnabled = false
+                
+                
+                let results1 = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+                
+                self.translationArr = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+                
+                
+                print("サーチバーに入力された値がありました\(searchBar.text!)")
+                
+                if results1.count != 0 {
+                    for results in 0...results1.count - 1 {
+                        self.sections.append(results1[results].inputData)
+                        self.tableDataList.append(results1[results].resultData)
                     }
                 }
-                self.tableView.reloadData()
             }
+            self.tableView.reloadData()
         }
     }
+    
     
     
     

@@ -135,6 +135,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         
+        config = Realm.Configuration(
+            schemaVersion: 12, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 12 {
+                    migration.create(Record.className(), value: ["isChecked": 0])
+                }
+            })
+        
+        config = Realm.Configuration(
+            schemaVersion: 13, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 13 {
+                    migration.create(Record.className(), value: ["inputDate": ""])
+                }
+            })
+        
+        
         Realm.Configuration.defaultConfiguration = config
         
         
