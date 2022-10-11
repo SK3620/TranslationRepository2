@@ -15,10 +15,8 @@ import Alamofire
 class History2ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var folderNameLabel: UILabel!
     @IBOutlet weak var memoButton: UIButton!
     @IBOutlet weak var recordButton: UIButton!
-    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var acordionButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -36,6 +34,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     var intArr = [Int]()
     var inputData3: String!
     var resultData3: String!
+    var tabBarController1: TabBarController!
     
     var number = 0
     var number1 = 0
@@ -51,9 +50,9 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         
         print("確認11 : \(self.folderNameString)")
-        
         
         
         self.searchBar.backgroundImage = UIImage()
@@ -64,15 +63,14 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorColor = .gray
+        tableView.separatorColor = .systemBlue
+        
         searchBar.delegate = self
         tableView.allowsSelection = false
         // Do any additional setup after loading the view.
         
 //        何も入力されていなくてもreturnキー押せるようにする
         searchBar.enablesReturnKeyAutomatically  = false
-        
-        folderNameLabel.numberOfLines = 2
         
         let borderColor = UIColor.gray.cgColor
         memoButton.layer.borderColor = borderColor
@@ -91,10 +89,6 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         recordButton.layer.borderWidth = 3
         recordButton.layer.cornerRadius = 10
 
-        
-        backButton.layer.borderColor = borderColor
-        backButton.layer.borderWidth = 3
-        backButton.layer.cornerRadius = 10
         
        
         //キーボードに完了のツールバーを作成
@@ -118,9 +112,32 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        acordionButton.setTitle("表示", for: .normal)
+        self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
+        tabBarController1.navigationController?.navigationBar.backgroundColor = UIColor.systemGray4
+
+        
+        let navigationController = self.navigationController as! NavigationControllerForFolder
+        navigationController.setNavigationBarHidden(false, animated: false)
+        navigationController.navigationBar.backgroundColor = UIColor.systemGray4
+        navigationController.navigationItem.title = self.folderNameString
+        print("バー確認とフォルダー名\(navigationController.navigationItem.title) : \(self.folderNameString)")
+        
+        
        
-        self.folderNameLabel.text = self.folderNameString
+        
+        let rightButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        navigationController.navigationItem.rightBarButtonItem = rightButton
+        
+//        let labelFrame = CGRect(x: view.frame.size.width / 2, y: 0, width: 55.0, height: navigationController.navigationBar.frame.height)
+//           let label = UILabel(frame: labelFrame)  // ラベルサイズと位置
+//           label.textColor = UIColor.white // テキストカラー
+//        navigationController.navigationBar.addSubview(label)
+//        label.text = self.folderNameString
+        
+        
+        print("フォルダー名　\(self.folderNameString)")
+        
+        acordionButton.setTitle("表示", for: .normal)
         
         tableView.layer.cornerRadius = 10
         
@@ -284,7 +301,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             switch result1 {
             case 0:
                 cell.cellEditButton.setImage(UIImage(), for: .normal)
-                cell.displayButton2.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+                cell.displayButton2.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
                 cell.cellEditButton.isEnabled = false
                 if indexPath.row == 0 {
                     cell.label2.text = ""
@@ -422,13 +439,14 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @objc func tapCellEditButton(_ sender: UIButton){
         let edit = ContextMenuItemWithImage(title: "編集する", image: UIImage())
         let save = ContextMenuItemWithImage(title: "保存する", image: UIImage())
+        let copy = ContextMenuItemWithImage(title: "コピーする", image: UIImage())
         let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage())
        
         
         let cellForRow: IndexPath = IndexPath(row: sender.tag, section: 0)
         self.sender_tag = sender.tag
 //        表示するアイテムを決定
-        CM.items = [edit, save, delete]
+        CM.items = [edit, save, copy, delete]
 //        表示します
         CM.showMenu(viewTargeted: tableView.cellForRow(at: cellForRow)!, delegate: self, animated: true)
     }
@@ -546,6 +564,9 @@ extension History2ViewController: ContextMenuDelegate {
             print("保存ボタン")
             savePhraseButton()
         case 2:
+            print("コピーボタン")
+            copyButton()
+        case 3:
             deleteButton()
         default:
             print("他の値")
@@ -572,6 +593,18 @@ extension History2ViewController: ContextMenuDelegate {
     }
     
     
+    func copyButton(){
+        let alert = UIAlertController(title: "コピーしました", message: "", preferredStyle: .alert)
+        let alert1 = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
+            if self.searchBar.text != "" {
+                UIPasteboard.general.string = self.translationArr[self.sender_tag].inputAndResultData
+            } else {
+                UIPasteboard.general.string = self.translationFolderArr[0].results[self.sender_tag].inputAndResultData
+            }
+        })
+        alert.addAction(alert1)
+        present(alert, animated: true, completion: nil)
+    }
     
     
     func deleteButton(){
@@ -607,7 +640,7 @@ extension History2ViewController: ContextMenuDelegate {
     //    右のドキュメントシステムアイコンをタップしたら、Realm（TranslationFolderファイル）のRecord2クラスに書き込み保存
     func savePhraseButton(){
         
-            let alert = UIAlertController(title: "保存しました", message: "ホーム画面の'単語・フレーズ'に保存されました", preferredStyle: .alert)
+            let alert = UIAlertController(title: "保存しました", message: "「単語・フレーズ」に保存されました", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
             

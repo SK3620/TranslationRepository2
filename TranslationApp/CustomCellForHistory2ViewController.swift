@@ -11,6 +11,7 @@ class CustomCellForHistory2ViewController: UITableViewCell {
 
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var label2: UILabel!
+    @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet weak var checkMarkButton: UIButton!
     @IBOutlet weak var displayButton1: UIButton!
     @IBOutlet weak var displayButton2: UIButton!
@@ -31,7 +32,15 @@ class CustomCellForHistory2ViewController: UITableViewCell {
     }
     
     func setData(_ inputData: String, _ indexPath_row: Int){
-        self.label1.text = "\(indexPath_row + 1): " + inputData
+        self.label1.text = inputData
+        
+        if indexPath_row % 2 == 0 {
+            self.numberLabel.backgroundColor = UIColor.systemGray6
+        } else {
+            self.numberLabel.backgroundColor = UIColor.systemGray4
+        }
+        
+        self.numberLabel.text = "\(indexPath_row + 100)"
     }
     
     func setData2(_ resultData: String){

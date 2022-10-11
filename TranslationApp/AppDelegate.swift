@@ -153,6 +153,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         
+        config = Realm.Configuration(
+            schemaVersion: 14, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 14 {
+                    migration.create(Histroy.className(), value: ["inputAndResultData": ""])
+                }
+            })
+        
         
         Realm.Configuration.defaultConfiguration = config
         

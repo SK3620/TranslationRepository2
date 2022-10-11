@@ -32,7 +32,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.separatorColor = .gray
+        tableView.separatorColor = .systemBlue
         
         searchBar.backgroundImage = UIImage()
 //        tableView.layer.borderColor = UIColor.gray.cgColor
@@ -54,6 +54,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         doneToolbar.items = [spacer, doneButton]
         self.searchBar.inputAccessoryView = doneToolbar
         
+        
+        
     }
     
     @objc func doneButtonTaped(sender: UIButton){
@@ -65,12 +67,16 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        let navigationController = self.navigationController as! NavigationControllerForFolder
+        navigationController.setNavigationBarHidden(true, animated: false)
         self.label.text = "右上のボタンでフォルダーを作成しよう！"
         
         editButton.setTitle("編集", for: .normal)
         tableView.isEditing = false
         
+        tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController1.setBarButtonItem1()
+      
         
         self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
         if translationFolderArr.count == 0 {
@@ -123,25 +129,15 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 //        }
 //    }
     
-   
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if self.translationFolderArr.count == 0{
-            self.label.text = "右上のボタンでフォルダーを作成しよう！"
-            return ""
-        } else {
-            self.label.text = ""
-            return "フォルダー 一覧"
-        }
-        
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if translationFolderArr.count == 0 {
             tableView.isEditing = false
+            self.label.text = "右上のボタンでフォルダーを作成しよう！"
             editButton.setTitle("編集", for: .normal)
             editButton.isEnabled = false
         } else {
+            self.label.text = ""
             editButton.isEnabled = true
         }
         return translationFolderArr.count
@@ -159,7 +155,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.textLabel?.text = translationFolderArr1.folderName
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        formatter.dateFormat = "yyyy.MM.dd HH:mm"
         
         let dateString: String = formatter.string(from: translationFolderArr1.date)
         cell.detailTextLabel?.text = "作成日:\(dateString)"
@@ -213,23 +209,32 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.deselectRow(at: indexPath, animated: true)
                   
             if translationFolderArr[0].results.count != 0 {
-                //        self.performSegue(withIdentifier: "ToHistory2", sender: nil)
-                //        print("確認3 : \(self.folderNameString!)")
+               
                 let history2ViewController = self.storyboard!.instantiateViewController(withIdentifier: "History2ViewController") as! History2ViewController
                 
                 history2ViewController.folderNameString = folderNameString!
                 
-                self.present(history2ViewController, animated: true, completion: nil)
-                
+//                self.present(history2ViewController, animated: true, completion: nil)
+                self.performSegue(withIdentifier: "ToHistory2ViewController", sender: self.folderNameString)
                 number = 1
                 
             } else {
                 SVProgressHUD.show()
                 SVProgressHUD.showError(withStatus: "'\(self.folderNameString!)' フォルダー内に保存されたデータがありません")
                 number = 1
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: { () -> Void in
+                    SVProgressHUD.dismiss()
+                })
             }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ToHistory2ViewController" {
+            let history2ViewController = segue.destination as! History2ViewController
+            history2ViewController.folderNameString = sender as! String
+            history2ViewController.tabBarController1 = self.tabBarController1
         }
+    }
     
     @IBAction func editButtonAction(_ sender: Any) {
         if tableView.isEditing {
@@ -241,29 +246,16 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-        
-    }
     
-    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //
-    //        if let folderNameString = self.folderNameString {
-    //
-    //            let history2ViewController = segue.destination as! History2ViewController
-    //            history2ViewController.folderNameString = folderNameString
-    //
-    //            print("確認8 : \(folderNameString)")
-    //        }
-    //    }
-    
-//}
+}
 
 
 
-    
-    
-    
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    
+
+
+
+// MARK: - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+
 

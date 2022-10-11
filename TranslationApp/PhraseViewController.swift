@@ -31,7 +31,7 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.separatorColor = .gray
+        tableView.separatorColor = UIColor.systemBlue
         
 //        self.searchBar.backgroundImage = UIImage()
 
@@ -63,6 +63,7 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
        
         if let tabBarController1 = self.tabBarController1 {
         tabBarController1.setBarButtonItem4()
+            tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
         }
         
   
@@ -107,7 +108,8 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
            
            cell.checkMarkButton.tag = indexPath.row
            cell.checkMarkButton.addTarget(self, action: #selector(tapCellButton(_:)), for: .touchUpInside)
-        
+           
+         
            
            let result = record2Arr[indexPath.row].isChecked
            
@@ -145,9 +147,11 @@ class PhraseViewController: UIViewController, UITableViewDelegate, UITableViewDa
                    cell.label2.text = ""
                let image = UIImage(systemName: "hand.tap")
                cell.displayButton.setImage(image, for: .normal)
+                   cell.displayButton.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
                } else if indexPath.row != 0 {
                    let image = UIImage()
                    cell.displayButton.setImage(image, for: .normal)
+                   cell.displayButton.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
                    cell.label2.text = ""
                }
            case 1:
@@ -319,13 +323,12 @@ extension PhraseViewController: ContextMenuDelegate {
                                   didSelect item: ContextMenuItem,
                                   forRowAt index: Int) -> Bool {
             
-            print("コンテキストメニューの", index, "番目のセルが選択された！")
-        print("そのセルには", item.title, "というテキストが書いてあるよ!")
-            
+          
             switch index {
             case 0:
                 self.tableView.isEditing = true
                 self.editButton.setTitle("完了", for: .normal)
+//              
             case 1:
                setUIAlertController()
             default:

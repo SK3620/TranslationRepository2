@@ -19,6 +19,8 @@ class CustomPhraseWordViewCell: UITableViewCell {
     @IBOutlet weak var checkMarkButton: UIButton!
     @IBOutlet weak var displayButton: UIButton!
     @IBOutlet weak var displayButton0: UIButton!
+    @IBOutlet weak var numberLabel: UILabel!
+    
     
     
     override func awakeFromNib() {
@@ -40,8 +42,13 @@ class CustomPhraseWordViewCell: UITableViewCell {
     }
     
     func setData1(_ inputData: String, _ indexPath_row: Int){
-        self.label1.text = "\(indexPath_row + 1): " + inputData
-//        self.label2.text = resultData
+        self.label1.text = inputData
+        if indexPath_row % 2 == 0 {
+            self.numberLabel.backgroundColor = UIColor.systemGray6
+        } else {
+            self.numberLabel.backgroundColor = UIColor.systemGray4
+        }
+        self.numberLabel.text = "\(indexPath_row + 1)"
     }
     
     func setData2(_ resultData: String){

@@ -42,16 +42,13 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
 //        listTableView.layer.borderWidth = 2.5
 //        listTableView.layer.cornerRadius = 10
         
-        confirmButton.layer.borderWidth = 2.5
-        confirmButton.layer.borderColor = borderColor
+        confirmButton.layer.borderWidth = 1
+        confirmButton.layer.borderColor = UIColor.systemBlue.cgColor
         confirmButton.layer.cornerRadius = 10
-
-        backButton.layer.borderWidth = 2.5
-        backButton.layer.borderColor = borderColor
-        backButton.layer.cornerRadius = 10
         
         listTableView.delegate = self
         listTableView.dataSource = self
+        listTableView.separatorColor = .systemBlue
         
        
         
@@ -80,8 +77,13 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
 //    セクションのタイトル
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "保存先一覧"
+    private func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 50))
+        label.textAlignment = NSTextAlignment.left
+        label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        label.text = "保存先一覧"
+        
+        return label
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -96,7 +98,7 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let date = translationFolderArr[indexPath.row].date
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        formatter.dateFormat = "yyyy.MM.dd HH:mm"
         let dateString: String = formatter.string(from: date)
     
 //        セクション番号で条件分岐
@@ -166,6 +168,7 @@ class FolderListViewController: UIViewController, UITableViewDelegate, UITableVi
 //
         
         translateViewController.textStringForButton2 = self.folderNameString
+        translateViewController.setStringForButton2()
 
         self.dismiss(animated: true)
     }

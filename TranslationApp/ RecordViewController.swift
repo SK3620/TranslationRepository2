@@ -2,7 +2,7 @@
 //  RecordViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/09/15.
+//  Created by 鈴木健太 on 2022/09/15./Users/suzukikenta/Library/Developer/Xcode/DerivedData
 //
 
 import UIKit
@@ -20,7 +20,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     @IBOutlet weak var tableView: UITableView!
 
     @IBOutlet weak var addButton: UIButton!
-    @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var label2: UILabel!
     @IBOutlet weak var reviewButton: UIButton!
     
     
@@ -47,10 +47,10 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         super.viewDidLoad()
         
         addButton.isEnabled = false
-        label1.text = "日付タップ → 「＋」で記録しよう！"
+//        label1.text = "日付タップ → 「＋」で記録しよう！"
         
-        reviewButton.isEnabled = false
-        reviewButton.isHidden = true
+//        reviewButton.isEnabled = false
+//        reviewButton.isHidden = true
         
         self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
         tableView.layer.borderWidth = 2.5
@@ -72,8 +72,12 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        label2.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
+        
         if self.tabBarController1 != nil && self.numberFromHistory2ViewController != 1 {
                  self.tabBarController1.setBarButtonItem3()
+            tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
         } else {
             self.numberFromHistory2ViewController = 0
         }
@@ -95,8 +99,8 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     
         tableView.reloadData()
         
-        reviewButton.isHidden = false
-        reviewButton.isEnabled = true
+//        reviewButton.isHidden = false
+//        reviewButton.isEnabled = true
         
         self.fscalendar.reloadData()
         
@@ -106,6 +110,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.recordArrFilter != nil {
+//            label2.text = ""
             return self.recordArrFilter.count
         } else {
             return 0
@@ -174,11 +179,11 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
         self.addButton.isEnabled = true
-        self.label1.isHidden = true
+     
         
         reviewButton.setTitle("次回復習日・内容を確認する", for: .normal)
-        reviewButton.isHidden = false
-        reviewButton.isEnabled = true
+//        reviewButton.isHidden = false
+//        reviewButton.isEnabled = true
         
 //        このdate変数をCalendarクラスを利用して、年、月、日で分解させる
         let tmpCalendar = Calendar(identifier: .gregorian)
@@ -205,15 +210,25 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 //            print(record1ArrFilter)
 //        }
         
+//        label2.text = "今日学習した内容を「＋」で記録しよう！"
+        print(label2.text)
         
         if self.recordArr.count != 0 {
+           
         let predicate = NSPredicate(format: "date3 == %@", self.dateString)
         self.recordArrFilter = self.recordArr.filter(predicate).sorted(byKeyPath: "date4", ascending: true)
             print(recordArrFilter)
-            if recordArrFilter != nil {
-            self.tableView.reloadData()
+            if recordArrFilter.isEmpty {
+                label2.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
+            } else {
+                label2.text = ""
+                
             }
         }
+        
+        self.tableView.reloadData()
+        print("reloadされた")
+       
         
         
 //        if self.recordArr.count != 0{
@@ -250,12 +265,12 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.recordArrFilter2 = self.recordArrFilter[indexPath.row]
-        
+
         let editViewContoller = self.storyboard?.instantiateViewController(withIdentifier: "edit") as! EditViewController
-    
+
         editViewContoller.recordViewController = self
         editViewContoller.dateString = self.dateString
-        
+
         editViewContoller.label1_text = self.dateString2
         editViewContoller.textField1_text = recordArrFilter2.folderName
         editViewContoller.textField2_text = recordArrFilter2.number
@@ -263,40 +278,32 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         editViewContoller.textField4_text = recordArrFilter2.nextReviewDate
         editViewContoller.textView1_text = recordArrFilter2.memo
         editViewContoller.dateString1 = recordArrFilter2.nextReviewDateForSorting
-        
+
         editViewContoller.recordArrFilter2 = self.recordArrFilter2
         
-        print("確認だよー")
-        
-//        let predicate = NSPredicate(format: "id == %@", recordArrFilter2.id)
-//        let recordArrFilter2_id = Int(recordArrFilter2.id)
-//        print(recordArrFilter2_id)
-//        record1ArrFilter = self.record1ArrFilter.filter("id == \(recordArrFilter2_id)")
-//        print("確認だよー２")
-//        print(record1ArrFilter)
-//
-//        if record1ArrFilter.isEmpty != true {
-//            editViewContoller.record1ArrFilter2 = record1ArrFilter.first
-//            print(record1ArrFilter.first)
-//        } else {
-//            print("空でした。")
-//        }
-//
-//        if let record1ArrFilter2 = self.record1ArrFilter?[indexPath.row] {
-//            print(record1ArrFilter2)
-//            editViewContoller.record1ArrFilter2 = record1ArrFilter2
-//        } else {
-//            print("nilでした")
-//        }
-//
-//        self.record1ArrFilter[indexPath.row] != nil {
-//            self.record1ArrFilter2 = self.record1ArrFilter[indexPath.row]
-//        editViewContoller.record1ArrFilter2 = record1ArrFilter2
-//        }
-        
-        
+//        performSegue(withIdentifier: "ToEditViewController", sender: indexPath.row)
         present(editViewContoller, animated: true, completion: nil)
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "ToEditViewController" {
+//        self.recordArrFilter2 = self.recordArrFilter[sender as! Int]
+//        let editViewController = segue.destination as! EditViewController
+//
+//        editViewController.recordViewController = self
+//        editViewController.dateString = self.dateString
+//
+//        editViewController.label1_text = self.dateString2
+//        editViewController.textField1_text = recordArrFilter2.folderName
+//        editViewController.textField2_text = recordArrFilter2.number
+//        editViewController.textField3_text = recordArrFilter2.times
+//        editViewController.textField4_text = recordArrFilter2.nextReviewDate
+//        editViewController.textView1_text = recordArrFilter2.memo
+//        editViewController.dateString1 = recordArrFilter2.nextReviewDateForSorting
+//        
+//        editViewController.recordArrFilter2 = self.recordArrFilter2
+//        }
+//    }
     
     // date型 -> 年月日をIntで取得
         func getDay(_ date:Date) -> (Int,Int,Int){

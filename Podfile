@@ -11,7 +11,6 @@ target 'TranslationApp' do
   pod 'FSCalendar'
   pod 'CalculateCalendarLogic'
   pod 'ContextMenuSwift'
-  pod 'FloatingPanel'
 end
 
 

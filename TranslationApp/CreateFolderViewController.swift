@@ -26,7 +26,7 @@ class CreateFolderViewController: UIViewController, UITextFieldDelegate {
     var array = [String]()
     var historyViewController: HistoryViewController!
     var tabBarController2: TabBarController!
-    var maxCharactersLength: Int = 22
+    var maxCharactersLength: Int = 13
   
     
     override func viewDidLoad() {

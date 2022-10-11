@@ -12,13 +12,13 @@ import RealmSwift
 
 
 class TranslateViewController: UIViewController, UITextViewDelegate {
-
-    // DeepL APIのレスポンス用構造体
-//    Codableとは、API通信等で取得したJSONやプロパティリストを任意のデータ型に変換するプロトコル →データをアプリを実装しやすいデータ型に変換することで処理が楽になる
-//    データ型とは要は、StringやIntのこと　swiftで扱えるようにする
     
-
-//    APIから取得したデータをJSONで受け取って、swiftで使えれるようにCodableで構造体に変換します。
+    // DeepL APIのレスポンス用構造体
+    //    Codableとは、API通信等で取得したJSONやプロパティリストを任意のデータ型に変換するプロトコル →データをアプリを実装しやすいデータ型に変換することで処理が楽になる
+    //    データ型とは要は、StringやIntのこと　swiftで扱えるようにする
+    
+    
+    //    APIから取得したデータをJSONで受け取って、swiftで使えれるようにCodableで構造体に変換します。
     struct DeepLResult: Codable {
         let translations: [Translation]
         struct Translation: Codable {
@@ -43,24 +43,41 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var languageLabel2: UILabel!
     
     @IBOutlet weak var button1: UIButton!
-    @IBOutlet weak var button2: UIButton!
-    @IBOutlet weak var button3: UIButton!
+        @IBOutlet weak var button2: UIButton!
+    //    @IBOutlet weak var button3: UIButton!
+    @IBOutlet weak var button4: UIButton!
+    @IBOutlet weak var button5: UIButton!
+    
     
     @IBOutlet weak var imageButton1: UIButton!
     @IBOutlet weak var imageButton2: UIButton!
     
     
-   
-
     //    JSONデコード用（？）
     let decoder: JSONDecoder = JSONDecoder()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         print("URL : \(Realm.Configuration.defaultConfiguration.fileURL!)")
+        
+       
+        
+        
+        
+        
+        let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium, scale: .medium)
 
-        let borderColor = UIColor.gray.cgColor
+                    let systemIcon = UIImage(systemName: "square.and.arrow.down", withConfiguration: config)
+
+                    button5.setImage(systemIcon, for: .normal)
+        button5.layer.borderColor = UIColor.systemBlue.cgColor
+        button5.layer.borderWidth = 1
+        button5.layer.cornerRadius = 10
+
+
+        
+        let borderColor = UIColor.systemGray4.cgColor
         
         //  ボタンの画像サイズ変更
         imageButton1.imageView?.contentMode = .scaleAspectFill
@@ -71,50 +88,56 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         imageButton2.contentHorizontalAlignment = .fill
         imageButton2.contentVerticalAlignment = .fill
         
-        translateTextView.layer.cornerRadius = 10
+        //        translateTextView.layer.cornerRadius = 10
         translateTextView.clipsToBounds = true
         translateTextView.layer.borderColor = borderColor
         translateTextView.layer.borderWidth = 2
         
         button1.layer.cornerRadius = 10
-        button1.layer.borderWidth = 2
-        button1.layer.borderColor = borderColor
-    
-        button2.layer.cornerRadius = 10
-        button2.layer.borderWidth = 2
-        button2.layer.borderColor = borderColor
-        button2.isEnabled = false
-        button2.isHidden = true
-        button2.titleLabel?.numberOfLines = 1
-        // ボタンの横幅に応じてフォントサイズを自動調整する設定
-        button2.titleLabel?.adjustsFontSizeToFitWidth = true
+        button1.layer.borderWidth = 1
+        button1.layer.borderColor = UIColor.systemBlue.cgColor
         
-        button3.layer.cornerRadius = 10
-        button3.layer.borderWidth = 2
-        button3.layer.borderColor = borderColor
-        button3.setTitle("上記を保存", for: .normal)
+                button2.layer.cornerRadius = 10
+                button2.layer.borderWidth = 1
+        button2.layer.borderColor = UIColor.systemBlue.cgColor
+                button2.isEnabled = false
+                button2.isHidden = true
+                button2.titleLabel?.numberOfLines = 1
+        
+        //        // ボタンの横幅に応じてフォントサイズを自動調整する設定
+                button2.titleLabel?.adjustsFontSizeToFitWidth = true
+        //
+        //        button3.layer.cornerRadius = 10
+        //        button3.layer.borderWidth = 2
+        //        button3.layer.borderColor = borderColor
+        //        button3.setTitle("上記を保存", for: .normal)
+        //
+        button4.layer.cornerRadius = 10
+        button4.layer.borderWidth = 1
+        button4.layer.borderColor = UIColor.systemBlue.cgColor
         
         
-        translateLabel.layer.cornerRadius = 10
+        //        translateLabel.layer.cornerRadius = 10
         translateLabel.clipsToBounds = true
         translateLabel.layer.borderWidth = 2
         translateLabel.layer.borderColor = borderColor
-       
+        
         
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
         
-        languageLabel1.text = "日本語\nJapanese"
-        languageLabel2.text = "英語\nEnglish"
-
+        languageLabel1.text = "Japanese"
+        languageLabel2.text = "English"
+        
         translateTextView.delegate = self
-
+        
         // Do any additional setup after loading the view.
         
-//        if let textString = self.textStringForButton2{
-//            button2.isHidden = false
-//            button2.isEnabled = true
-//            self.button2.setTitle("保存先▷\(textString)", for: .normal)
+                if let textString = self.textStringForButton2{
+                    button2.isHidden = false
+                    button2.isEnabled = true
+                    self.button2.setTitle("\(textString)　へ保存する", for: .normal)
+    }
         
         //キーボードに完了のツールバーを作成
         let doneToolbar = UIToolbar()
@@ -123,11 +146,11 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         // 左側のBarButtonItemはflexibleSpace。これがないと右に寄らない。flexibleSpaceはBlank space to add between other items
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
-//        The items displayed on the toolbar.
+        //        The items displayed on the toolbar.
         doneToolbar.items = [spacer, doneButton]
         let someArr = [self.translateTextView, self.translateLabel]
         for someNumber in someArr{
-//            // textViewのキーボードにツールバーを設定
+            //            // textViewのキーボードにツールバーを設定
             someNumber!.inputAccessoryView = doneToolbar
         }
     }
@@ -137,7 +160,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         translateLabel.endEditing(true)
     }
     
-   
+    
     
     @objc func dismissKeyboard(){
         view.endEditing(true)
@@ -147,14 +170,15 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         super.viewDidAppear(true)
         
         self.tabBarController1.setBarButtonItem0()
+        tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
         
         if let textString = self.textStringForButton2{
             let translationFolderArr2 = realm.objects(TranslationFolder.self)
             var FolderNameArr = [String]()
             if translationFolderArr2.count == 0 {
-                self.button2.isEnabled = false
-                self.button2.isHidden = true
-                self.button3.setTitle("上記を保存", for: .normal)
+                                self.button2.isEnabled = false
+                                self.button2.isHidden = true
+//                                self.button3.setTitle("上記を保存", for: .normal)
                 return
             } else {
                 for number in 0...translationFolderArr2.count - 1{
@@ -170,106 +194,107 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                 self.button2.isHidden = false
                 self.button2.isEnabled = true
                 
-                button3.setTitle("保存先を変更", for: .normal)
+                //                            button3.setTitle("保存先を変更", for: .normal)
             } else {
-                self.button3.setTitle("上記を保存", for: .normal)
+                //                self.button3.setTitle("上記を保存", for: .normal)
                 self.button2.isEnabled = false
                 self.button2.isHidden = true
             }
-        }
-    }
-    
-    
-    
-
-    @IBAction func translateButton(_ sender: Any) {
-        if self.translateTextView.text == "" {
-            SVProgressHUD.show()
-            SVProgressHUD.showError(withStatus: "赤枠内にテキストを入力して、翻訳して下さい")
-            translateTextView.layer.borderColor = UIColor.red.cgColor
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: changeIcon)
-            return
-        } else if self.languageLabel1.text == "日本語\nJapanese" {
-       translateJapanese()
-        } else {
-       translateEnglish()
-        }
-    }
-
-        @IBAction func changeLanguageButton(_ sender: Any) {
-            if languageLabel1.text == "日本語\nJapanese"{
-            languageLabel1.text = "英語\nEnglish"
-            languageLabel2.text = "日本語\nJapanese"
-//            translateEnglish()
-        } else {
-            languageLabel1.text = "日本語\nJapanese"
-            languageLabel2.text = "英語\nEnglish"
-//            translateJapanese()
-        }
-    }
-    
-    
-    func textViewDidChange(_ textView: UITextView) {
-        if self.languageLabel1.text == "日本語\nJapanese"{
-            translateJapanese()
-        } else {
-            translateEnglish()
-        }
-    }
-    
-    
-    func translateEnglish(){
-        let authKey1 = KeyManager().getValue(key: "apiKey") as! String
-        print("DEBUG : \(authKey1)")
-        //            print結果　914cbb6c-40d6-0314-6e30-5fbd278de0ac:fx
-        
-        //            前後のスペースと改行を削除
-        let authKey = authKey1.trimmingCharacters(in: .newlines)
-        
-        // APIリクエストするパラメータを作成　リクエストするために必要な情報を定義　リクエスト成功時に、翻訳結果が返される
-        let parameters: [String: String] = [
-            "text": self.translateTextView.text,
-            "auth_key": authKey,
-            "source_lang" : "EN",
-            "target_lang" : "JA"
-        ]
-    
-        // ヘッダーを作成
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/x-www-form-urlencoded"
-        ]
-        // DeepL APIリクエストを実行
-//        AF = Almofireのこと
-//        Almofireはapi情報を取得するための便利なライブラリ　通常はswift側で用意されているURLSessionを使う。
-//        requestメソッドでAPIを呼ぶ
-        AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self){ response in
             
-            if case .success = response.result {
-                do {
-                    // 結果をデコード
-//                    一般的に、アプリがAPIサーバーと通信する場合、データはJSON形式でやりとりすることが多いかと思います。Foundationフレームワークの JSONEncoder クラスを使用すると、Swiftの値をJSONに変換することができ、JSONDecoder クラスはJSONをSwiftの値にデコードすることができます
-                    let result = try self.decoder.decode(DeepLResult.self, from: response.data!)
-                    // 結果のテキストを取得&画面に反映
-                    self.translateLabel.text =  result.translations[0].text
-                  
-                } catch {
-                    debugPrint("デコード失敗")
-                }
+        }
+    }
+    
+    
+    
+    
+    @IBAction func translateButton(_ sender: Any) {
+            if self.translateTextView.text == "" {
+                SVProgressHUD.show()
+                SVProgressHUD.showError(withStatus: "赤枠内にテキストを入力して、翻訳して下さい")
+                translateTextView.layer.borderColor = UIColor.red.cgColor
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: changeIcon)
+                return
+            } else if self.languageLabel1.text == "Japanese" {
+                translateJapanese()
             } else {
-                debugPrint("APIリクエストエラー")
+                translateEnglish()
             }
         }
-    }
-    
-    func translateJapanese(){
-//        if self.translateTextView.text.isEmpty{
-//            SVProgressHUD.show()
-//            SVProgressHUD.showError(withStatus: "翻訳したい文を入力して下さい")
-//
-//            return
-//        }else{
+        
+        @IBAction func changeLanguageButton(_ sender: Any) {
+            if languageLabel1.text == "Japanese"{
+                languageLabel1.text = "English"
+                languageLabel2.text = "Japanese"
+                //            translateEnglish()
+            } else {
+                languageLabel1.text = "Japanese"
+                languageLabel2.text = "English"
+                //            translateJapanese()
+            }
+        }
+        
+        
+        func textViewDidChange(_ textView: UITextView) {
+            if self.languageLabel1.text == "Japanese"{
+                translateJapanese()
+            } else {
+                translateEnglish()
+            }
+        }
+        
+        
+        func translateEnglish(){
+            let authKey1 = KeyManager().getValue(key: "apiKey") as! String
+            print("DEBUG : \(authKey1)")
+            //            print結果　914cbb6c-40d6-0314-6e30-5fbd278de0ac:fx
+            
+            //            前後のスペースと改行を削除
+            let authKey = authKey1.trimmingCharacters(in: .newlines)
+            
+            // APIリクエストするパラメータを作成　リクエストするために必要な情報を定義　リクエスト成功時に、翻訳結果が返される
+            let parameters: [String: String] = [
+                "text": self.translateTextView.text,
+                "auth_key": authKey,
+                "source_lang" : "EN",
+                "target_lang" : "JA"
+            ]
+            
+            // ヘッダーを作成
+            let headers: HTTPHeaders = [
+                "Content-Type": "application/x-www-form-urlencoded"
+            ]
+            // DeepL APIリクエストを実行
+            //        AF = Almofireのこと
+            //        Almofireはapi情報を取得するための便利なライブラリ　通常はswift側で用意されているURLSessionを使う。
+            //        requestメソッドでAPIを呼ぶ
+            AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self){ response in
+                
+                if case .success = response.result {
+                    do {
+                        // 結果をデコード
+                        //                    一般的に、アプリがAPIサーバーと通信する場合、データはJSON形式でやりとりすることが多いかと思います。Foundationフレームワークの JSONEncoder クラスを使用すると、Swiftの値をJSONに変換することができ、JSONDecoder クラスはJSONをSwiftの値にデコードすることができます
+                        let result = try self.decoder.decode(DeepLResult.self, from: response.data!)
+                        // 結果のテキストを取得&画面に反映
+                        self.translateLabel.text =  result.translations[0].text
+                        
+                    } catch {
+                        debugPrint("デコード失敗")
+                    }
+                } else {
+                    debugPrint("APIリクエストエラー")
+                }
+            }
+        }
+        
+        func translateJapanese(){
+            //        if self.translateTextView.text.isEmpty{
+            //            SVProgressHUD.show()
+            //            SVProgressHUD.showError(withStatus: "翻訳したい文を入力して下さい")
+            //
+            //            return
+            //        }else{
             // APIKey.plistに保存したDeepLの認証キーを取得
-          
+            
             let authKey1 = KeyManager().getValue(key: "apiKey") as! String
             print("DEBUG : \(authKey1)")
             //            print結果　914cbb6c-40d6-0314-6e30-5fbd278de0ac:fx
@@ -284,7 +309,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                 "source_lang" : "JA",
                 "target_lang" : "EN"
             ]
-        
+            
             // ヘッダーを作成
             let headers: HTTPHeaders = [
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -309,7 +334,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                         let result = try self.decoder.decode(DeepLResult.self, from: response.data!)
                         // 結果のテキストを取得&画面に反映
                         self.translateLabel.text =  result.translations[0].text
-                      
+                        
                         // 結果をNCMBに保存する処理を呼び出し
                         //                                        saveResult()
                     } catch {
@@ -319,187 +344,248 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     debugPrint("APIリクエストエラー")
                 }
             }
-    }
-    
-    @IBAction func ToFolderListViewControllerButton(_ sender: Any) {
+        }
         
+        @IBAction func ToFolderListViewControllerButton(_ sender: Any) {
+            
+            let folderListViewController = self.storyboard?.instantiateViewController(withIdentifier: "FolderList") as! FolderListViewController
+            
+            //        let folderListViewController = FolderListViewController()
+            //
+            //        if let sheet = folderListViewController.sheetPresentationController{
+            //            sheet.detents = [.medium()]
+            //        }
+            
+            folderListViewController.translateViewController = self
+            
+            present(folderListViewController, animated: true, completion: nil)
+            
+            print("セグエ")
+        }
+        
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            
+            if segue.identifier == "FolderList" {
+                let folderListViewController = segue.destination as! FolderListViewController
+                folderListViewController.translateViewController = self
+            }
+        }
+        
+        @IBAction func SaveButton(_ sender: Any) {
+            if self.translateTextView.text != "" && self.translateLabel.text != "" {
+                if let textStringForButton2 = self.textStringForButton2 {
+                    SVProgressHUD.show()
+                    let translateTextViewText = self.translateTextView.text
+                    let translateLabelText = self.translateLabel.text
+                    
+                    print(translateTextViewText!)
+                    print(translateLabelText!)
+                    //                            Translationモデルのインスタンス作成
+                    //                let result1 = Translation(value: ["inputData": "\(translateTextViewText!)"])
+                    //                let result2 = Translation(value: ["resultData": "\(translateLabelText!)"])
+                    let predict = NSPredicate(format: "folderName == %@", textStringForButton2)
+                    translationFolderArr = realm.objects(TranslationFolder.self).filter(predict)
+                    
+                    let result3 = Translation()
+                    result3.inputData = translateTextViewText!
+                    result3.resultData = translateLabelText! + "\n" + "メモ : "
+                    result3.inputAndResultData = translateTextViewText! + result3.resultData
+                    let allTranslation = realm.objects(Translation.self)
+                    if allTranslation.count != 0 {
+                        result3.id = allTranslation.max(ofProperty: "id")! + 1
+                    }
+                    
+                    //                let dictionary: [String: [[String: String]]] = ["results": [["inputData": "\(translateTextViewText!)"], ["resultData": "\(translateLabelText!)"]]
+                    //                ]
+                    //                print("辞書 : \(dictionary)"
+                    //                let result3 = Translation(value: dictionary)
+                    //                print("結果3 : \(result3)")
+                    
+                    try! realm.write{
+                        translationFolderArr.first!.results.append(result3)
+                    }
+                    
+                    print(translationFolderArr)
+                    
+                    print("モデル確認")
+                    print(result3)
+                    //                ここに追加しました。Translationクラスのid設定はここではだめ
+                    //                let translation = Translation()
+                    //                let allTranslation = realm.objects(Translation.self)
+                    //                if allTranslation.count != 0 {
+                    //                  translation.id = allTranslation.max(ofProperty: "id")! + 1
+                    //                }
+                    
+                    let result4 = Histroy()
+                    
+                    let allHistory = self.realm.objects(Histroy.self)
+                    if allHistory.count != 0 {
+                        result4.id = allHistory.max(ofProperty: "id")! + 1
+                    }
+                    
+                    let date2 = Date()
+                    
+                    try! realm.write{
+                        result4.inputData2 = translateTextViewText!
+                        result4.resultData2 = translateLabelText!
+                        result4.date2 = date2
+                        result4.inputAndResultData = translateTextViewText! + translateLabelText!
+                        self.realm.add(result4)
+                    }
+                    
+                    
+                    
+                    
+                    print("データ : \(translationFolderArr)")
+                    SVProgressHUD.showSuccess(withStatus: "'\(textStringForButton2)' へ保存しました")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: showDismiss)
+                    
+                    if self.translateTextView.layer.borderWidth == 2 {
+                        
+                        self.translateTextView.layer.borderWidth = 2
+                        self.translateTextView.layer.borderColor = UIColor.systemGray4.cgColor
+                    }
+                    
+                    if self.translateLabel.layer.borderWidth == 2 {
+                        
+                        self.translateLabel.layer.borderWidth = 2
+                        self.translateLabel.layer.borderColor = UIColor.systemGray4.cgColor
+                    }
+                }
+                
+            } else if self.translateTextView.text == "" && self.translateLabel.text == "" {
+                error1()
+                error2()
+            } else if self.translateTextView.text == "" {
+                error1()
+                SVProgressHUD.show()
+                SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストを入力してください")
+            } else {
+                error2()
+            }
+        }
+    
+    func showDismiss(){
+        SVProgressHUD.dismiss()
+    }
+        
+        func error1(){
+            
+            let borderColor1 = UIColor.red.cgColor
+            self.translateTextView.layer.borderWidth = 2
+            self.translateTextView.layer.borderColor = borderColor1
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: changeIcon)
+            
+        }
+        
+        func error2(){
+            SVProgressHUD.show()
+            let borderColor1 = UIColor.red.cgColor
+            self.translateLabel.layer.borderWidth = 2
+            self.translateLabel.layer.borderColor = borderColor1
+            SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストを入力してください")
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: changeIcon)
+        }
+        
+        
+        func changeIcon(){
+            let borderColor1 = UIColor.systemGray4.cgColor
+            self.translateTextView.layer.borderWidth = 2
+            self.translateTextView.layer.borderColor = borderColor1
+            
+            self.translateLabel.layer.borderWidth = 2
+            self.translateLabel.layer.borderColor = borderColor1
+            
+            SVProgressHUD.dismiss()
+        }
+        
+        
+        
+        
+        @IBAction func deleteButton1(_ sender: Any) {
+            self.translateTextView.text = ""
+        }
+        
+        @IBAction func deleteButton2(_ sender: Any) {
+            self.translateLabel.text = ""
+        }
+    
+    @IBAction func selectFolderButton(_ sender: Any) {
         let folderListViewController = self.storyboard?.instantiateViewController(withIdentifier: "FolderList") as! FolderListViewController
         
-//        let folderListViewController = FolderListViewController()
-//
-//        if let sheet = folderListViewController.sheetPresentationController{
-//            sheet.detents = [.medium()]
-//        }
         
+        if let sheet = folderListViewController.sheetPresentationController{
+            sheet.detents = [.medium()]
+        }
         folderListViewController.translateViewController = self
-        
         present(folderListViewController, animated: true, completion: nil)
         
-        print("セグエ")
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "FolderList" {
-        let folderListViewController = segue.destination as! FolderListViewController
-        folderListViewController.translateViewController = self
-        }
-    }
+        //
+        //    taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        ////        データを取得する。
+        //    let predict = NSPredicate(format: "category == %@", taskSearchBar.text!)
+        //    taskArray = taskArray.filter(predict)
+        //    print(taskArray)
+        //    let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment")
+        //        if let sheet = commentViewController?.sheetPresentationController {
+        //            sheet.detents = [.medium()]
+        //        }
+        //        present(commentViewController!, animated: true, completion: nil)
+        //    }}
+        
+        
+        /*
+         // MARK: - Navigation
+         
+         // In a storyboard-based application, you will often want to do a little preparation before navigation
+         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         // Get the new view controller using segue.destination.
+         // Pass the selected object to the new view controller.
+         }
+         */
     
-    @IBAction func SaveButton(_ sender: Any) {
-        if self.translateTextView.text != "" && self.translateLabel.text != "" {
-            if let textStringForButton2 = self.textStringForButton2 {
-                SVProgressHUD.show()
-                let translateTextViewText = self.translateTextView.text
-                let translateLabelText = self.translateLabel.text
-                
-                print(translateTextViewText!)
-                print(translateLabelText!)
-//                            Translationモデルのインスタンス作成
-//                let result1 = Translation(value: ["inputData": "\(translateTextViewText!)"])
-//                let result2 = Translation(value: ["resultData": "\(translateLabelText!)"])
-                let predict = NSPredicate(format: "folderName == %@", textStringForButton2)
-                translationFolderArr = realm.objects(TranslationFolder.self).filter(predict)
-                
-                let result3 = Translation()
-                result3.inputData = translateTextViewText!
-                result3.resultData = translateLabelText! + "\n" + "メモ : "
-                result3.inputAndResultData = translateTextViewText! + result3.resultData
-                let allTranslation = realm.objects(Translation.self)
-                if allTranslation.count != 0 {
-                    result3.id = allTranslation.max(ofProperty: "id")! + 1
-                }
-                
-//                let dictionary: [String: [[String: String]]] = ["results": [["inputData": "\(translateTextViewText!)"], ["resultData": "\(translateLabelText!)"]]
-//                ]
-//                print("辞書 : \(dictionary)"
-//                let result3 = Translation(value: dictionary)
-//                print("結果3 : \(result3)")
-                
-                try! realm.write{
-                    translationFolderArr.first!.results.append(result3)
-                }
-                
-                print(translationFolderArr)
-                
-                print("モデル確認")
-                print(result3)
-//                ここに追加しました。Translationクラスのid設定はここではだめ
-//                let translation = Translation()
-//                let allTranslation = realm.objects(Translation.self)
-//                if allTranslation.count != 0 {
-//                  translation.id = allTranslation.max(ofProperty: "id")! + 1
-//                }
-                
-                let result4 = Histroy()
-                
-                let allHistory = self.realm.objects(Histroy.self)
-                if allHistory.count != 0 {
-                    result4.id = allHistory.max(ofProperty: "id")! + 1
-                }
-                
-                let date2 = Date()
-                
-                try! realm.write{
-                    result4.inputData2 = translateTextViewText!
-                    result4.resultData2 = translateLabelText!
-                    result4.date2 = date2
-                    self.realm.add(result4)
-                }
-                
-                
-                
-                
-                print("データ : \(translationFolderArr)")
-                SVProgressHUD.showSuccess(withStatus: "'\(textStringForButton2)' へ保存しました")
-                
-                if self.translateTextView.layer.borderWidth == 2.5 {
-                    
-                    self.translateTextView.layer.borderWidth = 2
-                    self.translateTextView.layer.borderColor = UIColor.gray.cgColor
-                }
-                
-                if self.translateLabel.layer.borderWidth == 2.5 {
-                    
-                    self.translateLabel.layer.borderWidth = 2
-                    self.translateLabel.layer.borderColor = UIColor.gray.cgColor
+    func setStringForButton2(){
+        
+        self.tabBarController1.setBarButtonItem0()
+        tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        if let textString = self.textStringForButton2{
+            let translationFolderArr2 = realm.objects(TranslationFolder.self)
+            var FolderNameArr = [String]()
+            if translationFolderArr2.count == 0 {
+                self.button2.isEnabled = false
+                self.button2.isHidden = true
+                //                                self.button3.setTitle("上記を保存", for: .normal)
+                return
+            } else {
+                for number in 0...translationFolderArr2.count - 1{
+                    FolderNameArr.append(translationFolderArr2[number].folderName)
                 }
             }
+            if FolderNameArr.contains(textString){
+                
+                
+                
+                print("DEBUG : \(textString)")
+                self.button2.setTitle("保存先▷\(textString)", for: .normal)
+                self.button2.isHidden = false
+                self.button2.isEnabled = true
+                
+                //                            button3.setTitle("保存先を変更", for: .normal)
+            } else {
+                //                self.button3.setTitle("上記を保存", for: .normal)
+                self.button2.isEnabled = false
+                self.button2.isHidden = true
+            }
             
-        } else if self.translateTextView.text == "" && self.translateLabel.text == "" {
-            error1()
-            error2()
-        } else if self.translateTextView.text == "" {
-            error1()
-            SVProgressHUD.show()
-            SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストが入っていません")
-        } else {
-            error2()
         }
     }
-    
-    func error1(){
-        
-        let borderColor1 = UIColor.red.cgColor
-        self.translateTextView.layer.borderWidth = 2.5
-        self.translateTextView.layer.borderColor = borderColor1
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: changeIcon)
-        
-    }
-    
-    func error2(){
-        SVProgressHUD.show()
-        let borderColor1 = UIColor.red.cgColor
-        self.translateLabel.layer.borderWidth = 2.5
-        self.translateLabel.layer.borderColor = borderColor1
-        SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストが入っていません")
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: changeIcon)
-    }
-    
-    
-    func changeIcon(){
-        let borderColor1 = UIColor.gray.cgColor
-        self.translateTextView.layer.borderWidth = 2.5
-        self.translateTextView.layer.borderColor = borderColor1
-        
-        self.translateLabel.layer.borderWidth = 2.5
-        self.translateLabel.layer.borderColor = borderColor1
-    }
-    
-    
-    
-    
-    @IBAction func deleteButton1(_ sender: Any) {
-        self.translateTextView.text = ""
-    }
-    
-    @IBAction func deleteButton2(_ sender: Any) {
-        self.translateLabel.text = ""
-    }
-    
-    //
-    //    taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
-    ////        データを取得する。
-    //    let predict = NSPredicate(format: "category == %@", taskSearchBar.text!)
-    //    taskArray = taskArray.filter(predict)
-    //    print(taskArray)
-    //    let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment")
-    //        if let sheet = commentViewController?.sheetPresentationController {
-    //            sheet.detents = [.medium()]
-    //        }
-    //        present(commentViewController!, animated: true, completion: nil)
-    //    }}
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
 }
+    
+
+

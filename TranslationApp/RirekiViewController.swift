@@ -8,13 +8,15 @@
 import UIKit
 import RealmSwift
 import ContextMenuSwift
+import Alamofire
 
-class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
   
     @IBOutlet weak var rirekiTableView: UITableView!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     
     
@@ -34,13 +36,29 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         rirekiTableView.delegate = self
         rirekiTableView.dataSource = self
-        rirekiTableView.separatorColor = .gray
+        rirekiTableView.separatorColor = .systemBlue
+        
+        searchBar.delegate = self
+        searchBar.backgroundImage = UIImage()
+        searchBar.enablesReturnKeyAutomatically = false
+        
+        let doneToolbar = UIToolbar()
+        doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneButton =  UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTapped))
+        doneToolbar.items = [spacer, doneButton]
+        self.searchBar.inputAccessoryView = doneToolbar
+        
 
         let nib = UINib(nibName: "CustomCellTableViewCell", bundle: nil)
         rirekiTableView.register(nib, forCellReuseIdentifier: "CustomCell")
         print("登録されてます")
         
         // Do any additional setup after loading the view.
+    }
+    
+    @objc func doneButtonTapped(sender: UIButton){
+        self.searchBar.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +70,7 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         self.tabBarController1.setBarButtonItem2()
+        tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
         
         self.historyArr = realm.objects(Histroy.self).sorted(byKeyPath: "date2", ascending: true)
         if historyArr.count == 0 {
@@ -61,10 +80,34 @@ class RirekiViewController: UIViewController, UITableViewDelegate, UITableViewDa
             editButton.isEnabled = true
             label1.text = ""
         }
+        
+        if searchBar.text != "" {
+            self.historyArr =  historyArr.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+        }
+        
         self.rirekiTableView.reloadData()
         
        
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        }
+    
+    func  searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        search()
+    }
+    
+    func search(){
+        self.historyArr  = historyArr.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+        
+        if historyArr.count == 0 {
+            self.historyArr = self.realm.objects(Histroy.self).sorted(byKeyPath: "date2", ascending: true)
+        }
+        
+        rirekiTableView.reloadData()
+        }
+    
     
     
     

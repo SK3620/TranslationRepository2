@@ -12,7 +12,6 @@
 		83071D0028B91AC70003734C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071CFE28B91AC70003734C /* Main.storyboard */; };
 		83071D0228B91AC90003734C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0128B91AC90003734C /* Assets.xcassets */; };
 		83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0328B91AC90003734C /* LaunchScreen.storyboard */; };
-		832A86AF28E15572002FB368 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 832A86AE28E15572002FB368 /* Alamofire */; };
 		832D4CB028D848B5004C4D7C /* Memo2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
@@ -38,13 +37,16 @@
 		83B6AF2028E7254000700DBF /* ReviewCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */; };
 		83B9C1FB28CFF10B006138E2 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */; };
 		83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */; };
-		83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */; };
+		83B9C1FE28D2F31B006138E2 /*  RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FD28D2F31B006138E2 /*  RecordViewController.swift */; };
 		83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FF28D3050E006138E2 /* CustomCell2.swift */; };
 		83B9C20228D3050E006138E2 /* CustomCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C20028D3050E006138E2 /* CustomCell2.xib */; };
 		83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20328D3132D006138E2 /* EditViewController.swift */; };
 		83B9C20628D39997006138E2 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20528D39997006138E2 /* AddViewController.swift */; };
 		83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C15AF928BF451F00280694 /* FolderListViewController.swift */; };
 		83F021B128C0CC56009FFDD2 /* History2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021B028C0CC56009FFDD2 /* History2ViewController.swift */; };
+		83F41A6C28F2998C004F653F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83F41A6B28F2998C004F653F /* Alamofire */; };
+		83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */; };
+		83F41A9128F3D906004F653F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83F41A9028F3D906004F653F /* Alamofire */; };
 		E6FAEDC6536A5BB599B65D2D /* Pods_TranslationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -96,13 +98,14 @@
 		83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReviewCustomCell.xib; sourceTree = "<group>"; };
 		83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
 		83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellTableViewCell.xib; sourceTree = "<group>"; };
-		83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		83B9C1FD28D2F31B006138E2 /*  RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " RecordViewController.swift"; sourceTree = "<group>"; };
 		83B9C1FF28D3050E006138E2 /* CustomCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell2.swift; sourceTree = "<group>"; };
 		83B9C20028D3050E006138E2 /* CustomCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCell2.xib; sourceTree = "<group>"; };
 		83B9C20328D3132D006138E2 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		83B9C20528D39997006138E2 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		83C15AF928BF451F00280694 /* FolderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListViewController.swift; sourceTree = "<group>"; };
 		83F021B028C0CC56009FFDD2 /* History2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History2ViewController.swift; sourceTree = "<group>"; };
+		83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerForFolder.swift; sourceTree = "<group>"; };
 		C116E1FDCFAEA5860B3B5F33 /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,8 +114,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83F41A9128F3D906004F653F /* Alamofire in Frameworks */,
 				E6FAEDC6536A5BB599B65D2D /* Pods_TranslationApp.framework in Frameworks */,
-				832A86AF28E15572002FB368 /* Alamofire in Frameworks */,
+				83F41A6C28F2998C004F653F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +155,7 @@
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
+				83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */,
 				83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */,
 				83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */,
 				83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */,
@@ -160,7 +165,7 @@
 				83B9C20328D3132D006138E2 /* EditViewController.swift */,
 				83B9C1FF28D3050E006138E2 /* CustomCell2.swift */,
 				83B9C20028D3050E006138E2 /* CustomCell2.xib */,
-				83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */,
+				83B9C1FD28D2F31B006138E2 /*  RecordViewController.swift */,
 				83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */,
 				83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */,
 				83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */,
@@ -211,7 +216,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				83F021A128C09D8A009FFDD2 /* Embed Frameworks */,
-				48D2ACC82B48ADEBAB4FA5CF /* [CP] Embed Pods Frameworks */,
+				EE25B6A0B67534A24AF15F0E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -219,7 +224,8 @@
 			);
 			name = TranslationApp;
 			packageProductDependencies = (
-				832A86AE28E15572002FB368 /* Alamofire */,
+				83F41A6B28F2998C004F653F /* Alamofire */,
+				83F41A9028F3D906004F653F /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
@@ -253,6 +259,8 @@
 				839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */,
 				832A86AD28E15572002FB368 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				83F41A6A28F2998C004F653F /* XCRemoteSwiftPackageReference "Alamofire" */,
+				83F41A8F28F3D906004F653F /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83071CF628B91AC70003734C /* Products */;
 			projectDirPath = "";
@@ -306,7 +314,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		48D2ACC82B48ADEBAB4FA5CF /* [CP] Embed Pods Frameworks */ = {
+		EE25B6A0B67534A24AF15F0E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -331,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */,
+				83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */,
 				83966BF728E8C1060098A39E /* CustomCellForHistory2ViewController.swift in Sources */,
 				83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */,
 				83B6AF1C28E71E8C00700DBF /* ReviewViewController.swift in Sources */,
@@ -341,7 +350,7 @@
 				83A564C928D7630300C3A9B9 /* PhraseViewController.swift in Sources */,
 				83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
-				83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */,
+				83B9C1FE28D2F31B006138E2 /*  RecordViewController.swift in Sources */,
 				83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */,
 				83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */,
 				832D4CB028D848B5004C4D7C /* Memo2ViewController.swift in Sources */,
@@ -610,12 +619,33 @@
 				kind = branch;
 			};
 		};
+		83F41A6A28F2998C004F653F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		83F41A8F28F3D906004F653F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		832A86AE28E15572002FB368 /* Alamofire */ = {
+		83F41A6B28F2998C004F653F /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		83F41A9028F3D906004F653F /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */

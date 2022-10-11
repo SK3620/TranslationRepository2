@@ -54,6 +54,8 @@ class Histroy: Object{
     
     @objc dynamic var id = 0
     
+    @objc dynamic var inputAndResultData = ""
+    
     override
     static func primaryKey() -> String? {
         return "id"
