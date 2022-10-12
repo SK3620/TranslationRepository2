@@ -107,6 +107,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         tableView.reloadData()
         
+        
     }
     
     func tableViewReload(){

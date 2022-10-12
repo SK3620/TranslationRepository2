@@ -30,12 +30,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTaped))
         doneToolbar.items = [spacer, doneButton]
         memoTextView.inputAccessoryView = doneToolbar
-        
-        
-        let borderColor = UIColor.gray.cgColor
-        self.memoButton.layer.borderColor = borderColor
-        self.memoButton.layer.borderWidth = 2.5
-        self.memoButton.layer.cornerRadius = 10
+       
         
         memoTextView.delegate = self
 

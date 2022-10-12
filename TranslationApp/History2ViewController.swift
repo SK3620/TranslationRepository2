@@ -79,8 +79,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         acordionButton.layer.borderWidth = 3
         acordionButton.layer.cornerRadius = 10
 
-      
-
+        
+        
         
        
         //キーボードに完了のツールバーを作成
@@ -104,19 +104,21 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
         tabBarController1.navigationController?.navigationBar.backgroundColor = UIColor.systemGray4
-
+        
+        
+       
         
         let navigationController = self.navigationController as! NavigationControllerForFolder
         navigationController.setNavigationBarHidden(false, animated: false)
-        navigationController.navigationBar.backgroundColor = UIColor.systemGray4
         navigationController.navigationItem.title = self.folderNameString
         print("バー確認とフォルダー名\(navigationController.navigationItem.title) : \(self.folderNameString)")
         
         
        
+       
         
-        let rightButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
-        navigationController.navigationItem.rightBarButtonItem = rightButton
+//        let rightButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+//        navigationController.navigationItem.rightBarButtonItem = rightButton
         
 //        let labelFrame = CGRect(x: view.frame.size.width / 2, y: 0, width: 55.0, height: navigationController.navigationBar.frame.height)
 //           let label = UILabel(frame: labelFrame)  // ラベルサイズと位置

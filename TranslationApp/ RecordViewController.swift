@@ -211,13 +211,13 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 //        }
         
 //        label2.text = "今日学習した内容を「＋」で記録しよう！"
-        print(label2.text)
+       
         
         if self.recordArr.count != 0 {
            
         let predicate = NSPredicate(format: "date3 == %@", self.dateString)
         self.recordArrFilter = self.recordArr.filter(predicate).sorted(byKeyPath: "date4", ascending: true)
-            print(recordArrFilter)
+          
             if recordArrFilter.isEmpty {
                 label2.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
             } else {

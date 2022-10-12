@@ -14,6 +14,7 @@
 		83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0328B91AC90003734C /* LaunchScreen.storyboard */; };
 		832D4CB028D848B5004C4D7C /* Memo2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
+		8382E93A28F71F5700877DD8 /* NavigationControllerForHistory2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* Edit1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */; };
@@ -76,6 +77,7 @@
 		83071D0628B91AC90003734C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo2ViewController.swift; sourceTree = "<group>"; };
 		837CD1B228BE264F00823D17 /* TranslationFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFolder.swift; sourceTree = "<group>"; };
+		8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerForHistory2ViewController.swift; sourceTree = "<group>"; };
 		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edit1ViewController.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
+				8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */,
 				83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */,
 				83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */,
 				83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */,
@@ -353,6 +356,7 @@
 				83A564C928D7630300C3A9B9 /* PhraseViewController.swift in Sources */,
 				83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
+				8382E93A28F71F5700877DD8 /* NavigationControllerForHistory2ViewController.swift in Sources */,
 				83B9C1FE28D2F31B006138E2 /*  RecordViewController.swift in Sources */,
 				83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */,
 				83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */,

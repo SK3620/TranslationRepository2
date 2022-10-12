@@ -52,6 +52,11 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var imageButton1: UIButton!
     @IBOutlet weak var imageButton2: UIButton!
     
+    @IBOutlet weak var view1: UIView!
+    @IBOutlet weak var view2: UIView!
+    
+    
+    
     
     //    JSONデコード用（？）
     let decoder: JSONDecoder = JSONDecoder()
@@ -121,6 +126,12 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         translateLabel.clipsToBounds = true
         translateLabel.layer.borderWidth = 2
         translateLabel.layer.borderColor = borderColor
+        
+        view1.layer.borderWidth = 2
+        view1.layer.borderColor = borderColor
+        
+        view2.layer.borderWidth = 2
+        view2.layer.borderColor = borderColor
         
         
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
