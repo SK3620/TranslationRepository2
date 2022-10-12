@@ -11,6 +11,7 @@ target 'TranslationApp' do
   pod 'FSCalendar'
   pod 'CalculateCalendarLogic'
   pod 'ContextMenuSwift'
+  pod 'SideMenu', '~> 6.0'
 end
 
 

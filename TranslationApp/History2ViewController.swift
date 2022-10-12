@@ -10,14 +10,17 @@ import RealmSwift
 import SVProgressHUD
 import ContextMenuSwift
 import Alamofire
+import SideMenu
 
 
-class History2ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
+
+protocol SettingsDelegate {
+    func tappedSettingsItem(indexPath: IndexPath)
+}
+
+class History2ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, SettingsDelegate{
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var memoButton: UIButton!
-    @IBOutlet weak var recordButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var acordionButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
 
@@ -44,16 +47,14 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     var result: Int!
     var result1: Int!
     
+    var menuNavigationController: SideMenuNavigationController!
+    
    
     
    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        
-        print("確認11 : \(self.folderNameString)")
-        
         
         self.searchBar.backgroundImage = UIImage()
         //        xibファイルの登録
@@ -73,21 +74,12 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         searchBar.enablesReturnKeyAutomatically  = false
         
         let borderColor = UIColor.gray.cgColor
-        memoButton.layer.borderColor = borderColor
-        memoButton.layer.borderWidth = 3
-        memoButton.layer.cornerRadius = 10
-        
+      
         acordionButton.layer.borderColor = borderColor
         acordionButton.layer.borderWidth = 3
         acordionButton.layer.cornerRadius = 10
 
-        saveButton.layer.borderColor = borderColor
-        saveButton.layer.borderWidth = 3
-        saveButton.layer.cornerRadius = 10
-        
-        recordButton.layer.borderColor = borderColor
-        recordButton.layer.borderWidth = 3
-        recordButton.layer.cornerRadius = 10
+      
 
         
        
@@ -105,8 +97,6 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         self.searchBar.endEditing(true)
         
     }
-        
-        
         
         
     override func viewWillAppear(_ animated: Bool) {
@@ -164,6 +154,69 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             self.search()
         }
     }
+    
+    
+    private func makeSettings() -> SideMenuSettings {
+           var settings = SideMenuSettings()
+           //動作を指定
+        settings.presentationStyle = .menuSlideIn
+        settings.menuWidth = 130
+
+           //メニューの陰影度
+//           settings.presentationStyle.onTopShadowOpacity = 10.0
+           //ステータスバーの透明度
+           settings.statusBarEndAlpha = 0
+           return settings
+          }
+
+
+    @IBAction func button(_ sender: Any) {
+
+        let menuViewController = storyboard?.instantiateViewController(withIdentifier: "Menu") as! SettingsViewController
+        
+        menuViewController.delegate = self
+        //サイドメニューのナビゲーションコントローラを生成
+        menuNavigationController = SideMenuNavigationController(rootViewController: menuViewController)
+        
+        menuNavigationController.leftSide = false
+        //設定を追加
+        menuNavigationController.settings = makeSettings()
+        //左,右のメニューとして追加
+        SideMenuManager.default.rightMenuNavigationController = menuNavigationController
+        
+        present(menuNavigationController, animated: true, completion: nil)
+    }
+
+
+    func tappedSettingsItem(indexPath: IndexPath){
+        switch indexPath.row {
+        case 0:
+            let pharseViewController = storyboard?.instantiateViewController(withIdentifier: "Phrase")
+            present(pharseViewController!, animated: true, completion: nil)
+        case 1:
+            let recordViewController = storyboard?.instantiateViewController(withIdentifier: "Record")
+            present(recordViewController!, animated: true, completion: nil)
+        case 2:
+            let memoViewController = storyboard?.instantiateViewController(withIdentifier: "MemoView") as! MemoViewController
+            
+            if let sheet = memoViewController.sheetPresentationController {
+                sheet.detents = [.medium()]
+            }
+            
+            memoViewController.folderNameString = self.folderNameString
+            
+            present(memoViewController, animated: true, completion: nil)
+        case 3:
+            print("閉じる")
+        default:
+            print("nil")
+        }
+    }
+
+
+    
+    
+   
     
 //    検索ボタン押下時の呼び出しメソッド
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -711,25 +764,13 @@ extension History2ViewController: ContextMenuDelegate {
         }
         
     }
+}
     
 //    セルをたっぷしたら、Edit1ViewControllerに画面遷移させて、そこで編集作業＋保存ボタンでRealmモデルクラス（TranslationFolderファイル）に保存
     
-    
-    @IBAction func memoButtonAction(_ sender: Any) {
-        
-        let memoViewController = storyboard?.instantiateViewController(withIdentifier: "MemoView") as! MemoViewController
-        
-        if let sheet = memoViewController.sheetPresentationController {
-            sheet.detents = [.medium()]
-        }
-        
-        memoViewController.folderNameString = self.folderNameString
-        
-        present(memoViewController, animated: true, completion: nil)
-    }
-}
-    
-    
+
+
+
 //    全削除ボタン
 //  @IBAction func deleteAllButtonAction(_ sender: Any) {
 //
@@ -829,5 +870,7 @@ extension History2ViewController: ContextMenuDelegate {
 //    }
 //
 //}
+
+
 
 

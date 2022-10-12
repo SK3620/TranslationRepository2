@@ -7,6 +7,7 @@ PODS:
   - Realm/Headers (10.20.0)
   - RealmSwift (10.20.0):
     - Realm (= 10.20.0)
+  - SideMenu (6.5.0)
   - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - ContextMenuSwift
   - FSCalendar
   - RealmSwift (= 10.20.0)
+  - SideMenu (~> 6.0)
   - SVProgressHUD
 
 SPEC REPOS:
@@ -23,6 +25,7 @@ SPEC REPOS:
     - FSCalendar
     - Realm
     - RealmSwift
+    - SideMenu
     - SVProgressHUD
 
 SPEC CHECKSUMS:
@@ -31,8 +34,9 @@ SPEC CHECKSUMS:
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Realm: ae32bdc1da7d19c7617e0400201a77acd4a211b9
   RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: cae30046b027e23d5ffa3b3bbdb8dc06cf762c54
+PODFILE CHECKSUM: 701a2a6e4f363d13e5c1c5e5ed87a4f9c08a253d
 
 COCOAPODS: 1.11.3

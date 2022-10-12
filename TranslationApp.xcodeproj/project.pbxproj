@@ -26,6 +26,7 @@
 		839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = 839FBA3828BA5C8900BB64A5 /* APIKey.plist */; };
 		839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3A28BA602700BB64A5 /* KeyManager.swift */; };
 		83A564C928D7630300C3A9B9 /* PhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A564C828D7630300C3A9B9 /* PhraseViewController.swift */; };
+		83A7917828F6654300BF7C2D /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7917728F6654300BF7C2D /* SettingsViewController.swift */; };
 		83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */; };
 		83AC1DC928E4427D00576CF4 /* CustomPhraseWordViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */; };
 		83AC1DCD28E6220A00576CF4 /* NavigationController0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */; };
@@ -87,6 +88,7 @@
 		839FBA3828BA5C8900BB64A5 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
 		83A564C828D7630300C3A9B9 /* PhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseViewController.swift; sourceTree = "<group>"; };
+		83A7917728F6654300BF7C2D /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhraseWordViewCell.swift; sourceTree = "<group>"; };
 		83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomPhraseWordViewCell.xib; sourceTree = "<group>"; };
 		83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController0.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */,
 				839FBA2E28BA016C00BB64A5 /* ViewController.swift */,
 				83F021B028C0CC56009FFDD2 /* History2ViewController.swift */,
+				83A7917728F6654300BF7C2D /* SettingsViewController.swift */,
 				8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */,
 				83AF317128CF037200FDA0E1 /* MemoViewController.swift */,
 				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
@@ -361,6 +364,7 @@
 				83B6AF1F28E7254000700DBF /* ReviewCustomCell.swift in Sources */,
 				83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */,
 				8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */,
+				83A7917828F6654300BF7C2D /* SettingsViewController.swift in Sources */,
 				83071CFB28B91AC70003734C /* SceneDelegate.swift in Sources */,
 				83B9C1FB28CFF10B006138E2 /* CustomCellTableViewCell.swift in Sources */,
 				83AF317428CF320B00FDA0E1 /* MemoViewController2.swift in Sources */,
