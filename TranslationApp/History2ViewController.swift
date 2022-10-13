@@ -23,6 +23,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var acordionButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var menuButton: UIButton!
+    
 
     
     let realm = try! Realm()
@@ -72,6 +74,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
 //        何も入力されていなくてもreturnキー押せるようにする
         searchBar.enablesReturnKeyAutomatically  = false
+        
+        self.menuButton.setImage(UIImage(systemName: "text.justify"), for: .normal)
         
         let borderColor = UIColor.gray.cgColor
       

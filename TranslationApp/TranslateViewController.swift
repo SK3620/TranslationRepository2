@@ -9,7 +9,8 @@ import UIKit
 import Alamofire
 import SVProgressHUD
 import RealmSwift
-
+import ContextMenuSwift
+import AVFoundation
 
 class TranslateViewController: UIViewController, UITextViewDelegate {
     
@@ -49,11 +50,25 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var button5: UIButton!
     
     
-    @IBOutlet weak var imageButton1: UIButton!
-    @IBOutlet weak var imageButton2: UIButton!
+//    @IBOutlet weak var imageButton1: UIButton!
+//    @IBOutlet weak var imageButton2: UIButton!
     
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var view2: UIView!
+    
+    
+    @IBOutlet weak var copyButton1: UIButton!
+    @IBOutlet weak var copyButton2: UIButton!
+    @IBOutlet weak var volumeButton1: UIButton!
+    @IBOutlet weak var volumeButton2: UIButton!
+    @IBOutlet weak var deleteTextButton1: UIButton!
+    @IBOutlet weak var deleteTextButton2: UIButton!
+    
+    var talker = AVSpeechSynthesizer()
+    
+    var numberForVolumeButton2: Int = 0
+    
+    
     
     
     
@@ -72,26 +87,35 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         
         
         let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium, scale: .medium)
-
-                    let systemIcon = UIImage(systemName: "square.and.arrow.down", withConfiguration: config)
-
-                    button5.setImage(systemIcon, for: .normal)
+        let systemIcon = UIImage(systemName: "square.and.arrow.down", withConfiguration: config)
+        button5.setImage(systemIcon, for: .normal)
         button5.layer.borderColor = UIColor.systemBlue.cgColor
         button5.layer.borderWidth = 1
         button5.layer.cornerRadius = 10
+        
+        let config1 = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+        let systemIconForCopy = UIImage(systemName: "doc.on.doc", withConfiguration: config1)
+        copyButton1.setImage(systemIconForCopy, for: .normal)
+        copyButton2.setImage(systemIconForCopy, for: .normal)
+        let systemIconForVolume = UIImage(systemName: "volume.3", withConfiguration: config1)
+        volumeButton1.setImage(systemIconForVolume, for: .normal)
+        volumeButton2.setImage(systemIconForVolume, for: .normal)
+        let systemIconForDeleteText = UIImage(systemName: "delete.left", withConfiguration: config1)
+        deleteTextButton1.setImage(systemIconForDeleteText, for: .normal)
+        deleteTextButton2.setImage(systemIconForDeleteText, for: .normal)
 
 
         
         let borderColor = UIColor.systemGray4.cgColor
         
         //  ボタンの画像サイズ変更
-        imageButton1.imageView?.contentMode = .scaleAspectFill
-        imageButton1.contentHorizontalAlignment = .fill
-        imageButton1.contentVerticalAlignment = .fill
-        
-        imageButton2.imageView?.contentMode = .scaleAspectFill
-        imageButton2.contentHorizontalAlignment = .fill
-        imageButton2.contentVerticalAlignment = .fill
+//        imageButton1.imageView?.contentMode = .scaleAspectFill
+//        imageButton1.contentHorizontalAlignment = .fill
+//        imageButton1.contentVerticalAlignment = .fill
+//
+//        imageButton2.imageView?.contentMode = .scaleAspectFill
+//        imageButton2.contentHorizontalAlignment = .fill
+//        imageButton2.contentVerticalAlignment = .fill
         
         //        translateTextView.layer.cornerRadius = 10
         translateTextView.clipsToBounds = true
@@ -164,6 +188,9 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             //            // textViewのキーボードにツールバーを設定
             someNumber!.inputAccessoryView = doneToolbar
         }
+        
+        
+        
     }
     
     @objc func doneButtonTaped(sender: UIButton){
@@ -596,7 +623,116 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             
         }
     }
+    
+    @IBAction func copyButton1(_ sender: Any) {
+        UIPasteboard.general.string = self.translateTextView.text
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+               self.copyButton1.setImage(UIImage(systemName: "checkmark", withConfiguration: config), for: .normal)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: chageCopyIcon)
+    }
+    
+    @IBAction func copyButton2(_ sender: Any) {
+        UIPasteboard.general.string = self.translateLabel.text
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+               self.copyButton2.setImage(UIImage(systemName: "checkmark", withConfiguration: config), for: .normal)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: chageCopyIcon)
+    }
+    
+    func chageCopyIcon(){
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+               self.copyButton1.setImage(UIImage(systemName: "doc.on.doc", withConfiguration: config), for: .normal)
+        self.copyButton2.setImage(UIImage(systemName: "doc.on.doc", withConfiguration: config), for: .normal)
+    }
+    
+    @IBAction func volumeButton1(_ sender: Any) {
+        
+        let english = ContextMenuItemWithImage(title: "英語", image: UIImage())
+        let japanese = ContextMenuItemWithImage(title: "日本語", image: UIImage())
+        let stop = ContextMenuItemWithImage(title: "停止", image: UIImage())
+        
+        CM.items = [english, japanese, stop]
+        CM.showMenu(viewTargeted: self.translateTextView, delegate: self, animated: true)
+        
+        self.numberForVolumeButton2 = 0
+    }
+    
+    @IBAction func volumeButton2(_ sender: Any) {
+        let english = ContextMenuItemWithImage(title: "英語", image: UIImage())
+        let japanese = ContextMenuItemWithImage(title: "日本語", image: UIImage())
+        let stop = ContextMenuItemWithImage(title: "停止", image: UIImage())
+        
+        CM.items = [english, japanese, stop]
+        CM.showMenu(viewTargeted: self.translateLabel, delegate: self, animated: true)
+        
+        self.numberForVolumeButton2 = 1
+    }
+    
 }
     
+
+
+extension TranslateViewController: ContextMenuDelegate {
+    func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) -> Bool {
+        
+        switch index {
+        case 0:
+            if self.numberForVolumeButton2 == 0 {
+            let englishText = self.translateTextView.text!
+//                話す内容をセット
+                         let utterance = AVSpeechUtterance(string: englishText)
+             //            言語を英語に設定
+                         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+             //            実行
+                         self.talker.speak(utterance)
+            } else {
+                self.numberForVolumeButton2 = 0
+                let englishText = self.translateLabel.text!
+//                話す内容をセット
+                         let utterance = AVSpeechUtterance(string: englishText)
+             //            言語を英語に設定
+                         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+             //            実行
+                         self.talker.speak(utterance)
+                
+                
+            }
+//
+        case 1:
+            if self.numberForVolumeButton2 == 0 {
+            let japaneseText = self.translateTextView.text!
+            let utterance = AVSpeechUtterance(string: japaneseText)
+            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+            self.talker.speak(utterance)
+            } else {
+                self.numberForVolumeButton2 = 0
+                let japaneseText = self.translateLabel.text!
+                let utterance = AVSpeechUtterance(string: japaneseText)
+                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+                self.talker.speak(utterance)
+               
+            }
+        case 2:
+//            音声再生停止
+            self.talker.stopSpeaking(at: AVSpeechBoundary.immediate)
+        default:
+            print("nilです")
+        }
+        return true
+    }
+    
+    
+    
+    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {}
+    
+    func contextMenuDidAppear(_ contextMenu: ContextMenu) {
+        print("メニューが表示されました")
+    }
+    
+    func contextMenuDidDisappear(_ contextMenu: ContextMenu) {
+        print("メニューが閉じました")
+    }
+    
+    
+}
 
 
