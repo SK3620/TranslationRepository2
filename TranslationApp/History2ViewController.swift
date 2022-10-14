@@ -11,7 +11,7 @@ import SVProgressHUD
 import ContextMenuSwift
 import Alamofire
 import SideMenu
-
+import AVFoundation
 
 
 protocol SettingsDelegate {
@@ -24,6 +24,11 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var acordionButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var menuButton: UIButton!
+    
+    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var backCellButton: UIButton!
+    @IBOutlet weak var nextCellButton: UIButton!
+    
     
 
     
@@ -51,12 +56,19 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     var menuNavigationController: SideMenuNavigationController!
     
+    
+    let speechSynthesizer = AVSpeechSynthesizer()
+    var indexPath_row: Int!
+    
    
     
    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let config = 
+        
         
         self.searchBar.backgroundImage = UIImage()
         //        xibファイルの登録
@@ -108,15 +120,17 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
         tabBarController1.navigationController?.navigationBar.backgroundColor = UIColor.systemGray4
-        
-        
+//        tabBarController1.navigationController?.navigationItem.title = self.folderNameString
        
         
         let navigationController = self.navigationController as! NavigationControllerForFolder
         navigationController.setNavigationBarHidden(false, animated: false)
-        navigationController.navigationItem.title = self.folderNameString
-        print("バー確認とフォルダー名\(navigationController.navigationItem.title) : \(self.folderNameString)")
+        navigationController.navigationBar.backgroundColor = .systemGray4
+        self.title = self.folderNameString
         
+     
+        
+      
         
        
        
@@ -315,6 +329,10 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         print("確認47")
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCellForHistory2ViewCell", for: indexPath) as! CustomCellForHistory2ViewController
+    
+        cell.indexPath_row = indexPath.row
+        cell.delegate = self
+        cell.cell = cell
         
         cell.setData(self.sections[indexPath.row], indexPath.row)
         
@@ -564,6 +582,28 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             print("func prepareが実行された")
         }
     }
+    
+    
+//    ボタンを押したら、次のcellへスクロール
+    @IBAction func nextCellButton(_ sender: Any) {
+        print("nextCellButton実行")
+        if self.indexPath_row < self.sections.count - 1 {
+        self.indexPath_row += 1
+        let indexPath = IndexPath(row: indexPath_row, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+        tableView.reloadData()
+        }
+    }
+    
+//    ボタンを押したら、一つ前のcellへスクロール
+    @IBAction func backCellButton(_ sender: Any) {
+        if self.indexPath_row > 0 {
+        self.indexPath_row -= 1
+        let indexPath = IndexPath(row: indexPath_row, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+        tableView.reloadData()
+        }
+    }
 }
     
     
@@ -770,6 +810,36 @@ extension History2ViewController: ContextMenuDelegate {
         }
         
     }
+}
+
+
+
+extension History2ViewController: LongPressDetectionDelegate {
+    func longPressDetection(_ indexPath_row: Int, _ cell: UITableViewCell) {
+        self.speechSynthesizer.stopSpeaking(at: AVSpeechBoundary.immediate)
+        speeche(text: self.translationFolderArr[0].results[indexPath_row].resultData)
+        self.indexPath_row = indexPath_row
+        
+    }
+    
+    
+    
+    
+    
+    
+    func speeche(text: String) {
+        // 読み上げる、文字、言語などの設定
+        let utterance = AVSpeechUtterance(string: text) // 読み上げる文字
+        print("テキスト確認 \(text)")
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US") // 言語
+//        utterance.rate = 0.5 // 読み上げ速度
+//        utterance.pitchMultiplier = 1.0 // 読み上げる声のピッチ
+//        utterance.preUtteranceDelay = 0.2 // 読み上げるまでのため
+        self.speechSynthesizer.speak(utterance)
+      }
+    
+    
+    
 }
     
 //    セルをたっぷしたら、Edit1ViewControllerに画面遷移させて、そこで編集作業＋保存ボタンでRealmモデルクラス（TranslationFolderファイル）に保存

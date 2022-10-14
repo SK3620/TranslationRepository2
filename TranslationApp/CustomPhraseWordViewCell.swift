@@ -56,4 +56,8 @@ class CustomPhraseWordViewCell: UITableViewCell {
         
     }
     
+    @IBAction func button(_ sender: Any) {
+        print("displayButton0")
+    }
+    
 }

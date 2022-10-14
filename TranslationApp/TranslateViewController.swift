@@ -714,6 +714,7 @@ extension TranslateViewController: ContextMenuDelegate {
         case 2:
 //            音声再生停止
             self.talker.stopSpeaking(at: AVSpeechBoundary.immediate)
+           
         default:
             print("nilです")
         }
