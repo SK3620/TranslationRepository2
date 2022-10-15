@@ -21,9 +21,13 @@ protocol SettingsDelegate {
 class History2ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, SettingsDelegate{
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var acordionButton: UIButton!
+ 
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var menuButton: UIButton!
+//    @IBOutlet weak var menuButton: UIButton!
+    @IBOutlet weak var displayAllButton: UIButton!
+    @IBOutlet weak var labelForDisplayAll: UILabel!
+    @IBOutlet weak var repeatButton: UIButton!
+    
     
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var backCellButton: UIButton!
@@ -67,7 +71,25 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let config = 
+        self.setImage(playButton, "play.circle.fill")
+        setImage(nextCellButton, "arrowtriangle.right")
+        setImage(backCellButton, "arrowtriangle.left")
+        setImage(displayAllButton, "arrow.triangle.2.circlepath")
+        setImage(repeatButton, "repeat")
+       
+    
+        
+//        let config = UIImage.SymbolConfiguration(pointSize: 27, weight: .medium, scale: .default)
+//        playButton.setImage(UIImage(systemName: "play.circle.fill", withConfiguration: config), for: .normal)
+//        nextCellButton.setImage(UIImage(systemName: "arrowtriangle.right", withConfiguration: config), for: .normal)
+//        backCellButton.setImage(UIImage(systemName: "arrowtriangle.left", withConfiguration: config), for: .normal)
+//
+//        labelForDisplayAll.text = "表示"
+//        displayAllButton.setImage(UIImage(systemName: "arrow.triangle.2.circlepath", withConfiguration: config), for: .normal)
+//        repeatButton.setImage(UIImage(systemName: "repeat", withConfiguration: config), for: .normal)
+//        テキストの上に画像をつける
+//        displayAllButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
+//        displayAllButton.titleEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         
         
         self.searchBar.backgroundImage = UIImage()
@@ -81,19 +103,18 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.separatorColor = .systemBlue
         
         searchBar.delegate = self
+        
         tableView.allowsSelection = false
         // Do any additional setup after loading the view.
         
 //        何も入力されていなくてもreturnキー押せるようにする
         searchBar.enablesReturnKeyAutomatically  = false
         
-        self.menuButton.setImage(UIImage(systemName: "text.justify"), for: .normal)
+//        self.menuButton.setImage(UIImage(systemName: "text.justify"), for: .normal)
         
         let borderColor = UIColor.gray.cgColor
       
-        acordionButton.layer.borderColor = borderColor
-        acordionButton.layer.borderWidth = 3
-        acordionButton.layer.cornerRadius = 10
+       
 
         
         
@@ -118,15 +139,34 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        repeatButton.tintColor = .systemGray2
+        labelForDisplayAll.text = "表示"
+        
+        if self.indexPath_row == nil {
+        nextCellButton.isEnabled = false
+        backCellButton.isEnabled = false
+        } else {
+            nextCellButton.isEnabled = true
+            backCellButton.isEnabled = true
+        }
+    
+        
         self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
         tabBarController1.navigationController?.navigationBar.backgroundColor = UIColor.systemGray4
+        
 //        tabBarController1.navigationController?.navigationItem.title = self.folderNameString
        
         
         let navigationController = self.navigationController as! NavigationControllerForFolder
         navigationController.setNavigationBarHidden(false, animated: false)
         navigationController.navigationBar.backgroundColor = .systemGray4
+        navigationController.navigationBar.barTintColor = .systemGray4
         self.title = self.folderNameString
+        
+        let addBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(addBarButtonTapped(_:)) )
+        
+        self.navigationItem.rightBarButtonItems = [addBarButtonItem]
+       
         
      
         
@@ -147,7 +187,6 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         print("フォルダー名　\(self.folderNameString)")
         
-        acordionButton.setTitle("表示", for: .normal)
         
         tableView.layer.cornerRadius = 10
         
@@ -175,6 +214,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+
     
     private func makeSettings() -> SideMenuSettings {
            var settings = SideMenuSettings()
@@ -188,9 +228,12 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
            settings.statusBarEndAlpha = 0
            return settings
           }
+    
+   
 
 
-    @IBAction func button(_ sender: Any) {
+    @objc func addBarButtonTapped(_ sender: UIBarButtonItem){
+        print("設定が押された")
 
         let menuViewController = storyboard?.instantiateViewController(withIdentifier: "Menu") as! SettingsViewController
         
@@ -264,7 +307,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             
             if self.searchBar.text == "" {
                 
-                acordionButton.isEnabled = true
+                displayAllButton.isEnabled = true
                
                 
                 //            空だったら、全て表示する。（通常表示）
@@ -280,7 +323,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                 
             } else {
                 
-                acordionButton.isEnabled = false
+                displayAllButton.isEnabled = false
                 
                 
                 let results1 = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
@@ -318,7 +361,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        
         if translationFolderArr.first!.results.isEmpty {
-            acordionButton.isEnabled = false
+            displayAllButton.isEnabled = false
         }
       
         return self.tableDataList.count
@@ -533,12 +576,12 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         if searchBar.text != "" {
             let translationArr3 = self.translationArr!
             
-            if self.acordionButton.titleLabel?.text == "表示"{
+            if self.labelForDisplayAll.text == "表示"{
                 for number in 0...translationArr3.count - 1 {
                     try! Realm().write{
                         translationArr3[number].isDisplayed = 1
                         try! Realm().add(translationArr3, update: .modified)
-                        self.acordionButton.setTitle("非表示", for: .normal)
+                        self.labelForDisplayAll.text = "非表示"
                     }
                 }
             } else {
@@ -546,19 +589,19 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                     try! Realm().write{
                         translationArr3[number].isDisplayed = 0
                         try! Realm().add(translationArr3, update: .modified)
-                        self.acordionButton.setTitle("表示", for: .normal)
+                        self.labelForDisplayAll.text = "表示"
                     }
                 }
             }
         } else {
             
             let translationArr3 = self.translationFolderArr.first!.results
-            if self.acordionButton.titleLabel?.text == "表示"{
+            if self.labelForDisplayAll.text == "表示"{
                 for number in 0...translationArr3.count - 1 {
                     try! Realm().write{
                         translationArr3[number].isDisplayed = 1
                         try! Realm().add(translationArr3, update: .modified)
-                        self.acordionButton.setTitle("非表示", for: .normal)
+                        self.labelForDisplayAll.text = "非表示"
                     }
                 }
             } else {
@@ -566,7 +609,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                     try! Realm().write{
                         translationArr3[number].isDisplayed = 0
                         try! Realm().add(translationArr3, update: .modified)
-                        self.acordionButton.setTitle("表示", for: .normal)
+                        self.labelForDisplayAll.text = "表示"
                     }
                 }
             }
@@ -584,26 +627,88 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     
-//    ボタンを押したら、次のcellへスクロール
+    //    ボタンを押したら、次のcellへスクロール
     @IBAction func nextCellButton(_ sender: Any) {
-        print("nextCellButton実行")
-        if self.indexPath_row < self.sections.count - 1 {
-        self.indexPath_row += 1
-        let indexPath = IndexPath(row: indexPath_row, section: 0)
-        self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-        tableView.reloadData()
+        
+        if speechSynthesizer.isPaused || speechSynthesizer.isPaused != true && speechSynthesizer.isSpeaking != true {
+            if self.indexPath_row < self.sections.count - 1 {
+                if repeatButton.tintColor != .systemBlue {
+                self.speechSynthesizer.stopSpeaking(at: .immediate)
+                }
+                self.indexPath_row += 1
+                let indexPath = IndexPath(row: indexPath_row, section: 0)
+                self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                tableView.reloadData()
+            }
+        } else {
+            print("nextCellButton実行")
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+            if self.indexPath_row < self.sections.count - 1 {
+                self.indexPath_row += 1
+                let indexPath = IndexPath(row: indexPath_row, section: 0)
+                self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                tableView.reloadData()
+                self.speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+            }
+        }
+    }
+
+
+//    ボタンを押したら、一つ前のcellへスクロール
+    @IBAction func backCellButton(_ sender: Any) {
+        if speechSynthesizer.isPaused || speechSynthesizer.isPaused != true && speechSynthesizer.isSpeaking != true {
+            if self.indexPath_row > 0 {
+                if repeatButton.tintColor != .systemBlue {
+                self.speechSynthesizer.stopSpeaking(at: .immediate)
+                }
+                self.indexPath_row -= 1
+                let indexPath = IndexPath(row: indexPath_row, section: 0)
+                self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                tableView.reloadData()
+            }
+        } else {
+            
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+            if self.indexPath_row > 0 {
+                self.indexPath_row -= 1
+                let indexPath = IndexPath(row: indexPath_row, section: 0)
+                self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                tableView.reloadData()
+                self.speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+            }
         }
     }
     
-//    ボタンを押したら、一つ前のcellへスクロール
-    @IBAction func backCellButton(_ sender: Any) {
-        if self.indexPath_row > 0 {
-        self.indexPath_row -= 1
-        let indexPath = IndexPath(row: indexPath_row, section: 0)
-        self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-        tableView.reloadData()
+//    音声一時停止/再生ボタン
+    @IBAction func playButton(_ sender: Any) {
+        if self.speechSynthesizer.isPaused {
+            setImage(playButton, "pause.circle.fill")
+                       self.speechSynthesizer.continueSpeaking()
+            print("停止中")
+        } else if speechSynthesizer.isSpeaking {
+            setImage(playButton, "play.circle.fill")
+                        self.speechSynthesizer.pauseSpeaking(at: .immediate)
+                        print("おしゃべり中")
+        } else if self.indexPath_row != nil {
+            print("もう一度最初から再生")
+            setImage(playButton, "pause.circle.fill")
+            speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
         }
     }
+    
+    //    リピートボタン
+    @IBAction func repeatButton(_ sender: Any) {
+        if indexPath_row != nil {
+            if repeatButton.tintColor == .systemGray2 {
+                repeatButton.tintColor = .systemBlue
+//                speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+            } else {
+                repeatButton.tintColor = .systemGray2
+            }
+        }
+        
+    }
+    
 }
     
     
@@ -814,20 +919,19 @@ extension History2ViewController: ContextMenuDelegate {
 
 
 
-extension History2ViewController: LongPressDetectionDelegate {
+extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDelegate{
     func longPressDetection(_ indexPath_row: Int, _ cell: UITableViewCell) {
         self.speechSynthesizer.stopSpeaking(at: AVSpeechBoundary.immediate)
         speeche(text: self.translationFolderArr[0].results[indexPath_row].resultData)
         self.indexPath_row = indexPath_row
         
+        self.nextCellButton.isEnabled = true
+        self.backCellButton.isEnabled = true
+        
     }
     
-    
-    
-    
-    
-    
     func speeche(text: String) {
+        
         // 読み上げる、文字、言語などの設定
         let utterance = AVSpeechUtterance(string: text) // 読み上げる文字
         print("テキスト確認 \(text)")
@@ -835,10 +939,43 @@ extension History2ViewController: LongPressDetectionDelegate {
 //        utterance.rate = 0.5 // 読み上げ速度
 //        utterance.pitchMultiplier = 1.0 // 読み上げる声のピッチ
 //        utterance.preUtteranceDelay = 0.2 // 読み上げるまでのため
+        self.speechSynthesizer.delegate = self
         self.speechSynthesizer.speak(utterance)
+        
       }
     
+     
+    func setImage(_ button: UIButton, _ string: String){
+        let config = UIImage.SymbolConfiguration(pointSize: 27, weight: .medium, scale: .default)
+        button.setImage(UIImage(systemName: string, withConfiguration: config), for: .normal)
+    }
     
+    
+//    読み上げ開始
+    internal func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
+        print("読み上げ開始")
+        setImage(playButton, "pause.circle.fill")
+           
+        }
+    
+    // 読み上げ終了
+       internal func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+           print("読み上げ終了")
+           
+           
+           if repeatButton.tintColor == .systemBlue {
+               speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+           } else {
+               setImage(playButton, "play.circle.fill")
+           }
+                
+       }
+    
+//    読み上げ一時停止した時
+    internal func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didPause utterance: AVSpeechUtterance) {
+        
+    }
+
     
 }
     

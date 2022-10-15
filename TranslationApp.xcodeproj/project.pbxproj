@@ -16,6 +16,7 @@
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
 		8382E93A28F71F5700877DD8 /* NavigationControllerForHistory2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */; };
 		8382E93D28F728E100877DD8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382E93C28F728E100877DD8 /* Alamofire */; };
+		8382FD4628F987B20021715C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382FD4528F987B20021715C /* Alamofire */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* Edit1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */; };
@@ -117,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8382FD4628F987B20021715C /* Alamofire in Frameworks */,
 				E6FAEDC6536A5BB599B65D2D /* Pods_TranslationApp.framework in Frameworks */,
 				8382E93D28F728E100877DD8 /* Alamofire in Frameworks */,
 			);
@@ -220,7 +222,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				83F021A128C09D8A009FFDD2 /* Embed Frameworks */,
-				EE25B6A0B67534A24AF15F0E /* [CP] Embed Pods Frameworks */,
+				C40DE02FEE3863C7251BB3AB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,6 +231,7 @@
 			name = TranslationApp;
 			packageProductDependencies = (
 				8382E93C28F728E100877DD8 /* Alamofire */,
+				8382FD4528F987B20021715C /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
@@ -265,6 +268,7 @@
 				83F41A6A28F2998C004F653F /* XCRemoteSwiftPackageReference "Alamofire" */,
 				83F41A8F28F3D906004F653F /* XCRemoteSwiftPackageReference "Alamofire" */,
 				8382E93B28F728E100877DD8 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				8382FD4428F987B20021715C /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83071CF628B91AC70003734C /* Products */;
 			projectDirPath = "";
@@ -318,7 +322,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EE25B6A0B67534A24AF15F0E /* [CP] Embed Pods Frameworks */ = {
+		C40DE02FEE3863C7251BB3AB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -617,6 +621,14 @@
 				kind = branch;
 			};
 		};
+		8382FD4428F987B20021715C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -653,6 +665,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		8382E93C28F728E100877DD8 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		8382FD4528F987B20021715C /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
