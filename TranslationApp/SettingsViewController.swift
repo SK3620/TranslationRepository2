@@ -14,7 +14,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 //    var delegate: SettingsDelegate!
     @IBOutlet weak var tableView: UITableView!
     
-    var menuArr: [String] = ["単語・フレーズ", "学習記録", "メモ", "閉じる"]
+    var menuArr: [String] = ["単語・フレーズ", "学習記録", "メモ", "", "閉じる"]
     var delegate: SettingsDelegate!
 
     override func viewDidLoad() {
@@ -25,17 +25,16 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.navigationController?.navigationBar.barTintColor = .systemGray6
         self.navigationController?.navigationBar.backgroundColor = .systemGray6
-        self.navigationController?.navigationBar.tintColor = .blue
-        self.navigationController?.title = "成功"
+        self.title = "メニュー"
         self.navigationController?.navigationBar.titleTextAttributes = [
 //文字の色
-            .foregroundColor: UIColor.white
+            .foregroundColor: UIColor.black
             ]
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 5
     }
     
     
@@ -43,6 +42,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = self.menuArr[indexPath.row]
+        
+        if indexPath.row == 3 {
+            cell.selectionStyle = .none
+            cell.isUserInteractionEnabled = false
+        }
+        
         return cell
     }
     

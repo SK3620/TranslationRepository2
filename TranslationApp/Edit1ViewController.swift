@@ -18,8 +18,7 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
 //
     //    @IBOutlet weak var button1: UIButton!
 //    @IBOutlet weak var button2: UIButton!
-    @IBOutlet weak var button3: UIButton!
-    @IBOutlet weak var button4: UIButton!
+   
 
     var numberForActionButton1: Int = 0
     var numberForActionButton2: Int = 0
@@ -42,14 +41,12 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
         
         let color = UIColor.gray.cgColor
         
-        textView1.layer.borderColor = color
-        textView1.layer.borderWidth = 2.5
-        textView1.layer.cornerRadius = 10
+        textView1.layer.borderColor = UIColor.systemGray4.cgColor
+        textView1.layer.borderWidth = 2
         
-        textView2.layer.borderColor = color
-        textView2.layer.borderWidth = 2.5
-        textView2.layer.cornerRadius = 10
-        
+        textView2.layer.borderColor = UIColor.systemGray4.cgColor
+        textView2.layer.borderWidth = 2
+       
 //        textViewMemo1.layer.borderColor = color
 //        textViewMemo1.layer.borderWidth = 2
 //        textViewMemo1.layer.cornerRadius = 10
@@ -66,13 +63,11 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
 //        button2.layer.borderWidth = 2
 //        button2.layer.cornerRadius = 10
 
-        button3.layer.borderColor = color
-        button3.layer.borderWidth = 2.5
-        button3.layer.cornerRadius = 10
+      
         
-        button4.layer.borderColor = color
-        button4.layer.borderWidth = 2.5
-        button4.layer.cornerRadius = 10
+//        button4.layer.borderColor = color
+//        button4.layer.borderWidth = 2.5
+//        button4.layer.cornerRadius = 10
         
         //キーボードに完了のツールバーを作成
         let doneToolbar = UIToolbar()
@@ -97,10 +92,12 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
         view.endEditing(true)
     }
     
+   
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        button4.isEnabled = false
+       
         
 //        textViewMemo1.isHidden = true
 //        textViewMemo1.isEditable = false
@@ -119,6 +116,7 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
         textView2.text = self.textView2String
         
     }
+    
     
     
 
@@ -164,16 +162,18 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
 //        }
 //    }
     
-    func textViewDidChange(_ textView: UITextView) {
-        if textView1.text! != textView1String || textView2.text! != textView2String {
-            self.button4.isEnabled = true
-        } else {
-            button4.isEnabled = false
-        }
-    }
+//    func textViewDidChange(_ textView: UITextView) {
+//        if textView1.text! != textView1String || textView2.text! != textView2String {
+//            self.button4.isEnabled = true
+//        } else {
+//            button4.isEnabled = false
+//        }
+//    }
     
-    
-    @IBAction func saveButton(_ sender: Any) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        
+        SVProgressHUD.show()
 //        let tarnslation = Translation()
 //        let predict = NSPredicate(format: "id == %@", "\(self.translationIdNumber)")
         let translationArr = self.realm.objects(Translation.self).filter("id == \(self.translationIdNumber)").first!
@@ -186,6 +186,10 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
                 translationArr.inputAndResultData = textView1.text + textView2.text
                 self.realm.add(translationArr, update: .modified)
             }
+        
+        SVProgressHUD.showSuccess(withStatus: "保存しました")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {() -> Void in
+            SVProgressHUD.dismiss()})
             
             print("確認17 : \(translationArr.inputData)")
             print("確認17 : \(translationArr.resultData)")
@@ -198,17 +202,8 @@ class Edit1ViewController: UIViewController, UITextViewDelegate {
 //                self.realm.add(translationArr, update: .modified)
 //            }
 //        }
-        
-        self.dismiss(animated: true)
     }
-    
-    
-    
-    
-    
-    @IBAction func backButton(_ sender: Any) {
-        self.dismiss(animated: true)
-    }
+
     
     
     

@@ -27,11 +27,14 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var displayAllButton: UIButton!
     @IBOutlet weak var labelForDisplayAll: UILabel!
     @IBOutlet weak var repeatButton: UIButton!
+    @IBOutlet weak var label1: UILabel!
     
     
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var backCellButton: UIButton!
     @IBOutlet weak var nextCellButton: UIButton!
+    @IBOutlet weak var speakSpeedButton: UIButton!
+    @IBOutlet weak var speakVoice: UIButton!
     
     
 
@@ -52,6 +55,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     var number = 0
     var number1 = 0
+    var number2 = 0
     var numberForAcordion = 0
     var sender_tag: Int!
     
@@ -63,6 +67,10 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     let speechSynthesizer = AVSpeechSynthesizer()
     var indexPath_row: Int!
+   
+    
+    var speakSpeed: Float = 0.5
+    var voice: String = "com.apple.ttsbundle.siri_Nicky_en-US_compact"
     
    
     
@@ -71,12 +79,24 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 利用可能な英語音声の確認
+        let voices = AVSpeechSynthesisVoice.speechVoices()
+        for voice in voices {
+            if voice.language == "en-US" {
+                print(voice)
+            }
+        }
+        
+        
+        
         self.setImage(playButton, "play.circle.fill")
         setImage(nextCellButton, "arrowtriangle.right")
         setImage(backCellButton, "arrowtriangle.left")
         setImage(displayAllButton, "arrow.triangle.2.circlepath")
         setImage(repeatButton, "repeat")
-       
+        
+        speakSpeedButton.setTitle("1.0x", for: .normal)
+        speakVoice.setTitle("女性", for: .normal)
     
         
 //        let config = UIImage.SymbolConfiguration(pointSize: 27, weight: .medium, scale: .default)
@@ -141,6 +161,12 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         repeatButton.tintColor = .systemGray2
         labelForDisplayAll.text = "表示"
+       
+      
+        
+        if self.indexPath_row == nil {
+            self.label1.text = "文章を長押しで音声再生"
+        }
         
         if self.indexPath_row == nil {
         nextCellButton.isEnabled = false
@@ -221,6 +247,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
            //動作を指定
         settings.presentationStyle = .menuSlideIn
         settings.menuWidth = 130
+        
+       
 
            //メニューの陰影度
 //           settings.presentationStyle.onTopShadowOpacity = 10.0
@@ -270,7 +298,9 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             
             present(memoViewController, animated: true, completion: nil)
         case 3:
-            print("閉じる")
+//            self.performSegue(withIdentifier: "Settings2", sender: nil)
+            
+           print("閉じる")
         default:
             print("nil")
         }
@@ -377,6 +407,26 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         cell.delegate = self
         cell.cell = cell
         
+      
+               
+//        if indexPath.row == indexPath_row {
+//            if indexPath_row % 2 == 0 {
+//                cell.backgroundColor = .systemGray6
+//            } else {
+//                cell.backgroundColor = .systemGray4
+//            }
+//        } else {
+//            cell.backgroundColor = .white
+//        }
+        
+        if indexPath.row == indexPath_row {
+                cell.backgroundColor = .systemGray6
+        } else {
+            cell.backgroundColor = .white
+        }
+        
+       
+        
         cell.setData(self.sections[indexPath.row], indexPath.row)
         
         cell.checkMarkButton.tag = indexPath.row
@@ -457,6 +507,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
        
         
         print(cell.label2.text!)
+        
+       
         
         return cell
     }
@@ -554,6 +606,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     }
         
         tableView.reloadData()
+        
     }
     
     @objc func tapCellEditButton(_ sender: UIButton){
@@ -572,6 +625,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func displayAllButton(_ sender: Any) {
+        
+       
        
         if searchBar.text != "" {
             let translationArr3 = self.translationArr!
@@ -615,6 +670,10 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
         tableView.reloadData()
+        if indexPath_row != nil {
+        tableView.scrollToRow(at: IndexPath(row: indexPath_row, section: 0), at: .middle, animated: true)
+            print("スクロール")
+        }
     }
     
     //    学習記録ボタンが押された時にRecordViewControllerへ値を渡す
@@ -623,6 +682,19 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             let recordViewController = segue.destination as! RecordViewController
             recordViewController.numberFromHistory2ViewController = 1
             print("func prepareが実行された")
+        } else if segue.identifier == "Edit1" {
+            let editViewController = segue.destination as! Edit1ViewController
+            
+            editViewController.textView1String = translationFolderArr[0].results[self.sender_tag].inputData
+                       editViewController.textView2String = translationFolderArr[0].results[sender_tag].resultData
+                       editViewController.translationIdNumber = translationFolderArr[0].results[sender_tag].id
+           
+                       if self.searchBar.text != "" {
+                           editViewController.textView1String = translationArr[self.sender_tag].inputData
+                           editViewController.textView2String = translationArr[sender_tag].resultData
+                           editViewController.translationIdNumber = translationArr[sender_tag].id
+                       }
+                       
         }
     }
     
@@ -648,7 +720,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
                 tableView.reloadData()
-                self.speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+                self.speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
             }
         }
     }
@@ -674,7 +746,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
                 tableView.reloadData()
-                self.speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+                speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
             }
         }
     }
@@ -692,7 +764,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         } else if self.indexPath_row != nil {
             print("もう一度最初から再生")
             setImage(playButton, "pause.circle.fill")
-            speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+            speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
         }
     }
     
@@ -708,6 +780,56 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
     }
+    
+//    読み上げ速度
+    @IBAction func speakSpeedButton(_ sender: Any) {
+        switch self.speakSpeed {
+        case 0.5:
+            speakSpeedButton.setTitle("1.25x", for: .normal)
+            self.speakSpeed = 0.525
+        case 0.525:
+            speakSpeedButton.setTitle("1.5x", for: .normal)
+            self.speakSpeed = 0.55
+        case 0.55:
+            speakSpeedButton.setTitle("1.75x", for: .normal)
+            self.speakSpeed = 0.575
+        case 0.575:
+            speakSpeedButton.setTitle("2.0x", for: .normal)
+            self.speakSpeed = 0.6
+        case 0.6:
+            speakSpeedButton.setTitle("0.5x", for: .normal)
+            self.speakSpeed = 0.3
+        case 0.3:
+            speakSpeedButton.setTitle("0.75x", for: .normal)
+            self.speakSpeed = 0.4
+        case 0.4:
+            speakSpeedButton.setTitle("1.0x", for: .normal)
+            self.speakSpeed = 0.5
+        default:
+            print("nil")
+                                                                    
+        }
+    }
+    
+    @IBAction func speakVoiceButton(_ sender: Any) {
+        switch self.voice {
+        case "com.apple.ttsbundle.siri_Nicky_en-US_compact":
+            self.voice = "com.apple.ttsbundle.siri_Aaron_en-US_compact"
+            speakVoice.setTitle("男性", for: .normal)
+        case "com.apple.ttsbundle.siri_Aaron_en-US_compact":
+            self.voice = "com.apple.ttsbundle.siri_Nicky_en-US_compact"
+            speakVoice.setTitle("女性", for: .normal)
+        default:
+            print("nil")
+        }
+    }
+    
+//    com.apple.ttsbundle.siri_Aaron_en-US_compact
+//        com.apple.ttsbundle.siri_Nicky_en-US_compact
+    
+    
+   
+    
     
 }
     
@@ -746,23 +868,26 @@ extension History2ViewController: ContextMenuDelegate {
         case 0:
             print("編集ボタン")
             
-            let editViewController = self.storyboard?.instantiateViewController(withIdentifier: "Edit1") as! Edit1ViewController
+//            let editViewController = self.storyboard?.instantiateViewController(withIdentifier: "Edit1") as! Edit1ViewController
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {() -> Void in
+                self.performSegue(withIdentifier: "Edit1", sender: nil)})
             
-            editViewController.textView1String = translationFolderArr[0].results[self.sender_tag].inputData
-            editViewController.textView2String = translationFolderArr[0].results[sender_tag].resultData
-            editViewController.translationIdNumber = translationFolderArr[0].results[sender_tag].id
             
-            if self.searchBar.text != "" {
-                editViewController.textView1String = translationArr[self.sender_tag].inputData
-                editViewController.textView2String = translationArr[sender_tag].resultData
-                editViewController.translationIdNumber = translationArr[sender_tag].id
-            }
+//            editViewController.textView1String = translationFolderArr[0].results[self.sender_tag].inputData
+//            editViewController.textView2String = translationFolderArr[0].results[sender_tag].resultData
+//            editViewController.translationIdNumber = translationFolderArr[0].results[sender_tag].id
+//
+//            if self.searchBar.text != "" {
+//                editViewController.textView1String = translationArr[self.sender_tag].inputData
+//                editViewController.textView2String = translationArr[sender_tag].resultData
+//                editViewController.translationIdNumber = translationArr[sender_tag].id
+//            }
             
             //        if let sheet = editViewController?.sheetPresentationController {
             //            sheet.detents = [.medium()]
             //        }
             
-            present(editViewController, animated: true, completion: nil)
+//            present(editViewController, animated: true, completion: nil)
             
         case 1:
             print("保存ボタン")
@@ -781,6 +906,8 @@ extension History2ViewController: ContextMenuDelegate {
         return true
         
     }
+    
+ 
     
     /**
      コンテキストメニューが表示されたら呼ばれる
@@ -920,33 +1047,65 @@ extension History2ViewController: ContextMenuDelegate {
 
 
 extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDelegate{
-    func longPressDetection(_ indexPath_row: Int, _ cell: UITableViewCell) {
+    func longPressDetection(_ indexPath_row: Int, _ cell: CustomCellForHistory2ViewController) {
         self.speechSynthesizer.stopSpeaking(at: AVSpeechBoundary.immediate)
-        speeche(text: self.translationFolderArr[0].results[indexPath_row].resultData)
+        speeche(text: self.translationFolderArr[0].results[indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
+        
+       
         self.indexPath_row = indexPath_row
+        let indexPath = IndexPath(row: indexPath_row, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+        
+        cell.backgroundColor = .white
+        
+        cell.backgroundColor = .systemGray6
+        
+//        if indexPath_row % 2 == 0 {
+//            cell.backgroundColor = .systemGray6
+//        } else {
+//            cell.backgroundColor = .systemGray4
+//        }
+        
         
         self.nextCellButton.isEnabled = true
         self.backCellButton.isEnabled = true
         
+        self.label1.text = " "
+        
+        tableView.reloadData()
+        
     }
     
-    func speeche(text: String) {
+    func speeche(text: String, speakSpeed: Float, voice: String) {
         
         // 読み上げる、文字、言語などの設定
         let utterance = AVSpeechUtterance(string: text) // 読み上げる文字
         print("テキスト確認 \(text)")
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US") // 言語
-//        utterance.rate = 0.5 // 読み上げ速度
-//        utterance.pitchMultiplier = 1.0 // 読み上げる声のピッチ
+        utterance.voice = self.makeVoice(voice) // 言語 com.apple.ttsbundle.siri_Aaron_en-US_compact
+//        com.apple.ttsbundle.siri_Nicky_en-US_compact
+        utterance.rate = speakSpeed // 読み上げ速度
+//        utterance.pitchMultiplier = pitchOfVoice // 読み上げる声のピッチ
 //        utterance.preUtteranceDelay = 0.2 // 読み上げるまでのため
         self.speechSynthesizer.delegate = self
         self.speechSynthesizer.speak(utterance)
         
       }
     
+    
+    // 英語ボイスの生成　Siri
+    func makeVoice(_ identifier: String) -> AVSpeechSynthesisVoice! {
+        let voices = AVSpeechSynthesisVoice.speechVoices()
+        for voice in voices {
+            if voice.identifier == identifier {
+                return AVSpeechSynthesisVoice.init(identifier: identifier)
+            }
+        }
+        return AVSpeechSynthesisVoice.init(language: "en-US")
+    }
+    
      
     func setImage(_ button: UIButton, _ string: String){
-        let config = UIImage.SymbolConfiguration(pointSize: 27, weight: .medium, scale: .default)
+        let config = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
         button.setImage(UIImage(systemName: string, withConfiguration: config), for: .normal)
     }
     
@@ -964,7 +1123,7 @@ extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesize
            
            
            if repeatButton.tintColor == .systemBlue {
-               speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+               speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
            } else {
                setImage(playButton, "play.circle.fill")
            }
@@ -976,7 +1135,13 @@ extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesize
         
     }
 
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        print("呼ばれた")
+        repeatButton.tintColor = .systemGray2
+        speechSynthesizer.stopSpeaking(at: .immediate)
+        
+    }
 }
     
 //    セルをたっぷしたら、Edit1ViewControllerに画面遷移させて、そこで編集作業＋保存ボタンでRealmモデルクラス（TranslationFolderファイル）に保存

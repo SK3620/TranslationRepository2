@@ -17,6 +17,7 @@
 		8382E93A28F71F5700877DD8 /* NavigationControllerForHistory2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */; };
 		8382E93D28F728E100877DD8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382E93C28F728E100877DD8 /* Alamofire */; };
 		8382FD4628F987B20021715C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382FD4528F987B20021715C /* Alamofire */; };
+		8382FD4828FD52420021715C /* Settings2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382FD4728FD52410021715C /* Settings2ViewController.swift */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* Edit1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */; };
@@ -78,6 +79,7 @@
 		832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo2ViewController.swift; sourceTree = "<group>"; };
 		837CD1B228BE264F00823D17 /* TranslationFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFolder.swift; sourceTree = "<group>"; };
 		8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerForHistory2ViewController.swift; sourceTree = "<group>"; };
+		8382FD4728FD52410021715C /* Settings2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings2ViewController.swift; sourceTree = "<group>"; };
 		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edit1ViewController.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
+				8382FD4728FD52410021715C /* Settings2ViewController.swift */,
 				8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */,
 				83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */,
 				83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */,
@@ -347,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */,
+				8382FD4828FD52420021715C /* Settings2ViewController.swift in Sources */,
 				83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */,
 				83966BF728E8C1060098A39E /* CustomCellForHistory2ViewController.swift in Sources */,
 				83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */,

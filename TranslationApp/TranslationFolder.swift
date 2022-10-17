@@ -38,7 +38,7 @@ class Translation: Object {
     @objc dynamic var isDisplayed: Int = 0
     
     @objc dynamic var inputAndResultData = ""
-    
+  
     override static func primaryKey() -> String? {
         return "id"
     }

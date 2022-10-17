@@ -9,6 +9,8 @@ import UIKit
 import RealmSwift
 import SVProgressHUD
 import Alamofire
+import AVFAudio
+import AVFoundation
 
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
   
@@ -66,6 +68,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+       
+        AVSpeechSynthesizer().stopSpeaking(at: .immediate)
         
         let navigationController = self.navigationController as! NavigationControllerForFolder
         navigationController.setNavigationBarHidden(true, animated: false)

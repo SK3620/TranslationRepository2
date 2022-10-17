@@ -8,7 +8,7 @@
 import UIKit
 
 protocol LongPressDetectionDelegate {
-    func longPressDetection(_ indexPath_row: Int, _ cell: UITableViewCell)
+    func longPressDetection(_ indexPath_row: Int, _ cell: CustomCellForHistory2ViewController)
 }
 
 class CustomCellForHistory2ViewController: UITableViewCell {
@@ -24,7 +24,7 @@ class CustomCellForHistory2ViewController: UITableViewCell {
     
     var delegate: LongPressDetectionDelegate!
     var indexPath_row: Int!
-    var cell: UITableViewCell!
+    var cell: CustomCellForHistory2ViewController!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -56,13 +56,15 @@ class CustomCellForHistory2ViewController: UITableViewCell {
     func setData(_ inputData: String, _ indexPath_row: Int){
         self.label1.text = inputData
         
-        if indexPath_row % 2 == 0 {
-            self.numberLabel.backgroundColor = UIColor.systemGray6
-        } else {
-            self.numberLabel.backgroundColor = UIColor.systemGray4
-        }
+//        if indexPath_row % 2 == 0 {
+//            self.numberLabel.backgroundColor = UIColor.systemGray6
+//        } else {
+//            self.numberLabel.backgroundColor = UIColor.systemGray4
+//        }
         
-        self.numberLabel.text = "\(indexPath_row + 100)"
+        self.numberLabel.backgroundColor = .systemGray6
+        
+        self.numberLabel.text = "\(indexPath_row + 1)"
     }
     
     func setData2(_ resultData: String){
