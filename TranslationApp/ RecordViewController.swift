@@ -40,6 +40,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     var selectedDate: Date!
     var number = 0
     var tabBarController1: TabBarController!
+    var history2ViewContoller: History2ViewController?
     var numberFromHistory2ViewController: Int = 0
     
    
@@ -81,6 +82,15 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         } else {
             self.numberFromHistory2ViewController = 0
         }
+        
+        if let history2ViewContoller = history2ViewContoller {
+            history2ViewContoller.SetTabBarController1()
+        }
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        
+       
         if self.number == 1 {
         let predicate = NSPredicate(format: "date3 == %@", self.dateString)
         self.recordArrFilter = self.recordArrFilter0.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
@@ -104,6 +114,14 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         
         self.fscalendar.reloadData()
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        
+        if let history2ViewContoller = self.history2ViewContoller {
+            history2ViewContoller.SetTabBarController1()
+        }
     }
     
    
@@ -266,44 +284,57 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.recordArrFilter2 = self.recordArrFilter[indexPath.row]
 
-        let editViewContoller = self.storyboard?.instantiateViewController(withIdentifier: "edit") as! EditViewController
-
-        editViewContoller.recordViewController = self
-        editViewContoller.dateString = self.dateString
-
-        editViewContoller.label1_text = self.dateString2
-        editViewContoller.textField1_text = recordArrFilter2.folderName
-        editViewContoller.textField2_text = recordArrFilter2.number
-        editViewContoller.textField3_text = recordArrFilter2.times
-        editViewContoller.textField4_text = recordArrFilter2.nextReviewDate
-        editViewContoller.textView1_text = recordArrFilter2.memo
-        editViewContoller.dateString1 = recordArrFilter2.nextReviewDateForSorting
-
-        editViewContoller.recordArrFilter2 = self.recordArrFilter2
+//        let editViewContoller = self.storyboard?.instantiateViewController(withIdentifier: "edit") as! EditViewController
+//
+//        editViewContoller.recordViewController = self
+//        editViewContoller.dateString = self.dateString
+//
+//        editViewContoller.label1_text = self.dateString2
+//        editViewContoller.textField1_text = recordArrFilter2.folderName
+//        editViewContoller.textField2_text = recordArrFilter2.number
+//        editViewContoller.textField3_text = recordArrFilter2.times
+//        editViewContoller.textField4_text = recordArrFilter2.nextReviewDate
+//        editViewContoller.textView1_text = recordArrFilter2.memo
+//        editViewContoller.dateString1 = recordArrFilter2.nextReviewDateForSorting
+//
+//        editViewContoller.recordArrFilter2 = self.recordArrFilter2
         
-//        performSegue(withIdentifier: "ToEditViewController", sender: indexPath.row)
-        present(editViewContoller, animated: true, completion: nil)
+        performSegue(withIdentifier: "ToEditViewController", sender: indexPath.row)
+        print("performSegueが実行された")
+//        present(editViewContoller, animated: true, completion: nil)
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "ToEditViewController" {
-//        self.recordArrFilter2 = self.recordArrFilter[sender as! Int]
-//        let editViewController = segue.destination as! EditViewController
-//
-//        editViewController.recordViewController = self
-//        editViewController.dateString = self.dateString
-//
-//        editViewController.label1_text = self.dateString2
-//        editViewController.textField1_text = recordArrFilter2.folderName
-//        editViewController.textField2_text = recordArrFilter2.number
-//        editViewController.textField3_text = recordArrFilter2.times
-//        editViewController.textField4_text = recordArrFilter2.nextReviewDate
-//        editViewController.textView1_text = recordArrFilter2.memo
-//        editViewController.dateString1 = recordArrFilter2.nextReviewDateForSorting
-//        
-//        editViewController.recordArrFilter2 = self.recordArrFilter2
-//        }
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ToEditViewController" {
+        self.recordArrFilter2 = self.recordArrFilter[sender as! Int]
+        let editViewController = segue.destination as! EditViewController
+
+        editViewController.recordViewController = self
+        editViewController.dateString = self.dateString
+
+        editViewController.label1_text = self.dateString2
+        editViewController.textField1_text = recordArrFilter2.folderName
+        editViewController.textField2_text = recordArrFilter2.number
+        editViewController.textField3_text = recordArrFilter2.times
+        editViewController.textField4_text = recordArrFilter2.nextReviewDate
+        editViewController.textView1_text = recordArrFilter2.memo
+        editViewController.dateString1 = recordArrFilter2.nextReviewDateForSorting
+        
+        editViewController.recordArrFilter2 = self.recordArrFilter2
+            editViewController.tabBarController1 = self.tabBarController1
+            if let history2ViewContoller = history2ViewContoller {
+                editViewController.history2ViewController = history2ViewContoller
+            }
+            print("func prepareが実行された")
+            
+        } else if segue.identifier == "ToReviewViewController" {
+            let reviewViewController = segue.destination as! ReviewViewController
+            reviewViewController.tabBarController1 = self.tabBarController1
+            if let history2ViewContoller = history2ViewContoller {
+                reviewViewController.history2ViewController = history2ViewContoller
+            }
+        }
+    }
     
     // date型 -> 年月日をIntで取得
         func getDay(_ date:Date) -> (Int,Int,Int){
@@ -402,10 +433,12 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     }
     
     @IBAction func ToReveiwViewController(_ sender: Any) {
-            let reviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "ReviewViewController") as! ReviewViewController
-            
-            
-            present(reviewViewController, animated: true, completion: nil)
+//            let reviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "ReviewViewController") as! ReviewViewController
+        
+        self.performSegue(withIdentifier: "ToReviewViewController", sender: nil)
+//
+//
+//            present(reviewViewController, animated: true, completion: nil)
         }
         
     }

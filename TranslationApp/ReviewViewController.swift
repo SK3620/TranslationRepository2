@@ -17,7 +17,8 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var label2: UILabel!
+    @IBOutlet weak var label3: UILabel!
+    @IBOutlet var view1: UIView!
     
     
     
@@ -28,6 +29,9 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var memo = [String]()
     var times = [String]()
     var inputDate = [String]()
+    
+    var tabBarController1: UITabBarController!
+    var history2ViewController: History2ViewController!
 
     
     let realm = try! Realm()
@@ -48,12 +52,10 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.register(nib, forCellReuseIdentifier: "ReviewCustomCell")
 
         textField.layer.borderColor = UIColor.gray.cgColor
-        textField.layer.borderWidth = 2.5
-        textField.layer.cornerRadius = 10
+        textField.layer.borderWidth = 2
+        textField.layer.cornerRadius = 6
         
-        backButton.layer.borderColor = UIColor.gray.cgColor
-        backButton.layer.borderWidth = 2.5
-        backButton.layer.cornerRadius = 10
+       
         
         tableView.layer.borderColor = UIColor.systemGray4.cgColor
         tableView.layer.borderWidth = 2.5
@@ -174,6 +176,22 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        let date = Date()
+        let dateFomatter = DateFormatter()
+        dateFomatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d", options: 0, locale: Locale(identifier: "ja_JP"))
+        let dateString = dateFomatter.string(from: date)
+        
+        
+        
+        self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.title = "次回復習日・内容 \(dateString)"
+        self.navigationController?.navigationBar.barTintColor = .systemGray4
+        self.navigationController?.navigationBar.backgroundColor = .systemGray4
+        
+        let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(editButton(_:)))
+        
+        self.navigationItem.rightBarButtonItems = [editBarButtonItem]
         
         
         print("Record確認\(self.recordArr)")
@@ -196,14 +214,23 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
         
-        let date = Date()
-        let dateFomatter = DateFormatter()
-        dateFomatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d", options: 0, locale: Locale(identifier: "ja_JP"))
-        let dateString = dateFomatter.string(from: date)
-        self.label2.text = "本日:\(dateString)"
-        
-        
-        
+        if self.history2ViewController == nil {
+            backButton.isHidden = true
+            backButton.isEnabled = false
+            editButton.isEnabled = false
+            editButton.isHidden = true
+            label3.text = ""
+            editButton.setTitle("", for: .normal)
+            view1.backgroundColor = .systemGray4
+        } else {
+        label3.text = "次回復習日・内容 \(dateString)"
+            editButton.setTitle("編集", for: .normal)
+            view1.backgroundColor = .white
+            backButton.setTitle("戻る", for: .normal)
+            backButton.isEnabled = true
+            backButton.isHidden = false
+        }
+
     }
     
 
@@ -296,8 +323,9 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    @IBAction func editButton(_ sender: Any) {
-        if tableView.isEditing {
+    
+    @objc func editButton(_ sender: UIBarButtonItem){
+    if tableView.isEditing {
         tableView.isEditing = false
         editButton.setTitle("編集", for: .normal)
         } else {
@@ -306,6 +334,18 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
     }
+    
+    
+    @IBAction func editButton1(_ sender: Any) {
+        if tableView.isEditing {
+            tableView.isEditing = false
+            editButton.setTitle("編集", for: .normal)
+            } else {
+                tableView.isEditing = true
+                editButton.setTitle("完了", for: .normal)
+            }
+    }
+    
     
     
 //    @IBAction func returnButton(_ sender: Any) {

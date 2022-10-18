@@ -240,6 +240,10 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func SetTabBarController1(){
+        self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
 
     
     private func makeSettings() -> SideMenuSettings {
@@ -285,8 +289,11 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             let pharseViewController = storyboard?.instantiateViewController(withIdentifier: "Phrase")
             present(pharseViewController!, animated: true, completion: nil)
         case 1:
-            let recordViewController = storyboard?.instantiateViewController(withIdentifier: "Record")
-            present(recordViewController!, animated: true, completion: nil)
+            let recordViewController = storyboard?.instantiateViewController(withIdentifier: "Record") as! RecordViewController
+            recordViewController.tabBarController1 = self.tabBarController1
+            recordViewController.history2ViewContoller = self
+            
+            present(recordViewController, animated: true, completion: nil)
         case 2:
             let memoViewController = storyboard?.instantiateViewController(withIdentifier: "MemoView") as! MemoViewController
             

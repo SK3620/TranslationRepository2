@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SVProgressHUD
 
 class AddViewController: UIViewController {
     
@@ -53,9 +54,7 @@ class AddViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("日付日付　\(self.dateString)")
-        print("日付日付2 \(self.dateString2)")
-        
+       
         self.textField3.delegate = self
         
         for number in 1...30 {
@@ -130,37 +129,31 @@ class AddViewController: UIViewController {
         
         let borderColor = UIColor.gray.cgColor
         
-        textField1.layer.borderWidth = 2.5
+        textField1.layer.borderWidth = 2
         textField1.layer.borderColor = borderColor
-        textField1.layer.cornerRadius = 10
+        textField1.layer.cornerRadius = 6
         
         
-        textField2.layer.borderWidth = 2.5
+        textField2.layer.borderWidth = 2
         textField2.layer.borderColor = borderColor
-        textField2.layer.cornerRadius = 10
+        textField2.layer.cornerRadius = 6
         
         
-        textField3.layer.borderWidth = 2.5
+        textField3.layer.borderWidth = 2
         textField3.layer.borderColor = borderColor
-        textField3.layer.cornerRadius = 10
+        textField3.layer.cornerRadius = 6
         
         
-        textField4.layer.borderWidth = 2.5
+        textField4.layer.borderWidth = 2
         textField4.layer.borderColor = borderColor
-        textField4.layer.cornerRadius = 10
+        textField4.layer.cornerRadius = 6
        
         
-        textView1.layer.borderWidth = 2.5
+        textView1.layer.borderWidth = 2
         textView1.layer.borderColor = borderColor
-        textView1.layer.cornerRadius = 10
+        textView1.layer.cornerRadius = 6
         
-        button1.layer.borderWidth = 2.5
-        button1.layer.borderColor = borderColor
-        button1.layer.cornerRadius = 10
-        
-        button2.layer.borderWidth = 2.5
-        button2.layer.borderColor = borderColor
-        button2.layer.cornerRadius = 10
+       
 
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
@@ -231,6 +224,8 @@ class AddViewController: UIViewController {
     
     @IBAction func addButtonAction(_ sender: Any) {
         
+        SVProgressHUD.show()
+        
         let textField_text1 = self.textField1.text
         let textField_text2 = self.textField2.text
         let textField_text3 = self.textField3.text
@@ -277,10 +272,15 @@ class AddViewController: UIViewController {
                 self.recordViewController.dateString = self.dateString
                 
 //                self.recordViewController.recordArrFilter00 = self.record1Arr
+                SVProgressHUD.showSuccess(withStatus: "追加しました")
             }
         } catch {
             print("エラー発生")
         }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: { () -> Void in
+            SVProgressHUD.dismiss()
+        })
        
         print(recordArr)
         
@@ -298,8 +298,7 @@ class AddViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         self.recordViewController.calendar(recordViewController.fscalendar, numberOfEventsFor: self.selectedDate)
-        print("selecteddate確認 : \(self.selectedDate)")
-        print("ViewWillDissapearが呼ばれました。")
+       
     }
     
 }

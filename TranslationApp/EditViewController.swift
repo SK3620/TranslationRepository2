@@ -7,11 +7,13 @@
 
 import UIKit
 import RealmSwift
+import SVProgressHUD
 
-class EditViewController: UIViewController {
+class EditViewController: UIViewController, UINavigationBarDelegate {
     
     
     @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var editLabel: UILabel!
     @IBOutlet weak var textField1: UITextField!
     @IBOutlet weak var textField2: UITextField!
     @IBOutlet weak var textField3: UITextField!
@@ -19,6 +21,8 @@ class EditViewController: UIViewController {
     @IBOutlet weak var textView1: UITextView!
     @IBOutlet weak var button1: UIButton!
     @IBOutlet weak var button2: UIButton!
+    @IBOutlet var view1: UIView!
+    
     
     var datePicker: UIDatePicker = UIDatePicker()
     var pickerView1: UIPickerView = UIPickerView()
@@ -41,8 +45,10 @@ class EditViewController: UIViewController {
 //    var record1ArrFilter2: Record1!
     
     var recordViewController: RecordViewController!
+    var tabBarController1: UITabBarController?
     var dateString: String!
     var dateString1: Int!
+    var history2ViewController: History2ViewController!
     
     var label1_text: String!
     var textField1_text: String!
@@ -122,33 +128,25 @@ class EditViewController: UIViewController {
         
         let color = UIColor.gray.cgColor
         
-        button1.layer.borderWidth = 2
-        button1.layer.borderColor = color
-        button1.layer.cornerRadius = 10
-    
-        button2.layer.borderWidth = 2
-        button2.layer.borderColor = color
-        button2.layer.cornerRadius = 10
-        
         textField1.layer.borderWidth = 2
         textField1.layer.borderColor = color
-        textField1.layer.cornerRadius = 10
+        textField1.layer.cornerRadius = 6
         
         textField2.layer.borderWidth = 2
         textField2.layer.borderColor = color
-        textField2.layer.cornerRadius = 10
+        textField2.layer.cornerRadius = 6
         
         textField3.layer.borderWidth = 2
         textField3.layer.borderColor = color
-        textField3.layer.cornerRadius = 10
+        textField3.layer.cornerRadius = 6
         
         textField4.layer.borderWidth = 2
         textField4.layer.borderColor = color
-        textField4.layer.cornerRadius = 10
+        textField4.layer.cornerRadius = 6
         
         textView1.layer.borderWidth = 2
         textView1.layer.borderColor = color
-        textView1.layer.cornerRadius = 10
+        textView1.layer.cornerRadius = 6
         
         self.label1.text = self.label1_text
         self.textField1.text = self.textField1_text
@@ -212,7 +210,30 @@ class EditViewController: UIViewController {
     }
         // Do any additional setup after loading the view.
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.title = "編集"
+        self.navigationController?.navigationBar.barTintColor = .systemGray4
+        self.navigationController?.navigationBar.backgroundColor = .systemGray4
+        
+        editLabel.text = ""
+        view1.backgroundColor = .systemGray4
+        button1.isEnabled = false
+        button1.isHidden = true
+        
+        if history2ViewController != nil {
+            editLabel.text = "編集"
+            view1.backgroundColor = .white
+            button1.isEnabled = true
+            button1.isHidden = false
+        }
+       
+    }
+    
+  
     /*
     // MARK: - Navigation
 
@@ -225,6 +246,9 @@ class EditViewController: UIViewController {
     
 //    保存ボタン
     @IBAction func Button2Action(_ sender: Any) {
+        
+        SVProgressHUD.show()
+        
          textField1_text = self.textField1.text
          textField2_text = self.textField2.text
          textField3_text = self.textField3.text
@@ -257,6 +281,11 @@ class EditViewController: UIViewController {
             self.recordViewController.recordArrFilter0 = self.recordArr
             self.recordViewController.number = 1
             self.recordViewController.dateString = self.dateString
+            
+            SVProgressHUD.showSuccess(withStatus: "保存しました")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute:{ () -> Void in
+                SVProgressHUD.dismiss()
+            })
             
 //            self.recordViewController.recordArrFilter00 = self.record1Arr
             
