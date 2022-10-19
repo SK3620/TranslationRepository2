@@ -685,7 +685,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6N-TM-zSY">
-                                                <rect key="frame" x="168.33333333333334" y="41.666666666666742" width="38.333333333333343" height="18"/>
+                                                <rect key="frame" x="168.33333333333334" y="36.666666666666742" width="38.333333333333343" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <color key="textColor" systemColor="systemOrangeColor"/>
                                                 <nil key="highlightedColor"/>
@@ -730,7 +730,7 @@
                                             <constraint firstItem="zJ6-ie-Rsb" firstAttribute="centerY" secondItem="9EV-Dc-zqp" secondAttribute="centerY" id="JEr-ju-TIk"/>
                                             <constraint firstItem="nfl-Hx-cfO" firstAttribute="top" secondItem="6Ux-a6-WD7" secondAttribute="top" constant="8" id="P1o-UD-b75"/>
                                             <constraint firstItem="fy2-Tf-e8A" firstAttribute="centerX" secondItem="9EV-Dc-zqp" secondAttribute="centerX" id="U1K-Vn-JP3"/>
-                                            <constraint firstItem="o6N-TM-zSY" firstAttribute="top" secondItem="mzu-06-V37" secondAttribute="bottom" constant="3" id="ZXm-aV-IoA"/>
+                                            <constraint firstItem="o6N-TM-zSY" firstAttribute="top" secondItem="mzu-06-V37" secondAttribute="bottom" constant="-2" id="ZXm-aV-IoA"/>
                                             <constraint firstItem="mzu-06-V37" firstAttribute="top" secondItem="6Ux-a6-WD7" secondAttribute="top" constant="8" id="d2y-gZ-li3"/>
                                             <constraint firstItem="che-rl-key" firstAttribute="centerX" secondItem="nfl-Hx-cfO" secondAttribute="centerX" id="eQC-PR-3Gc"/>
                                             <constraint firstItem="zJ6-ie-Rsb" firstAttribute="top" secondItem="aKt-0p-VqD" secondAttribute="bottom" constant="-7" id="jAz-n5-rVG"/>
@@ -919,7 +919,7 @@
                                         </prototypes>
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="26I-Lp-lOt">
-                                        <rect key="frame" x="165" y="284.66666666666669" width="45" height="21"/>
+                                        <rect key="frame" x="165" y="284.33333333333331" width="45" height="21.666666666666686"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                         <color key="textColor" systemColor="systemOrangeColor"/>
                                         <nil key="highlightedColor"/>
@@ -1269,22 +1269,22 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="dS2-PG-IvR">
                                 <rect key="frame" x="15" y="99" width="345" height="196"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習したフォルダー名" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IKf-tw-hlB">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習したフォルダー名" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IKf-tw-hlB">
                                         <rect key="frame" x="0.0" y="0.0" width="345" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習した文章番号/内容(例:1〜10)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0uZ-9i-UIU">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習した文章番号/内容(例:1〜10)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0uZ-9i-UIU">
                                         <rect key="frame" x="0.0" y="54" width="345" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="復習した回数(〜回目)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ztD-JV-Bng">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="復習した回数(〜回目)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ztD-JV-Bng">
                                         <rect key="frame" x="0.0" y="108" width="345" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="次回復習日を設定しよう！" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WZp-Ut-IZy">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="次回復習日を設定しよう！" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WZp-Ut-IZy">
                                         <rect key="frame" x="0.0" y="162" width="345" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -1436,22 +1436,22 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HTQ-fX-pqH">
                                 <rect key="frame" x="15" y="96.666666666666686" width="345" height="196"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習したフォルダー名" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DEK-hS-E8u">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習したフォルダー名" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DEK-hS-E8u">
                                         <rect key="frame" x="5" y="0.0" width="335" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習した文章番号/内容(例:1〜10)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4Xh-MD-9JZ">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="学習した文章番号/内容(例:1〜10)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4Xh-MD-9JZ">
                                         <rect key="frame" x="5" y="53.999999999999986" width="335" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="復習した回数 (〜回目）" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qvq-at-s7s">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="復習した回数 (〜回目）" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qvq-at-s7s">
                                         <rect key="frame" x="5" y="107.99999999999999" width="335" height="34.000000000000014"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="次回復習日を設定しよう！" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hH4-QB-GT3">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="次回復習日を設定しよう！" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hH4-QB-GT3">
                                         <rect key="frame" x="5" y="162" width="335" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>

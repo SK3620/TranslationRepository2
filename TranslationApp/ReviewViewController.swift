@@ -251,14 +251,15 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let result = self.resultsArr[indexPath.row].isChecked
         switch result {
         case 0:
-            let image = UIImage(systemName: "checkmark")
+            let image = UIImage(systemName: "checkmark.circle")
             cell.checkMarkButton.setImage(image, for: .normal)
-            cell.checkMarkButton.setTitle("完了", for: .normal)
+//            cell.checkMarkButton.setTitle("完了", for: .normal)
             cell.checkMarkButton.tintColor = UIColor.gray
             
         case 1:
-            let image = UIImage(systemName: "checkmark")
-            cell.checkMarkButton.setTitle("復習完了", for: .normal);            cell.checkMarkButton.setImage(image, for: .normal)
+            let image = UIImage(systemName: "checkmark.circle.fill")
+//            cell.checkMarkButton.setTitle("復習完了", for: .normal)
+            cell.checkMarkButton.setImage(image, for: .normal)
             cell.checkMarkButton.tintColor = UIColor.systemGreen
         default:
             print("他の値です")
@@ -276,6 +277,11 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 resultsArr[sender.tag].isChecked = 1
                 realm.add(resultsArr, update: .modified)
             }
+            SVProgressHUD.show()
+            SVProgressHUD.showSuccess(withStatus: "復習が完了しました")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { () -> Void in
+                SVProgressHUD.dismiss()
+            })
         case 1:
             try! realm.write{
                 resultsArr[sender.tag].isChecked = 0

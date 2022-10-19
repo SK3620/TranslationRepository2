@@ -144,4 +144,17 @@ class Memo: Object {
     }
 }
 
+class Speak: Object {
+    
+    @objc dynamic var playInputData = "off"
+    
+    @objc dynamic var playResultData = "on"
+    
+    @objc dynamic var id = 0
+
+    override static func primaryKey() -> String? {
+        "id"
+    }
+}
+
 

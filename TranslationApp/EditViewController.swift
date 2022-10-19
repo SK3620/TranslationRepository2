@@ -171,7 +171,11 @@ class EditViewController: UIViewController, UINavigationBarDelegate {
     
     @objc func done1(){
         textField1.endEditing(true)
+        if folderNames.isEmpty != true {
         textField1.text = "\(self.folderNames[pickerView1.selectedRow(inComponent: 0)])"
+        } else {
+            textField1.text = ""
+        }
     }
     
     @objc func cancel1(){

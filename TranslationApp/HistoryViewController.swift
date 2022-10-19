@@ -34,6 +34,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let speak = Speak()
+        speak.playResultData = "on"
+        speak.playInputData = "off"
+        try! Realm().write{
+            self.realm.add(speak, update: .modified)
+        }
+        
         tableView.separatorColor = .systemBlue
         
         searchBar.backgroundImage = UIImage()

@@ -72,12 +72,12 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     var speakSpeed: Float = 0.5
     var voice: String = "com.apple.ttsbundle.siri_Nicky_en-US_compact"
     
-   
-    
-   
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("viewDidLoad")
         
         // 利用可能な英語音声の確認
         let voices = AVSpeechSynthesisVoice.speechVoices()
@@ -86,6 +86,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                 print(voice)
             }
         }
+        
         
         
         
@@ -166,6 +167,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
         if self.indexPath_row == nil {
             self.label1.text = "文章を長押しで音声再生"
+            label1.textColor = .orange
         }
         
         if self.indexPath_row == nil {
@@ -250,7 +252,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
            var settings = SideMenuSettings()
            //動作を指定
         settings.presentationStyle = .menuSlideIn
-        settings.menuWidth = 130
+        settings.menuWidth = 170
         
        
 
@@ -305,7 +307,16 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
             
             present(memoViewController, animated: true, completion: nil)
         case 3:
-//            self.performSegue(withIdentifier: "Settings2", sender: nil)
+//            太文字再生
+            repeatButton.tintColor = .systemGray2
+            speechSynthesizer.stopSpeaking(at: .immediate)
+            setImage(playButton, "play.circle.fill")
+        case 4:
+//            小文字再生
+            repeatButton.tintColor = .systemGray2
+            speechSynthesizer.stopSpeaking(at: .immediate)
+            setImage(playButton, "play.circle.fill")
+            
             
            print("閉じる")
         default:
@@ -329,6 +340,13 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     //        検索バーに入力があったら呼ばれる　（文字列検索機能）
 
     func search(){
+        
+        speechSynthesizer.pauseSpeaking(at: .immediate)
+        playButton.isEnabled = false
+        setImage(playButton, "play.circle.fill")
+        backCellButton.isEnabled = false
+        nextCellButton.isEnabled = false
+        self.label1.text = "文章を長押しで音声再生"
         
         translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
         
@@ -371,10 +389,15 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                 print("サーチバーに入力された値がありました\(searchBar.text!)")
                 
                 if results1.count != 0 {
+                    indexPath_row = 0
                     for results in 0...results1.count - 1 {
                         self.sections.append(results1[results].inputData)
                         self.tableDataList.append(results1[results].resultData)
                     }
+                } else {
+                    playButton.isEnabled = false
+                    backCellButton.isEnabled = false
+                    nextCellButton.isEnabled = false
                 }
             }
             self.tableView.reloadData()
@@ -409,6 +432,7 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         print("確認47")
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCellForHistory2ViewCell", for: indexPath) as! CustomCellForHistory2ViewController
+        
     
         cell.indexPath_row = indexPath.row
         cell.delegate = self
@@ -416,15 +440,6 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         
       
                
-//        if indexPath.row == indexPath_row {
-//            if indexPath_row % 2 == 0 {
-//                cell.backgroundColor = .systemGray6
-//            } else {
-//                cell.backgroundColor = .systemGray4
-//            }
-//        } else {
-//            cell.backgroundColor = .white
-//        }
         
         if indexPath.row == indexPath_row {
                 cell.backgroundColor = .systemGray6
@@ -727,7 +742,11 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
                 tableView.reloadData()
-                self.speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
+                if searchBar.text == "" {
+                    speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                } else {
+                    speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                }
             }
         }
     }
@@ -753,7 +772,11 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
                 tableView.reloadData()
-                speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
+                if searchBar.text == "" {
+                    speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                } else {
+                    speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                }
             }
         }
     }
@@ -771,7 +794,11 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         } else if self.indexPath_row != nil {
             print("もう一度最初から再生")
             setImage(playButton, "pause.circle.fill")
-            speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
+            if searchBar.text == "" {
+                speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+            } else {
+                speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+            }
         }
     }
     
@@ -960,6 +987,11 @@ extension History2ViewController: ContextMenuDelegate {
                 }
                 
             }
+            self.repeatButton.tintColor = .systemGray2
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+            self.nextCellButton.isEnabled = false
+            self.backCellButton.isEnabled = false
+            self.playButton.isEnabled = false
             self.tableView.reloadData()
         })
         
@@ -1044,7 +1076,11 @@ extension History2ViewController: ContextMenuDelegate {
                     tableView.deselectRow(at: indexPath, animated: true)
                 }
             }
-           
+            repeatButton.tintColor = .systemGray2
+            speechSynthesizer.stopSpeaking(at: .immediate)
+            nextCellButton.isEnabled = false
+            backCellButton.isEnabled = false
+            playButton.isEnabled = false
             tableView.reloadData()
         }
         
@@ -1056,7 +1092,15 @@ extension History2ViewController: ContextMenuDelegate {
 extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDelegate{
     func longPressDetection(_ indexPath_row: Int, _ cell: CustomCellForHistory2ViewController) {
         self.speechSynthesizer.stopSpeaking(at: AVSpeechBoundary.immediate)
-        speeche(text: self.translationFolderArr[0].results[indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
+        if searchBar.text == "" {
+            speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+        } else {
+            speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+        }
+        
+        playButton.isEnabled = true
+        backCellButton.isEnabled = true
+        nextCellButton.isEnabled = true
         
        
         self.indexPath_row = indexPath_row
@@ -1083,19 +1127,23 @@ extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesize
         
     }
     
-    func speeche(text: String, speakSpeed: Float, voice: String) {
+    func speeche(textForResultData: String, textForInputData: String, speakSpeed: Float, voice: String) {
         
-        // 読み上げる、文字、言語などの設定
-        let utterance = AVSpeechUtterance(string: text) // 読み上げる文字
-        print("テキスト確認 \(text)")
-        utterance.voice = self.makeVoice(voice) // 言語 com.apple.ttsbundle.siri_Aaron_en-US_compact
-//        com.apple.ttsbundle.siri_Nicky_en-US_compact
-        utterance.rate = speakSpeed // 読み上げ速度
-//        utterance.pitchMultiplier = pitchOfVoice // 読み上げる声のピッチ
-//        utterance.preUtteranceDelay = 0.2 // 読み上げるまでのため
-        self.speechSynthesizer.delegate = self
-        self.speechSynthesizer.speak(utterance)
-        
+        let speak = realm.objects(Speak.self).first!
+        if speak.playResultData == "on" {
+            let utterance = AVSpeechUtterance(string: textForResultData) // 読み上げる文字
+            utterance.voice = self.makeVoice(voice) // 言語
+            utterance.rate = speakSpeed // 読み上げ速度
+            self.speechSynthesizer.delegate = self
+            self.speechSynthesizer.speak(utterance)
+        } else if speak.playInputData == "on" {
+            print("inputData音声再生が実行された")
+            let utterance = AVSpeechUtterance(string: textForInputData) // 読み上げる文字
+            utterance.voice = self.makeVoice(voice) // 言語
+            utterance.rate = speakSpeed // 読み上げ速度
+            self.speechSynthesizer.delegate = self
+            self.speechSynthesizer.speak(utterance)
+        }
       }
     
     
@@ -1130,11 +1178,14 @@ extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesize
            
            
            if repeatButton.tintColor == .systemBlue {
-               speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData, speakSpeed: self.speakSpeed, voice: self.voice)
+               if searchBar.text == "" {
+                   speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+               } else {
+                   speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+               }
            } else {
                setImage(playButton, "play.circle.fill")
            }
-                
        }
     
 //    読み上げ一時停止した時

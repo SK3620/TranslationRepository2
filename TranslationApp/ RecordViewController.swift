@@ -10,6 +10,7 @@ import RealmSwift
 import FSCalendar
 import CalculateCalendarLogic
 import Alamofire
+import SVProgressHUD
 
 
 
@@ -127,6 +128,9 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        label2.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
+        
         if self.recordArrFilter != nil {
 //            label2.text = ""
             return self.recordArrFilter.count
@@ -138,6 +142,12 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCell2
 //        cell.delegate = self
+        
+        if recordArrFilter.isEmpty {
+            label2.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
+        } else {
+            label2.text = ""
+        }
 
         if self.recordArrFilter != nil {
         cell.setData(self.recordArrFilter[indexPath.row])
@@ -147,18 +157,18 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             case 0:
                 cell.label6.text = "(復習未完了)"
                 cell.label6.textColor = .systemRed
-                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
                 cell.checkMarkButton.tintColor = UIColor.systemGray
-                cell.view1.layer.borderColor = UIColor.systemBlue.cgColor
-                cell.view1.layer.borderWidth = 5
-               
+//                cell.view1.layer.borderColor = UIColor.systemBlue.cgColor
+//                cell.view1.layer.borderWidth = 5
+//
             case 1:
                 cell.label6.text = "(復習完了)"
                 cell.label6.textColor = .systemGreen
-                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
                 cell.checkMarkButton.tintColor = UIColor.systemGreen
-                cell.view1.layer.borderColor = UIColor.systemBlue.cgColor
-                cell.view1.layer.borderWidth = 5
+//                cell.view1.layer.borderColor = UIColor.systemBlue.cgColor
+//                cell.view1.layer.borderWidth = 5
             default:
                 print("他の値です")
             }
@@ -177,6 +187,11 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             try! realm.write{
                 recordArrFilter[sender.tag].isChecked = 1
                 realm.add(recordArrFilter, update: .modified)
+                SVProgressHUD.show()
+                SVProgressHUD.showSuccess(withStatus: "復習が完了しました")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { () -> Void in
+                    SVProgressHUD.dismiss()
+                })
             }
         case 1:
             try! realm.write{
@@ -240,7 +255,6 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
                 label2.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
             } else {
                 label2.text = ""
-                
             }
         }
         
