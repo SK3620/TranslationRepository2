@@ -21,7 +21,6 @@ class CustomCell2: UITableViewCell {
     @IBOutlet weak var label4: UILabel!
     @IBOutlet weak var label5: UILabel!
     @IBOutlet weak var label6: UILabel!
-    @IBOutlet weak var view1: UIView!
     
     
     

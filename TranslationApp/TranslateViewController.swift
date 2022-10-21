@@ -38,20 +38,18 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var translateTextView: UITextView!
     @IBOutlet weak var translateLabel: UITextView!
+    @IBOutlet weak var label1: UILabel!
     
     
     @IBOutlet weak var languageLabel1: UILabel!
     @IBOutlet weak var languageLabel2: UILabel!
     
+    
     @IBOutlet weak var button1: UIButton!
-        @IBOutlet weak var button2: UIButton!
-    //    @IBOutlet weak var button3: UIButton!
+    @IBOutlet weak var button2: UIButton!
     @IBOutlet weak var button4: UIButton!
     @IBOutlet weak var button5: UIButton!
     
-    
-//    @IBOutlet weak var imageButton1: UIButton!
-//    @IBOutlet weak var imageButton2: UIButton!
     
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var view2: UIView!
@@ -83,8 +81,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         
        
         
-        
-        
+        label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
+       
         
         let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium, scale: .medium)
         let systemIcon = UIImage(systemName: "square.and.arrow.down", withConfiguration: config)
@@ -108,16 +106,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         
         let borderColor = UIColor.systemGray4.cgColor
         
-        //  ボタンの画像サイズ変更
-//        imageButton1.imageView?.contentMode = .scaleAspectFill
-//        imageButton1.contentHorizontalAlignment = .fill
-//        imageButton1.contentVerticalAlignment = .fill
-//
-//        imageButton2.imageView?.contentMode = .scaleAspectFill
-//        imageButton2.contentHorizontalAlignment = .fill
-//        imageButton2.contentVerticalAlignment = .fill
-        
-        //        translateTextView.layer.cornerRadius = 10
+       
         translateTextView.clipsToBounds = true
         translateTextView.layer.borderColor = borderColor
         translateTextView.layer.borderWidth = 2
@@ -135,18 +124,12 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         
         //        // ボタンの横幅に応じてフォントサイズを自動調整する設定
                 button2.titleLabel?.adjustsFontSizeToFitWidth = true
-        //
-        //        button3.layer.cornerRadius = 10
-        //        button3.layer.borderWidth = 2
-        //        button3.layer.borderColor = borderColor
-        //        button3.setTitle("上記を保存", for: .normal)
-        //
+       
         button4.layer.cornerRadius = 10
         button4.layer.borderWidth = 1
         button4.layer.borderColor = UIColor.systemBlue.cgColor
         
         
-        //        translateLabel.layer.cornerRadius = 10
         translateLabel.clipsToBounds = true
         translateLabel.layer.borderWidth = 2
         translateLabel.layer.borderColor = borderColor
@@ -232,9 +215,9 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                 self.button2.isHidden = false
                 self.button2.isEnabled = true
                 
-                //                            button3.setTitle("保存先を変更", for: .normal)
+               
             } else {
-                //                self.button3.setTitle("上記を保存", for: .normal)
+                
                 self.button2.isEnabled = false
                 self.button2.isHidden = true
             }
@@ -263,22 +246,32 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             if languageLabel1.text == "Japanese"{
                 languageLabel1.text = "English"
                 languageLabel2.text = "Japanese"
-                //            translateEnglish()
+                
             } else {
                 languageLabel1.text = "Japanese"
                 languageLabel2.text = "English"
-                //            translateJapanese()
+                
             }
         }
         
         
-        func textViewDidChange(_ textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
+        
+        if textView == translateTextView {
+            if translateTextView.text != "" {
+                self.label1.text = ""
+            } else {
+                self.label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
+            }
+            
+            
             if self.languageLabel1.text == "Japanese"{
                 translateJapanese()
             } else {
                 translateEnglish()
             }
         }
+    }
         
         
         func translateEnglish(){
@@ -325,14 +318,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         }
         
         func translateJapanese(){
-            //        if self.translateTextView.text.isEmpty{
-            //            SVProgressHUD.show()
-            //            SVProgressHUD.showError(withStatus: "翻訳したい文を入力して下さい")
-            //
-            //            return
-            //        }else{
+        
             // APIKey.plistに保存したDeepLの認証キーを取得
-            
             let authKey1 = KeyManager().getValue(key: "apiKey") as! String
             print("DEBUG : \(authKey1)")
             //            print結果　914cbb6c-40d6-0314-6e30-5fbd278de0ac:fx
@@ -388,12 +375,6 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             
             let folderListViewController = self.storyboard?.instantiateViewController(withIdentifier: "FolderList") as! FolderListViewController
             
-            //        let folderListViewController = FolderListViewController()
-            //
-            //        if let sheet = folderListViewController.sheetPresentationController{
-            //            sheet.detents = [.medium()]
-            //        }
-            
             folderListViewController.translateViewController = self
             
             present(folderListViewController, animated: true, completion: nil)
@@ -418,9 +399,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     
                     print(translateTextViewText!)
                     print(translateLabelText!)
-                    //                            Translationモデルのインスタンス作成
-                    //                let result1 = Translation(value: ["inputData": "\(translateTextViewText!)"])
-                    //                let result2 = Translation(value: ["resultData": "\(translateLabelText!)"])
+                   
                     let predict = NSPredicate(format: "folderName == %@", textStringForButton2)
                     translationFolderArr = realm.objects(TranslationFolder.self).filter(predict)
                     
@@ -433,26 +412,15 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                         result3.id = allTranslation.max(ofProperty: "id")! + 1
                     }
                     
-                    //                let dictionary: [String: [[String: String]]] = ["results": [["inputData": "\(translateTextViewText!)"], ["resultData": "\(translateLabelText!)"]]
-                    //                ]
-                    //                print("辞書 : \(dictionary)"
-                    //                let result3 = Translation(value: dictionary)
-                    //                print("結果3 : \(result3)")
                     
                     try! realm.write{
                         translationFolderArr.first!.results.append(result3)
                     }
                     
-                    print(translationFolderArr)
+                  
                     
-                    print("モデル確認")
-                    print(result3)
-                    //                ここに追加しました。Translationクラスのid設定はここではだめ
-                    //                let translation = Translation()
-                    //                let allTranslation = realm.objects(Translation.self)
-                    //                if allTranslation.count != 0 {
-                    //                  translation.id = allTranslation.max(ofProperty: "id")! + 1
-                    //                }
+                  
+                    
                     
                     let result4 = Histroy()
                     
@@ -474,7 +442,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     
                     
                     
-                    print("データ : \(translationFolderArr)")
+                   
                     SVProgressHUD.showSuccess(withStatus: "'\(textStringForButton2)' へ保存しました")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: showDismiss)
                     
@@ -544,6 +512,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         
         @IBAction func deleteButton1(_ sender: Any) {
             self.translateTextView.text = ""
+            self.label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
         }
         
         @IBAction func deleteButton2(_ sender: Any) {
@@ -563,20 +532,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     }
     
         
-        //
-        //    taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
-        ////        データを取得する。
-        //    let predict = NSPredicate(format: "category == %@", taskSearchBar.text!)
-        //    taskArray = taskArray.filter(predict)
-        //    print(taskArray)
-        //    let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment")
-        //        if let sheet = commentViewController?.sheetPresentationController {
-        //            sheet.detents = [.medium()]
-        //        }
-        //        present(commentViewController!, animated: true, completion: nil)
-        //    }}
-        
-        
+       
         /*
          // MARK: - Navigation
          
@@ -598,7 +554,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             if translationFolderArr2.count == 0 {
                 self.button2.isEnabled = false
                 self.button2.isHidden = true
-                //                                self.button3.setTitle("上記を保存", for: .normal)
+                //
                 return
             } else {
                 for number in 0...translationFolderArr2.count - 1{
@@ -614,9 +570,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                 self.button2.isHidden = false
                 self.button2.isEnabled = true
                 
-                //                            button3.setTitle("保存先を変更", for: .normal)
-            } else {
-                //                self.button3.setTitle("上記を保存", for: .normal)
+                            } else {
+                
                 self.button2.isEnabled = false
                 self.button2.isHidden = true
             }

@@ -160,6 +160,8 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        self.playBackground()
+        
         repeatButton.tintColor = .systemGray2
         labelForDisplayAll.text = "表示"
        
@@ -225,7 +227,6 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
         let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
         translationFolderArr = self.translationFolderArr.filter(predict)
         
-        print("テスト1\(translationFolderArr)")
         
         self.sections = []
         self.tableDataList = []
@@ -633,15 +634,17 @@ class History2ViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func tapCellEditButton(_ sender: UIButton){
         let edit = ContextMenuItemWithImage(title: "編集する", image: UIImage())
-        let save = ContextMenuItemWithImage(title: "保存する", image: UIImage())
+        let save = ContextMenuItemWithImage(title: "お気に入りにする", image: UIImage())
+        let folder = ContextMenuItemWithImage(title: "保存先を変更する", image: UIImage())
         let copy = ContextMenuItemWithImage(title: "コピーする", image: UIImage())
         let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage())
+        
        
         
         let cellForRow: IndexPath = IndexPath(row: sender.tag, section: 0)
         self.sender_tag = sender.tag
 //        表示するアイテムを決定
-        CM.items = [edit, save, copy, delete]
+        CM.items = [edit, save, folder, copy, delete]
 //        表示します
         CM.showMenu(viewTargeted: tableView.cellForRow(at: cellForRow)!, delegate: self, animated: true)
     }
@@ -927,9 +930,29 @@ extension History2ViewController: ContextMenuDelegate {
             print("保存ボタン")
             savePhraseButton()
         case 2:
+            print("保存先変更ボタン")
+            let folderList2ViewController = storyboard?.instantiateViewController(withIdentifier: "FolderList2") as! FolderList2ViewController
+            folderList2ViewController.sender_tag = self.sender_tag
+            
+            if searchBar.text == "" {
+                folderList2ViewController.inputData = translationFolderArr.first!.results[sender_tag].inputData
+                folderList2ViewController.resultData = translationFolderArr.first!.results[sender_tag].resultData
+                folderList2ViewController.inputAndResultData = translationFolderArr.first!.results[sender_tag].inputAndResultData
+            } else {
+                folderList2ViewController.inputData = translationArr[sender_tag].inputData
+                folderList2ViewController.resultData = translationArr[sender_tag].resultData
+                folderList2ViewController.inputAndResultData = translationArr[sender_tag].inputAndResultData
+            }
+            
+            if let sheet = folderList2ViewController.sheetPresentationController {
+                sheet.detents = [.medium()]
+                present(folderList2ViewController, animated: true, completion: nil)
+            }
+            
+        case 3:
             print("コピーボタン")
             copyButton()
-        case 3:
+        case 4:
             deleteButton()
         default:
             print("他の値")
@@ -1087,9 +1110,20 @@ extension History2ViewController: ContextMenuDelegate {
     }
 }
 
+//try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+//    }
+//}
+
+
+
 
 
 extension History2ViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDelegate{
+    
+    func playBackground(){
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+    }
+    
     func longPressDetection(_ indexPath_row: Int, _ cell: CustomCellForHistory2ViewController) {
         self.speechSynthesizer.stopSpeaking(at: AVSpeechBoundary.immediate)
         if searchBar.text == "" {
