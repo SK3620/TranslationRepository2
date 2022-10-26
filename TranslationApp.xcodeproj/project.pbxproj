@@ -12,47 +12,47 @@
 		83071D0028B91AC70003734C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071CFE28B91AC70003734C /* Main.storyboard */; };
 		83071D0228B91AC90003734C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0128B91AC90003734C /* Assets.xcassets */; };
 		83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0328B91AC90003734C /* LaunchScreen.storyboard */; };
-		832D4CB028D848B5004C4D7C /* Memo2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */; };
+		832D4CB028D848B5004C4D7C /* QuickMemoViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */; };
 		8342F77728FD760E005C8FD5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8342F77628FD760E005C8FD5 /* Alamofire */; };
+		8356E9552905574500FD9236 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E9542905574500FD9236 /* History.swift */; };
+		8356E9572905584500FD9236 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E9562905584500FD9236 /* Record.swift */; };
+		8356E95929055BCC00FD9236 /* PhraseWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95829055BCC00FD9236 /* PhraseWord.swift */; };
+		8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95B2906407500FD9236 /* FirstMemo.swift */; };
+		8356E95E290642D800FD9236 /* Speak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95D290642D800FD9236 /* Speak.swift */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
-		8382E93A28F71F5700877DD8 /* NavigationControllerForHistory2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */; };
 		8382E93D28F728E100877DD8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382E93C28F728E100877DD8 /* Alamofire */; };
 		8382FD4628F987B20021715C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382FD4528F987B20021715C /* Alamofire */; };
-		8382FD4828FD52420021715C /* Settings2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8382FD4728FD52410021715C /* Settings2ViewController.swift */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
-		8388DA5C28CA3770008DE6FF /* Edit1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */; };
-		83966BF728E8C1060098A39E /* CustomCellForHistory2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83966BF528E8C1060098A39E /* CustomCellForHistory2ViewController.swift */; };
-		83966BF828E8C1060098A39E /* CustomCellForHistory2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83966BF628E8C1060098A39E /* CustomCellForHistory2ViewController.xib */; };
-		839FBA2F28BA016C00BB64A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA2E28BA016C00BB64A5 /* ViewController.swift */; };
+		8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */; };
+		83966BF728E8C1060098A39E /* CustomCellForStudy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83966BF528E8C1060098A39E /* CustomCellForStudy.swift */; };
+		83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83966BF628E8C1060098A39E /* CustomCellForStudy.xib */; };
+		839CDF632906939100F78F44 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 839CDF622906939100F78F44 /* Alamofire */; };
 		839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */; };
-		839FBA3328BA101200BB64A5 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3228BA101200BB64A5 /* HistoryViewController.swift */; };
-		839FBA3528BA113300BB64A5 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3428BA113300BB64A5 /* CreateFolderViewController.swift */; };
+		839FBA3328BA101200BB64A5 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3228BA101200BB64A5 /* FolderViewController.swift */; };
 		839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = 839FBA3828BA5C8900BB64A5 /* APIKey.plist */; };
 		839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3A28BA602700BB64A5 /* KeyManager.swift */; };
 		83A2E1AB2901023700F1117A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83A2E1AA2901023700F1117A /* Alamofire */; };
 		83A2E1AE29018C5D00F1117A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83A2E1AD29018C5D00F1117A /* Alamofire */; };
-		83A2E1B029019CA100F1117A /* FolderList2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2E1AF29019CA100F1117A /* FolderList2ViewController.swift */; };
-		83A564C928D7630300C3A9B9 /* PhraseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A564C828D7630300C3A9B9 /* PhraseViewController.swift */; };
-		83A7917828F6654300BF7C2D /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7917728F6654300BF7C2D /* SettingsViewController.swift */; };
-		83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */; };
-		83AC1DC928E4427D00576CF4 /* CustomPhraseWordViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */; };
-		83AC1DCD28E6220A00576CF4 /* NavigationController0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */; };
-		83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317128CF037200FDA0E1 /* MemoViewController.swift */; };
-		83AF317428CF320B00FDA0E1 /* MemoViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */; };
-		83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317528CF863100FDA0E1 /* RirekiViewController.swift */; };
+		83A2E1B029019CA100F1117A /* SelectFolderForStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */; };
+		83A564C928D7630300C3A9B9 /* PhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A564C828D7630300C3A9B9 /* PhraseWordViewController.swift */; };
+		83A7917828F6654300BF7C2D /* SettingsForStudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */; };
+		83AC1DC828E4427D00576CF4 /* CustomCellForPhraseWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */; };
+		83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83AC1DC728E4427D00576CF4 /* CustomCellForPhraseWord.xib */; };
+		83AF317228CF037200FDA0E1 /* MemoForStudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317128CF037200FDA0E1 /* MemoForStudyViewController.swift */; };
+		83AF317628CF863100FDA0E1 /* HistoryViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AF317528CF863100FDA0E1 /* HistoryViewContoller.swift */; };
 		83B6AF1C28E71E8C00700DBF /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */; };
-		83B6AF1F28E7254000700DBF /* ReviewCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */; };
-		83B6AF2028E7254000700DBF /* ReviewCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */; };
-		83B9C1FB28CFF10B006138E2 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */; };
-		83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */; };
-		83B9C1FE28D2F31B006138E2 /*  RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FD28D2F31B006138E2 /*  RecordViewController.swift */; };
-		83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FF28D3050E006138E2 /* CustomCell2.swift */; };
-		83B9C20228D3050E006138E2 /* CustomCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C20028D3050E006138E2 /* CustomCell2.xib */; };
-		83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20328D3132D006138E2 /* EditViewController.swift */; };
+		83B6AF1F28E7254000700DBF /* CustomCellForReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B6AF1D28E7254000700DBF /* CustomCellForReview.swift */; };
+		83B6AF2028E7254000700DBF /* CustomCellForReview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B6AF1E28E7254000700DBF /* CustomCellForReview.xib */; };
+		83B9C1FB28CFF10B006138E2 /* CustomCellForHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */; };
+		83B9C1FC28CFF10B006138E2 /* CustomCellForHistory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C1FA28CFF10B006138E2 /* CustomCellForHistory.xib */; };
+		83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */; };
+		83B9C20128D3050E006138E2 /* CustomCellForRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C1FF28D3050E006138E2 /* CustomCellForRecord.swift */; };
+		83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83B9C20028D3050E006138E2 /* CustomCellForRecord.xib */; };
+		83B9C20428D3132D006138E2 /* EditRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20328D3132D006138E2 /* EditRecordViewController.swift */; };
 		83B9C20628D39997006138E2 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B9C20528D39997006138E2 /* AddViewController.swift */; };
-		83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C15AF928BF451F00280694 /* FolderListViewController.swift */; };
-		83F021B128C0CC56009FFDD2 /* History2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021B028C0CC56009FFDD2 /* History2ViewController.swift */; };
+		83C15AFA28BF451F00280694 /* SelectFolderForTranslateViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C15AF928BF451F00280694 /* SelectFolderForTranslateViewContoller.swift */; };
+		83F021B128C0CC56009FFDD2 /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021B028C0CC56009FFDD2 /* StudyViewController.swift */; };
 		83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */; };
 		E6FAEDC6536A5BB599B65D2D /* Pods_TranslationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */; };
 /* End PBXBuildFile section */
@@ -80,42 +80,41 @@
 		83071D0128B91AC90003734C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83071D0428B91AC90003734C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83071D0628B91AC90003734C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo2ViewController.swift; sourceTree = "<group>"; };
+		832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickMemoViewContoller.swift; sourceTree = "<group>"; };
+		8356E9542905574500FD9236 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		8356E9562905584500FD9236 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
+		8356E95829055BCC00FD9236 /* PhraseWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseWord.swift; sourceTree = "<group>"; };
+		8356E95B2906407500FD9236 /* FirstMemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMemo.swift; sourceTree = "<group>"; };
+		8356E95D290642D800FD9236 /* Speak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speak.swift; sourceTree = "<group>"; };
 		837CD1B228BE264F00823D17 /* TranslationFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFolder.swift; sourceTree = "<group>"; };
-		8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerForHistory2ViewController.swift; sourceTree = "<group>"; };
-		8382FD4728FD52410021715C /* Settings2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings2ViewController.swift; sourceTree = "<group>"; };
 		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edit1ViewController.swift; sourceTree = "<group>"; };
-		83966BF528E8C1060098A39E /* CustomCellForHistory2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForHistory2ViewController.swift; sourceTree = "<group>"; };
-		83966BF628E8C1060098A39E /* CustomCellForHistory2ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForHistory2ViewController.xib; sourceTree = "<group>"; };
-		839FBA2E28BA016C00BB64A5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStudyViewContoller.swift; sourceTree = "<group>"; };
+		83966BF528E8C1060098A39E /* CustomCellForStudy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForStudy.swift; sourceTree = "<group>"; };
+		83966BF628E8C1060098A39E /* CustomCellForStudy.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForStudy.xib; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
-		839FBA3228BA101200BB64A5 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
-		839FBA3428BA113300BB64A5 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
+		839FBA3228BA101200BB64A5 /* FolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
 		839FBA3828BA5C8900BB64A5 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
-		83A2E1AF29019CA100F1117A /* FolderList2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderList2ViewController.swift; sourceTree = "<group>"; };
-		83A564C828D7630300C3A9B9 /* PhraseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseViewController.swift; sourceTree = "<group>"; };
-		83A7917728F6654300BF7C2D /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhraseWordViewCell.swift; sourceTree = "<group>"; };
-		83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomPhraseWordViewCell.xib; sourceTree = "<group>"; };
-		83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController0.swift; sourceTree = "<group>"; };
-		83AF317128CF037200FDA0E1 /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
-		83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController2.swift; sourceTree = "<group>"; };
-		83AF317528CF863100FDA0E1 /* RirekiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RirekiViewController.swift; sourceTree = "<group>"; };
+		83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderForStudyViewContoller.swift; sourceTree = "<group>"; };
+		83A564C828D7630300C3A9B9 /* PhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseWordViewController.swift; sourceTree = "<group>"; };
+		83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsForStudyViewController.swift; sourceTree = "<group>"; };
+		83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForPhraseWord.swift; sourceTree = "<group>"; };
+		83AC1DC728E4427D00576CF4 /* CustomCellForPhraseWord.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForPhraseWord.xib; sourceTree = "<group>"; };
+		83AF317128CF037200FDA0E1 /* MemoForStudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoForStudyViewController.swift; sourceTree = "<group>"; };
+		83AF317528CF863100FDA0E1 /* HistoryViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewContoller.swift; sourceTree = "<group>"; };
 		83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
-		83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCustomCell.swift; sourceTree = "<group>"; };
-		83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReviewCustomCell.xib; sourceTree = "<group>"; };
-		83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
-		83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellTableViewCell.xib; sourceTree = "<group>"; };
-		83B9C1FD28D2F31B006138E2 /*  RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " RecordViewController.swift"; sourceTree = "<group>"; };
-		83B9C1FF28D3050E006138E2 /* CustomCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell2.swift; sourceTree = "<group>"; };
-		83B9C20028D3050E006138E2 /* CustomCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCell2.xib; sourceTree = "<group>"; };
-		83B9C20328D3132D006138E2 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		83B6AF1D28E7254000700DBF /* CustomCellForReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForReview.swift; sourceTree = "<group>"; };
+		83B6AF1E28E7254000700DBF /* CustomCellForReview.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForReview.xib; sourceTree = "<group>"; };
+		83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForHistory.swift; sourceTree = "<group>"; };
+		83B9C1FA28CFF10B006138E2 /* CustomCellForHistory.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForHistory.xib; sourceTree = "<group>"; };
+		83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		83B9C1FF28D3050E006138E2 /* CustomCellForRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForRecord.swift; sourceTree = "<group>"; };
+		83B9C20028D3050E006138E2 /* CustomCellForRecord.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForRecord.xib; sourceTree = "<group>"; };
+		83B9C20328D3132D006138E2 /* EditRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRecordViewController.swift; sourceTree = "<group>"; };
 		83B9C20528D39997006138E2 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
-		83C15AF928BF451F00280694 /* FolderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListViewController.swift; sourceTree = "<group>"; };
-		83F021B028C0CC56009FFDD2 /* History2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History2ViewController.swift; sourceTree = "<group>"; };
+		83C15AF928BF451F00280694 /* SelectFolderForTranslateViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderForTranslateViewContoller.swift; sourceTree = "<group>"; };
+		83F021B028C0CC56009FFDD2 /* StudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewController.swift; sourceTree = "<group>"; };
 		83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerForFolder.swift; sourceTree = "<group>"; };
 		C116E1FDCFAEA5860B3B5F33 /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83A2E1AB2901023700F1117A /* Alamofire in Frameworks */,
+				839CDF632906939100F78F44 /* Alamofire in Frameworks */,
 				8382FD4628F987B20021715C /* Alamofire in Frameworks */,
 				8342F77728FD760E005C8FD5 /* Alamofire in Frameworks */,
 				83A2E1AE29018C5D00F1117A /* Alamofire in Frameworks */,
@@ -166,51 +166,130 @@
 		83071CF728B91AC70003734C /* TranslationApp */ = {
 			isa = PBXGroup;
 			children = (
+				83071D0628B91AC90003734C /* Info.plist */,
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
-				83071CFE28B91AC70003734C /* Main.storyboard */,
-				83A2E1AF29019CA100F1117A /* FolderList2ViewController.swift */,
-				8382FD4728FD52410021715C /* Settings2ViewController.swift */,
-				8382E93928F71F5600877DD8 /* NavigationControllerForHistory2ViewController.swift */,
-				83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */,
-				83B6AF1D28E7254000700DBF /* ReviewCustomCell.swift */,
-				83B6AF1E28E7254000700DBF /* ReviewCustomCell.xib */,
-				83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */,
-				832D4CAF28D848B5004C4D7C /* Memo2ViewController.swift */,
-				83A564C828D7630300C3A9B9 /* PhraseViewController.swift */,
-				83B9C20528D39997006138E2 /* AddViewController.swift */,
-				83B9C20328D3132D006138E2 /* EditViewController.swift */,
-				83B9C1FF28D3050E006138E2 /* CustomCell2.swift */,
-				83B9C20028D3050E006138E2 /* CustomCell2.xib */,
-				83B9C1FD28D2F31B006138E2 /*  RecordViewController.swift */,
-				83B9C1F928CFF10B006138E2 /* CustomCellTableViewCell.swift */,
-				83AC1DC628E4427D00576CF4 /* CustomPhraseWordViewCell.swift */,
-				83B9C1FA28CFF10B006138E2 /* CustomCellTableViewCell.xib */,
-				83AF317528CF863100FDA0E1 /* RirekiViewController.swift */,
-				83AF317328CF320B00FDA0E1 /* MemoViewController2.swift */,
-				8388DA5928C9E25D008DE6FF /* TabBarController.swift */,
-				83AC1DCC28E6220A00576CF4 /* NavigationController0.swift */,
-				83C15AF928BF451F00280694 /* FolderListViewController.swift */,
-				839FBA3428BA113300BB64A5 /* CreateFolderViewController.swift */,
-				839FBA3228BA101200BB64A5 /* HistoryViewController.swift */,
-				839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */,
-				839FBA2E28BA016C00BB64A5 /* ViewController.swift */,
-				83F021B028C0CC56009FFDD2 /* History2ViewController.swift */,
-				83A7917728F6654300BF7C2D /* SettingsViewController.swift */,
-				8388DA5B28CA3770008DE6FF /* Edit1ViewController.swift */,
-				83AF317128CF037200FDA0E1 /* MemoViewController.swift */,
-				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
-				83071D0128B91AC90003734C /* Assets.xcassets */,
-				83071D0328B91AC90003734C /* LaunchScreen.storyboard */,
-				83071D0628B91AC90003734C /* Info.plist */,
 				839FBA3828BA5C8900BB64A5 /* APIKey.plist */,
-				839FBA3A28BA602700BB64A5 /* KeyManager.swift */,
-				8388DA5528C9C237008DE6FF /* TranslationImage.png */,
-				83966BF528E8C1060098A39E /* CustomCellForHistory2ViewController.swift */,
-				83AC1DC728E4427D00576CF4 /* CustomPhraseWordViewCell.xib */,
-				83966BF628E8C1060098A39E /* CustomCellForHistory2ViewController.xib */,
+				8356E94F29046E4100FD9236 /* Model */,
+				8356E95029046E7000FD9236 /* View */,
+				8356E953290496F900FD9236 /* Controller For XIB */,
+				8356E9522904708C00FD9236 /* Controller */,
 			);
 			path = TranslationApp;
+			sourceTree = "<group>";
+		};
+		8356E94F29046E4100FD9236 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				839FBA3A28BA602700BB64A5 /* KeyManager.swift */,
+				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
+				8356E9542905574500FD9236 /* History.swift */,
+				8356E9562905584500FD9236 /* Record.swift */,
+				8356E95829055BCC00FD9236 /* PhraseWord.swift */,
+				8356E95B2906407500FD9236 /* FirstMemo.swift */,
+				8356E95D290642D800FD9236 /* Speak.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8356E95029046E7000FD9236 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8388DA5528C9C237008DE6FF /* TranslationImage.png */,
+				83071CFE28B91AC70003734C /* Main.storyboard */,
+				83071D0328B91AC90003734C /* LaunchScreen.storyboard */,
+				83AC1DC728E4427D00576CF4 /* CustomCellForPhraseWord.xib */,
+				83966BF628E8C1060098A39E /* CustomCellForStudy.xib */,
+				83B9C1FA28CFF10B006138E2 /* CustomCellForHistory.xib */,
+				83B9C20028D3050E006138E2 /* CustomCellForRecord.xib */,
+				83B6AF1E28E7254000700DBF /* CustomCellForReview.xib */,
+				83071D0128B91AC90003734C /* Assets.xcassets */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8356E9522904708C00FD9236 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */,
+				8388DA5928C9E25D008DE6FF /* TabBarController.swift */,
+				8356E95F2906467C00FD9236 /* Contents Of TabBar */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		8356E953290496F900FD9236 /* Controller For XIB */ = {
+			isa = PBXGroup;
+			children = (
+				83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */,
+				83966BF528E8C1060098A39E /* CustomCellForStudy.swift */,
+				83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */,
+				83B9C1FF28D3050E006138E2 /* CustomCellForRecord.swift */,
+				83B6AF1D28E7254000700DBF /* CustomCellForReview.swift */,
+			);
+			path = "Controller For XIB";
+			sourceTree = "<group>";
+		};
+		8356E95F2906467C00FD9236 /* Contents Of TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				8356E9602906479700FD9236 /* PhraseWordViewController */,
+				8356E961290647D200FD9236 /* FolderViewController */,
+				8356E9622906480100FD9236 /* TranslateViewController */,
+				8356E9632906482600FD9236 /* HistoryViewController */,
+				8356E9642906484100FD9236 /* RecordViewController */,
+			);
+			path = "Contents Of TabBar";
+			sourceTree = "<group>";
+		};
+		8356E9602906479700FD9236 /* PhraseWordViewController */ = {
+			isa = PBXGroup;
+			children = (
+				83A564C828D7630300C3A9B9 /* PhraseWordViewController.swift */,
+			);
+			path = PhraseWordViewController;
+			sourceTree = "<group>";
+		};
+		8356E961290647D200FD9236 /* FolderViewController */ = {
+			isa = PBXGroup;
+			children = (
+				83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */,
+				839FBA3228BA101200BB64A5 /* FolderViewController.swift */,
+				83F021B028C0CC56009FFDD2 /* StudyViewController.swift */,
+				83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */,
+				8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */,
+				83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */,
+				83AF317128CF037200FDA0E1 /* MemoForStudyViewController.swift */,
+			);
+			path = FolderViewController;
+			sourceTree = "<group>";
+		};
+		8356E9622906480100FD9236 /* TranslateViewController */ = {
+			isa = PBXGroup;
+			children = (
+				839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */,
+				83C15AF928BF451F00280694 /* SelectFolderForTranslateViewContoller.swift */,
+			);
+			path = TranslateViewController;
+			sourceTree = "<group>";
+		};
+		8356E9632906482600FD9236 /* HistoryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				83AF317528CF863100FDA0E1 /* HistoryViewContoller.swift */,
+			);
+			path = HistoryViewController;
+			sourceTree = "<group>";
+		};
+		8356E9642906484100FD9236 /* RecordViewController */ = {
+			isa = PBXGroup;
+			children = (
+				83B9C1FD28D2F31B006138E2 /* RecordViewController.swift */,
+				83B6AF1B28E71E8C00700DBF /* ReviewViewController.swift */,
+				83B9C20528D39997006138E2 /* AddViewController.swift */,
+				83B9C20328D3132D006138E2 /* EditRecordViewController.swift */,
+			);
+			path = RecordViewController;
 			sourceTree = "<group>";
 		};
 		C1EE7F81A77D0C5F9E5E2A03 /* Pods */ = {
@@ -234,7 +313,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				83F021A128C09D8A009FFDD2 /* Embed Frameworks */,
-				6187315C2F20CB4C27FE1844 /* [CP] Embed Pods Frameworks */,
+				39AB2E1D6F4D04D01EABDFE1 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -247,6 +326,7 @@
 				8342F77628FD760E005C8FD5 /* Alamofire */,
 				83A2E1AA2901023700F1117A /* Alamofire */,
 				83A2E1AD29018C5D00F1117A /* Alamofire */,
+				839CDF622906939100F78F44 /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
@@ -287,6 +367,7 @@
 				8342F77528FD760E005C8FD5 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				83A2E1A92901023700F1117A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				83A2E1AC29018C5D00F1117A /* XCRemoteSwiftPackageReference "Alamofire" */,
+				839CDF612906939100F78F44 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83071CF628B91AC70003734C /* Products */;
 			projectDirPath = "";
@@ -303,15 +384,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */,
-				83B6AF2028E7254000700DBF /* ReviewCustomCell.xib in Resources */,
+				83B6AF2028E7254000700DBF /* CustomCellForReview.xib in Resources */,
 				839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */,
 				83071D0228B91AC90003734C /* Assets.xcassets in Resources */,
-				83B9C1FC28CFF10B006138E2 /* CustomCellTableViewCell.xib in Resources */,
+				83B9C1FC28CFF10B006138E2 /* CustomCellForHistory.xib in Resources */,
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
 				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
-				83AC1DC928E4427D00576CF4 /* CustomPhraseWordViewCell.xib in Resources */,
-				83966BF828E8C1060098A39E /* CustomCellForHistory2ViewController.xib in Resources */,
-				83B9C20228D3050E006138E2 /* CustomCell2.xib in Resources */,
+				83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */,
+				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
+				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,7 +421,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6187315C2F20CB4C27FE1844 /* [CP] Embed Pods Frameworks */ = {
+		39AB2E1D6F4D04D01EABDFE1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -364,38 +445,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83B9C20428D3132D006138E2 /* EditViewController.swift in Sources */,
-				8382FD4828FD52420021715C /* Settings2ViewController.swift in Sources */,
+				83B9C20428D3132D006138E2 /* EditRecordViewController.swift in Sources */,
 				83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */,
-				83A2E1B029019CA100F1117A /* FolderList2ViewController.swift in Sources */,
-				83966BF728E8C1060098A39E /* CustomCellForHistory2ViewController.swift in Sources */,
-				83B9C20128D3050E006138E2 /* CustomCell2.swift in Sources */,
+				8356E9552905574500FD9236 /* History.swift in Sources */,
+				83A2E1B029019CA100F1117A /* SelectFolderForStudyViewContoller.swift in Sources */,
+				8356E9572905584500FD9236 /* Record.swift in Sources */,
+				83966BF728E8C1060098A39E /* CustomCellForStudy.swift in Sources */,
+				8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */,
+				83B9C20128D3050E006138E2 /* CustomCellForRecord.swift in Sources */,
 				83B6AF1C28E71E8C00700DBF /* ReviewViewController.swift in Sources */,
 				83B9C20628D39997006138E2 /* AddViewController.swift in Sources */,
-				839FBA2F28BA016C00BB64A5 /* ViewController.swift in Sources */,
-				83AC1DCD28E6220A00576CF4 /* NavigationController0.swift in Sources */,
 				839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */,
-				83A564C928D7630300C3A9B9 /* PhraseViewController.swift in Sources */,
-				83AC1DC828E4427D00576CF4 /* CustomPhraseWordViewCell.swift in Sources */,
+				83A564C928D7630300C3A9B9 /* PhraseWordViewController.swift in Sources */,
+				83AC1DC828E4427D00576CF4 /* CustomCellForPhraseWord.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
-				8382E93A28F71F5700877DD8 /* NavigationControllerForHistory2ViewController.swift in Sources */,
-				83B9C1FE28D2F31B006138E2 /*  RecordViewController.swift in Sources */,
-				83AF317228CF037200FDA0E1 /* MemoViewController.swift in Sources */,
-				83C15AFA28BF451F00280694 /* FolderListViewController.swift in Sources */,
-				832D4CB028D848B5004C4D7C /* Memo2ViewController.swift in Sources */,
+				83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */,
+				8356E95929055BCC00FD9236 /* PhraseWord.swift in Sources */,
+				83AF317228CF037200FDA0E1 /* MemoForStudyViewController.swift in Sources */,
+				83C15AFA28BF451F00280694 /* SelectFolderForTranslateViewContoller.swift in Sources */,
+				832D4CB028D848B5004C4D7C /* QuickMemoViewContoller.swift in Sources */,
 				83071CF928B91AC70003734C /* AppDelegate.swift in Sources */,
 				837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */,
-				839FBA3328BA101200BB64A5 /* HistoryViewController.swift in Sources */,
-				839FBA3528BA113300BB64A5 /* CreateFolderViewController.swift in Sources */,
-				83B6AF1F28E7254000700DBF /* ReviewCustomCell.swift in Sources */,
-				83AF317628CF863100FDA0E1 /* RirekiViewController.swift in Sources */,
+				839FBA3328BA101200BB64A5 /* FolderViewController.swift in Sources */,
+				83B6AF1F28E7254000700DBF /* CustomCellForReview.swift in Sources */,
+				83AF317628CF863100FDA0E1 /* HistoryViewContoller.swift in Sources */,
 				8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */,
-				83A7917828F6654300BF7C2D /* SettingsViewController.swift in Sources */,
+				8356E95E290642D800FD9236 /* Speak.swift in Sources */,
+				83A7917828F6654300BF7C2D /* SettingsForStudyViewController.swift in Sources */,
 				83071CFB28B91AC70003734C /* SceneDelegate.swift in Sources */,
-				83B9C1FB28CFF10B006138E2 /* CustomCellTableViewCell.swift in Sources */,
-				83AF317428CF320B00FDA0E1 /* MemoViewController2.swift in Sources */,
-				8388DA5C28CA3770008DE6FF /* Edit1ViewController.swift in Sources */,
-				83F021B128C0CC56009FFDD2 /* History2ViewController.swift in Sources */,
+				83B9C1FB28CFF10B006138E2 /* CustomCellForHistory.swift in Sources */,
+				8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */,
+				83F021B128C0CC56009FFDD2 /* StudyViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -659,6 +739,14 @@
 				kind = branch;
 			};
 		};
+		839CDF612906939100F78F44 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -723,6 +811,11 @@
 		8382FD4528F987B20021715C /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		839CDF622906939100F78F44 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		83A2E1AA2901023700F1117A /* Alamofire */ = {
