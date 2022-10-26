@@ -9,6 +9,7 @@ PODS:
     - Realm (= 10.20.0)
   - SideMenu (6.5.0)
   - SVProgressHUD (2.2.5)
+  - SwiftFormat/CLI (0.50.3)
 
 DEPENDENCIES:
   - CalculateCalendarLogic
@@ -17,6 +18,7 @@ DEPENDENCIES:
   - RealmSwift (= 10.20.0)
   - SideMenu (~> 6.0)
   - SVProgressHUD
+  - SwiftFormat/CLI
 
 SPEC REPOS:
   trunk:
@@ -27,6 +29,7 @@ SPEC REPOS:
     - RealmSwift
     - SideMenu
     - SVProgressHUD
+    - SwiftFormat
 
 SPEC CHECKSUMS:
   CalculateCalendarLogic: d14189787cd47766e64281b2686608afea07ae4d
@@ -36,7 +39,8 @@ SPEC CHECKSUMS:
   RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftFormat: 61cda3819dc3a7d69795ce0430e1e1d53c4a4fb2
 
-PODFILE CHECKSUM: 701a2a6e4f363d13e5c1c5e5ed87a4f9c08a253d
+PODFILE CHECKSUM: 6654f5c4b32bb63df38a82112ed6aec633e7a02b
 
 COCOAPODS: 1.11.3

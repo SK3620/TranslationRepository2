@@ -12,37 +12,31 @@ protocol CheckCellDelegate: AnyObject {
 }
 
 class CustomCellForPhraseWord: UITableViewCell {
-    
-    @IBOutlet weak var label1: UILabel!
-    @IBOutlet weak var label2: UILabel!
-    
-    @IBOutlet weak var checkMarkButton: UIButton!
-    @IBOutlet weak var displayButton1: UIButton!
-    @IBOutlet weak var displayButton2: UIButton!
-    
-    @IBOutlet weak var numberLabel: UILabel!
-    
-    
-    
+    @IBOutlet var label1: UILabel!
+    @IBOutlet var label2: UILabel!
+
+    @IBOutlet var checkMarkButton: UIButton!
+    @IBOutlet var displayButton1: UIButton!
+    @IBOutlet var displayButton2: UIButton!
+
+    @IBOutlet var numberLabel: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        label1.numberOfLines = 0
-        label2.numberOfLines = 0
+        self.label1.numberOfLines = 0
+        self.label2.numberOfLines = 0
     }
-    
-    @IBAction func checkMarkButtonAction(_ sender: Any) {
-        
-    }
-    
+
+    @IBAction func checkMarkButtonAction(_: Any) {}
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
-    
-    func setData1(_ inputData: String, _ indexPath_row: Int){
+
+    func setData1(_ inputData: String, _ indexPath_row: Int) {
         self.label1.text = inputData
         if indexPath_row % 2 == 0 {
             self.numberLabel.backgroundColor = UIColor.systemGray6
@@ -51,14 +45,12 @@ class CustomCellForPhraseWord: UITableViewCell {
         }
         self.numberLabel.text = "\(indexPath_row + 1)"
     }
-    
-    func setData2(_ resultData: String){
+
+    func setData2(_ resultData: String) {
         self.label2.text = resultData
-        
     }
-    
-    @IBAction func button(_ sender: Any) {
+
+    @IBAction func button(_: Any) {
         print("displayButton0")
     }
-    
 }

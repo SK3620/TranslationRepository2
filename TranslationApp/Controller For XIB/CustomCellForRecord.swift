@@ -5,39 +5,28 @@
 //  Created by 鈴木健太 on 2022/09/15.
 //
 
-import UIKit
 import RealmSwift
+import UIKit
 
 protocol ToEditViewContollerDelegate: AnyObject {
     func ToEditViewContoller()
 }
 
-
 class CustomCellForRecord: UITableViewCell {
-    
-    @IBOutlet weak var label1: UILabel!
-    @IBOutlet weak var label2: UILabel!
-    @IBOutlet weak var label3: UILabel!
-    @IBOutlet weak var label4: UILabel!
-    @IBOutlet weak var label5: UILabel!
-    @IBOutlet weak var label6: UILabel!
-    
-    
-    
-    @IBOutlet weak var checkMarkButton: UIButton!
-    
-    
+    @IBOutlet var label1: UILabel!
+    @IBOutlet var label2: UILabel!
+    @IBOutlet var label3: UILabel!
+    @IBOutlet var label4: UILabel!
+    @IBOutlet var label5: UILabel!
+    @IBOutlet var label6: UILabel!
 
-    
-    
+    @IBOutlet var checkMarkButton: UIButton!
+
 //    weak var delegate: ToEditViewContollerDelegate?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-       
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -45,48 +34,41 @@ class CustomCellForRecord: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
 //    @IBAction func editButtonAction(_ sender: Any) {
 //
 //        self.delegate?.ToEditViewContoller()
 //    }
-    
-    func setData(_ recordArrFilter: Record){
-        
+
+    func setData(_ recordArrFilter: Record) {
         if recordArrFilter.folderName != "" {
-            label1.text = recordArrFilter.folderName
+            self.label1.text = recordArrFilter.folderName
         } else {
-            label1.text = " "
+            self.label1.text = " "
         }
-        
+
         if recordArrFilter.number != "" {
-            label2.text = recordArrFilter.number
+            self.label2.text = recordArrFilter.number
         } else {
-            label2.text = " "
+            self.label2.text = " "
         }
-        
+
         if recordArrFilter.times != "" {
-            label3.text = recordArrFilter.times
+            self.label3.text = recordArrFilter.times
         } else {
-            label3.text = " "
+            self.label3.text = " "
         }
-        
+
         if recordArrFilter.nextReviewDate != "" {
-            label4.text = recordArrFilter.nextReviewDate
+            self.label4.text = recordArrFilter.nextReviewDate
         } else {
-            label4.text = " "
+            self.label4.text = " "
         }
-        
+
         if recordArrFilter.memo != "" {
-            label5.text = recordArrFilter.memo
+            self.label5.text = recordArrFilter.memo
         } else {
-            label5.text = " "
+            self.label5.text = " "
         }
-        
     }
-    
 }
-
-
-
-

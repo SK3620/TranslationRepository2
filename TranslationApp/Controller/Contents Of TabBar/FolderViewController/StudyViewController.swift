@@ -4,45 +4,37 @@
 //
 //  Created by 鈴木健太 on 2022/09/01.
 
-
-import UIKit
-import RealmSwift
-import SVProgressHUD
-import ContextMenuSwift
 import Alamofire
-import SideMenu
 import AVFoundation
-
+import ContextMenuSwift
+import RealmSwift
+import SideMenu
+import SVProgressHUD
+import UIKit
 
 protocol SettingsDelegate: AnyObject {
     func tappedSettingsItem(indexPath: IndexPath)
 }
 
-class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, SettingsDelegate{
+class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, SettingsDelegate {
+    @IBOutlet var tableView: UITableView!
 
-    @IBOutlet weak var tableView: UITableView!
- 
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var displayAllButton: UIButton!
-    @IBOutlet weak var labelForDisplayAll: UILabel!
-    @IBOutlet weak var repeatButton: UIButton!
-    @IBOutlet weak var label1: UILabel!
-    
-    
-    @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var backCellButton: UIButton!
-    @IBOutlet weak var nextCellButton: UIButton!
-    @IBOutlet weak var speakSpeedButton: UIButton!
-    @IBOutlet weak var speakVoice: UIButton!
-    
-    
+    @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet var displayAllButton: UIButton!
+    @IBOutlet var labelForDisplayAll: UILabel!
+    @IBOutlet var repeatButton: UIButton!
+    @IBOutlet var label1: UILabel!
 
-    
+    @IBOutlet var playButton: UIButton!
+    @IBOutlet var backCellButton: UIButton!
+    @IBOutlet var nextCellButton: UIButton!
+    @IBOutlet var speakSpeedButton: UIButton!
+    @IBOutlet var speakVoice: UIButton!
+
     let realm = try! Realm()
     var translationFolderArr: Results<TranslationFolder>!
     var translationArr: Results<Translation>!
-    
-    
+
     var folderNameString: String = ""
     var expandSectionSet = Set<Int>()
     var sections = [String]()
@@ -51,32 +43,26 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var inputData3: String!
     var resultData3: String!
     var tabBarController1: TabBarController!
-    
+
     var number = 0
     var number1 = 0
     var number2 = 0
     var numberForAcordion = 0
     var sender_tag: Int!
-    
+
     var result: Int!
     var isDisplayed: Bool!
     var menuNavigationController: SideMenuNavigationController!
-    
-    
+
     let speechSynthesizer = AVSpeechSynthesizer()
     var indexPath_row: Int!
-   
-    
+
     var speakSpeed: Float = 0.5
     var voice: String = "com.apple.ttsbundle.siri_Nicky_en-US_compact"
-    
-  
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
-        
+
         // 利用可能な英語音声の確認
         let voices = AVSpeechSynthesisVoice.speechVoices()
         for voice in voices {
@@ -84,168 +70,144 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 print(voice)
             }
         }
-        
-        
-        
-        
-        self.setImage(playButton, "play.circle.fill")
-        setImage(nextCellButton, "arrowtriangle.right")
-        setImage(backCellButton, "arrowtriangle.left")
-        setImage(displayAllButton, "arrow.triangle.2.circlepath")
-        setImage(repeatButton, "repeat")
-        
-        speakSpeedButton.setTitle("1.0x", for: .normal)
-        speakVoice.setTitle("女性", for: .normal)
-    
-        
 
-        
+        setImage(self.playButton, "play.circle.fill")
+        setImage(self.nextCellButton, "arrowtriangle.right")
+        setImage(self.backCellButton, "arrowtriangle.left")
+        setImage(self.displayAllButton, "arrow.triangle.2.circlepath")
+        setImage(self.repeatButton, "repeat")
+
+        self.speakSpeedButton.setTitle("1.0x", for: .normal)
+        self.speakVoice.setTitle("女性", for: .normal)
+
         self.searchBar.backgroundImage = UIImage()
         //        xibファイルの登録
         let nib = UINib(nibName: "CustomCellForStudy", bundle: nil)
         //        再利用するための準備　ヘッダーの登録
-        tableView.register(nib, forCellReuseIdentifier: "CustomCellForStudy")
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.separatorColor = .systemBlue
-        
-        searchBar.delegate = self
-        
-        tableView.allowsSelection = false
+        self.tableView.register(nib, forCellReuseIdentifier: "CustomCellForStudy")
+
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.separatorColor = .systemBlue
+
+        self.searchBar.delegate = self
+
+        self.tableView.allowsSelection = false
         // Do any additional setup after loading the view.
-        
-//        何も入力されていなくてもreturnキー押せるようにする
-        searchBar.enablesReturnKeyAutomatically  = false
-        
-        
-        
-       
-        //キーボードに完了のツールバーを作成
+
+        //        何も入力されていなくてもreturnキー押せるようにする
+        self.searchBar.enablesReturnKeyAutomatically = false
+
+        // キーボードに完了のツールバーを作成
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let doneButton =  UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(doneButtonTapped))
+        let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(self.doneButtonTapped))
         doneToolbar.items = [spacer, doneButton]
         self.searchBar.inputAccessoryView = doneToolbar
-        
     }
-    
-    @objc func doneButtonTapped(sender: UIButton){
+
+    @objc func doneButtonTapped(sender _: UIButton) {
         self.searchBar.endEditing(true)
-        
     }
-        
-        
-    override func viewWillAppear(_ animated: Bool) {
+
+    override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-        
-        self.playBackground()
-        
-        repeatButton.tintColor = .systemGray2
-        labelForDisplayAll.text = "表示"
-       
-      
-        
+
+        playBackground()
+
+        self.repeatButton.tintColor = .systemGray2
+        self.labelForDisplayAll.text = "表示"
+
+        playBackground()
+
+        self.repeatButton.tintColor = .systemGray2
+        self.labelForDisplayAll.text = "表示"
+
         if self.indexPath_row == nil {
             self.label1.text = "文章を長押しで音声再生"
-            label1.textColor = .orange
+            self.label1.textColor = .orange
         }
-        
+
         if self.indexPath_row == nil {
-        nextCellButton.isEnabled = false
-        backCellButton.isEnabled = false
+            self.nextCellButton.isEnabled = false
+            self.backCellButton.isEnabled = false
         } else {
-            nextCellButton.isEnabled = true
-            backCellButton.isEnabled = true
+            self.nextCellButton.isEnabled = true
+            self.backCellButton.isEnabled = true
         }
-    
-        
+
         self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
-        tabBarController1.navigationController?.navigationBar.backgroundColor = UIColor.systemGray4
-    
-        
+        self.tabBarController1.navigationController?.navigationBar.backgroundColor = UIColor.systemGray4
+
         let navigationController = self.navigationController as! NavigationControllerForFolder
         navigationController.setNavigationBarHidden(false, animated: false)
         navigationController.navigationBar.backgroundColor = .systemGray4
         navigationController.navigationBar.barTintColor = .systemGray4
-        self.title = self.folderNameString
-        
-        let addBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(addBarButtonTapped(_:)) )
-        
-        self.navigationItem.rightBarButtonItems = [addBarButtonItem]
-       
-        
-  
-        
-        tableView.layer.cornerRadius = 10
-        
+        title = self.folderNameString
+
+        let addBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.addBarButtonTapped(_:)))
+
+        navigationItem.rightBarButtonItems = [addBarButtonItem]
+
+        self.tableView.layer.cornerRadius = 10
+
         print("確認10 : \(self.folderNameString)")
-        
+
         self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-        
-        let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
-        translationFolderArr = self.translationFolderArr.filter(predict)
-        
-        
+
+        let predict = NSPredicate(format: "folderName == %@", folderNameString)
+        self.translationFolderArr = self.translationFolderArr.filter(predict)
+
         self.sections = []
         self.tableDataList = []
-        
-        for number in 0...translationFolderArr[0].results.count - 1 {
-            self.sections.append(translationFolderArr[0].results[number].inputData)
-            self.tableDataList.append(translationFolderArr[0].results[number].resultData)
+
+        for number in 0 ... self.translationFolderArr[0].results.count - 1 {
+            self.sections.append(self.translationFolderArr[0].results[number].inputData)
+            self.tableDataList.append(self.translationFolderArr[0].results[number].resultData)
         }
-        
-        tableView.reloadData()
-       
+
+        self.tableView.reloadData()
+
         if self.searchBar.text != "" {
             self.search()
         }
     }
-    
-    func SetTabBarController1(){
+
+    func SetTabBarController1() {
         self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-    
 
-    
     private func makeSettings() -> SideMenuSettings {
-           var settings = SideMenuSettings()
-           //動作を指定
+        var settings = SideMenuSettings()
+        // 動作を指定
         settings.presentationStyle = .menuSlideIn
         settings.menuWidth = 170
-        
-       
 
-         
-           //ステータスバーの透明度
-           settings.statusBarEndAlpha = 0
-           return settings
-          }
-    
-   
+        // ステータスバーの透明度
+        settings.statusBarEndAlpha = 0
+        return settings
+    }
 
-
-    @objc func addBarButtonTapped(_ sender: UIBarButtonItem){
+    @objc func addBarButtonTapped(_: UIBarButtonItem) {
         print("設定が押された")
 
         let menuViewController = storyboard?.instantiateViewController(withIdentifier: "Menu") as! SettingsForStudyViewController
-        
-            menuViewController.delegate = self
-        //サイドメニューのナビゲーションコントローラを生成
-        menuNavigationController = SideMenuNavigationController(rootViewController: menuViewController)
-        
-        menuNavigationController.leftSide = false
-        //設定を追加
-        menuNavigationController.settings = makeSettings()
-        //左,右のメニューとして追加
-        SideMenuManager.default.rightMenuNavigationController = menuNavigationController
-        
-        present(menuNavigationController, animated: true, completion: nil)
+
+        menuViewController.delegate = self
+        // サイドメニューのナビゲーションコントローラを生成
+        self.menuNavigationController = SideMenuNavigationController(rootViewController: menuViewController)
+
+        self.menuNavigationController.leftSide = false
+        // 設定を追加
+        self.menuNavigationController.settings = self.makeSettings()
+        // 左,右のメニューとして追加
+        SideMenuManager.default.rightMenuNavigationController = self.menuNavigationController
+
+        present(self.menuNavigationController, animated: true, completion: nil)
     }
 
-
-    func tappedSettingsItem(indexPath: IndexPath){
+    func tappedSettingsItem(indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
             let pharseWordViewController = storyboard?.instantiateViewController(withIdentifier: "PhraseWord")
@@ -254,174 +216,134 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let recordViewController = storyboard?.instantiateViewController(withIdentifier: "Record") as! RecordViewController
             recordViewController.tabBarController1 = self.tabBarController1
             recordViewController.studyViewController = self
-            
+
             present(recordViewController, animated: true, completion: nil)
         case 2:
             let memoForStudyViewController = storyboard?.instantiateViewController(withIdentifier: "MemoView") as! MemoForStudyViewController
-            
+
             if let sheet = memoForStudyViewController.sheetPresentationController {
                 sheet.detents = [.medium()]
             }
-            
+
             memoForStudyViewController.folderNameString = self.folderNameString
-            
+
             present(memoForStudyViewController, animated: true, completion: nil)
         case 3:
-//            太文字再生
-            repeatButton.tintColor = .systemGray2
-            speechSynthesizer.stopSpeaking(at: .immediate)
-            setImage(playButton, "play.circle.fill")
+            //            太文字再生
+            self.repeatButton.tintColor = .systemGray2
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+            setImage(self.playButton, "play.circle.fill")
         case 4:
-//            小文字再生
-            repeatButton.tintColor = .systemGray2
-            speechSynthesizer.stopSpeaking(at: .immediate)
-            setImage(playButton, "play.circle.fill")
-            
-            
-           print("閉じる")
+            //            小文字再生
+            self.repeatButton.tintColor = .systemGray2
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+            setImage(self.playButton, "play.circle.fill")
+
+            print("閉じる")
         default:
             print("nil")
         }
     }
 
-
-    
-    
-   
-    
-//    検索ボタン押下時の呼び出しメソッド
+    //    検索ボタン押下時の呼び出しメソッド
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
-        }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    }
+
+    func searchBar(_: UISearchBar, textDidChange _: String) {
         self.search()
     }
-    //        検索バーに入力があったら呼ばれる　（文字列検索機能）
 
-    func search(){
-        
-        speechSynthesizer.pauseSpeaking(at: .immediate)
-        playButton.isEnabled = false
-        setImage(playButton, "play.circle.fill")
-        backCellButton.isEnabled = false
-        nextCellButton.isEnabled = false
+    //        検索バーに入力があったら呼ばれる　（文字列検索機能）
+    func search() {
+        self.speechSynthesizer.pauseSpeaking(at: .immediate)
+        self.playButton.isEnabled = false
+        setImage(self.playButton, "play.circle.fill")
+        self.backCellButton.isEnabled = false
+        self.nextCellButton.isEnabled = false
         self.label1.text = "文章を長押しで音声再生"
-        
-        translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-        
-        let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
-        translationFolderArr = self.translationFolderArr.filter(predict)
-        
-        if translationFolderArr.first!.results.count == 0 {
+
+        self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+
+        let predict = NSPredicate(format: "folderName == %@", folderNameString)
+        self.translationFolderArr = self.translationFolderArr.filter(predict)
+
+        if self.translationFolderArr.first!.results.count == 0 {
             return
         } else {
-            
             self.sections.removeAll()
             self.tableDataList.removeAll()
-            
+
             if self.searchBar.text == "" {
-                
-                displayAllButton.isEnabled = true
-               
-                
+                self.displayAllButton.isEnabled = true
+
                 //            空だったら、全て表示する。（通常表示）
-                translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-                
-                let predict = NSPredicate(format: "folderName == %@", self.folderNameString)
-                translationFolderArr = self.translationFolderArr.filter(predict)
-                
-                for number in 0...translationFolderArr[0].results.count - 1 {
-                    self.sections.append(translationFolderArr[0].results[number].inputData)
-                    self.tableDataList.append(translationFolderArr[0].results[number].resultData)
+                self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+
+                let predict = NSPredicate(format: "folderName == %@", folderNameString)
+                self.translationFolderArr = self.translationFolderArr.filter(predict)
+
+                for number in 0 ... self.translationFolderArr[0].results.count - 1 {
+                    self.sections.append(self.translationFolderArr[0].results[number].inputData)
+                    self.tableDataList.append(self.translationFolderArr[0].results[number].resultData)
                 }
-                
+
             } else {
-                
-                displayAllButton.isEnabled = false
-                
-                
-                let results1 = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
-                
-                self.translationArr = translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
-                
-                
-                print("サーチバーに入力された値がありました\(searchBar.text!)")
-                
+                self.displayAllButton.isEnabled = false
+
+                let results1 = self.translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+
+                self.translationArr = self.translationFolderArr[0].results.filter("inputAndResultData CONTAINS '\(self.searchBar.text!)'")
+
                 if results1.count != 0 {
-                    indexPath_row = 0
-                    for results in 0...results1.count - 1 {
+                    self.indexPath_row = 0
+                    for results in 0 ... results1.count - 1 {
                         self.sections.append(results1[results].inputData)
                         self.tableDataList.append(results1[results].resultData)
                     }
                 } else {
-                    playButton.isEnabled = false
-                    backCellButton.isEnabled = false
-                    nextCellButton.isEnabled = false
+                    self.playButton.isEnabled = false
+                    self.backCellButton.isEnabled = false
+                    self.nextCellButton.isEnabled = false
                 }
             }
             self.tableView.reloadData()
         }
     }
-    
-    
-    
-    
-    
-    //    開閉時の表示処理をする
-    //    あとはセクションの開閉の表示処理をしてやるだけです。閉じてるセクションでは row の数を0にしてやればいい感じになる
-    
-    
-    //    func  numberOfSections(in tableView: UITableView) -> Int {
-    //        print("確認45")
-    //
-    //        return self.sections.count > 0 ? sections.count : 0
-    //    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       
-        if translationFolderArr.first!.results.isEmpty {
-            displayAllButton.isEnabled = false
+
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        if self.translationFolderArr.first!.results.isEmpty {
+            self.displayAllButton.isEnabled = false
         }
-      
+
         return self.tableDataList.count
     }
-    
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("確認47")
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCellForStudy", for: indexPath) as! CustomCellForStudy
-        
-    
+
         cell.indexPath_row = indexPath.row
         cell.delegate = self
         cell.cell = cell
-        
-      
-               
-        
-        if indexPath.row == indexPath_row {
-                cell.backgroundColor = .systemGray6
+
+        if indexPath.row == self.indexPath_row {
+            cell.backgroundColor = .systemGray6
         } else {
             cell.backgroundColor = .white
         }
-        
-       
-        
+
         cell.setData(self.sections[indexPath.row], indexPath.row)
-        
+
         cell.checkMarkButton.tag = indexPath.row
-        cell.checkMarkButton.addTarget(self, action: #selector(tapCellButton(_:)), for: .touchUpInside)
-        
-        if searchBar.text != "" {
-            self.result = translationArr[indexPath.row].isChecked
+        cell.checkMarkButton.addTarget(self, action: #selector(self.tapCellButton(_:)), for: .touchUpInside)
+
+        if self.searchBar.text != "" {
+            self.result = self.translationArr[indexPath.row].isChecked
         } else {
-            self.result = translationFolderArr.first!.results[indexPath.row].isChecked
+            self.result = self.translationFolderArr.first!.results[indexPath.row].isChecked
         }
-        
-        
-        switch result {
+
+        switch self.result {
         case 0:
             let image0 = UIImage(systemName: "star")
             cell.checkMarkButton.setImage(image0, for: .normal)
@@ -431,89 +353,83 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         case 2:
             let image2 = UIImage(systemName: "star.fill")
             cell.checkMarkButton.setImage(image2, for: .normal)
+
         default:
             print("その他の値です")
         }
-        
-       
-            cell.displayButton1.tag = indexPath.row
-            cell.displayButton1.addTarget(self, action: #selector(tapDisplayButton(_:)), for: .touchUpInside)
-            
-            cell.displayButton2.tag = indexPath.row
-            cell.displayButton2.addTarget(self, action: #selector(tapDisplayButton(_:)), for: .touchUpInside)
-            
-        if searchBar.text != "" {
-            self.isDisplayed = translationArr[indexPath.row].isDisplayed
+
+        cell.displayButton1.tag = indexPath.row
+        cell.displayButton1.addTarget(self, action: #selector(self.tapDisplayButton(_:)), for: .touchUpInside)
+
+        cell.displayButton2.tag = indexPath.row
+        cell.displayButton2.addTarget(self, action: #selector(self.tapDisplayButton(_:)), for: .touchUpInside)
+
+        if self.searchBar.text != "" {
+            self.isDisplayed = self.translationArr[indexPath.row].isDisplayed
         } else {
-            self.isDisplayed = translationFolderArr.first!.results[indexPath.row].isDisplayed
+            self.isDisplayed = self.translationFolderArr.first!.results[indexPath.row].isDisplayed
         }
-            
-            
-            switch isDisplayed {
-            case false:
-                cell.cellEditButton.setImage(UIImage(), for: .normal)
-                cell.displayButton2.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-                cell.cellEditButton.isEnabled = false
-                if indexPath.row == 0 {
-                    cell.label2.text = ""
-                    let image = UIImage(systemName: "hand.tap")
-                    cell.displayButton2.setImage(image, for: .normal)
-                } else if indexPath.row != 0 {
-                    let image = UIImage()
-                    cell.displayButton2.setImage(image, for: .normal)
-                    cell.label2.text = " "
-                }
-            case true:
-                cell.cellEditButton.isEnabled = true
-                cell.displayButton2.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
-                let image1 = UIImage()
-                cell.displayButton2.setImage(image1, for: .normal)
-                cell.setData2(self.tableDataList[indexPath.row])
-                let image = UIImage(systemName: "ellipsis.circle")
-                cell.cellEditButton.setImage(image, for: .normal)
-            default:
-                print("その他の値です")
-            }
-        
-        cell.cellEditButton.tag = indexPath.row
-        cell.cellEditButton.addTarget(self, action: #selector(tapCellEditButton(_:)), for: .touchUpInside)
-    
-        if translationFolderArr.first?.results[indexPath.row].resultData == "" {
-            cell.label2.text = " "
-        }
-        
-        if searchBar.text != "" && self.translationArr[indexPath.row].resultData == "" {
+
+        switch self.isDisplayed {
+        case false:
+            cell.cellEditButton.setImage(UIImage(), for: .normal)
+            cell.displayButton2.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+            cell.cellEditButton.isEnabled = false
+            if indexPath.row == 0 {
+                cell.label2.text = ""
+                let image = UIImage(systemName: "hand.tap")
+                cell.displayButton2.setImage(image, for: .normal)
+            } else if indexPath.row != 0 {
+                let image = UIImage()
+                cell.displayButton2.setImage(image, for: .normal)
                 cell.label2.text = " "
             }
-       
-        
+        case true:
+            cell.cellEditButton.isEnabled = true
+            cell.displayButton2.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+            let image1 = UIImage()
+            cell.displayButton2.setImage(image1, for: .normal)
+            cell.setData2(self.tableDataList[indexPath.row])
+            let image = UIImage(systemName: "ellipsis.circle")
+            cell.cellEditButton.setImage(image, for: .normal)
+        default:
+            print("その他の値です")
+        }
+
+        cell.cellEditButton.tag = indexPath.row
+        cell.cellEditButton.addTarget(self, action: #selector(self.tapCellEditButton(_:)), for: .touchUpInside)
+
+        if self.translationFolderArr.first?.results[indexPath.row].resultData == "" {
+            cell.label2.text = " "
+        }
+
+        if self.searchBar.text != "", self.translationArr[indexPath.row].resultData == "" {
+            cell.label2.text = " "
+        }
+
         print(cell.label2.text!)
-        
-       
-        
+
         return cell
     }
-    
-    
-    
-    @objc func tapCellButton(_ sender: UIButton){
+
+    @objc func tapCellButton(_ sender: UIButton) {
         if self.searchBar.text != "" {
-            let result = translationArr[sender.tag].isChecked
-            
+            let result = self.translationArr[sender.tag].isChecked
+
             switch result {
             case 0:
-                try! Realm().write{
+                try! Realm().write {
                     translationArr[sender.tag].isChecked = 1
                     realm.add(translationArr, update: .modified)
                 }
             case 1:
-                try! Realm().write{
+                try! Realm().write {
                     translationArr[sender.tag].isChecked = 2
                     realm.add(translationArr, update: .modified)
                 }
             case 2:
-                try! Realm().write{
-                    translationArr[sender.tag].isChecked = 0;               realm.add(translationArr, update: .modified)
+                try! Realm().write {
+                    translationArr[sender.tag].isChecked = 0; realm.add(translationArr, update: .modified)
                 }
             default:
                 print("値ありません。")
@@ -521,105 +437,97 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             let translationArr1 = self.translationFolderArr.first!.results
             let result = translationArr1[sender.tag].isChecked
-        
-        switch result {
-        case 0:
-            try! Realm().write{
-                translationArr1[sender.tag].isChecked = 1
-                realm.add(translationArr1, update: .modified)
+
+            switch result {
+            case 0:
+                try! Realm().write {
+                    translationArr1[sender.tag].isChecked = 1
+                    realm.add(translationArr1, update: .modified)
+                }
+            case 1:
+                try! Realm().write {
+                    translationArr1[sender.tag].isChecked = 2
+                    realm.add(translationArr1, update: .modified)
+                }
+            case 2:
+                try! Realm().write {
+                    translationArr1[sender.tag].isChecked = 0; realm.add(translationArr1, update: .modified)
+                }
+            default:
+                print("値ありません。")
             }
-        case 1:
-            try! Realm().write{
-                translationArr1[sender.tag].isChecked = 2
-                realm.add(translationArr1, update: .modified)
-            }
-        case 2:
-            try! Realm().write{
-                translationArr1[sender.tag].isChecked = 0;               realm.add(translationArr1, update: .modified)
-            }
-        default:
-            print("値ありません。")
         }
-        }
-       
-        tableView.reloadData()
+
+        self.tableView.reloadData()
     }
-    
-    @objc func tapDisplayButton(_ sender: UIButton){
+
+    @objc func tapDisplayButton(_ sender: UIButton) {
         if self.searchBar.text != "" {
-        let result = translationArr[sender.tag].isDisplayed
-        print("result確認\(result)")
-        switch result {
-        case false:
-            try! Realm().write{
-                translationArr[sender.tag].isDisplayed = true
-                realm.add(translationArr, update: .modified)
+            let result = self.translationArr[sender.tag].isDisplayed
+            print("result確認\(result)")
+            switch result {
+            case false:
+                try! Realm().write {
+                    translationArr[sender.tag].isDisplayed = true
+                    realm.add(translationArr, update: .modified)
+                }
+            case true:
+                try! Realm().write {
+                    translationArr[sender.tag].isDisplayed = false
+                    realm.add(translationArr, update: .modified)
+                }
             }
-        case true:
-            try! Realm().write{
-                translationArr[sender.tag].isDisplayed = false
-                realm.add(translationArr, update: .modified)
-            }
-        }
         } else {
-    
-            
             let translationArr1 = self.translationFolderArr.first!.results
-        let result = translationArr1[sender.tag].isDisplayed
-       
-        switch result {
-        case false:
-            try! Realm().write{
-                translationArr1[sender.tag].isDisplayed = true
-                realm.add(translationArr1, update: .modified)
-            }
-        case true:
-            try! Realm().write{
-                translationArr1[sender.tag].isDisplayed = false
-                realm.add(translationArr1, update: .modified)
+            let result = translationArr1[sender.tag].isDisplayed
+
+            switch result {
+            case false:
+                try! Realm().write {
+                    translationArr1[sender.tag].isDisplayed = true
+                    realm.add(translationArr1, update: .modified)
+                }
+            case true:
+                try! Realm().write {
+                    translationArr1[sender.tag].isDisplayed = false
+                    realm.add(translationArr1, update: .modified)
+                }
             }
         }
+
+        self.tableView.reloadData()
     }
-        
-        tableView.reloadData()
-        
-    }
-    
-    @objc func tapCellEditButton(_ sender: UIButton){
+
+    @objc func tapCellEditButton(_ sender: UIButton) {
         let edit = ContextMenuItemWithImage(title: "編集する", image: UIImage())
         let save = ContextMenuItemWithImage(title: "お気に入りにする", image: UIImage())
         let folder = ContextMenuItemWithImage(title: "保存先を変更する", image: UIImage())
         let copy = ContextMenuItemWithImage(title: "コピーする", image: UIImage())
         let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage())
-        
-       
-        
-        let cellForRow: IndexPath = IndexPath(row: sender.tag, section: 0)
+
+        let cellForRow = IndexPath(row: sender.tag, section: 0)
         self.sender_tag = sender.tag
-//        表示するアイテムを決定
+        //        表示するアイテムを決定
         CM.items = [edit, save, folder, copy, delete]
-//        表示します
-        CM.showMenu(viewTargeted: tableView.cellForRow(at: cellForRow)!, delegate: self, animated: true)
+        //        表示します
+        CM.showMenu(viewTargeted: self.tableView.cellForRow(at: cellForRow)!, delegate: self, animated: true)
     }
-    
-    @IBAction func displayAllButton(_ sender: Any) {
-        
-       
-       
-        if searchBar.text != "" {
+
+    @IBAction func displayAllButton(_: Any) {
+        if self.searchBar.text != "" {
             let translationArr3 = self.translationArr!
-            
-            if self.labelForDisplayAll.text == "表示"{
-                for number in 0...translationArr3.count - 1 {
-                    try! Realm().write{
+
+            if self.labelForDisplayAll.text == "表示" {
+                for number in 0 ... translationArr3.count - 1 {
+                    try! Realm().write {
                         translationArr3[number].isDisplayed = true
                         try! Realm().add(translationArr3, update: .modified)
                         self.labelForDisplayAll.text = "非表示"
                     }
                 }
             } else {
-                for number in 0...translationArr3.count - 1 {
-                    try! Realm().write{
+                for number in 0 ... translationArr3.count - 1 {
+                    try! Realm().write {
                         translationArr3[number].isDisplayed = false
                         try! Realm().add(translationArr3, update: .modified)
                         self.labelForDisplayAll.text = "表示"
@@ -627,19 +535,18 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         } else {
-            
             let translationArr3 = self.translationFolderArr.first!.results
-            if self.labelForDisplayAll.text == "表示"{
-                for number in 0...translationArr3.count - 1 {
-                    try! Realm().write{
+            if self.labelForDisplayAll.text == "表示" {
+                for number in 0 ... translationArr3.count - 1 {
+                    try! Realm().write {
                         translationArr3[number].isDisplayed = true
                         try! Realm().add(translationArr3, update: .modified)
                         self.labelForDisplayAll.text = "非表示"
                     }
                 }
             } else {
-                for number in 0...translationArr3.count - 1 {
-                    try! Realm().write{
+                for number in 0 ... translationArr3.count - 1 {
+                    try! Realm().write {
                         translationArr3[number].isDisplayed = false
                         try! Realm().add(translationArr3, update: .modified)
                         self.labelForDisplayAll.text = "表示"
@@ -647,194 +554,182 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
-        tableView.reloadData()
-        if indexPath_row != nil {
-        tableView.scrollToRow(at: IndexPath(row: indexPath_row, section: 0), at: .middle, animated: true)
-            print("スクロール")
+        self.tableView.reloadData()
+        if self.indexPath_row != nil {
+            self.tableView.scrollToRow(at: IndexPath(row: self.indexPath_row, section: 0), at: .middle, animated: true)
         }
     }
-    
+
     //    学習記録ボタンが押された時にRecordViewControllerへ値を渡す
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
         if segue.identifier == "ToHistory2ViewController" {
             let recordViewController = segue.destination as! RecordViewController
             recordViewController.studyViewController = self
-           
+            print("学習記録ボタンがおされた")
+
         } else if segue.identifier == "ToEditStudy" {
             let editStudyViewController = segue.destination as! EditStudyViewContoller
-            
-            editStudyViewController.textView1String = translationFolderArr[0].results[self.sender_tag].inputData
-                       editStudyViewController.textView2String = translationFolderArr[0].results[sender_tag].resultData
-                       editStudyViewController.translationId = translationFolderArr[0].results[sender_tag].id
-           
-                       if self.searchBar.text != "" {
-                           editStudyViewController.textView1String = translationArr[self.sender_tag].inputData
-                           editStudyViewController.textView2String = translationArr[sender_tag].resultData
-                           editStudyViewController.translationId = translationArr[sender_tag].id
-                       }
+
+            editStudyViewController.inputDataTextView1 = self.translationFolderArr[0].results[self.sender_tag].inputData
+            editStudyViewController.resultDataTextView2 = self.translationFolderArr[0].results[self.sender_tag].resultData
+            editStudyViewController.translationId = self.translationFolderArr[0].results[self.sender_tag].id
+
+            if self.searchBar.text != "" {
+                editStudyViewController.inputDataTextView1 = self.translationArr[self.sender_tag].inputData
+                editStudyViewController.resultDataTextView2 = self.translationArr[self.sender_tag].resultData
+                editStudyViewController.translationId = self.translationArr[self.sender_tag].id
+            }
         }
     }
-    
-    
+
     //    ボタンを押したら、次のcellへスクロール
-    @IBAction func nextCellButton(_ sender: Any) {
-        
-        if speechSynthesizer.isPaused || speechSynthesizer.isPaused != true && speechSynthesizer.isSpeaking != true {
+    @IBAction func nextCellButton(_: Any) {
+        if self.speechSynthesizer.isPaused || self.speechSynthesizer.isPaused != true && self.speechSynthesizer.isSpeaking != true {
             if self.indexPath_row < self.sections.count - 1 {
-                if repeatButton.tintColor != .systemBlue {
-                self.speechSynthesizer.stopSpeaking(at: .immediate)
+                if self.repeatButton.tintColor != .systemBlue {
+                    self.speechSynthesizer.stopSpeaking(at: .immediate)
                 }
                 self.indexPath_row += 1
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-                tableView.reloadData()
+                self.tableView.reloadData()
             }
         } else {
-            
             self.speechSynthesizer.stopSpeaking(at: .immediate)
             if self.indexPath_row < self.sections.count - 1 {
                 self.indexPath_row += 1
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-                tableView.reloadData()
-                if searchBar.text == "" {
-                    speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                self.tableView.reloadData()
+                if self.searchBar.text == "" {
+                    speeche(textForResultData: self.translationFolderArr.first!.results[self.indexPath_row].resultData, textForInputData: self.translationFolderArr.first!.results[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
                 } else {
-                    speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                    speeche(textForResultData: self.translationArr[self.indexPath_row].resultData, textForInputData: self.translationArr[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
                 }
             }
         }
     }
 
-
-//    ボタンを押したら、一つ前のcellへスクロール
-    @IBAction func backCellButton(_ sender: Any) {
-        if speechSynthesizer.isPaused || speechSynthesizer.isPaused != true && speechSynthesizer.isSpeaking != true {
+    //    ボタンを押したら、一つ前のcellへスクロール
+    @IBAction func backCellButton(_: Any) {
+        if self.speechSynthesizer.isPaused || self.speechSynthesizer.isPaused != true && self.speechSynthesizer.isSpeaking != true {
             if self.indexPath_row > 0 {
-                if repeatButton.tintColor != .systemBlue {
-                self.speechSynthesizer.stopSpeaking(at: .immediate)
+                if self.repeatButton.tintColor != .systemBlue {
+                    self.speechSynthesizer.stopSpeaking(at: .immediate)
                 }
                 self.indexPath_row -= 1
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-                tableView.reloadData()
+                self.tableView.reloadData()
             }
         } else {
-            
             self.speechSynthesizer.stopSpeaking(at: .immediate)
             if self.indexPath_row > 0 {
                 self.indexPath_row -= 1
                 let indexPath = IndexPath(row: indexPath_row, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-                tableView.reloadData()
-                if searchBar.text == "" {
-                    speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                self.tableView.reloadData()
+                if self.searchBar.text == "" {
+                    speeche(textForResultData: self.translationFolderArr.first!.results[self.indexPath_row].resultData, textForInputData: self.translationFolderArr.first!.results[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
                 } else {
-                    speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                    speeche(textForResultData: self.translationArr[self.indexPath_row].resultData, textForInputData: self.translationArr[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
                 }
             }
         }
     }
-    
-//    音声一時停止/再生ボタン
-    @IBAction func playButton(_ sender: Any) {
+
+    //    音声一時停止/再生ボタン
+    @IBAction func playButton(_: Any) {
         if self.speechSynthesizer.isPaused {
-            setImage(playButton, "pause.circle.fill")
-                       self.speechSynthesizer.continueSpeaking()
+            setImage(self.playButton, "pause.circle.fill")
+            self.speechSynthesizer.continueSpeaking()
             print("停止中")
-        } else if speechSynthesizer.isSpeaking {
-            setImage(playButton, "play.circle.fill")
-                        self.speechSynthesizer.pauseSpeaking(at: .immediate)
-                        print("おしゃべり中")
+        } else if self.speechSynthesizer.isSpeaking {
+            setImage(self.playButton, "play.circle.fill")
+            self.speechSynthesizer.pauseSpeaking(at: .immediate)
+            print("おしゃべり中")
         } else if self.indexPath_row != nil {
             print("もう一度最初から再生")
-            setImage(playButton, "pause.circle.fill")
-            if searchBar.text == "" {
-                speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+            setImage(self.playButton, "pause.circle.fill")
+            if self.searchBar.text == "" {
+                speeche(textForResultData: self.translationFolderArr.first!.results[self.indexPath_row].resultData, textForInputData: self.translationFolderArr.first!.results[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
             } else {
-                speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+                speeche(textForResultData: self.translationArr[self.indexPath_row].resultData, textForInputData: self.translationArr[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
             }
         }
     }
-    
+
     //    リピートボタン
-    @IBAction func repeatButton(_ sender: Any) {
-        if indexPath_row != nil {
-            if repeatButton.tintColor == .systemGray2 {
-                repeatButton.tintColor = .systemBlue
-//                speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
+    @IBAction func repeatButton(_: Any) {
+        if self.indexPath_row != nil {
+            if self.repeatButton.tintColor == .systemGray2 {
+                self.repeatButton.tintColor = .systemBlue
+                //                speeche(text: self.translationFolderArr[0].results[self.indexPath_row].resultData)
             } else {
-                repeatButton.tintColor = .systemGray2
+                self.repeatButton.tintColor = .systemGray2
             }
         }
-        
     }
-    
-//    読み上げ速度
-    @IBAction func speakSpeedButton(_ sender: Any) {
+
+    //    読み上げ速度
+    @IBAction func speakSpeedButton(_: Any) {
         switch self.speakSpeed {
         case 0.5:
-            speakSpeedButton.setTitle("1.25x", for: .normal)
+            self.speakSpeedButton.setTitle("1.25x", for: .normal)
             self.speakSpeed = 0.525
         case 0.525:
-            speakSpeedButton.setTitle("1.5x", for: .normal)
+            self.speakSpeedButton.setTitle("1.5x", for: .normal)
             self.speakSpeed = 0.55
         case 0.55:
-            speakSpeedButton.setTitle("1.75x", for: .normal)
+            self.speakSpeedButton.setTitle("1.75x", for: .normal)
             self.speakSpeed = 0.575
         case 0.575:
-            speakSpeedButton.setTitle("2.0x", for: .normal)
+            self.speakSpeedButton.setTitle("2.0x", for: .normal)
             self.speakSpeed = 0.6
         case 0.6:
-            speakSpeedButton.setTitle("0.5x", for: .normal)
+            self.speakSpeedButton.setTitle("0.5x", for: .normal)
             self.speakSpeed = 0.3
         case 0.3:
-            speakSpeedButton.setTitle("0.75x", for: .normal)
+            self.speakSpeedButton.setTitle("0.75x", for: .normal)
             self.speakSpeed = 0.4
         case 0.4:
-            speakSpeedButton.setTitle("1.0x", for: .normal)
+            self.speakSpeedButton.setTitle("1.0x", for: .normal)
             self.speakSpeed = 0.5
         default:
             print("nil")
-                                                                    
         }
     }
-    
-    @IBAction func speakVoiceButton(_ sender: Any) {
+
+    @IBAction func speakVoiceButton(_: Any) {
         switch self.voice {
         case "com.apple.ttsbundle.siri_Nicky_en-US_compact":
             self.voice = "com.apple.ttsbundle.siri_Aaron_en-US_compact"
-            speakVoice.setTitle("男性", for: .normal)
+            self.speakVoice.setTitle("男性", for: .normal)
         case "com.apple.ttsbundle.siri_Aaron_en-US_compact":
             self.voice = "com.apple.ttsbundle.siri_Nicky_en-US_compact"
-            speakVoice.setTitle("女性", for: .normal)
+            self.speakVoice.setTitle("女性", for: .normal)
         default:
             print("nil")
         }
     }
+
+    //    com.apple.ttsbundle.siri_Aaron_en-US_compact
+    //        com.apple.ttsbundle.siri_Nicky_en-US_compact
     
-//    com.apple.ttsbundle.siri_Aaron_en-US_compact
-//        com.apple.ttsbundle.siri_Nicky_en-US_compact
+    @IBAction func fastForwardButton(_ sender: Any) {
+        let AVPlayer = AVPlayer()
+        AVPlayer.seek(to: <#T##CMTime#>, completionHandler: <#T##(Bool) -> Void#>)
+    }
     
-    
-   
     
     
 }
-    
-    
-
-
-
 
 extension StudyViewController: ContextMenuDelegate {
-    
-    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {
-    }
-    
+    func contextMenuDidDeselect(_: ContextMenu, cell _: ContextMenuCell, targetedView _: UIView, didSelect _: ContextMenuItem, forRowAt _: Int) {}
+
     //    コンテキストメニューが表示された時の挙動を設定
-    
-    
+
     //    コンテキストメニューの選択肢が選択された時に実行される
     //            - Parameters:
     //                - contextMenu: そのコンテキストメニューだと思われる
@@ -844,75 +739,71 @@ extension StudyViewController: ContextMenuDelegate {
     //                - index: **選択されたコンテキストのアイテムの**座標
     //            - Returns: よくわからない(多分成功したらtrue...?
     //         */
-    func contextMenuDidSelect(_ contextMenu: ContextMenu,
-                              cell: ContextMenuCell,
-                              targetedView: UIView,
+    func contextMenuDidSelect(_: ContextMenu,
+                              cell _: ContextMenuCell,
+                              targetedView _: UIView,
                               didSelect item: ContextMenuItem,
-                              forRowAt index: Int) -> Bool {
-        
+                              forRowAt index: Int) -> Bool
+    {
         print("コンテキストメニューの", index, "番目のセルが選択された！")
         print("そのセルには", item.title, "というテキストが書いてあるよ!")
-        
+
         switch index {
         case 0:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {() -> Void in
-                self.performSegue(withIdentifier: "ToEditStudy", sender: nil)})
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { () in
+                self.performSegue(withIdentifier: "ToEditStudy", sender: nil)
+            }
         case 1:
-            savePhraseButton()
+            self.savePhraseButton()
         case 2:
             let folderList2ViewController = storyboard?.instantiateViewController(withIdentifier: "SelectFolderForStudy") as! SelectFolderForStudyViewContoller
             folderList2ViewController.sender_tag = self.sender_tag
-            
-            if searchBar.text == "" {
-                folderList2ViewController.inputData = translationFolderArr.first!.results[sender_tag].inputData
-                folderList2ViewController.resultData = translationFolderArr.first!.results[sender_tag].resultData
-                folderList2ViewController.inputAndResultData = translationFolderArr.first!.results[sender_tag].inputAndResultData
+
+            if self.searchBar.text == "" {
+                folderList2ViewController.inputData = self.translationFolderArr.first!.results[self.sender_tag].inputData
+                folderList2ViewController.resultData = self.translationFolderArr.first!.results[self.sender_tag].resultData
+                folderList2ViewController.inputAndResultData = self.translationFolderArr.first!.results[self.sender_tag].inputAndResultData
             } else {
-                folderList2ViewController.inputData = translationArr[sender_tag].inputData
-                folderList2ViewController.resultData = translationArr[sender_tag].resultData
-                folderList2ViewController.inputAndResultData = translationArr[sender_tag].inputAndResultData
+                folderList2ViewController.inputData = self.translationArr[self.sender_tag].inputData
+                folderList2ViewController.resultData = self.translationArr[self.sender_tag].resultData
+                folderList2ViewController.inputAndResultData = self.translationArr[self.sender_tag].inputAndResultData
             }
-            
+
             if let sheet = folderList2ViewController.sheetPresentationController {
                 sheet.detents = [.medium()]
                 present(folderList2ViewController, animated: true, completion: nil)
             }
-            
+
         case 3:
             print("コピーボタン")
-            copyButton()
+            self.copyButton()
         case 4:
-            deleteButton()
+            self.deleteButton()
         default:
             print("他の値")
-            
         }
-        
-        //サンプルではtrueを返していたのでとりあえずtrueを返してみる
+
+        // サンプルではtrueを返していたのでとりあえずtrueを返してみる
         return true
-        
     }
-    
- 
-    
+
     /**
      コンテキストメニューが表示されたら呼ばれる
      */
-    func contextMenuDidAppear(_ contextMenu: ContextMenu) {
+    func contextMenuDidAppear(_: ContextMenu) {
         print("コンテキストメニューが表示された!")
     }
-    
+
     /**
      コンテキストメニューが消えたら呼ばれる
      */
-    func contextMenuDidDisappear(_ contextMenu: ContextMenu) {
+    func contextMenuDidDisappear(_: ContextMenu) {
         print("コンテキストメニューが消えた!")
     }
-    
-    
-    func copyButton(){
+
+    func copyButton() {
         let alert = UIAlertController(title: "コピーしました", message: "", preferredStyle: .alert)
-        let alert1 = UIAlertAction(title: "OK", style: .default, handler: {(action) -> Void in
+        let alert1 = UIAlertAction(title: "OK", style: .default, handler: { _ in
             if self.searchBar.text != "" {
                 UIPasteboard.general.string = self.translationArr[self.sender_tag].inputAndResultData
             } else {
@@ -922,11 +813,10 @@ extension StudyViewController: ContextMenuDelegate {
         alert.addAction(alert1)
         present(alert, animated: true, completion: nil)
     }
-    
-    
-    func deleteButton(){
+
+    func deleteButton() {
         let alert = UIAlertController(title: "本当に削除しますか？", message: "保存した文章を\n左スワイプで削除することもできます", preferredStyle: .alert)
-        let delete = UIAlertAction(title: "削除", style:.default, handler: {(action) -> Void in
+        let delete = UIAlertAction(title: "削除", style: .default, handler: { _ in
             try! self.realm.write {
                 if self.searchBar.text != "" {
                     self.realm.delete(self.translationArr[self.sender_tag])
@@ -937,7 +827,6 @@ extension StudyViewController: ContextMenuDelegate {
                     self.sections.remove(at: self.sender_tag)
                     self.tableDataList.remove(at: self.sender_tag)
                 }
-                
             }
             self.repeatButton.tintColor = .systemGray2
             self.speechSynthesizer.stopSpeaking(at: .immediate)
@@ -946,74 +835,65 @@ extension StudyViewController: ContextMenuDelegate {
             self.playButton.isEnabled = false
             self.tableView.reloadData()
         })
-        
-        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: {(action) -> Void in print("キャンセルボタンがタップされた。")
+
+        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: { _ in print("キャンセルボタンがタップされた。")
         })
-        
+
         alert.addAction(delete)
         alert.addAction(cencel)
-        
-        self.present(alert, animated: true, completion: nil)
+
+        present(alert, animated: true, completion: nil)
     }
-                                   
-                                   
-                                   
-                                   
+
     //    右のドキュメントシステムアイコンをタップしたら、Realm（TranslationFolderファイル）のRecord2クラスに書き込み保存
-    func savePhraseButton(){
-        
-            let alert = UIAlertController(title: "保存しました", message: "「単語・フレーズ」に保存されました", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
-            
+    func savePhraseButton() {
+        let alert = UIAlertController(title: "保存しました", message: "「単語・フレーズ」に保存されました", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+
         if self.searchBar.text != "" {
-            self.inputData3 = translationArr[self.sender_tag].inputData
-            self.resultData3 = translationArr[self.sender_tag].resultData
+            self.inputData3 = self.translationArr[self.sender_tag].inputData
+            self.resultData3 = self.translationArr[self.sender_tag].resultData
         } else {
-        self.inputData3 = translationFolderArr[0].results[self.sender_tag].inputData
-        self.resultData3 = translationFolderArr[0].results[self.sender_tag].resultData
+            self.inputData3 = self.translationFolderArr[0].results[self.sender_tag].inputData
+            self.resultData3 = self.translationFolderArr[0].results[self.sender_tag].resultData
         }
-        
+
         let phraseWord = PhraseWord()
         let date5 = Date()
-        
-        phraseWord.inputData = inputData3
-        phraseWord.resultData = resultData3
+
+        phraseWord.inputData = self.inputData3
+        phraseWord.resultData = self.resultData3
         phraseWord.date = date5
-        
+
         let phraseWordArr = self.realm.objects(PhraseWord.self)
         if phraseWordArr.count != 0 {
             phraseWord.id = phraseWordArr.max(ofProperty: "id")! + 1
         }
-        
-        
+
         do {
             let realm = try Realm()
-            try realm.write{
+            try realm.write {
                 realm.add(phraseWord)
             }
         } catch {
             print("エラー")
         }
     }
-    
-    
-    
-    @IBAction func backButtton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+
+    @IBAction func backButtton(_: Any) {
+        dismiss(animated: true, completion: nil)
     }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+
+    func tableView(_: UITableView, editingStyleForRowAt _: IndexPath) -> UITableViewCell.EditingStyle {
         return UITableViewCell.EditingStyle.delete
         //        .deleteだけでもよき
     }
-    
-//    セル削除メソッド
+
+    //    セル削除メソッド
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-      
         if editingStyle == UITableViewCell.EditingStyle.delete {
-           
-            try! realm.write {
+            try! self.realm.write {
                 if self.searchBar.text != "" {
                     self.realm.delete(translationArr[indexPath.row])
                     sections.remove(at: indexPath.row)
@@ -1026,65 +906,55 @@ extension StudyViewController: ContextMenuDelegate {
                     tableView.deselectRow(at: indexPath, animated: true)
                 }
             }
-            repeatButton.tintColor = .systemGray2
-            speechSynthesizer.stopSpeaking(at: .immediate)
-            nextCellButton.isEnabled = false
-            backCellButton.isEnabled = false
-            playButton.isEnabled = false
+            self.repeatButton.tintColor = .systemGray2
+            self.speechSynthesizer.stopSpeaking(at: .immediate)
+            self.nextCellButton.isEnabled = false
+            self.backCellButton.isEnabled = false
+            self.playButton.isEnabled = false
             tableView.reloadData()
         }
-        
     }
 }
 
-//try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+// try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
 //    }
-//}
+// }
 
-
-
-
-
-extension StudyViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDelegate{
-    
-    func playBackground(){
+extension StudyViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDelegate {
+    func playBackground() {
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
     }
-    
+
     func longPressDetection(_ indexPath_row: Int, _ cell: CustomCellForStudy) {
         self.speechSynthesizer.stopSpeaking(at: AVSpeechBoundary.immediate)
-        if searchBar.text == "" {
-            speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+        if self.searchBar.text == "" {
+            self.speeche(textForResultData: self.translationFolderArr.first!.results[indexPath_row].resultData, textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
         } else {
-            speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+            self.speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
         }
-        
-        playButton.isEnabled = true
-        backCellButton.isEnabled = true
-        nextCellButton.isEnabled = true
-        
-       
+
+        self.playButton.isEnabled = true
+        self.backCellButton.isEnabled = true
+        self.nextCellButton.isEnabled = true
+
         self.indexPath_row = indexPath_row
         let indexPath = IndexPath(row: indexPath_row, section: 0)
-        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-        
+        self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+
         cell.backgroundColor = .white
-        
+
         cell.backgroundColor = .systemGray6
-        
-        
+
         self.nextCellButton.isEnabled = true
         self.backCellButton.isEnabled = true
-        
+
         self.label1.text = " "
-        
-        tableView.reloadData()
-        
+
+        self.tableView.reloadData()
     }
-    
+
     func speeche(textForResultData: String, textForInputData: String, speakSpeed: Float, voice: String) {
-        
-        let speak = realm.objects(Speak.self).first!
+        let speak = self.realm.objects(Speak.self).first!
         if speak.playResultData {
             let utterance = AVSpeechUtterance(string: textForResultData) // 読み上げる文字
             utterance.voice = self.makeVoice(voice) // 言語
@@ -1099,68 +969,57 @@ extension StudyViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDe
             self.speechSynthesizer.delegate = self
             self.speechSynthesizer.speak(utterance)
         }
-      }
-    
-    
+    }
+
     // 英語ボイスの生成　Siri
     func makeVoice(_ identifier: String) -> AVSpeechSynthesisVoice! {
         let voices = AVSpeechSynthesisVoice.speechVoices()
         for voice in voices {
             if voice.identifier == identifier {
-                return AVSpeechSynthesisVoice.init(identifier: identifier)
+                return AVSpeechSynthesisVoice(identifier: identifier)
             }
         }
-        return AVSpeechSynthesisVoice.init(language: "en-US")
+        return AVSpeechSynthesisVoice(language: "en-US")
     }
-    
-     
-    func setImage(_ button: UIButton, _ string: String){
+
+    func setImage(_ button: UIButton, _ string: String) {
         let config = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular, scale: .default)
         button.setImage(UIImage(systemName: string, withConfiguration: config), for: .normal)
     }
-    
-    
-//    読み上げ開始
-    internal func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
+
+    //    読み上げ開始
+    internal func speechSynthesizer(_: AVSpeechSynthesizer, didStart _: AVSpeechUtterance) {
         print("読み上げ開始")
-        setImage(playButton, "pause.circle.fill")
-           
-        }
-    
-    // 読み上げ終了
-       internal func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-           print("読み上げ終了")
-           
-           
-           if repeatButton.tintColor == .systemBlue {
-               if searchBar.text == "" {
-                   speeche(textForResultData: (self.translationFolderArr.first!.results[indexPath_row].resultData), textForInputData: self.translationFolderArr.first!.results[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
-               } else {
-                   speeche(textForResultData: self.translationArr[indexPath_row].resultData, textForInputData: self.translationArr[indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
-               }
-           } else {
-               setImage(playButton, "play.circle.fill")
-           }
-       }
-    
-//    読み上げ一時停止した時
-    internal func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didPause utterance: AVSpeechUtterance) {
-        
+        self.setImage(self.playButton, "pause.circle.fill")
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    // 読み上げ終了
+    internal func speechSynthesizer(_: AVSpeechSynthesizer, didFinish _: AVSpeechUtterance) {
+        print("読み上げ終了")
+
+        if self.repeatButton.tintColor == .systemBlue {
+            if self.searchBar.text == "" {
+                self.speeche(textForResultData: self.translationFolderArr.first!.results[self.indexPath_row].resultData, textForInputData: self.translationFolderArr.first!.results[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+            } else {
+                self.speeche(textForResultData: self.translationArr[self.indexPath_row].resultData, textForInputData: self.translationArr[self.indexPath_row].inputData, speakSpeed: self.speakSpeed, voice: self.voice)
+            }
+        } else {
+            self.setImage(self.playButton, "play.circle.fill")
+        }
+    }
+
+    //    読み上げ一時停止した時
+    internal func speechSynthesizer(_: AVSpeechSynthesizer, didPause _: AVSpeechUtterance) {}
+
+    override func viewWillDisappear(_: Bool) {
         super.viewWillDisappear(true)
         print("呼ばれた")
-        repeatButton.tintColor = .systemGray2
-        speechSynthesizer.stopSpeaking(at: .immediate)
-        
+        self.repeatButton.tintColor = .systemGray2
+        self.speechSynthesizer.stopSpeaking(at: .immediate)
     }
 }
-    
+
 //    セルをたっぷしたら、Edit1ViewControllerに画面遷移させて、そこで編集作業＋保存ボタンでRealmモデルクラス（TranslationFolderファイル）に保存
-    
-
-
 
 //    全削除ボタン
 //  @IBAction func deleteAllButtonAction(_ sender: Any) {
@@ -1233,9 +1092,9 @@ extension StudyViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDe
 //    }
 //
 //
-//}
-    
-    //    ボタンタップでアコーディオン全表示、非表示切り替え
+// }
+
+//    ボタンタップでアコーディオン全表示、非表示切り替え
 //    @IBAction func changeAcordionButton(_ sender: Any) {
 //
 //        if self.translationFolderArr[0].results.count != 0 {
@@ -1260,8 +1119,4 @@ extension StudyViewController: LongPressDetectionDelegate, AVSpeechSynthesizerDe
 //
 //    }
 //
-//}
-
-
-
-
+// }

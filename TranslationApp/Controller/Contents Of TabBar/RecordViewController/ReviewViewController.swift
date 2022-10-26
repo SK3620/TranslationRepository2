@@ -5,126 +5,117 @@
 //  Created by 鈴木健太 on 2022/09/30.
 //
 
-import UIKit
 import RealmSwift
 import SVProgressHUD
+import UIKit
 
-class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
-    
-
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var label1: UILabel!
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var label3: UILabel!
+class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    @IBOutlet var textField: UITextField!
+    @IBOutlet var backButton: UIButton!
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var label1: UILabel!
+    @IBOutlet var editButton: UIButton!
+    @IBOutlet var label3: UILabel!
     @IBOutlet var view1: UIView!
-    
-    
-    
-    
+
     var reviewDate = [String]()
     var folderName = [String]()
     var content = [String]()
     var memo = [String]()
     var times = [String]()
     var inputDate = [String]()
-    
+
     var tabBarController1: UITabBarController!
     var studyViewController: StudyViewController!
 
-    
     let realm = try! Realm()
+
     var recordArr = try! Realm().objects(Record.self).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
     var resultsArr: Results<Record>!
-   
-    
-    var datePicker: UIDatePicker = UIDatePicker()
-    
+
+    var datePicker: UIDatePicker = .init()
+
     var dateString: String!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.separatorColor = .gray
-        
-        let nib = UINib(nibName: "CustomCellForReview", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: "CustomCell")
 
-        textField.layer.borderColor = UIColor.gray.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 6
-        
-       
-        
-        tableView.layer.borderColor = UIColor.systemGray4.cgColor
-        tableView.layer.borderWidth = 2.5
-        
+        self.tableView.separatorColor = .gray
+
+        let nib = UINib(nibName: "CustomCellForReview", bundle: nil)
+        self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+
+        self.textField.layer.borderColor = UIColor.gray.cgColor
+        self.textField.layer.borderWidth = 2
+        self.textField.layer.cornerRadius = 6
+
+        self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
+        self.tableView.layer.borderWidth = 2.5
+
         // ピッカー設定
-        datePicker.datePickerMode = UIDatePicker.Mode.date
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.timeZone = NSTimeZone.local
-        datePicker.locale = Locale.current
+        self.datePicker.datePickerMode = UIDatePicker.Mode.date
+        self.datePicker.preferredDatePickerStyle = .wheels
+        self.datePicker.timeZone = NSTimeZone.local
+        self.datePicker.locale = Locale.current
         // 決定バーの生成
         let toolbar4 = UIToolbar()
-         toolbar4.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        toolbar4.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let doneItem4 = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(done4))
-        let cancelItem4 = UIBarButtonItem(title: "キャンセル", style: .done, target: self, action: #selector(cancel4))
+        let doneItem4 = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(self.done4))
+        let cancelItem4 = UIBarButtonItem(title: "キャンセル", style: .done, target: self, action: #selector(self.cancel4))
         toolbar4.setItems([cancelItem4, spaceItem, doneItem4], animated: true)
         // インプットビュー設定
-        textField.inputView = datePicker
-        textField.inputAccessoryView = toolbar4
+        self.textField.inputView = self.datePicker
+        self.textField.inputAccessoryView = toolbar4
 //        デフォルト設定
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
-        datePicker.date = formatter.date(from: dateString)!
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+        self.datePicker.date = formatter.date(from: dateString)!
+
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         // Do any additional setup after loading the view.
     }
-    
-    
-    @objc func done4(){
-        textField.endEditing(true)
+
+    @objc func done4() {
+        self.textField.endEditing(true)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.M.d"
-        let dateString = formatter.string(from: datePicker.date)
-        textField.text = dateString
-        
+        let dateString = formatter.string(from: self.datePicker.date)
+        self.textField.text = dateString
+
         let predict = NSPredicate(format: "nextReviewDate == %@", dateString)
-         resultsArr = self.recordArr.filter(predict)
-        
-        reviewDate = []
-        times = []
-        folderName = []
-        content = []
-        memo = []
-        inputDate = []
-        
-        if recordArr.isEmpty != true {
-            if resultsArr.count != 0 {
-                for number in 0...resultsArr.count - 1 {
-                    self.reviewDate.append(resultsArr[number].nextReviewDate)
-                    self.times.append(resultsArr[number].times)
-                    self.folderName.append(resultsArr[number].folderName)
-                    self.content.append(resultsArr[number].number)
-                    self.memo.append(resultsArr[number].memo)
-                    self.inputDate.append(recordArr[number].inputDate)
+        self.resultsArr = self.recordArr.filter(predict)
+
+        self.reviewDate = []
+        self.times = []
+        self.folderName = []
+        self.content = []
+        self.memo = []
+        self.inputDate = []
+
+        if self.recordArr.isEmpty != true {
+            if self.resultsArr.count != 0 {
+                for number in 0 ... self.resultsArr.count - 1 {
+                    self.reviewDate.append(self.resultsArr[number].nextReviewDate)
+                    self.times.append(self.resultsArr[number].times)
+                    self.folderName.append(self.resultsArr[number].folderName)
+                    self.content.append(self.resultsArr[number].number)
+                    self.memo.append(self.resultsArr[number].memo)
+                    self.inputDate.append(self.recordArr[number].inputDate)
 
                     self.label1.text = "\(dateString)に復習する内容があります"
                 }
             } else {
-                for number in 0...recordArr.count - 1 {
-                    self.reviewDate.append(recordArr[number].nextReviewDate)
-                    self.times.append(recordArr[number].times)
-                    self.folderName.append(recordArr[number].folderName)
-                    self.content.append(recordArr[number].number)
-                    self.memo.append(recordArr[number].memo)
-                    self.inputDate.append(recordArr[number].inputDate)
-                    
+                for number in 0 ... self.recordArr.count - 1 {
+                    self.reviewDate.append(self.recordArr[number].nextReviewDate)
+                    self.times.append(self.recordArr[number].times)
+                    self.folderName.append(self.recordArr[number].folderName)
+                    self.content.append(self.recordArr[number].number)
+                    self.memo.append(self.recordArr[number].memo)
+                    self.inputDate.append(self.recordArr[number].inputDate)
+
                     self.resultsArr = self.recordArr
 
                     self.label1.text = "\(dateString)に復習する内容はありません\n代わりに全データを日付順に表示しています"
@@ -135,30 +126,28 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
 
-        tableView.reloadData()
-      
+        self.tableView.reloadData()
     }
-    
-    @objc func cancel4(){
-        textField.endEditing(true)
-        textField.text = ""
-        
-        reviewDate = []
-        folderName = []
-        content = []
-        memo = []
-        times = []
-        inputDate = []
 
-        if recordArr.isEmpty != true {
-            
-            for number in 0...recordArr.count - 1 {
-                self.reviewDate.append(recordArr[number].nextReviewDate)
-                self.times.append(recordArr[number].times)
-                self.folderName.append(recordArr[number].folderName)
-                self.content.append(recordArr[number].number)
-                self.memo.append(recordArr[number].memo)
-                self.inputDate.append(recordArr[number].inputDate)
+    @objc func cancel4() {
+        self.textField.endEditing(true)
+        self.textField.text = ""
+
+        self.reviewDate = []
+        self.folderName = []
+        self.content = []
+        self.memo = []
+        self.times = []
+        self.inputDate = []
+
+        if self.recordArr.isEmpty != true {
+            for number in 0 ... self.recordArr.count - 1 {
+                self.reviewDate.append(self.recordArr[number].nextReviewDate)
+                self.times.append(self.recordArr[number].times)
+                self.folderName.append(self.recordArr[number].folderName)
+                self.content.append(self.recordArr[number].number)
+                self.memo.append(self.recordArr[number].memo)
+                self.inputDate.append(self.recordArr[number].inputDate)
                 print("実行された")
 
                 self.resultsArr = self.recordArr
@@ -168,42 +157,38 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
-        
-        tableView.reloadData()
+
+        self.tableView.reloadData()
     }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
+
+    override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-        
+
         let date = Date()
         let dateFomatter = DateFormatter()
         dateFomatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d", options: 0, locale: Locale(identifier: "ja_JP"))
         let dateString = dateFomatter.string(from: date)
-        
-        
-        
+
         self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.title = "次回復習日・内容 \(dateString)"
-        self.navigationController?.navigationBar.barTintColor = .systemGray4
-        self.navigationController?.navigationBar.backgroundColor = .systemGray4
-        
-        let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(editButton(_:)))
-        
-        self.navigationItem.rightBarButtonItems = [editBarButtonItem]
-        
-        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        title = "次回復習日・内容 \(dateString)"
+        navigationController?.navigationBar.barTintColor = .systemGray4
+        navigationController?.navigationBar.backgroundColor = .systemGray4
+
+        let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.editButton(_:)))
+
+        navigationItem.rightBarButtonItems = [editBarButtonItem]
+
         print("Record確認\(self.recordArr)")
-        
-        if recordArr.isEmpty != true {
-            for number in 0...recordArr.count - 1 {
-                self.reviewDate.append(recordArr[number].nextReviewDate)
-                self.times.append(recordArr[number].times)
-                self.folderName.append(recordArr[number].folderName)
-                self.content.append(recordArr[number].number)
-                self.memo.append(recordArr[number].memo)
-                self.inputDate.append(recordArr[number].inputDate)
+
+        if self.recordArr.isEmpty != true {
+            for number in 0 ... self.recordArr.count - 1 {
+                self.reviewDate.append(self.recordArr[number].nextReviewDate)
+                self.times.append(self.recordArr[number].times)
+                self.folderName.append(self.recordArr[number].folderName)
+                self.content.append(self.recordArr[number].number)
+                self.memo.append(self.recordArr[number].memo)
+                self.inputDate.append(self.recordArr[number].inputDate)
 
                 self.resultsArr = self.recordArr
 
@@ -213,96 +198,90 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
-        
+
         if self.studyViewController == nil {
-            backButton.isHidden = true
-            backButton.isEnabled = false
-            editButton.isEnabled = false
-            editButton.isHidden = true
-            label3.text = ""
-            editButton.setTitle("", for: .normal)
-            view1.backgroundColor = .systemGray4
+            self.backButton.isHidden = true
+            self.backButton.isEnabled = false
+            self.editButton.isEnabled = false
+            self.editButton.isHidden = true
+            self.label3.text = ""
+            self.editButton.setTitle("", for: .normal)
+            self.view1.backgroundColor = .systemGray4
         } else {
-        label3.text = "次回復習日・内容 \(dateString)"
-            editButton.setTitle("編集", for: .normal)
-            view1.backgroundColor = .white
-            backButton.setTitle("戻る", for: .normal)
-            backButton.isEnabled = true
-            backButton.isHidden = false
+            self.label3.text = "次回復習日・内容 \(dateString)"
+            self.editButton.setTitle("編集", for: .normal)
+            self.view1.backgroundColor = .white
+            self.backButton.setTitle("戻る", for: .normal)
+            self.backButton.isEnabled = true
+            self.backButton.isHidden = false
         }
-
     }
-    
 
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.label1.text == "全てのデータを日付順に表示しています" && self.textField.text == "" && folderName.isEmpty {
-            label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        if self.label1.text == "全てのデータを日付順に表示しています", self.textField.text == "", self.folderName.isEmpty {
+            self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
         return self.folderName.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForReview
-        cell.setData(reviewDate[indexPath.row], folderName[indexPath.row], content[indexPath.row], memo[indexPath.row], times[indexPath.row], inputDate[indexPath.row])
+        cell.setData(self.reviewDate[indexPath.row], self.folderName[indexPath.row], self.content[indexPath.row], self.memo[indexPath.row], self.times[indexPath.row], self.inputDate[indexPath.row])
         cell.checkMarkButton.tag = indexPath.row
-        cell.checkMarkButton.addTarget(self, action: #selector(tapCheckMarkButton(_:)), for: .touchUpInside)
-        
+        cell.checkMarkButton.addTarget(self, action: #selector(self.tapCheckMarkButton(_:)), for: .touchUpInside)
+
         let isChecked = self.resultsArr[indexPath.row].isChecked
         switch isChecked {
         case false:
             let image = UIImage(systemName: "checkmark.circle")
             cell.checkMarkButton.setImage(image, for: .normal)
-//            cell.checkMarkButton.setTitle("完了", for: .normal)
             cell.checkMarkButton.tintColor = UIColor.gray
-            
+
         case true:
             let image = UIImage(systemName: "checkmark.circle.fill")
-//            cell.checkMarkButton.setTitle("復習完了", for: .normal)
             cell.checkMarkButton.setImage(image, for: .normal)
             cell.checkMarkButton.tintColor = UIColor.systemGreen
         }
-        
+
         return cell
     }
-    
-    @objc func tapCheckMarkButton(_ sender: UIButton){
+
+    @objc func tapCheckMarkButton(_ sender: UIButton) {
         let result = self.resultsArr[sender.tag].isChecked
-       
-        switch result{
+
+        switch result {
         case false:
-            try! realm.write{
+            try! self.realm.write {
                 resultsArr[sender.tag].isChecked = true
                 realm.add(resultsArr, update: .modified)
             }
             SVProgressHUD.show()
             SVProgressHUD.showSuccess(withStatus: "復習が完了しました")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: { () -> Void in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
                 SVProgressHUD.dismiss()
-            })
+            }
         case true:
-            try! realm.write{
+            try! self.realm.write {
                 resultsArr[sender.tag].isChecked = false
                 realm.add(resultsArr, update: .modified)
             }
         }
-        
-        tableView.reloadData()
-        
+
+        self.tableView.reloadData()
     }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+
+    func tableView(_: UITableView, editingStyleForRowAt _: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
-    
+
 //    deleteボタンが押された時
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
 //            データベースから削除する
-            try! realm.write  {
+            try! self.realm.write {
                 print("確認だよ")
 //                print(resultsArr1)
-                
+
                 self.realm.delete(self.resultsArr[indexPath.row])
                 self.folderName.remove(at: indexPath.row)
                 self.content.remove(at: indexPath.row)
@@ -312,44 +291,38 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 print("実行確認")
             }
-            
-            if self.resultsArr.count == 0 && self.recordArr.count == 0 {
-                label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
+
+            if self.resultsArr.count == 0, self.recordArr.count == 0 {
+                self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
             } else if self.resultsArr.count == 0 {
-                label1.text = "\(self.dateString)に登録されたデータはありません\n代わりに全てのデータを日付順に表示しています"
+                self.label1.text = "\(self.dateString)に登録されたデータはありません\n代わりに全てのデータを日付順に表示しています"
                 self.resultsArr = self.recordArr
             }
-            
-           
+
             tableView.reloadData()
         }
     }
-    
-    
-    @objc func editButton(_ sender: UIBarButtonItem){
-    if tableView.isEditing {
-        tableView.isEditing = false
-        editButton.setTitle("編集", for: .normal)
+
+    @objc func editButton(_: UIBarButtonItem) {
+        if self.tableView.isEditing {
+            self.tableView.isEditing = false
+            self.editButton.setTitle("編集", for: .normal)
         } else {
-            tableView.isEditing = true
-            editButton.setTitle("完了", for: .normal)
+            self.tableView.isEditing = true
+            self.editButton.setTitle("完了", for: .normal)
         }
-        
     }
-    
-    
-    @IBAction func editButton1(_ sender: Any) {
-        if tableView.isEditing {
-            tableView.isEditing = false
-            editButton.setTitle("編集", for: .normal)
-            } else {
-                tableView.isEditing = true
-                editButton.setTitle("完了", for: .normal)
-            }
+
+    @IBAction func editButton1(_: Any) {
+        if self.tableView.isEditing {
+            self.tableView.isEditing = false
+            self.editButton.setTitle("編集", for: .normal)
+        } else {
+            self.tableView.isEditing = true
+            self.editButton.setTitle("完了", for: .normal)
+        }
     }
-    
-    
-    
+
 //    @IBAction func returnButton(_ sender: Any) {
 //        if self.textField.text != "" {
 //            let formatter = DateFormatter()
@@ -394,13 +367,8 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 //               formatter.dateFormat = fromFormat
 //               return formatter.date(from: dateString)
 //           }
-    
-    
-    @IBAction func backButton(_ sender: Any) {
-        self.dismiss(animated: true)
-    }
-    
-}
-    
 
- 
+    @IBAction func backButton(_: Any) {
+        dismiss(animated: true)
+    }
+}

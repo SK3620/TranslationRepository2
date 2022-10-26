@@ -409,7 +409,7 @@
                                 <rect key="frame" x="0.0" y="99" width="375" height="629"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="selectFolder" textLabel="jEd-KD-Lwi" detailTextLabel="NE6-1S-NIf" style="IBUITableViewCellStyleSubtitle" id="dwM-xB-cUW">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="jEd-KD-Lwi" detailTextLabel="NE6-1S-NIf" style="IBUITableViewCellStyleSubtitle" id="dwM-xB-cUW">
                                         <rect key="frame" x="0.0" y="44.666666030883789" width="375" height="49.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dwM-xB-cUW" id="igW-wU-jDj">
@@ -647,7 +647,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ax-iV-9hs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1412" y="2878.8177339901481"/>
+            <point key="canvasLocation" x="1380" y="2879"/>
         </scene>
         <!--編集-->
         <scene sceneID="MPw-Jn-Tk0">
@@ -734,10 +734,18 @@
                                         <rect key="frame" x="0.0" y="640.66666666666663" width="375" height="83.333333333333371"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="mzu-06-V37">
-                                                <rect key="frame" x="122.33333333333333" y="8.0000000000000018" width="130.66666666666669" height="30.666666666666671"/>
+                                                <rect key="frame" x="84.000000000000014" y="8" width="207.33333333333337" height="31"/>
                                                 <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ne7-FM-aPt">
+                                                        <rect key="frame" x="0.0" y="0.0" width="38.333333333333336" height="31"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="ボ"/>
+                                                        <connections>
+                                                            <action selector="fastForwardButton:" destination="kJL-ST-fzW" eventType="touchUpInside" id="f4b-6m-e5N"/>
+                                                        </connections>
+                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hZ-Hc-46i">
-                                                        <rect key="frame" x="0.0" y="0.0" width="42.666666666666664" height="30.666666666666668"/>
+                                                        <rect key="frame" x="38.333333333333329" y="0.0" width="42.666666666666671" height="31"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.backward" catalog="system"/>
                                                         <connections>
@@ -745,7 +753,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alo-1n-hpF">
-                                                        <rect key="frame" x="42.666666666666671" y="0.0" width="45.333333333333329" height="30.666666666666668"/>
+                                                        <rect key="frame" x="81" y="0.0" width="45.333333333333343" height="31"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="pause.circle.fill" catalog="system"/>
                                                         <connections>
@@ -753,12 +761,17 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xbH-bc-wfK">
-                                                        <rect key="frame" x="88.000000000000014" y="0.0" width="42.666666666666671" height="30.666666666666668"/>
+                                                        <rect key="frame" x="126.33333333333336" y="0.0" width="42.666666666666671" height="31"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.right" catalog="system"/>
                                                         <connections>
                                                             <action selector="nextCellButton:" destination="kJL-ST-fzW" eventType="touchUpInside" id="1YE-UE-J9U"/>
                                                         </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U1K-JH-8v5">
+                                                        <rect key="frame" x="169" y="0.0" width="38.333333333333343" height="31"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="ボ"/>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -797,7 +810,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6N-TM-zSY">
-                                                <rect key="frame" x="168.33333333333334" y="36.666666666666742" width="38.333333333333343" height="18"/>
+                                                <rect key="frame" x="168.33333333333334" y="37" width="38.333333333333343" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <color key="textColor" systemColor="systemOrangeColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1110,7 +1123,7 @@
             </objects>
             <point key="canvasLocation" x="2249" y="-217"/>
         </scene>
-        <!--Quick Memo View Contoller-->
+        <!--Quick Memo-->
         <scene sceneID="FNz-sk-Dzq">
             <objects>
                 <viewController id="JDV-Vh-fvC" customClass="QuickMemoViewContoller" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -1119,16 +1132,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="voh-cU-99D">
-                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="724"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quick Memo (簡単メモ)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kg5-NO-CAv">
-                                        <rect key="frame" x="0.0" y="0.0" width="214" height="24"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FQk-8G-erq">
-                                        <rect key="frame" x="0.0" y="32" width="375" height="701"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <color key="textColor" systemColor="labelColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1137,12 +1144,10 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="FQk-8G-erq" firstAttribute="top" secondItem="Kg5-NO-CAv" secondAttribute="bottom" constant="8" id="4DA-Vo-sNo"/>
-                                    <constraint firstItem="Kg5-NO-CAv" firstAttribute="leading" secondItem="voh-cU-99D" secondAttribute="leading" id="4g2-uu-buZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="FQk-8G-erq" secondAttribute="trailing" id="BOq-je-Uq3"/>
-                                    <constraint firstAttribute="bottom" secondItem="FQk-8G-erq" secondAttribute="bottom" constant="-43" id="QOv-KK-eMe"/>
-                                    <constraint firstItem="FQk-8G-erq" firstAttribute="leading" secondItem="voh-cU-99D" secondAttribute="leading" id="f23-0S-odM"/>
-                                    <constraint firstItem="Kg5-NO-CAv" firstAttribute="top" secondItem="voh-cU-99D" secondAttribute="top" id="m0p-fI-RNV"/>
+                                    <constraint firstAttribute="bottom" secondItem="FQk-8G-erq" secondAttribute="bottom" id="7Bt-rc-IOE"/>
+                                    <constraint firstItem="FQk-8G-erq" firstAttribute="top" secondItem="voh-cU-99D" secondAttribute="top" id="XJZ-7g-369"/>
+                                    <constraint firstItem="FQk-8G-erq" firstAttribute="leading" secondItem="voh-cU-99D" secondAttribute="leading" id="nf9-fX-9rV"/>
+                                    <constraint firstAttribute="trailing" secondItem="FQk-8G-erq" secondAttribute="trailing" id="qdU-nN-JPD"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -1151,18 +1156,18 @@
                         <constraints>
                             <constraint firstItem="voh-cU-99D" firstAttribute="top" secondItem="td7-2Y-KI4" secondAttribute="top" id="1eX-tb-n0H"/>
                             <constraint firstItem="voh-cU-99D" firstAttribute="leading" secondItem="td7-2Y-KI4" secondAttribute="leading" id="40P-9H-WIS"/>
-                            <constraint firstItem="td7-2Y-KI4" firstAttribute="bottom" secondItem="voh-cU-99D" secondAttribute="bottom" id="WaR-RX-acc"/>
                             <constraint firstItem="td7-2Y-KI4" firstAttribute="trailing" secondItem="voh-cU-99D" secondAttribute="trailing" id="ev9-R2-Crm"/>
+                            <constraint firstAttribute="bottom" secondItem="voh-cU-99D" secondAttribute="bottom" id="xW6-ye-k8I"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="4vo-DP-FQF"/>
+                    <navigationItem key="navigationItem" title="Quick Memo" id="4vo-DP-FQF"/>
                     <connections>
                         <outlet property="textView" destination="FQk-8G-erq" id="q0X-qJ-7qO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tk5-Sj-216" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3084" y="-217"/>
+            <point key="canvasLocation" x="3084" y="-217.24137931034483"/>
         </scene>
         <!--履歴-->
         <scene sceneID="vXr-QA-WlB">

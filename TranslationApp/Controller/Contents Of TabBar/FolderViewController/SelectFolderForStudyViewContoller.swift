@@ -5,70 +5,62 @@
 //  Created by 鈴木健太 on 2022/10/21.
 //
 
-import UIKit
+import Alamofire
 import RealmSwift
 import SVProgressHUD
-import Alamofire
+import UIKit
 
 class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
-    
-    
-    @IBOutlet weak var label1: UILabel!
-    @IBOutlet weak var label2: UILabel!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet var label1: UILabel!
+    @IBOutlet var label2: UILabel!
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var tableView: UITableView!
+
     let realm = try! Realm()
     var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-    
+
     //    以下五つは、studyViewControllerから画面遷移時に、値が渡される。
     var folderName: String!
     var sender_tag: Int!
     var inputData: String!
     var resultData: String!
     var inputAndResultData: String!
-    
+
     var string = "保存先 : "
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        label1.text = "保存先を選択してください"
-        label2.text = string
-        
-        saveButton.isEnabled = false
-        saveButton.layer.borderColor = UIColor.systemBlue.cgColor
-        saveButton.layer.borderWidth = 1
-        saveButton.layer.cornerRadius = 10
-        
-        
-        
+
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+
+        self.label1.text = "保存先を選択してください"
+        self.label2.text = self.string
+
+        self.saveButton.isEnabled = false
+        self.saveButton.layer.borderColor = UIColor.systemBlue.cgColor
+        self.saveButton.layer.borderWidth = 1
+        self.saveButton.layer.cornerRadius = 10
+
         // Do any additional setup after loading the view.
     }
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        translationFolderArr.count
+
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        self.translationFolderArr.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        let folderNameString = translationFolderArr[indexPath.row].folderName
-        
-        let date = translationFolderArr[indexPath.row].date
+
+        let folderNameString = self.translationFolderArr[indexPath.row].folderName
+
+        let date = self.translationFolderArr[indexPath.row].date
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd HH:mm"
         let dateString: String = formatter.string(from: date)
-        
+
         //        セクション番号で条件分岐
         if indexPath.section == 0 {
-            
             cell.imageView?.image = UIImage(systemName: "folder")
             cell.textLabel?.text = folderNameString
             //        複数行可能
@@ -77,48 +69,42 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
         }
         return cell
     }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        self.folderName = translationFolderArr[indexPath.row].folderName
-        
-        saveButton.isEnabled = true
-        label2.text = string + folderName
-        
+
+    func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.folderName = self.translationFolderArr[indexPath.row].folderName
+
+        self.saveButton.isEnabled = true
+        self.label2.text = self.string + self.folderName
     }
-    
-    @IBAction func saveButton(_ sender: Any) {
-        
+
+    @IBAction func saveButton(_: Any) {
         SVProgressHUD.show()
-        
-        let predict = NSPredicate(format: "folderName == %@", self.folderName)
+
+        let predict = NSPredicate(format: "folderName == %@", folderName)
         self.translationFolderArr = self.realm.objects(TranslationFolder.self).filter(predict).sorted(byKeyPath: "date", ascending: true)
-        
+
         let translation = Translation()
         translation.inputData = self.inputData
         translation.resultData = self.resultData
         translation.inputAndResultData = self.inputAndResultData
-        
-        let allTranslation = realm.objects(Translation.self)
+
+        let allTranslation = self.realm.objects(Translation.self)
         if allTranslation.count != 0 {
             translation.id = allTranslation.max(ofProperty: "id")! + 1
         }
-        try! Realm().write{
+        try! Realm().write {
             translationFolderArr.first!.results.append(translation)
         }
-        
-        SVProgressHUD.showSuccess(withStatus: "'\(folderName!)'へ保存しました")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: { () -> Void in
+
+        SVProgressHUD.showSuccess(withStatus: "'\(self.folderName!)'へ保存しました")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { () in
             SVProgressHUD.dismiss()
-        })
-        
-        self.dismiss(animated: true, completion: nil)
+        }
+
+        dismiss(animated: true, completion: nil)
     }
-    
-    
-    
-    @IBAction func backButton(_ sender: Any) {
+
+    @IBAction func backButton(_: Any) {
         dismiss(animated: true, completion: nil)
     }
 }

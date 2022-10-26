@@ -6,11 +6,10 @@
 //
 
 import Foundation
-//apikey.plist(APIKeyファイル？）を呼ぶヘルパークラスの作成
-//apikeyが複数あるとすれば、その中からkeyを指定してValueを返す。
+// apikey.plist(APIKeyファイル？）を呼ぶヘルパークラスの作成
+// apikeyが複数あるとすれば、その中からkeyを指定してValueを返す。
 
 struct KeyManager {
-
 //    APIKey.plistファイルを取得
     private let keyFilePath = Bundle.main.path(forResource: "APIKey", ofType: "plist")
 

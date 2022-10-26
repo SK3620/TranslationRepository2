@@ -12,6 +12,7 @@ target 'TranslationApp' do
   pod 'CalculateCalendarLogic'
   pod 'ContextMenuSwift'
   pod 'SideMenu', '~> 6.0'
+  pod 'SwiftFormat/CLI'
 end
 
 

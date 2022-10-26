@@ -8,18 +8,17 @@
 import Foundation
 import RealmSwift
 
-class Histroy: Object{
-    
+class Histroy: Object {
     @objc dynamic var inputData = ""
-    
+
     @objc dynamic var resultData = ""
-    
+
     @objc dynamic var date = Date()
-    
+
     @objc dynamic var id = 0
-    
+
     @objc dynamic var inputAndResultData = ""
-    
+
     override
     static func primaryKey() -> String? {
         return "id"
