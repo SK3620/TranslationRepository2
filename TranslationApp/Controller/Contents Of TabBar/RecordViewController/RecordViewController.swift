@@ -26,7 +26,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     var recordArrFilter2: Record!
     //　　　"yyyyMMdd"タップされたString型の日付を格納
     var dateString: String = ""
-//    "\(year).\(month).\(day)"タップされたString型の日付を格納
+    //    "\(year).\(month).\(day)"タップされたString型の日付を格納
     var dateString2: String = ""
     var tabBarController1: TabBarController!
     var studyViewController: StudyViewController?
@@ -70,12 +70,101 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         self.fscalendar.reloadData()
     }
 
-
     override func viewWillDisappear(_: Bool) {
         super.viewWillDisappear(true)
+
         if let studyViewController = studyViewController {
             studyViewController.SetTabBarController1()
         }
+    }
+
+    // date型 -> 年月日をIntで取得
+    func getDay(_ date: Date) -> (Int, Int, Int) {
+        let tmpCalendar = Calendar(identifier: .gregorian)
+        let year = tmpCalendar.component(.year, from: date)
+        let month = tmpCalendar.component(.month, from: date)
+        let day = tmpCalendar.component(.day, from: date)
+        return (year, month, day)
+    }
+
+    // 曜日判定(日曜日:1 〜 土曜日:7)
+    func getWeekIdx(_ date: Date) -> Int {
+        let tmpCalendar = Calendar(identifier: .gregorian)
+        return tmpCalendar.component(.weekday, from: date)
+    }
+
+    // 土日や祝日の日の文字色を変える
+    func calendar(_: FSCalendar, appearance _: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        // 祝日判定をする（祝日は赤色で表示する）
+        if self.judgeHoliday(date) {
+            return UIColor.red
+        }
+
+        // 土日の判定を行う（土曜日は青色、日曜日は赤色で表示する）
+        let weekday = self.getWeekIdx(date)
+        if weekday == 1 { // 日曜日
+            return UIColor.red
+        } else if weekday == 7 { // 土曜日
+            return UIColor.blue
+        }
+
+        return nil
+    }
+
+    fileprivate let gregorian: Calendar = .init(identifier: .gregorian)
+    fileprivate lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+
+    //    祝日判定を行い結果を返すメソッド　trueなら祝日　falseなら普通の日
+    func judgeHoliday(_ date: Date) -> Bool {
+        //        祝日判定用のカレンダークラスのインスタンス　グレゴリ暦のカレンダーインスタンス
+        let tmpCalendar = Calendar(identifier: .gregorian)
+
+        //        祝日判定を行う日にちの年、月、日を取得(多分、とりあえず全ての年、月、日を取得してるとおもう）
+        let year = tmpCalendar.component(.year, from: date)
+        let month = tmpCalendar.component(.month, from: date)
+        let day = tmpCalendar.component(.day, from: date)
+
+        //        祝日判定のインスタンスの生成
+        let holiday = CalculateCalendarLogic()
+
+        return holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
+    }
+
+    //    選択された日付を取得する　日付がタップされた時の処理
+    //    選択された日付はdate変数に格納される
+    func calendar(_: FSCalendar, didSelect date: Date, at _: FSCalendarMonthPosition) {
+        self.addButton.isEnabled = true
+
+        self.reviewButton.setTitle("次回復習日・内容を確認する", for: .normal)
+
+        //        このdate変数をCalendarクラスを利用して、年、月、日で分解させる
+        let tmpCalendar = Calendar(identifier: .gregorian)
+        let year = String(tmpCalendar.component(.year, from: date))
+        let month = String(tmpCalendar.component(.month, from: date))
+        let day = String(tmpCalendar.component(.day, from: date))
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let dateString: String = formatter.string(from: date)
+
+        self.dateString = dateString
+        self.dateString2 = "\(year).\(month).\(day)"
+
+        if self.recordArr.count != 0 {
+            let predicate = NSPredicate(format: "date1 == %@", self.dateString)
+            self.recordArrFilter = self.recordArr.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
+
+            if self.recordArrFilter.isEmpty {
+                self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
+            } else {
+                self.label1.text = ""
+            }
+        }
+        self.tableView.reloadData()
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -140,64 +229,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
                 realm.add(recordArrFilter, update: .modified)
             }
         }
-
         self.tableView.reloadData()
-    }
-
-    //    選択された日付を取得する　日付がタップされた時の処理
-    //    選択された日付はdate変数に格納される
-    func calendar(_: FSCalendar, didSelect date: Date, at _: FSCalendarMonthPosition) {
-        self.addButton.isEnabled = true
-
-        self.reviewButton.setTitle("次回復習日・内容を確認する", for: .normal)
-
-        //        このdate変数をCalendarクラスを利用して、年、月、日で分解させる
-        let tmpCalendar = Calendar(identifier: .gregorian)
-        let year = String(tmpCalendar.component(.year, from: date))
-        let month = String(tmpCalendar.component(.month, from: date))
-        let day = String(tmpCalendar.component(.day, from: date))
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
-        let dateString: String = formatter.string(from: date)
-
-        self.dateString = dateString
-        self.dateString2 = "\(year).\(month).\(day)"
-
-        if self.recordArr.count != 0 {
-            let predicate = NSPredicate(format: "date1 == %@", self.dateString)
-            self.recordArrFilter = self.recordArr.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
-
-            if self.recordArrFilter.isEmpty {
-                self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
-            } else {
-                self.label1.text = ""
-            }
-        }
-        self.tableView.reloadData()
-    }
-
-    fileprivate let gregorian: Calendar = .init(identifier: .gregorian)
-    fileprivate lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
-
-    //    祝日判定を行い結果を返すメソッド　trueなら祝日　falseなら普通の日
-    func judgeHoliday(_ date: Date) -> Bool {
-        //        祝日判定用のカレンダークラスのインスタンス　グレゴリ暦のカレンダーインスタンス
-        let tmpCalendar = Calendar(identifier: .gregorian)
-
-        //        祝日判定を行う日にちの年、月、日を取得(多分、とりあえず全ての年、月、日を取得してるとおもう）
-        let year = tmpCalendar.component(.year, from: date)
-        let month = tmpCalendar.component(.month, from: date)
-        let day = tmpCalendar.component(.day, from: date)
-
-        //        祝日判定のインスタンスの生成
-        let holiday = CalculateCalendarLogic()
-
-        return holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -211,7 +243,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             let editRecordViewController = segue.destination as! EditRecordViewController
 
             editRecordViewController.recordViewController = self
-//            タップされた日付
+            //            タップされた日付
             editRecordViewController.dateString = self.dateString
 
             editRecordViewController.label1_text = self.dateString2
@@ -237,50 +269,17 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         }
     }
 
-    // date型 -> 年月日をIntで取得
-    func getDay(_ date: Date) -> (Int, Int, Int) {
-        let tmpCalendar = Calendar(identifier: .gregorian)
-        let year = tmpCalendar.component(.year, from: date)
-        let month = tmpCalendar.component(.month, from: date)
-        let day = tmpCalendar.component(.day, from: date)
-        return (year, month, day)
-    }
-
-    // 曜日判定(日曜日:1 〜 土曜日:7)
-    func getWeekIdx(_ date: Date) -> Int {
-        let tmpCalendar = Calendar(identifier: .gregorian)
-        return tmpCalendar.component(.weekday, from: date)
-    }
-
-    // 土日や祝日の日の文字色を変える
-    func calendar(_: FSCalendar, appearance _: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-        // 祝日判定をする（祝日は赤色で表示する）
-        if self.judgeHoliday(date) {
-            return UIColor.red
-        }
-
-        // 土日の判定を行う（土曜日は青色、日曜日は赤色で表示する）
-        let weekday = self.getWeekIdx(date)
-        if weekday == 1 { // 日曜日
-            return UIColor.red
-        } else if weekday == 7 { // 土曜日
-            return UIColor.blue
-        }
-
-        return nil
-    }
-
     @IBAction func addButton(_: Any) {
         let addViewController = storyboard?.instantiateViewController(withIdentifier: "add") as! AddViewController
         addViewController.recordViewController = self
-//       "yyyyMMdd"
+        //       "yyyyMMdd"
         addViewController.dateString = self.dateString
-//        "\(year).\(month).\(day)"
+        //        "\(year).\(month).\(day)"
         addViewController.dateString2 = self.dateString2
         present(addViewController, animated: true, completion: nil)
     }
 
-    //    日付にドットマークをつけるメソッド　dateの数だけ呼ばれる（要するに、表示されている月、30回呼ばれる）
+    //    日付にドットマークをつけるメソッド　dateの数だけ呼ばれる
     func calendar(_: FSCalendar, numberOfEventsFor date: Date) -> Int {
         var resultsArr = [String]()
         if self.recordArr.count != 0 {
@@ -322,7 +321,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         performSegue(withIdentifier: "ToReviewViewController", sender: nil)
     }
 
-//    addViewController画面が閉じた時に呼ばれる
+    //    addViewController画面が閉じた時に呼ばれる
     func filteredRecordArr(recordArrFilter1: Results<Record>!) {
         let predicate = NSPredicate(format: "date1 == %@", dateString)
         self.recordArrFilter = recordArrFilter1.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)

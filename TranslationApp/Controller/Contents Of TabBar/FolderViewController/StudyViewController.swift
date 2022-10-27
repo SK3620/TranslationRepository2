@@ -715,14 +715,6 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     //    com.apple.ttsbundle.siri_Aaron_en-US_compact
     //        com.apple.ttsbundle.siri_Nicky_en-US_compact
-    
-    @IBAction func fastForwardButton(_ sender: Any) {
-        let AVPlayer = AVPlayer()
-        AVPlayer.seek(to: <#T##CMTime#>, completionHandler: <#T##(Bool) -> Void#>)
-    }
-    
-    
-    
 }
 
 extension StudyViewController: ContextMenuDelegate {

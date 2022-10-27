@@ -734,18 +734,10 @@
                                         <rect key="frame" x="0.0" y="640.66666666666663" width="375" height="83.333333333333371"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="mzu-06-V37">
-                                                <rect key="frame" x="84.000000000000014" y="8" width="207.33333333333337" height="31"/>
+                                                <rect key="frame" x="122.33333333333333" y="8.0000000000000018" width="130.66666666666669" height="30.666666666666671"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ne7-FM-aPt">
-                                                        <rect key="frame" x="0.0" y="0.0" width="38.333333333333336" height="31"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" title="ボ"/>
-                                                        <connections>
-                                                            <action selector="fastForwardButton:" destination="kJL-ST-fzW" eventType="touchUpInside" id="f4b-6m-e5N"/>
-                                                        </connections>
-                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hZ-Hc-46i">
-                                                        <rect key="frame" x="38.333333333333329" y="0.0" width="42.666666666666671" height="31"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="42.666666666666664" height="30.666666666666668"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.backward" catalog="system"/>
                                                         <connections>
@@ -753,7 +745,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alo-1n-hpF">
-                                                        <rect key="frame" x="81" y="0.0" width="45.333333333333343" height="31"/>
+                                                        <rect key="frame" x="42.666666666666671" y="0.0" width="45.333333333333329" height="30.666666666666668"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="pause.circle.fill" catalog="system"/>
                                                         <connections>
@@ -761,17 +753,12 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xbH-bc-wfK">
-                                                        <rect key="frame" x="126.33333333333336" y="0.0" width="42.666666666666671" height="31"/>
+                                                        <rect key="frame" x="88.000000000000014" y="0.0" width="42.666666666666671" height="30.666666666666668"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.right" catalog="system"/>
                                                         <connections>
                                                             <action selector="nextCellButton:" destination="kJL-ST-fzW" eventType="touchUpInside" id="1YE-UE-J9U"/>
                                                         </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U1K-JH-8v5">
-                                                        <rect key="frame" x="169" y="0.0" width="38.333333333333343" height="31"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" title="ボ"/>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -810,7 +797,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6N-TM-zSY">
-                                                <rect key="frame" x="168.33333333333334" y="37" width="38.333333333333343" height="18"/>
+                                                <rect key="frame" x="168.33333333333334" y="36.666666666666742" width="38.333333333333343" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <color key="textColor" systemColor="systemOrangeColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1276,7 +1263,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hR8-bu-GIB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6244" y="2150.9852216748768"/>
+            <point key="canvasLocation" x="5170" y="2151"/>
         </scene>
         <!--Add View Controller-->
         <scene sceneID="XDk-33-Sgu">
@@ -1413,7 +1400,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zyd-Jh-ohJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7060" y="2838"/>
+            <point key="canvasLocation" x="6126" y="2879"/>
         </scene>
         <!--Edit Record View Controller-->
         <scene sceneID="pSV-4G-Vdr">
@@ -1560,7 +1547,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="464-3a-PAW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7796" y="2150.9852216748768"/>
+            <point key="canvasLocation" x="7060" y="2151"/>
         </scene>
         <!--Record View Controller-->
         <scene sceneID="5fg-qQ-5mS">
@@ -1649,7 +1636,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QkP-4w-7km" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7060" y="2150.9852216748768"/>
+            <point key="canvasLocation" x="6126" y="2151"/>
         </scene>
         <!--学習記録-->
         <scene sceneID="vTU-bX-S6R">
@@ -1667,7 +1654,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y0v-4A-5Yl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6118" y="754"/>
+            <point key="canvasLocation" x="6127" y="754"/>
         </scene>
         <!--単語・フレーズ-->
         <scene sceneID="3M7-Xv-9Ee">

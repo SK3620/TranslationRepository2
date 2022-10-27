@@ -105,7 +105,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     //    UIButtonの設定
     func setButton1(button: [UIButton], pointSize: CGFloat, weight: UIImage.SymbolWeight, scale: UIImage.SymbolScale, systemName: [String], borderWidth: CGFloat?, borderColor: CGColor?, cornerRadius: CGFloat?) {
         let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: weight, scale: scale)
-
+    
         for i in 0 ... button.count - 1 {
             let systemIcon = UIImage(systemName: systemName[i], withConfiguration: config)
             button[i].setImage(systemIcon, for: .normal)
@@ -119,14 +119,14 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
     //    UIbuttonの設定
     func setButton2(button: [UIButton], borderColor: CGColor, borderWidth: CGFloat, cornerRadius: CGFloat) {
-        for i in 0 ... button.count - 1 {
-            button[i].layer.borderColor = borderColor
-            button[i].layer.borderWidth = borderWidth
-            button[i].layer.cornerRadius = cornerRadius
+        button.forEach{
+            $0.layer.borderColor = borderColor
+            $0.layer.borderWidth = borderWidth
+            $0.layer.cornerRadius = cornerRadius
         }
     }
 
-    //　　textViewとViewの設定
+    //　　textViewとViewのデザイン設定
     func setTranslateTextViewAndView() {
         let color = UIColor.systemGray4.cgColor
         self.translateTextView1.layer.borderColor = color

@@ -25,17 +25,14 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var times = [String]()
     var inputDate = [String]()
 
-    var tabBarController1: UITabBarController!
-    var studyViewController: StudyViewController!
-
     let realm = try! Realm()
-
     var recordArr = try! Realm().objects(Record.self).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
     var resultsArr: Results<Record>!
 
     var datePicker: UIDatePicker = .init()
-
     var dateString: String!
+    var tabBarController1: UITabBarController!
+    var studyViewController: StudyViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,11 +49,23 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
         self.tableView.layer.borderWidth = 2.5
 
-        // ピッカー設定
         self.datePicker.datePickerMode = UIDatePicker.Mode.date
         self.datePicker.preferredDatePickerStyle = .wheels
         self.datePicker.timeZone = NSTimeZone.local
         self.datePicker.locale = Locale.current
+        self.setDoneToolBarForTextField()
+//        デフォルト設定
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: Date())
+        self.datePicker.date = formatter.date(from: dateString)!
+
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        // Do any additional setup after loading the view.
+    }
+
+    func setDoneToolBarForTextField() {
         // 決定バーの生成
         let toolbar4 = UIToolbar()
         toolbar4.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
@@ -67,15 +76,6 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // インプットビュー設定
         self.textField.inputView = self.datePicker
         self.textField.inputAccessoryView = toolbar4
-//        デフォルト設定
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let dateString = formatter.string(from: Date())
-        self.datePicker.date = formatter.date(from: dateString)!
-
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        // Do any additional setup after loading the view.
     }
 
     @objc func done4() {
@@ -97,35 +97,32 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         if self.recordArr.isEmpty != true {
             if self.resultsArr.count != 0 {
-                for number in 0 ... self.resultsArr.count - 1 {
-                    self.reviewDate.append(self.resultsArr[number].nextReviewDate)
-                    self.times.append(self.resultsArr[number].times)
-                    self.folderName.append(self.resultsArr[number].folderName)
-                    self.content.append(self.resultsArr[number].number)
-                    self.memo.append(self.resultsArr[number].memo)
-                    self.inputDate.append(self.recordArr[number].inputDate)
-
-                    self.label1.text = "\(dateString)に復習する内容があります"
+                self.resultsArr.forEach {
+                    self.reviewDate.append($0.nextReviewDate)
+                    self.times.append($0.times)
+                    self.folderName.append($0.folderName)
+                    self.content.append($0.number)
+                    self.memo.append($0.memo)
+                    self.inputDate.append($0.inputDate)
                 }
+                self.label1.text = "\(dateString)に復習する内容があります"
             } else {
-                for number in 0 ... self.recordArr.count - 1 {
-                    self.reviewDate.append(self.recordArr[number].nextReviewDate)
-                    self.times.append(self.recordArr[number].times)
-                    self.folderName.append(self.recordArr[number].folderName)
-                    self.content.append(self.recordArr[number].number)
-                    self.memo.append(self.recordArr[number].memo)
-                    self.inputDate.append(self.recordArr[number].inputDate)
-
-                    self.resultsArr = self.recordArr
-
-                    self.label1.text = "\(dateString)に復習する内容はありません\n代わりに全データを日付順に表示しています"
+                self.recordArr.forEach {
+                    self.reviewDate.append($0.nextReviewDate)
+                    self.times.append($0.times)
+                    self.folderName.append($0.folderName)
+                    self.content.append($0.number)
+                    self.memo.append($0.memo)
+                    self.inputDate.append($0.inputDate)
                 }
+                self.resultsArr = self.recordArr
+
+                self.label1.text = "\(dateString)に復習する内容はありません\n代わりに全データを日付順に表示しています"
             }
         } else {
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
-
         self.tableView.reloadData()
     }
 
@@ -141,64 +138,54 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.inputDate = []
 
         if self.recordArr.isEmpty != true {
-            for number in 0 ... self.recordArr.count - 1 {
-                self.reviewDate.append(self.recordArr[number].nextReviewDate)
-                self.times.append(self.recordArr[number].times)
-                self.folderName.append(self.recordArr[number].folderName)
-                self.content.append(self.recordArr[number].number)
-                self.memo.append(self.recordArr[number].memo)
-                self.inputDate.append(self.recordArr[number].inputDate)
-                print("実行された")
-
-                self.resultsArr = self.recordArr
-                self.label1.text = "全てのデータを日付順に表示しています"
+            self.recordArr.forEach {
+                self.reviewDate.append($0.nextReviewDate)
+                self.times.append($0.times)
+                self.folderName.append($0.folderName)
+                self.content.append($0.number)
+                self.memo.append($0.memo)
+                self.inputDate.append($0.inputDate)
             }
+            self.resultsArr = self.recordArr
+            self.label1.text = "全てのデータを日付順に表示しています"
         } else {
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
-
         self.tableView.reloadData()
     }
-
+    
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
+        
         let date = Date()
         let dateFomatter = DateFormatter()
         dateFomatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d", options: 0, locale: Locale(identifier: "ja_JP"))
         let dateString = dateFomatter.string(from: date)
-
+        
         self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.setNavigationBarHidden(false, animated: true)
         title = "次回復習日・内容 \(dateString)"
         navigationController?.navigationBar.barTintColor = .systemGray4
         navigationController?.navigationBar.backgroundColor = .systemGray4
-
         let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.editButton(_:)))
-
         navigationItem.rightBarButtonItems = [editBarButtonItem]
-
-        print("Record確認\(self.recordArr)")
-
+        
         if self.recordArr.isEmpty != true {
-            for number in 0 ... self.recordArr.count - 1 {
-                self.reviewDate.append(self.recordArr[number].nextReviewDate)
-                self.times.append(self.recordArr[number].times)
-                self.folderName.append(self.recordArr[number].folderName)
-                self.content.append(self.recordArr[number].number)
-                self.memo.append(self.recordArr[number].memo)
-                self.inputDate.append(self.recordArr[number].inputDate)
-
-                self.resultsArr = self.recordArr
-
-                self.label1.text = "全てのデータを日付順に表示しています"
+            self.recordArr.forEach {
+                self.reviewDate.append($0.nextReviewDate)
+                self.times.append($0.times)
+                self.folderName.append($0.folderName)
+                self.content.append($0.number)
+                self.memo.append($0.memo)
+                self.inputDate.append($0.inputDate)
             }
+            self.resultsArr = self.recordArr
+            self.label1.text = "全てのデータを日付順に表示しています"
         } else {
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
-
         if self.studyViewController == nil {
             self.backButton.isHidden = true
             self.backButton.isEnabled = false
@@ -236,19 +223,16 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let image = UIImage(systemName: "checkmark.circle")
             cell.checkMarkButton.setImage(image, for: .normal)
             cell.checkMarkButton.tintColor = UIColor.gray
-
         case true:
             let image = UIImage(systemName: "checkmark.circle.fill")
             cell.checkMarkButton.setImage(image, for: .normal)
             cell.checkMarkButton.tintColor = UIColor.systemGreen
         }
-
         return cell
     }
 
     @objc func tapCheckMarkButton(_ sender: UIButton) {
         let result = self.resultsArr[sender.tag].isChecked
-
         switch result {
         case false:
             try! self.realm.write {
@@ -266,7 +250,6 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 realm.add(resultsArr, update: .modified)
             }
         }
-
         self.tableView.reloadData()
     }
 
@@ -279,9 +262,6 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if editingStyle == .delete {
 //            データベースから削除する
             try! self.realm.write {
-                print("確認だよ")
-//                print(resultsArr1)
-
                 self.realm.delete(self.resultsArr[indexPath.row])
                 self.folderName.remove(at: indexPath.row)
                 self.content.remove(at: indexPath.row)
@@ -289,16 +269,14 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.reviewDate.remove(at: indexPath.row)
                 self.memo.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                print("実行確認")
             }
 
             if self.resultsArr.count == 0, self.recordArr.count == 0 {
                 self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
             } else if self.resultsArr.count == 0 {
-                self.label1.text = "\(self.dateString)に登録されたデータはありません\n代わりに全てのデータを日付順に表示しています"
+                self.label1.text = "\(String(describing: self.dateString))に登録されたデータはありません\n代わりに全てのデータを日付順に表示しています"
                 self.resultsArr = self.recordArr
             }
-
             tableView.reloadData()
         }
     }
@@ -322,51 +300,6 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.editButton.setTitle("完了", for: .normal)
         }
     }
-
-//    @IBAction func returnButton(_ sender: Any) {
-//        if self.textField.text != "" {
-//            let formatter = DateFormatter()
-//
-//            let date = self.stringToDate(dateString: textField.text!, fromFormat: "yyyy.M.d")!
-//            print("日付確認1\(date)")
-//            let before = Calendar.current.date(byAdding: .day, value: -1, to: date)
-//            print("日付確認2\(before)")
-//
-//            formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyyMd", options: 0, locale: Locale(identifier: "ja_JP"))
-//            let dateString5 = formatter.string(from: before!)
-//            print("日付確認2.5 \(dateString5)")
-//            let dateString6: Date = self.stringToDate(dateString: dateString5, fromFormat: "yyyy.M.d")!
-//            formatter.dateFormat = "yyyy.M.d"
-//            let dateString7 = formatter.string(from: dateString6)
-//            print("日付確認3 \(dateString7)")
-//            textField.text = dateString7
-//        }
-//    }
-//
-//
-//    @IBAction func forwardButton(_ sender: Any) {
-//        if self.textField.text != "" {
-//            let formatter = DateFormatter()
-//
-//            let date = self.stringToDate(dateString: textField.text!, fromFormat: "yyyy.M.d")!
-//            print("日付確認3.5: \(date)")
-//            formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyyMd", options: 0, locale: Locale(identifier: "ja_JP"))
-//            let dateString8 = formatter.string(from: date)
-//            let dateString9 = self.stringToDate(dateString: dateString8, fromFormat: "yyyy.M.d")
-//            print(dateString9)
-//
-//            let after = Calendar.current.date(byAdding: .day, value: 1, to: dateString9!)!
-//            print("日付確認4: \(after)")
-//        }
-//
-//    }
-//
-//    func stringToDate(dateString: String, fromFormat: String) -> Date? {
-//               let formatter = DateFormatter()
-//               formatter.locale = .current
-//               formatter.dateFormat = fromFormat
-//               return formatter.date(from: dateString)
-//           }
 
     @IBAction func backButton(_: Any) {
         dismiss(animated: true)

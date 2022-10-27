@@ -30,23 +30,23 @@ class AddViewController: UIViewController {
     var recordViewController: RecordViewController!
     var translationFolderArr: Results<TranslationFolder>!
 
-//    RecordViewControllerからの遷移時に渡される、タップされた日付を格納する変数 "yyyyMMdd"
+    //    RecordViewControllerからの遷移時に渡される、タップされた日付を格納する変数 "yyyyMMdd"
     var dateString: String!
     //　　上と同じ　タップされた日付 "\(year).\(month).\(day)"
     var dateString2: String!
-//    nextReviewDateForSorting（Int型にした日付）を格納する変数
+    //    nextReviewDateForSorting（Int型にした日付）を格納する変数
     var dateStringForSorting: Int!
     var folderNames = [String]()
     var numbers = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        "\(year).\(month).\(day)"をラベルに表示
+        //        "\(year).\(month).\(day)"をラベルに表示
         self.label1.text = self.dateString2
 
         self.textField3.delegate = self
 
-//        復習回数を１〜３０回に設定
+        //        復習回数を１〜３０回に設定
         for number in 1 ... 30 {
             let number = String(number)
             self.numbers.append(number)
@@ -62,7 +62,7 @@ class AddViewController: UIViewController {
         self.setDoneTooBarForTextField4()
         self.setDoneToolBarForTextView1()
 
-//        dataPickerのデフォルト設定
+        //        dataPickerのデフォルト設定
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
@@ -178,7 +178,7 @@ class AddViewController: UIViewController {
         self.textField4.text = formatter.string(from: self.datePicker.date)
 
         formatter.dateFormat = "yyyyMd"
-//        取得した日付をInt型に変換
+        //        取得した日付をInt型に変換
         self.dateStringForSorting = Int(formatter.string(from: self.datePicker.date))
     }
 
@@ -202,9 +202,9 @@ class AddViewController: UIViewController {
         let textField_text1 = self.textField1.text
         let textField_text2 = self.textField2.text
         let textField_text3 = self.textField3.text
-//        String型の次回復習日"yyyy.M.d"
+        //        String型の次回復習日"yyyy.M.d"
         let textField_text4 = self.textField4.text
-//        Int型の次回復習日"yyyyMd'
+        //        Int型の次回復習日"yyyyMd'
         let textField_text4ForSorting = self.dateStringForSorting
         let textView_text1 = self.textView1.text
 
@@ -214,15 +214,15 @@ class AddViewController: UIViewController {
         record.times = textField_text3!
         record.nextReviewDate = textField_text4!
         record.memo = textView_text1!
-//        "yyyyMMdd"
+        //        "yyyyMMdd"
         record.date1 = self.dateString
-//        "\(year).\(month).\(day)"
+        //        "\(year).\(month).\(day)"
         record.inputDate = self.dateString2
         if textField_text4 != "" {
-//            Int型に変換したyyyyMMdd
+            //            Int型に変換したyyyyMMdd
             record.nextReviewDateForSorting = textField_text4ForSorting!
         } else {
-//            何も入力がなければ、12月31日以降をInt型で指定　並べ替え時に一番下に表示される
+            //            何も入力がなければ、12月31日以降をInt型で指定　並べ替え時に一番下に表示される
             record.nextReviewDateForSorting = 1232
         }
 
@@ -235,8 +235,6 @@ class AddViewController: UIViewController {
             try realm.write {
                 realm.add(record)
             }
-//            self.recordViewController.recordArrFilter1 = self.recordArr
-//            self.recordViewController.number = 1
             self.recordViewController.filteredRecordArr(recordArrFilter1: self.recordArr)
             self.recordViewController.dateString = self.dateString
             SVProgressHUD.showSuccess(withStatus: "追加しました")
@@ -248,23 +246,16 @@ class AddViewController: UIViewController {
         }
         dismiss(animated: true)
     }
-
-//    func stringToDate(dateString: String, fromFormat: String) -> Date? {
-//        let formatter = DateFormatter()
-//        formatter.locale = .current
-//        formatter.dateFormat = fromFormat
-//        return formatter.date(from: dateString)
-//    }
 }
 
 extension AddViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     func numberOfComponents(in _: UIPickerView) -> Int {
-//        ドラムロールの列数
+        //        ドラムロールの列数
         return 1
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent _: Int) -> Int {
-//        ドラムロールの行数
+        //        ドラムロールの行数
         return pickerView == self.pickerView1 ? self.folderNames.count : 30
     }
 

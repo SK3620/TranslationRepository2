@@ -42,4 +42,3 @@ class Translation: Object {
         return "id"
     }
 }
-
