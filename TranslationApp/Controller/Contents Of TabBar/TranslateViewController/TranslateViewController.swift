@@ -12,6 +12,9 @@ import RealmSwift
 import SVProgressHUD
 import UIKit
 
+// クロージャの非同期処理時のprogresss処理
+// firebaseと連携するためのファイル　googleservice.info.plistをgitIgnoreする（API情報があるから）
+
 class TranslateViewController: UIViewController, UITextViewDelegate {
     // DeepL APIのレスポンス用構造体
     //    Codableとは、API通信等で取得したJSONやプロパティリストを任意のデータ型に変換するプロトコル →データをアプリを実装しやすいデータ型に変換することで処理が楽になる
@@ -100,12 +103,15 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
         // キーボードに完了のツールバーを作成
         self.setDoneTooBar()
+
+        self.tabBarController1.setBarButtonItem0()
+        self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
     //    UIButtonの設定
     func setButton1(button: [UIButton], pointSize: CGFloat, weight: UIImage.SymbolWeight, scale: UIImage.SymbolScale, systemName: [String], borderWidth: CGFloat?, borderColor: CGColor?, cornerRadius: CGFloat?) {
         let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: weight, scale: scale)
-    
+
         for i in 0 ... button.count - 1 {
             let systemIcon = UIImage(systemName: systemName[i], withConfiguration: config)
             button[i].setImage(systemIcon, for: .normal)
@@ -119,7 +125,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
     //    UIbuttonの設定
     func setButton2(button: [UIButton], borderColor: CGColor, borderWidth: CGFloat, cornerRadius: CGFloat) {
-        button.forEach{
+        button.forEach {
             $0.layer.borderColor = borderColor
             $0.layer.borderWidth = borderWidth
             $0.layer.cornerRadius = cornerRadius

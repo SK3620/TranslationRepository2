@@ -154,15 +154,15 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         self.tableView.reloadData()
     }
-    
+
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-        
+
         let date = Date()
         let dateFomatter = DateFormatter()
         dateFomatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d", options: 0, locale: Locale(identifier: "ja_JP"))
         let dateString = dateFomatter.string(from: date)
-        
+
         self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.setNavigationBarHidden(false, animated: true)
         title = "次回復習日・内容 \(dateString)"
@@ -170,7 +170,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationController?.navigationBar.backgroundColor = .systemGray4
         let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.editButton(_:)))
         navigationItem.rightBarButtonItems = [editBarButtonItem]
-        
+
         if self.recordArr.isEmpty != true {
             self.recordArr.forEach {
                 self.reviewDate.append($0.nextReviewDate)

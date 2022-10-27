@@ -5,6 +5,7 @@
 //  Created by 鈴木健太 on 2022/08/27.
 //
 
+import Firebase
 import RealmSwift
 import UIKit
 
@@ -14,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
+
         var config = Realm.Configuration(
             schemaVersion: 1, // schemaVersionを2から3に増加。
             migrationBlock: { migration, oldSchemaVersion in
