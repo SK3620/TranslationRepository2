@@ -139,6 +139,16 @@ class TabBarController: UITabBarController {
         }))
         present(alert, animated: true, completion: nil)
     }
+
+//    タイムライン画面への遷移時
+    override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
+        if segue.identifier == "ToSecondTabBarController" {
+            let secondTabBarController = segue.destination as! SecondTabBarController
+            let navigationController = secondTabBarController.viewControllers![1] as! UINavigationController
+            let profileViewController = navigationController.viewControllers[0] as! ProfileViewController
+            profileViewController.secondTabBarController = secondTabBarController
+        }
+    }
 }
 
 extension TabBarController: UITextFieldDelegate {

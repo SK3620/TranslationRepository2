@@ -20,8 +20,9 @@ class TimeLineViewController: UIViewController {
 //        currentUserがnilなら
         if Auth.auth().currentUser == nil {
 //            ログインしていない時の処理
-            let loginViewController = self.storyboard?.instantiateViewController(withIdentifier: "Login")
-            self.present(loginViewController!, animated: true, completion: nil)
+            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+//            loginViewController.logoutButton.isEnabled = false
+            self.present(loginViewController, animated: true, completion: nil)
         }
     }
 

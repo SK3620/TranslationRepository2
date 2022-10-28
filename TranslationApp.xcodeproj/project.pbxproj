@@ -32,6 +32,10 @@
 		8389C3FE290ABDBC007347AE /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8389C3FD290ABDBC007347AE /* ProfileViewController.swift */; };
 		8389C401290AC663007347AE /* Pods_TranslationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */; };
 		8389C405290AC6AF007347AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8389C404290AC6AF007347AE /* Alamofire */; };
+		83920A9F290B946100F1F2D6 /* CustomCellForProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920A9D290B946100F1F2D6 /* CustomCellForProfile.swift */; };
+		83920AA0290B946100F1F2D6 /* CustomCellForProfile.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83920A9E290B946100F1F2D6 /* CustomCellForProfile.xib */; };
+		83920AA2290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */; };
+		83920AA4290BB2BE00F1F2D6 /* editProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920AA3290BB2BE00F1F2D6 /* editProfileViewController.swift */; };
 		83966BF728E8C1060098A39E /* CustomCellForStudy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83966BF528E8C1060098A39E /* CustomCellForStudy.swift */; };
 		83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83966BF628E8C1060098A39E /* CustomCellForStudy.xib */; };
 		839CDF632906939100F78F44 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 839CDF622906939100F78F44 /* Alamofire */; };
@@ -88,6 +92,10 @@
 		8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
 		8389C3FB290A7C6A007347AE /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8389C3FD290ABDBC007347AE /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		83920A9D290B946100F1F2D6 /* CustomCellForProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForProfile.swift; sourceTree = "<group>"; };
+		83920A9E290B946100F1F2D6 /* CustomCellForProfile.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForProfile.xib; sourceTree = "<group>"; };
+		83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireBaseRelatedPath.swift; sourceTree = "<group>"; };
+		83920AA3290BB2BE00F1F2D6 /* editProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editProfileViewController.swift; sourceTree = "<group>"; };
 		83966BF528E8C1060098A39E /* CustomCellForStudy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForStudy.swift; sourceTree = "<group>"; };
 		83966BF628E8C1060098A39E /* CustomCellForStudy.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForStudy.xib; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
@@ -200,6 +208,7 @@
 				8388DA5528C9C237008DE6FF /* TranslationImage.png */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
 				83071D0328B91AC90003734C /* LaunchScreen.storyboard */,
+				83920A9E290B946100F1F2D6 /* CustomCellForProfile.xib */,
 				83AC1DC728E4427D00576CF4 /* CustomCellForPhraseWord.xib */,
 				83966BF628E8C1060098A39E /* CustomCellForStudy.xib */,
 				83B9C1FA28CFF10B006138E2 /* CustomCellForHistory.xib */,
@@ -225,6 +234,7 @@
 		8356E953290496F900FD9236 /* Controller For XIB */ = {
 			isa = PBXGroup;
 			children = (
+				83920A9D290B946100F1F2D6 /* CustomCellForProfile.swift */,
 				83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */,
 				83966BF528E8C1060098A39E /* CustomCellForStudy.swift */,
 				83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */,
@@ -300,7 +310,9 @@
 			isa = PBXGroup;
 			children = (
 				8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */,
+				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
 				8389C3FD290ABDBC007347AE /* ProfileViewController.swift */,
+				83920AA3290BB2BE00F1F2D6 /* editProfileViewController.swift */,
 				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
 			);
 			path = "Contents Of SecondTabBar";
@@ -409,6 +421,7 @@
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
 				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
 				83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */,
+				83920AA0290B946100F1F2D6 /* CustomCellForProfile.xib in Resources */,
 				836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */,
 				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
@@ -481,6 +494,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83920A9F290B946100F1F2D6 /* CustomCellForProfile.swift in Sources */,
 				83B9C20428D3132D006138E2 /* EditRecordViewController.swift in Sources */,
 				83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */,
 				8356E9552905574500FD9236 /* History.swift in Sources */,
@@ -491,8 +505,10 @@
 				8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */,
 				83B9C20128D3050E006138E2 /* CustomCellForRecord.swift in Sources */,
 				83B6AF1C28E71E8C00700DBF /* ReviewViewController.swift in Sources */,
+				83920AA2290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift in Sources */,
 				83B9C20628D39997006138E2 /* AddViewController.swift in Sources */,
 				839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */,
+				83920AA4290BB2BE00F1F2D6 /* editProfileViewController.swift in Sources */,
 				83A564C928D7630300C3A9B9 /* PhraseWordViewController.swift in Sources */,
 				83AC1DC828E4427D00576CF4 /* CustomCellForPhraseWord.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,

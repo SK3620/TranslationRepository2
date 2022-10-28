@@ -345,6 +345,24 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
   - CalculateCalendarLogic (0.5.0)
+  - CLImageEditor/AllTools (0.2.4):
+    - CLImageEditor/Core
+    - CLImageEditor/EmoticonTool
+    - CLImageEditor/ResizeTool
+    - CLImageEditor/SplashTool
+    - CLImageEditor/StickerTool
+    - CLImageEditor/TextTool
+  - CLImageEditor/Core (0.2.4)
+  - CLImageEditor/EmoticonTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/ResizeTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/SplashTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/StickerTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/TextTool (0.2.4):
+    - CLImageEditor/Core
   - ContextMenuSwift (1.0.0)
   - Firebase (8.9.1):
     - Firebase/Core (= 8.9.1)
@@ -512,6 +530,7 @@ PODS:
 
 DEPENDENCIES:
   - CalculateCalendarLogic
+  - CLImageEditor/AllTools (= 0.2.4)
   - ContextMenuSwift
   - Firebase (= 8.9.1)
   - Firebase/Analytics
@@ -530,6 +549,7 @@ SPEC REPOS:
     - abseil
     - BoringSSL-GRPC
     - CalculateCalendarLogic
+    - CLImageEditor
     - ContextMenuSwift
     - Firebase
     - FirebaseAnalytics
@@ -562,6 +582,7 @@ SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   CalculateCalendarLogic: d14189787cd47766e64281b2686608afea07ae4d
+  CLImageEditor: dc3e5358f641368da3a76fc1c744a4c2ceb270ad
   ContextMenuSwift: c89068a89ccd9210dfcaee3bdc558e65aa74899b
   Firebase: fb5114cd2bf96e2ff7bcb01d0d9a156cf5fd2f07
   FirebaseAnalytics: 4ab446ce08a3fe52e8a4303dd997cf26276bf968
@@ -590,6 +611,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftFormat: 61cda3819dc3a7d69795ce0430e1e1d53c4a4fb2
 
-PODFILE CHECKSUM: f4d821e1f3027ece7ed948e74860cb74b9ed0d9c
+PODFILE CHECKSUM: c3086f9a165df845ccec63f7388cb24a0da1a375
 
 COCOAPODS: 1.11.3

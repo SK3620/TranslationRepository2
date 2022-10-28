@@ -146,9 +146,9 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         navigationController.navigationBar.barTintColor = .systemGray4
         title = self.folderNameString
 
-        let addBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.addBarButtonTapped(_:)))
+        let settingsBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.addBarButtonTapped(_:)))
 
-        navigationItem.rightBarButtonItems = [addBarButtonItem]
+        navigationItem.rightBarButtonItems = [settingsBarButtonItem]
 
         self.tableView.layer.cornerRadius = 10
 
