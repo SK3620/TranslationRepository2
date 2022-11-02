@@ -515,6 +515,7 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - Parchment (3.2.0)
   - PromisesObjC (2.1.1)
   - Realm (10.20.0):
     - Realm/Headers (= 10.20.0)
@@ -539,6 +540,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - FirebaseUI/Storage
   - FSCalendar
+  - Parchment (~> 3.0)
   - RealmSwift (= 10.20.0)
   - SideMenu (~> 6.0)
   - SVProgressHUD
@@ -570,6 +572,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - Parchment
     - PromisesObjC
     - Realm
     - RealmSwift
@@ -603,6 +606,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  Parchment: a43c440b22c8a60f7e0196b74339446d4d1d18ea
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Realm: ae32bdc1da7d19c7617e0400201a77acd4a211b9
   RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
@@ -611,6 +615,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftFormat: 61cda3819dc3a7d69795ce0430e1e1d53c4a4fb2
 
-PODFILE CHECKSUM: c3086f9a165df845ccec63f7388cb24a0da1a375
+PODFILE CHECKSUM: df124fe992e19761dd9d8beb110f6ec2eb57f572
 
 COCOAPODS: 1.11.3

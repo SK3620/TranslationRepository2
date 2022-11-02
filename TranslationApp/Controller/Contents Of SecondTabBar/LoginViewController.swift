@@ -17,19 +17,28 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginButton: UIButton!
     @IBOutlet var createAccountButton: UIButton!
     @IBOutlet var logoutButton: UIButton!
+    @IBOutlet var deleteAccountButton: UIButton!
+    @IBOutlet var view1: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.view1.layer.cornerRadius = 10
+
         if Auth.auth().currentUser == nil {
             self.logoutButton.isEnabled = false
+            self.deleteAccountButton.isEnabled = false
         } else {
             self.logoutButton.isEnabled = true
+            self.deleteAccountButton.isEnabled = true
         }
 
         self.logoutButton.layer.borderWidth = 1
         self.logoutButton.layer.cornerRadius = 6
         self.logoutButton.layer.borderColor = UIColor.systemRed.cgColor
+        self.deleteAccountButton.layer.borderWidth = 1
+        self.deleteAccountButton.layer.cornerRadius = 6
+        self.deleteAccountButton.layer.borderColor = UIColor.systemRed.cgColor
 
         //            textFieldとbuttonのデザインを設定
         let textFieldArr: [UITextField] = [mailAddressTextField, passwordTextField, displayNameTextField]
@@ -73,7 +82,7 @@ class LoginViewController: UIViewController {
     //    アカウント作成ボタン
     @IBAction func createAccountButton(_: Any) {
         if let address = self.mailAddressTextField.text, let password = self.passwordTextField.text, let displayName = displayNameTextField.text {
-            if address.isEmpty || password.isEmpty || displayName.isEmpty {
+            if address.isEmpty || password.isEmpty || displayName.isEmpty || displayName == "ー" {
                 print("何かが入力されていません")
                 return
             }
@@ -102,6 +111,23 @@ class LoginViewController: UIViewController {
                             SVProgressHUD.showError(withStatus: "表示名の設定に失敗しました")
                             return
                         }
+
+                        let postRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument")
+                        let postDic = [
+                            "age": "ー",
+                            "work": "ー",
+                            "gender": "ー",
+                            "introduction": "ー",
+                            "academicHistory": "ー",
+                            "hobby": "ー",
+                            "visitedCountry": "ー",
+                            "wannaVisitCountry": "ー",
+                            "whereYouLive": "ー",
+                            "birthday": "ー",
+                            "etc": "ー",
+                        ] as [String: Any]
+                        print(postDic)
+                        postRef.setData(postDic, merge: true)
                         print("DEBUG_PRINT: [displayName = \(user.displayName!)]の設定に成功しました。")
 
                         SVProgressHUD.dismiss()
@@ -147,7 +173,53 @@ class LoginViewController: UIViewController {
             SVProgressHUD.show()
 //            ログアウト処理
             try! Auth.auth().signOut()
-            SVProgressHUD.dismiss()
+            SVProgressHUD.showSuccess(withStatus: "ログアウトが完了しました")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
+                SVProgressHUD.dismiss()
+                self.dismiss(animated: true, completion: nil)
+            }
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+
+//    アカウント削除ボタン
+    @IBAction func deleteAccountButton(_: Any) {
+        let alert = UIAlertController(title: "アカウント削除", message: "アカウントを削除しますか？", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "削除", style: .default, handler: { _ in
+            SVProgressHUD.show()
+//            削除処理
+            let user = Auth.auth().currentUser!
+            user.delete { error in
+                if let error = error {
+                    // An error happened.
+                    print("削除失敗\(error)")
+                } else {
+                    // Account deleted.
+                    let postRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument")
+                    postRef.delete(completion: { error in
+                        if let error = error {
+                            print("profileDataの削除失敗\(error)")
+                        } else {
+                            print("profileDataの削除成功")
+                        }
+                    })
+
+                    Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg").delete(completion: { error in
+                        if let error = error {
+                            print("画像削除失敗\(error)")
+                        } else {
+                            print("画像削除成功")
+                        }
+                    })
+                }
+            }
+            SVProgressHUD.showSuccess(withStatus: "アカウント削除が完了しました")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
+                SVProgressHUD.dismiss()
+                self.dismiss(animated: true, completion: nil)
+//                self.profileViewController.setImageFromStorage()
+            }
         }))
         present(alert, animated: true, completion: nil)
     }

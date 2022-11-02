@@ -11,19 +11,18 @@ import UIKit
 class TimeLineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.navigationController?.navigationBar.backgroundColor = .systemGray4
+        //        currentUserがnilなら
+        if Auth.auth().currentUser == nil {
+            //            ログインしていない時の処理
+            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+            //            loginViewController.logoutButton.isEnabled = false
+            self.present(loginViewController, animated: true, completion: nil)
+        }
     }
 
     override func viewDidAppear(_: Bool) {
         super.viewDidAppear(true)
-//        currentUserがnilなら
-        if Auth.auth().currentUser == nil {
-//            ログインしていない時の処理
-            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-//            loginViewController.logoutButton.isEnabled = false
-            self.present(loginViewController, animated: true, completion: nil)
-        }
     }
 
     /*

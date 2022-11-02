@@ -20,9 +20,12 @@
 		8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95B2906407500FD9236 /* FirstMemo.swift */; };
 		8356E95E290642D800FD9236 /* Speak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95D290642D800FD9236 /* Speak.swift */; };
 		836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 836D1F89290A52360075AFEE /* GoogleService-Info.plist */; };
+		836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
 		8382E93D28F728E100877DD8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382E93C28F728E100877DD8 /* Alamofire */; };
 		8382FD4628F987B20021715C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382FD4528F987B20021715C /* Alamofire */; };
+		83833545290F60CF00C374F9 /* CustomCellForEditProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */; };
+		83833546290F60CF00C374F9 /* CustomCellForEditProfile.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83833544290F60CF00C374F9 /* CustomCellForEditProfile.xib */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */; };
@@ -32,10 +35,10 @@
 		8389C3FE290ABDBC007347AE /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8389C3FD290ABDBC007347AE /* ProfileViewController.swift */; };
 		8389C401290AC663007347AE /* Pods_TranslationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */; };
 		8389C405290AC6AF007347AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8389C404290AC6AF007347AE /* Alamofire */; };
-		83920A9F290B946100F1F2D6 /* CustomCellForProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920A9D290B946100F1F2D6 /* CustomCellForProfile.swift */; };
-		83920AA0290B946100F1F2D6 /* CustomCellForProfile.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83920A9E290B946100F1F2D6 /* CustomCellForProfile.xib */; };
+		83920A9F290B946100F1F2D6 /* CustomCellForIntroduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920A9D290B946100F1F2D6 /* CustomCellForIntroduction.swift */; };
+		83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83920A9E290B946100F1F2D6 /* CustomCellForIntroduction.xib */; };
 		83920AA2290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */; };
-		83920AA4290BB2BE00F1F2D6 /* editProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920AA3290BB2BE00F1F2D6 /* editProfileViewController.swift */; };
+		83920AA4290BB2BE00F1F2D6 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920AA3290BB2BE00F1F2D6 /* EditProfileViewController.swift */; };
 		83966BF728E8C1060098A39E /* CustomCellForStudy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83966BF528E8C1060098A39E /* CustomCellForStudy.swift */; };
 		83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83966BF628E8C1060098A39E /* CustomCellForStudy.xib */; };
 		839CDF632906939100F78F44 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 839CDF622906939100F78F44 /* Alamofire */; };
@@ -43,6 +46,7 @@
 		839FBA3328BA101200BB64A5 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3228BA101200BB64A5 /* FolderViewController.swift */; };
 		839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = 839FBA3828BA5C8900BB64A5 /* APIKey.plist */; };
 		839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3A28BA602700BB64A5 /* KeyManager.swift */; };
+		83A1D5C7290EC69D00B6F18A /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */; };
 		83A2E1AB2901023700F1117A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83A2E1AA2901023700F1117A /* Alamofire */; };
 		83A2E1AE29018C5D00F1117A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83A2E1AD29018C5D00F1117A /* Alamofire */; };
 		83A2E1B029019CA100F1117A /* SelectFolderForStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */; };
@@ -85,23 +89,27 @@
 		8356E95B2906407500FD9236 /* FirstMemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMemo.swift; sourceTree = "<group>"; };
 		8356E95D290642D800FD9236 /* Speak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speak.swift; sourceTree = "<group>"; };
 		836D1F89290A52360075AFEE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsHistoryViewController.swift; sourceTree = "<group>"; };
 		837CD1B228BE264F00823D17 /* TranslationFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFolder.swift; sourceTree = "<group>"; };
+		83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForEditProfile.swift; sourceTree = "<group>"; };
+		83833544290F60CF00C374F9 /* CustomCellForEditProfile.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForEditProfile.xib; sourceTree = "<group>"; };
 		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStudyViewContoller.swift; sourceTree = "<group>"; };
 		8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
 		8389C3FB290A7C6A007347AE /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8389C3FD290ABDBC007347AE /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		83920A9D290B946100F1F2D6 /* CustomCellForProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForProfile.swift; sourceTree = "<group>"; };
-		83920A9E290B946100F1F2D6 /* CustomCellForProfile.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForProfile.xib; sourceTree = "<group>"; };
+		83920A9D290B946100F1F2D6 /* CustomCellForIntroduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForIntroduction.swift; sourceTree = "<group>"; };
+		83920A9E290B946100F1F2D6 /* CustomCellForIntroduction.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForIntroduction.xib; sourceTree = "<group>"; };
 		83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireBaseRelatedPath.swift; sourceTree = "<group>"; };
-		83920AA3290BB2BE00F1F2D6 /* editProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editProfileViewController.swift; sourceTree = "<group>"; };
+		83920AA3290BB2BE00F1F2D6 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		83966BF528E8C1060098A39E /* CustomCellForStudy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForStudy.swift; sourceTree = "<group>"; };
 		83966BF628E8C1060098A39E /* CustomCellForStudy.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForStudy.xib; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
 		839FBA3228BA101200BB64A5 /* FolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
 		839FBA3828BA5C8900BB64A5 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
+		83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
 		83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderForStudyViewContoller.swift; sourceTree = "<group>"; };
 		83A564C828D7630300C3A9B9 /* PhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseWordViewController.swift; sourceTree = "<group>"; };
 		83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsForStudyViewController.swift; sourceTree = "<group>"; };
@@ -208,7 +216,8 @@
 				8388DA5528C9C237008DE6FF /* TranslationImage.png */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
 				83071D0328B91AC90003734C /* LaunchScreen.storyboard */,
-				83920A9E290B946100F1F2D6 /* CustomCellForProfile.xib */,
+				83920A9E290B946100F1F2D6 /* CustomCellForIntroduction.xib */,
+				83833544290F60CF00C374F9 /* CustomCellForEditProfile.xib */,
 				83AC1DC728E4427D00576CF4 /* CustomCellForPhraseWord.xib */,
 				83966BF628E8C1060098A39E /* CustomCellForStudy.xib */,
 				83B9C1FA28CFF10B006138E2 /* CustomCellForHistory.xib */,
@@ -234,7 +243,8 @@
 		8356E953290496F900FD9236 /* Controller For XIB */ = {
 			isa = PBXGroup;
 			children = (
-				83920A9D290B946100F1F2D6 /* CustomCellForProfile.swift */,
+				83920A9D290B946100F1F2D6 /* CustomCellForIntroduction.swift */,
+				83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */,
 				83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */,
 				83966BF528E8C1060098A39E /* CustomCellForStudy.swift */,
 				83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */,
@@ -312,7 +322,9 @@
 				8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */,
 				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
 				8389C3FD290ABDBC007347AE /* ProfileViewController.swift */,
-				83920AA3290BB2BE00F1F2D6 /* editProfileViewController.swift */,
+				83920AA3290BB2BE00F1F2D6 /* EditProfileViewController.swift */,
+				83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */,
+				836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */,
 				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
 			);
 			path = "Contents Of SecondTabBar";
@@ -339,7 +351,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				836F9AAA2908D01C00EB9C70 /* ShellScript */,
-				383F90A786EEE924747B2BF2 /* [CP] Embed Pods Frameworks */,
+				8E208F9E3F848F22C08B15CC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -414,6 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */,
+				83833546290F60CF00C374F9 /* CustomCellForEditProfile.xib in Resources */,
 				83B6AF2028E7254000700DBF /* CustomCellForReview.xib in Resources */,
 				839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */,
 				83071D0228B91AC90003734C /* Assets.xcassets in Resources */,
@@ -421,7 +434,7 @@
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
 				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
 				83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */,
-				83920AA0290B946100F1F2D6 /* CustomCellForProfile.xib in Resources */,
+				83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */,
 				836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */,
 				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
@@ -453,23 +466,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		383F90A786EEE924747B2BF2 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		836F9AAA2908D01C00EB9C70 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -487,6 +483,23 @@
 			shellPath = /bin/sh;
 			shellScript = "$ Pods/SwiftFormat/CommandLineTool/swiftformat .\n$ Pods/SwiftFormat/CommandLineTool/swiftformat . --self insert\n\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --self insert\n";
 		};
+		8E208F9E3F848F22C08B15CC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -494,7 +507,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83920A9F290B946100F1F2D6 /* CustomCellForProfile.swift in Sources */,
+				83920A9F290B946100F1F2D6 /* CustomCellForIntroduction.swift in Sources */,
 				83B9C20428D3132D006138E2 /* EditRecordViewController.swift in Sources */,
 				83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */,
 				8356E9552905574500FD9236 /* History.swift in Sources */,
@@ -504,11 +517,14 @@
 				83966BF728E8C1060098A39E /* CustomCellForStudy.swift in Sources */,
 				8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */,
 				83B9C20128D3050E006138E2 /* CustomCellForRecord.swift in Sources */,
+				836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */,
+				83833545290F60CF00C374F9 /* CustomCellForEditProfile.swift in Sources */,
 				83B6AF1C28E71E8C00700DBF /* ReviewViewController.swift in Sources */,
 				83920AA2290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift in Sources */,
 				83B9C20628D39997006138E2 /* AddViewController.swift in Sources */,
 				839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */,
-				83920AA4290BB2BE00F1F2D6 /* editProfileViewController.swift in Sources */,
+				83920AA4290BB2BE00F1F2D6 /* EditProfileViewController.swift in Sources */,
+				83A1D5C7290EC69D00B6F18A /* IntroductionViewController.swift in Sources */,
 				83A564C928D7630300C3A9B9 /* PhraseWordViewController.swift in Sources */,
 				83AC1DC828E4427D00576CF4 /* CustomCellForPhraseWord.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
