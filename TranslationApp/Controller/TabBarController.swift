@@ -144,9 +144,14 @@ class TabBarController: UITabBarController {
     override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
         if segue.identifier == "ToSecondTabBarController" {
             let secondTabBarController = segue.destination as! SecondTabBarController
+//            プロフィール画面へsecondTabBarControllerインスタンスを渡す
             let navigationController = secondTabBarController.viewControllers![1] as! UINavigationController
             let profileViewController = navigationController.viewControllers[0] as! ProfileViewController
             profileViewController.secondTabBarController = secondTabBarController
+//            プロフィール画面へsecondTabBarControllerインスタンスを渡す
+            let navigationController1 = secondTabBarController.viewControllers![0] as! UINavigationController
+            let timeLineViewController = navigationController1.viewControllers[0] as! TimeLineViewController
+            timeLineViewController.secondTabBarController = secondTabBarController
         }
     }
 }

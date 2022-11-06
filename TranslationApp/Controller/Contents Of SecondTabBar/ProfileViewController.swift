@@ -40,13 +40,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
 
         let introductionViewController = storyboard?.instantiateViewController(identifier: "introduction") as! IntroductionViewController
-        let postsHistoryViewController = storyboard?.instantiateViewController(identifier: "postsHistory") as! PostsHistoryViewController
+//        let postsHistoryViewController = storyboard?.instantiateViewController(identifier: "postsHistory") as! PostsHistoryViewController
+        let navigationController = storyboard?.instantiateViewController(withIdentifier: "NC") as! UINavigationController
+        let bookMarkViewController = storyboard?.instantiateViewController(withIdentifier: "BookMark") as! BookMarkViewController
 
         introductionViewController.title = "自己紹介"
-        postsHistoryViewController.title = "投稿履歴"
+//        postsHistoryViewController.title = "投稿履歴"
+        navigationController.title = "投稿履歴"
+        bookMarkViewController.title = "ブックマーク"
 
 //        pagingViewControllerのインスタンス生成
-        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, postsHistoryViewController])
+        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, bookMarkViewController])
 
 //        Adds the specified view controller as a child of the current view controller.
         addChild(pagingViewController)
@@ -76,8 +80,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
         //        画像にデフォルト設定
         self.imageView.image = UIImage(systemName: "person")
-        self.imageView.layer.borderColor = UIColor.systemGray.cgColor
-        self.imageView.layer.borderWidth = 2.3
+        self.imageView.layer.borderColor = UIColor.systemGray4.cgColor
+        self.imageView.layer.borderWidth = 2.5
 
         self.title = "プロフィール"
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(self.tappedRightEdgeBarButtonItem))

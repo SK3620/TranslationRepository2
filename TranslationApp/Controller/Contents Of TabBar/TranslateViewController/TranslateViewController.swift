@@ -175,7 +175,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     }
 
     override func viewWillAppear(_: Bool) {
-        super.viewDidAppear(true)
+        super.viewWillAppear(true)
 
 //        navigationBarのタイトルを設定
         self.tabBarController1.setBarButtonItem0()

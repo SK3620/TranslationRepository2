@@ -1,74 +1,90 @@
 //
-//  TimeLineViewController.swift
+//  CommentViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/10/27.
+//  Created by 鈴木健太 on 2022/11/03.
 //
 
-import Alamofire
 import Firebase
 import SVProgressHUD
 import UIKit
 
-class TimeLineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CommentSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
     var secondTabBarController: SecondTabBarController!
-    // 投稿データを格納する配列
-    var postArray: [PostData] = []
+    var timeLineViewController: TimeLineViewController!
+    var postData: PostData!
     // Firestoreのリスナー
     var listener: ListenerRegistration?
     var listener2: ListenerRegistration?
-
     var secondPostArray: [SecondPostData] = []
+
+//    入力したコメントを保持させる
+    var comment: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.backgroundColor = .systemGray4
-        //        currentUserがnilなら
-        if Auth.auth().currentUser == nil {
-            //            ログインしていない時の処理
-            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-            //            loginViewController.logoutButton.isEnabled = false
-            self.present(loginViewController, animated: true, completion: nil)
-        }
+
+        // Do any additional setup after loading the view.
+
+        self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.timeLineViewController.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.title = "詳細"
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
-
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+
+        let nib2 = UINib(nibName: "CustomCellForCommentSetion", bundle: nil)
+        self.tableView.register(nib2, forCellReuseIdentifier: "CustomCell2")
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+        // ログイン済みか確認
+        if let user = Auth.auth().currentUser {
+            // listenerを登録して投稿データの更新を監視する
+            //            タップされたドキュメントIDを指定　いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+            print("postRef確認\(postsRef)")
+//            単一のドキュメントが入ってる。
+            self.listener = postsRef.addSnapshotListener { documentSnapshot, error in
+                if let error = error {
+                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                    return
+                }
 
-        SVProgressHUD.show(withStatus: "データを読み込み中...")
-
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.tip.crop.circle.badge.plus"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
-        self.secondTabBarController.navigationItem.rightBarButtonItem = rightBarButtonItem
-        self.secondTabBarController.title = "タイムライン"
+                if let documentSnapshot = documentSnapshot {
+                    self.postData = PostData(document: documentSnapshot)
+                    print("DEBUG_PRINT: snapshotの取得が成功しました。")
+                }
+            }
+        }
 
         // ログイン済みか確認
         if let user = Auth.auth().currentUser {
             // listenerを登録して投稿データの更新を監視する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
-
+            // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
             print("postRef確認\(postsRef)")
-            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
+            self.listener2 = postsRef.addSnapshotListener { querySnapshot, error in
                 if let error = error {
                     print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                     return
                 }
                 // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                self.postArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    return postData
+                //                mapの中のクロージャ引数documentはquerySnapshotDocumentで取り出された単一のドキュメント
+                self.secondPostArray = querySnapshot!.documents.map { document in
+                    print("DEBUG_PRINT: document取得 ここでは、自動生成（追加）されたドキュメントのIDがプリントされます。\(document.documentID)")
+                    let secondPostData = SecondPostData(document: document)
+                    print("DEBUG_PRINT: snapshotの取得が成功しました。")
+
+                    return secondPostData
                 }
-                print("データかくにん\(self.postArray)")
                 self.tableView.reloadData()
-                SVProgressHUD.dismiss()
+                print("tableViewがリロードされた2")
             }
         }
     }
@@ -79,17 +95,21 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         // listenerを削除して監視を停止する
         self.listener?.remove()
         self.listener2?.remove()
+        self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.timeLineViewController.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
-    @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
-        print("バーボタンタップされた")
-        let postViewContoller = storyboard!.instantiateViewController(withIdentifier: "Post")
-        present(postViewContoller, animated: true, completion: nil)
+    override func viewDidDisappear(_: Bool) {
+        super.viewDidDisappear(true)
+    }
+
+    func reloadTableView() {
+        self.tableView.reloadData()
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
         if Auth.auth().currentUser != nil {
-            return self.postArray.count
+            return self.secondPostArray.count + 1
         } else {
             return 0
         }
@@ -97,10 +117,13 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
-        cell.commentButton.isEnabled = false
-        cell.commentButton.isHidden = true
 
-        cell.setPostData(self.postArray[indexPath.row])
+        cell.commentButton.isEnabled = true
+        cell.commentButton.isHidden = false
+//        cell.commentButton.configuration?.title = "コメントする"
+//        cell.commentButton.configuration?.subtitle = ""
+//        cell.commentButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton), for: .touchUpInside)
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
 
@@ -108,7 +131,26 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
 
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
 
-        return cell
+        if indexPath.row == 0 {
+            cell.setPostData(self.postData)
+            return cell
+        }
+
+        let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
+        cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
+        return cell2
+    }
+
+    @objc func tappedCommentButton() {
+        let navigationController = storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
+        if let sheet = navigationController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
+        let inputCommentViewContoller = navigationController.viewControllers[0] as! InputCommentViewController
+        inputCommentViewContoller.postData = self.postData
+        inputCommentViewContoller.commentSectionViewController = self
+        inputCommentViewContoller.textView_text = self.comment
+        present(navigationController, animated: true, completion: nil)
     }
 
     @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
@@ -120,7 +162,7 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         let indexPath = self.tableView.indexPathForRow(at: point)
 
         // 配列からタップされたインデックスのデータを取り出す
-        let postData = self.postArray[indexPath!.row]
+        let postData = self.postData!
 
         // bookMarkを更新する
         if let myid = Auth.auth().currentUser?.uid {
@@ -148,7 +190,7 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         let indexPath = self.tableView.indexPathForRow(at: point)
 
         // 配列からタップされたインデックスのデータを取り出す
-        let postData = self.postArray[indexPath!.row]
+        let postData = self.postData!
         print("postData確認\(postData)")
 
         // likesを更新する
@@ -165,22 +207,6 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
-        }
-    }
-
-    func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
-        let postData = self.postArray[indexPath.row]
-//        タップされたcellのドキュメントを取得
-        self.performSegue(withIdentifier: "ToComment", sender: postData)
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ToComment" {
-            let commentViewController = segue.destination as! CommentSectionViewController
-            commentViewController.timeLineViewController = self
-            commentViewController.secondTabBarController = self.secondTabBarController
-            commentViewController.postData = sender as? PostData
         }
     }
 
