@@ -9,12 +9,30 @@ import Firebase
 import SVProgressHUD
 import UIKit
 
-class PostViewController: UIViewController {
+class PostViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var textView: UITextView!
     @IBOutlet var label1: UILabel!
 
+    @IBOutlet var correctButton: UIButton!
+    @IBOutlet var HowToLearnButton: UIButton!
+    @IBOutlet var wordButton: UIButton!
+    @IBOutlet var grammerButton: UIButton!
+    @IBOutlet var conversationButton: UIButton!
+    @IBOutlet var listeningButton: UIButton!
+    @IBOutlet var pronunciationButton: UIButton!
+    @IBOutlet var certificationButton: UIButton!
+    @IBOutlet var etcButton: UIButton!
+
+    var array: [String] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.label1.text = "下の項目から関連のあるトピックを追加できます"
+
+        self.setButtonDesign(buttonArr: [self.correctButton, self.HowToLearnButton, self.wordButton, self.grammerButton, self.conversationButton, self.listeningButton, self.pronunciationButton, self.certificationButton, self.etcButton])
+
+        self.textView.delegate = self
 
         self.title = "タイムライン"
         self.textView.endEditing(false)
@@ -33,7 +51,24 @@ class PostViewController: UIViewController {
         self.textView.endEditing(true)
     }
 
-//    投稿ボタン
+    func setButtonDesign(buttonArr: [UIButton]) {
+        buttonArr.forEach {
+            $0.backgroundColor = .white
+            $0.layer.borderWidth = 1.5
+            $0.layer.cornerRadius = 6
+            $0.layer.borderColor = UIColor.systemGray2.cgColor
+        }
+    }
+
+    func textViewDidChange(_: UITextView) {
+        if self.textView.text == "" {
+            self.label1.text = "下の項目から関連のあるトピックを追加できます"
+        } else {
+            self.label1.text == ""
+        }
+    }
+
+    //    投稿ボタン
     @IBAction func postButton(_: Any) {
         SVProgressHUD.show()
         if self.textView.text.isEmpty {
@@ -50,20 +85,52 @@ class PostViewController: UIViewController {
             "uid": user.uid,
         ] as [String: Any]
         postRef.setData(postDic)
+
+        let value = FieldValue.arrayUnion(self.array)
+        postRef.updateData(["topic": value])
+
         SVProgressHUD.showSuccess(withStatus: "投稿しました")
+        self.dismiss(animated: true)
     }
 
     @IBAction func backButton(_: Any) {
         self.dismiss(animated: true)
+        print(self.array)
     }
 
-    /*
-     // MARK: - Navigation
+    @IBAction func correctButton(_: Any) {
+        ButtonModel(button: self.correctButton, postViewController: self)
+    }
 
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
+    @IBAction func howToLearnButton(_: Any) {
+        ButtonModel(button: self.HowToLearnButton, postViewController: self)
+    }
+
+    @IBAction func wordButton(_: Any) {
+        ButtonModel(button: self.wordButton, postViewController: self)
+    }
+
+    @IBAction func grammerButton(_: Any) {
+        ButtonModel(button: self.grammerButton, postViewController: self)
+    }
+
+    @IBAction func conversationButton(_: Any) {
+        ButtonModel(button: self.conversationButton, postViewController: self)
+    }
+
+    @IBAction func listeningButton(_: Any) {
+        ButtonModel(button: self.listeningButton, postViewController: self)
+    }
+
+    @IBAction func pronunciationButton(_: Any) {
+        ButtonModel(button: self.pronunciationButton, postViewController: self)
+    }
+
+    @IBAction func certificationButton(_: Any) {
+        ButtonModel(button: self.certificationButton, postViewController: self)
+    }
+
+    @IBAction func etcButton(_: Any) {
+        ButtonModel(button: self.etcButton, postViewController: self)
+    }
 }

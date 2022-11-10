@@ -15,6 +15,9 @@ class CustomCellForCommentSetion: UITableViewCell {
     @IBOutlet var postedDateLabel: UILabel!
     @IBOutlet var commentLabel: UILabel!
     @IBOutlet var viewForSeparator: UIView!
+    @IBOutlet var heartButton: UIButton!
+    @IBOutlet var heartLabel: UILabel!
+    @IBOutlet var bookMarkButton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,7 +38,8 @@ class CustomCellForCommentSetion: UITableViewCell {
 
     func setSecondPostData(secondPostData: SecondPostData) {
 //        プロフィール画像設定
-        self.imageView1.sd_setImage(with: secondPostData.profileImage!)
+        let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(secondPostData.uid!)" + ".jpg")
+        self.imageView1.sd_setImage(with: imageRef)
 
         self.userNameLabel.text = secondPostData.userName!
 
@@ -49,5 +53,32 @@ class CustomCellForCommentSetion: UITableViewCell {
         }
 
         self.commentLabel.text = secondPostData.comment!
+
+        // いいね数の表示
+        let likeNumber = secondPostData.likes.count
+        self.heartLabel.text = "\(likeNumber)"
+
+        // いいねボタンの表示
+        if secondPostData.isLiked {
+            self.setButtonImage(button: self.heartButton, systemName: "heart.fill")
+            self.heartButton.tintColor = UIColor.systemRed
+        } else {
+            self.setButtonImage(button: self.heartButton, systemName: "heart")
+            self.heartButton.tintColor = UIColor.darkGray
+        }
+
+//        bookMarkの表示
+        if secondPostData.isBookMarked {
+            self.setButtonImage(button: self.bookMarkButton, systemName: "bookmark.fill")
+            self.bookMarkButton.tintColor = UIColor.systemGreen
+        } else {
+            self.setButtonImage(button: self.bookMarkButton, systemName: "bookmark")
+            self.bookMarkButton.tintColor = UIColor.darkGray
+        }
+    }
+
+    func setButtonImage(button: UIButton, systemName: String) {
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+        button.setImage(UIImage(systemName: systemName, withConfiguration: config), for: .normal)
     }
 }

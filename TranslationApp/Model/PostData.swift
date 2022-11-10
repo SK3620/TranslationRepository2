@@ -11,13 +11,17 @@ import UIKit
 class PostData: NSObject {
     var documentId: String
     var userName: String?
+//    投稿内容
     var contentOfPost: String?
+//    コメント
+    var comment: String?
     var postedDate: Date?
     var likes: [String] = []
     var isLiked: Bool = false
     var bookMarks: [String] = []
     var isBookMarked: Bool = false
     var numberOfComments: String?
+    var uid: String?
 
     init(document: QueryDocumentSnapshot) {
         print("postDataクラスが実行された")
@@ -28,6 +32,7 @@ class PostData: NSObject {
         self.userName = postDic["userName"] as? String
 
         self.contentOfPost = postDic["contentOfPost"] as? String
+        self.comment = postDic["comment"] as? String
 
         let timestamp = postDic["postedDate"] as? Timestamp
         self.postedDate = timestamp?.dateValue()
@@ -58,6 +63,9 @@ class PostData: NSObject {
 
 //        コメント数表示
         self.numberOfComments = postDic["numberOfComments"] as? String
+
+//        投稿者のuid
+        self.uid = postDic["uid"] as? String
     }
 
 //    CommentSectionViewController画面で単一のドキュメントを監視した時
@@ -99,5 +107,8 @@ class PostData: NSObject {
         }
         //        コメント数表示
         self.numberOfComments = postDic["numberOfComments"] as? String
+
+        //    投稿者のuid
+        self.uid = postDic["uid"] as? String
     }
 }

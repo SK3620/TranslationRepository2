@@ -1,73 +1,67 @@
 //
-//  TimeLineViewController.swift
+//  OthersBookMarkViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/10/27.
+//  Created by 鈴木健太 on 2022/11/09.
 //
 
-import Alamofire
 import Firebase
 import SVProgressHUD
 import UIKit
 
-class TimeLineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class OthersBookMarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
-    var secondTabBarController: SecondTabBarController!
-    var secondPagingViewController: SecondPagingViewController!
+    var postData: PostData!
     // 投稿データを格納する配列
     var postArray: [PostData] = []
-    // Firestoreのリスナー
-    var listener: ListenerRegistration?
 
-    var secondPostArray: [SecondPostData] = []
+    var listener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.backgroundColor = .systemGray4
-        //        currentUserがnilなら
-        if Auth.auth().currentUser == nil {
-            //            ログインしていない時の処理
-            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-            //            loginViewController.logoutButton.isEnabled = false
-            self.present(loginViewController, animated: true, completion: nil)
-        }
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.tableView.allowsSelection = false
 
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-        SVProgressHUD.show(withStatus: "データを読み込み中...")
+        self.tableView.allowsSelection = true
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-
-        // ログイン済みか確認
+        //        自分のuidで絞り込んだドキュメントを取得
         if Auth.auth().currentUser != nil {
-            // listenerを登録して投稿データの更新を監視する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
-
-            print("postRef確認\(postsRef)")
+            SVProgressHUD.show(withStatus: "データを読み込み中...")
+            //            複合インデックスを作成する必要がある
+            //            クエリで指定している複数のインデックスをその順にインデックスに登録する
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("bookMarks", arrayContains: self.postData.uid!).order(by: "postedDate", descending: true)
             self.listener = postsRef.addSnapshotListener { querySnapshot, error in
+
                 if let error = error {
                     print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    return
                 }
-                // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                self.postArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    return postData
+                if let querySnapshot = querySnapshot {
+                    // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
+                    self.postArray = querySnapshot.documents.map { document in
+                        print("DEBUG_PRINT: document取得 \(document.documentID)")
+                        let postData = PostData(document: document)
+                        return postData
+                    }
                 }
-                print("データかくにん\(self.postArray)")
-                self.tableView.reloadData()
+                print("行われた")
                 SVProgressHUD.dismiss()
+                self.tableView.reloadData()
             }
+
+//            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document().collection("commentDataCollection").whereField("bookMarks", arrayContains: user.uid).order(by: "postedDate", descending: true)
+//            この処理では、firebaseに定義された保存場所を取得できない .document()の部分がおそらくダメ。
         }
     }
 
@@ -78,44 +72,38 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         self.listener?.remove()
     }
 
+    // セクション数を指定
+//    func numberOfSections(in _: UITableView) -> Int {
+//        if self.postArray1.isEmpty, self.postArray2.isEmpty {
+//            return 0
+//        } else {
+//            return self.sections.count
+//        }
+//    }
+//
+//    // セクションタイトルを指定
+//    func tableView(_: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return self.sections[section]
+//    }
+
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        if Auth.auth().currentUser != nil {
-            return self.postArray.count
-        } else {
-            return 0
-        }
+        self.postArray.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
-
         cell.commentButton.isEnabled = false
         cell.commentButton.isHidden = true
-
-        cell.setPostData(self.postArray[indexPath.row])
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+
+        cell.setPostData(self.postArray[indexPath.row])
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
 
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
 
-        cell.buttonOnImageView1.addTarget(self, action: #selector(self.tappedImageView1(_:forEvent:)), for: .touchUpInside)
-
         return cell
-    }
-
-    //    プロフィール写真上のタップジェスチャー
-    @objc func tappedImageView1(_: UIButton, forEvent event: UIEvent) {
-        print("タップジェスチャー")
-        // タップされたセルのインデックスを求める
-        let touch = event.allTouches?.first
-        let point = touch!.location(in: self.tableView)
-        let indexPath = self.tableView.indexPathForRow(at: point)
-
-        // 配列からタップされたインデックスのデータを取り出す
-        let postData = self.postArray[indexPath!.row]
-        self.performSegue(withIdentifier: "ToOthersProfile", sender: postData)
     }
 
     @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
@@ -178,24 +166,24 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         let postData = self.postArray[indexPath.row]
-        self.secondPagingViewController.postData = postData
-        self.secondPagingViewController.segue()
+        //        タップされたcellのドキュメントを取得
+        self.performSegue(withIdentifier: "ToOthersBookMarkCommentsSection", sender: postData)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ToOthersProfile" {
-            let othersProfileViewController = segue.destination as! OthersProfileViewController
-            othersProfileViewController.postData = sender as? PostData
+        if segue.identifier == "ToOthersBookMarkCommentsSection" {
+            let othersBookMarkCommentsSection = segue.destination as! OthersBookMarkCommentsSectionViewController
+            othersBookMarkCommentsSection.postData = sender as? PostData
         }
     }
+
+    /*
+     // MARK: - Navigation
+
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         // Get the new view controller using segue.destination.
+         // Pass the selected object to the new view controller.
+     }
+     */
 }
-
-/*
- // MARK: - Navigation
-
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
- }
- */

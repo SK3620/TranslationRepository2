@@ -14,6 +14,8 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
     var postArray: [PostData] = []
 
+    var listener: ListenerRegistration?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,37 +32,33 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
-        if Auth.auth().currentUser != nil {
-            self.whereSelect()
-        }
-    }
-
-//        自分のuidで絞り込んだドキュメントを取得
-    func whereSelect() {
         if let user = Auth.auth().currentUser {
-//            複合インデックスを作成する必要がある
-//            クエリで指定している複数のインデックスをその順にインデックスに登録する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath)
-            postsRef.whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true).getDocuments { queryDocuments, error in
+            //            複合インデックスを作成する必要がある
+            //            クエリで指定している複数のインデックスをその順にインデックスに登録する
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true)
+            postsRef.addSnapshotListener { querySnapshot, error in
                 if let error = error {
-                    print("絞り込みに失敗しました\(error)")
-                }
-                guard let queryDocuments = queryDocuments else {
-                    print("絞り込み結果0件でした")
+                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                     return
                 }
-                print("絞り込み結果がありました\(queryDocuments)")
                 // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                self.postArray = queryDocuments.documents.map { document in
+                self.postArray = querySnapshot!.documents.map { document in
                     print("DEBUG_PRINT: document取得 \(document.documentID)")
                     let postData = PostData(document: document)
                     return postData
                 }
-
-                print(self.postArray)
+                print("データかくにん\(self.postArray)")
                 self.tableView.reloadData()
+                SVProgressHUD.dismiss()
             }
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("DEBUG_PRINT: viewWillDisappear")
+        // listenerを削除して監視を停止する
+        self.listener?.remove()
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -74,8 +72,8 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
         cell.setPostData(self.postArray[indexPath.row])
-        cell.bookMarkButton.isEnabled = false
-        cell.bookMarkButton.isHidden = true
+        cell.bookMarkButton.isEnabled = true
+        cell.bookMarkButton.isHidden = false
         cell.commentButton.isEnabled = false
         cell.commentButton.isHidden = true
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)

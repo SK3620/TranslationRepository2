@@ -40,17 +40,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
 
         let introductionViewController = storyboard?.instantiateViewController(identifier: "introduction") as! IntroductionViewController
-//        let postsHistoryViewController = storyboard?.instantiateViewController(identifier: "postsHistory") as! PostsHistoryViewController
         let navigationController = storyboard?.instantiateViewController(withIdentifier: "NC") as! UINavigationController
-        let bookMarkViewController = storyboard?.instantiateViewController(withIdentifier: "BookMark") as! BookMarkViewController
+        let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "NC2") as! UINavigationController
 
         introductionViewController.title = "自己紹介"
-//        postsHistoryViewController.title = "投稿履歴"
         navigationController.title = "投稿履歴"
-        bookMarkViewController.title = "ブックマーク"
+        navigationController2.title = "ブックマーク"
 
 //        pagingViewControllerのインスタンス生成
-        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, bookMarkViewController])
+        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, navigationController2])
 
 //        Adds the specified view controller as a child of the current view controller.
         addChild(pagingViewController)
@@ -166,6 +164,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     func setImageFromStorage() {
         if let user = Auth.auth().currentUser {
             //            storageから画像を取り出して、imageViewに設置
+            let user = Auth.auth().currentUser!
             let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
 
             self.imageView.sd_setImage(with: imageRef)
@@ -228,13 +227,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let imageData = self.image.jpegData(compressionQuality: 0.75)
         //        画像の保存場所定義
         let user = Auth.auth().currentUser!
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyyMMddHHmm"
+//        let dateString: String = formatter.string(from: Date())
+//        let path = "user'sImage/\(user.uid)/profile_\(dateString).jpg"
 
-        let imageRef: StorageReference? = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
+        let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
+//        let imageRef: StorageReference? = Storage.storage().reference(withPath: path)
 
         SVProgressHUD.show()
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpeg"
-        imageRef!.putData(imageData!, metadata: metaData) { metadata, error in
+        imageRef.putData(imageData!, metadata: metaData) { metadata, error in
             if error != nil {
                 // 画像のアップロード失敗
                 print(error!)

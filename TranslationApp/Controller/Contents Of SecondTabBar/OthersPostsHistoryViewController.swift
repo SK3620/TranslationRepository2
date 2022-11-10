@@ -1,73 +1,54 @@
 //
-//  TimeLineViewController.swift
+//  OthersPostsHistoryViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/10/27.
+//  Created by 鈴木健太 on 2022/11/07.
 //
 
-import Alamofire
 import Firebase
 import SVProgressHUD
 import UIKit
 
-class TimeLineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
-    var secondTabBarController: SecondTabBarController!
-    var secondPagingViewController: SecondPagingViewController!
-    // 投稿データを格納する配列
+    var postData: PostData!
     var postArray: [PostData] = []
-    // Firestoreのリスナー
     var listener: ListenerRegistration?
-
-    var secondPostArray: [SecondPostData] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.backgroundColor = .systemGray4
-        //        currentUserがnilなら
-        if Auth.auth().currentUser == nil {
-            //            ログインしていない時の処理
-            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-            //            loginViewController.logoutButton.isEnabled = false
-            self.present(loginViewController, animated: true, completion: nil)
-        }
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
-
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+        self.tableView.allowsSelection = true
+        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-        SVProgressHUD.show(withStatus: "データを読み込み中...")
-
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
-        // ログイン済みか確認
-        if Auth.auth().currentUser != nil {
-            // listenerを登録して投稿データの更新を監視する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
-
-            print("postRef確認\(postsRef)")
-            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    return
-                }
-                // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                self.postArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    return postData
-                }
-                print("データかくにん\(self.postArray)")
-                self.tableView.reloadData()
-                SVProgressHUD.dismiss()
+        //            複合インデックスを作成する必要がある
+        //            クエリで指定している複数のインデックスをその順にインデックスに登録する
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: self.postData.uid!).order(by: "postedDate", descending: true)
+        postsRef.addSnapshotListener { querySnapshot, error in
+            if let error = error {
+                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                return
             }
+            // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
+            self.postArray = querySnapshot!.documents.map { document in
+                print("DEBUG_PRINT: document取得 \(document.documentID)")
+                let postData = PostData(document: document)
+                return postData
+            }
+            print("データかくにん\(self.postArray)")
+            self.tableView.reloadData()
+            SVProgressHUD.dismiss()
         }
     }
 
@@ -79,48 +60,32 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        if Auth.auth().currentUser != nil {
-            return self.postArray.count
-        } else {
+        if self.postArray.isEmpty {
             return 0
+        } else {
+            return self.postArray.count
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
-
-        cell.commentButton.isEnabled = false
-        cell.commentButton.isHidden = true
-
         cell.setPostData(self.postArray[indexPath.row])
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+        cell.commentButton.isEnabled = false
+        cell.commentButton.isHidden = true
+        cell.bookMarkButton.isEnabled = true
+        cell.bookMarkButton.isHidden = false
+
+        cell.setPostData(self.postArray[indexPath.row])
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
-
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
-
-        cell.buttonOnImageView1.addTarget(self, action: #selector(self.tappedImageView1(_:forEvent:)), for: .touchUpInside)
-
         return cell
     }
 
-    //    プロフィール写真上のタップジェスチャー
-    @objc func tappedImageView1(_: UIButton, forEvent event: UIEvent) {
-        print("タップジェスチャー")
-        // タップされたセルのインデックスを求める
-        let touch = event.allTouches?.first
-        let point = touch!.location(in: self.tableView)
-        let indexPath = self.tableView.indexPathForRow(at: point)
-
-        // 配列からタップされたインデックスのデータを取り出す
-        let postData = self.postArray[indexPath!.row]
-        self.performSegue(withIdentifier: "ToOthersProfile", sender: postData)
-    }
-
     @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
-        print("bookMarkButtonが押された")
-
+        print("bookMakrタップされた")
         // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
@@ -178,24 +143,23 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         let postData = self.postArray[indexPath.row]
-        self.secondPagingViewController.postData = postData
-        self.secondPagingViewController.segue()
+        //        タップされたcellのドキュメントを取得
+        self.performSegue(withIdentifier: "ToOthersCommentsHistory", sender: postData)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ToOthersProfile" {
-            let othersProfileViewController = segue.destination as! OthersProfileViewController
-            othersProfileViewController.postData = sender as? PostData
+        if segue.identifier == "ToOthersCommentsHistory" {
+            let othersCommentsHistoryViewController = segue.destination as! OthersCommentsHistoryViewController
+            othersCommentsHistoryViewController.postData = sender as? PostData
         }
     }
+    /*
+     // MARK: - Navigation
+
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         // Get the new view controller using segue.destination.
+         // Pass the selected object to the new view controller.
+     }
+     */
 }
-
-/*
- // MARK: - Navigation
-
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
- }
- */

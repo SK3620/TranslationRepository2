@@ -1,36 +1,24 @@
 //
-//  CommentViewController.swift
+//  OthersCommentsHistoryViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/11/03.
+//  Created by 鈴木健太 on 2022/11/07.
 //
 
 import Firebase
 import SVProgressHUD
 import UIKit
 
-class CommentSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
-    var secondTabBarController: SecondTabBarController!
-//    var timeLineViewController: TimeLineViewController!
     var postData: PostData!
-
-    // Firestoreのリスナー
     var listener: ListenerRegistration?
     var listener2: ListenerRegistration?
     var secondPostArray: [SecondPostData] = []
 
-//    入力したコメントを保持させる
-    var comment: String = ""
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-
-//        self.timeLineViewController.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.title = "詳細"
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -39,14 +27,14 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
 
         let nib2 = UINib(nibName: "CustomCellForCommentSetion", bundle: nil)
         self.tableView.register(nib2, forCellReuseIdentifier: "CustomCell2")
+
+        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-        self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.secondTabBarController.tabBar.isHidden = true
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         // ログイン済みか確認
         if let user = Auth.auth().currentUser {
@@ -64,9 +52,8 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
                 if let documentSnapshot = documentSnapshot {
                     self.postData = PostData(document: documentSnapshot)
                     print("DEBUG_PRINT: snapshotの取得が成功しました。")
-                    self.tableView.reloadData()
-                    print("tableViewがリロードされた1")
                 }
+                self.tableView.reloadData()
             }
         }
 
@@ -102,39 +89,21 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         // listenerを削除して監視を停止する
         self.listener?.remove()
         self.listener2?.remove()
-//        self.timeLineViewController.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-
-    override func viewDidDisappear(_: Bool) {
-        super.viewDidDisappear(true)
-    }
-
-    func reloadTableView() {
-        self.tableView.reloadData()
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        if Auth.auth().currentUser != nil {
-            return self.secondPostArray.count + 1
-        } else {
-            return 0
-        }
+        return self.secondPostArray.count + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
 
-        cell.commentButton.isEnabled = true
-        cell.commentButton.isHidden = false
-//        cell.commentButton.configuration?.title = "コメントする"
-//        cell.commentButton.configuration?.subtitle = ""
-//        cell.commentButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton), for: .touchUpInside)
+        cell.commentButton.isEnabled = false
+        cell.commentButton.isHidden = true
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
-
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
 
         if indexPath.row == 0 {
@@ -145,28 +114,15 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
         cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
         cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
-        cell2.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButtonInComment(_:forEvent:)), for: .touchUpInside)
-
         cell2.bookMarkButton.isEnabled = false
         cell2.bookMarkButton.isHidden = true
 
         return cell2
     }
 
-    @objc func tappedCommentButton() {
-        let navigationController = storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
-        if let sheet = navigationController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-        }
-        let inputCommentViewContoller = navigationController.viewControllers[0] as! InputCommentViewController
-        inputCommentViewContoller.postData = self.postData
-        inputCommentViewContoller.commentSectionViewController = self
-        inputCommentViewContoller.textView_text = self.comment
-        present(navigationController, animated: true, completion: nil)
-    }
-
     @objc func tappedBookMarkButton(_: UIButton, forEvent _: UIEvent) {
-        print("bookMarkButtonが押された")
+        print("bookMakrタップされた")
+
         // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postData!
 
@@ -189,9 +145,8 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
 
     @objc func tappedHeartButton(_: UIButton, forEvent _: UIEvent) {
         print("DEBUG_PRINT: likeボタンがタップされました。")
-        // 配列からタップされたインデックスのデータを取り出す
+
         let postData = self.postData!
-        print("postData確認\(postData)")
 
         // likesを更新する
         if let myid = Auth.auth().currentUser?.uid {
@@ -207,33 +162,6 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
-        }
-    }
-
-    @objc func tappedBookMarkButtonInComment(_: UIButton, forEvent event: UIEvent) {
-        print("bookMarkButtonが押された")
-
-        // タップされたセルのインデックスを求める
-        let touch = event.allTouches?.first
-        let point = touch!.location(in: self.tableView)
-        let indexPath = self.tableView.indexPathForRow(at: point)
-
-        // 配列からタップされたインデックスのデータを取り出す
-        let secondPostData = self.secondPostArray[indexPath!.row - 1]
-        // bookMarkを更新する
-        if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
-            var updateValue: FieldValue
-            if secondPostData.isBookMarked {
-                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
-                updateValue = FieldValue.arrayRemove([myid])
-            } else {
-                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
-                updateValue = FieldValue.arrayUnion([myid])
-            }
-            // bookMarksに更新データを書き込む
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
-            postRef.updateData(["bookMarks": updateValue])
         }
     }
 
@@ -264,14 +192,14 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
             postRef.updateData(["likes": updateValue])
         }
     }
-
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
 }
+
+/*
+ // MARK: - Navigation
+
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+ }
+ */

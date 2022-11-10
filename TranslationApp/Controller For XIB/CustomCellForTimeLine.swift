@@ -19,6 +19,7 @@ class CustomCellForTimeLine: UITableViewCell {
     @IBOutlet var postedDateLabel: UILabel!
     @IBOutlet var imageView1: UIImageView!
     @IBOutlet var commentButton: UIButton!
+    @IBOutlet var buttonOnImageView1: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -42,14 +43,16 @@ class CustomCellForTimeLine: UITableViewCell {
     // PostDataの内容をセルに表示
     func setPostData(_ postData: PostData) {
 //            プロフィール写真設定
-        let user = Auth.auth().currentUser!
-        let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
+        let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(postData.uid!)" + ".jpg")
         self.imageView1.sd_setImage(with: imageRef)
 
 //            ユーザー名表示
         self.userNameLabel.text = postData.userName
         // 投稿内容表示
         self.contentOfPostLabel.text = postData.contentOfPost
+        if let comment = postData.comment {
+            self.contentOfPostLabel.text = comment
+        }
 
         // 日時の表示
         self.postedDateLabel.text = ""

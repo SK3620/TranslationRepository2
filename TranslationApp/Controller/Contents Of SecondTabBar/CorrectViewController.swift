@@ -1,16 +1,15 @@
 //
-//  TimeLineViewController.swift
+//  CorrectViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/10/27.
+//  Created by 鈴木健太 on 2022/11/10.
 //
 
-import Alamofire
 import Firebase
 import SVProgressHUD
 import UIKit
 
-class TimeLineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CorrectViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
     var secondTabBarController: SecondTabBarController!
@@ -50,7 +49,7 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true).whereField("topic", arrayContains: "修正/教えて")
 
             print("postRef確認\(postsRef)")
             self.listener = postsRef.addSnapshotListener { querySnapshot, error in

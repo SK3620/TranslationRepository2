@@ -150,8 +150,8 @@ class TabBarController: UITabBarController {
             profileViewController.secondTabBarController = secondTabBarController
 //            プロフィール画面へsecondTabBarControllerインスタンスを渡す
             let navigationController1 = secondTabBarController.viewControllers![0] as! UINavigationController
-            let timeLineViewController = navigationController1.viewControllers[0] as! TimeLineViewController
-            timeLineViewController.secondTabBarController = secondTabBarController
+            let secondPagingViewController = navigationController1.viewControllers[0] as! SecondPagingViewController
+            secondPagingViewController.secondTabBarController = secondTabBarController
         }
     }
 }

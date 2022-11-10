@@ -56,6 +56,7 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
                     self.postData = PostData(document: documentSnapshot)
                     print("DEBUG_PRINT: snapshotの取得が成功しました。")
                 }
+                self.tableView.reloadData()
             }
         }
 
@@ -110,6 +111,7 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         cell.bookMarkButton.isHidden = false
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
+        cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
 
         if indexPath.row == 0 {
             cell.setPostData(self.postData)
@@ -118,18 +120,15 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
 
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
         cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
+        cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
+        cell2.bookMarkButton.isEnabled = false
+        cell2.bookMarkButton.isHidden = true
         return cell2
     }
 
-    @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
+    @objc func tappedHeartButton(_: UIButton, forEvent _: UIEvent) {
         print("DEBUG_PRINT: likeボタンがタップされました。")
 
-        // タップされたセルのインデックスを求める
-        let touch = event.allTouches?.first
-        let point = touch!.location(in: self.tableView)
-        let indexPath = self.tableView.indexPathForRow(at: point)
-
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postData!
         print("postData確認\(postData)")
 
@@ -150,6 +149,55 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
 
+    @objc func tappedBookMarkButton(_: UIButton, forEvent _: UIEvent) {
+        print("bookMarkButtonが押された")
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.postData!
+
+        // bookMarkを更新する
+        if let myid = Auth.auth().currentUser?.uid {
+            // 更新データを作成する
+            var updateValue: FieldValue
+            if postData.isBookMarked {
+                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
+                updateValue = FieldValue.arrayRemove([myid])
+            } else {
+                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
+                updateValue = FieldValue.arrayUnion([myid])
+            }
+            // bookMarksに更新データを書き込む
+            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+            postRef.updateData(["bookMarks": updateValue])
+        }
+    }
+
+    @objc func tappedHeartButtonInComment(_: UIButton, forEvent event: UIEvent) {
+        print("DEBUG_PRINT: likeボタンがタップされました。")
+
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        // 配列からタップされたインデックスのデータを取り出す
+        let secondPostData = self.secondPostArray[indexPath!.row - 1]
+
+        // likesを更新する
+        if let myid = Auth.auth().currentUser?.uid {
+            // 更新データを作成する
+            var updateValue: FieldValue
+            if secondPostData.isLiked {
+                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
+                updateValue = FieldValue.arrayRemove([myid])
+            } else {
+                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
+                updateValue = FieldValue.arrayUnion([myid])
+            }
+            // likesに更新データを書き込む
+            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
+            postRef.updateData(["likes": updateValue])
+        }
+    }
     /*
      // MARK: - Navigation
 

@@ -29,6 +29,11 @@
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7el-sQ-W0G">
+                        <rect key="frame" x="159" y="101" width="24" height="14"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain"/>
+                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="unD-Rs-6JX">
                         <rect key="frame" x="15" y="65" width="341" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -77,8 +82,8 @@
                             <constraint firstAttribute="height" constant="10" id="EAU-zC-313"/>
                         </constraints>
                     </view>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7el-sQ-W0G">
-                        <rect key="frame" x="159" y="101" width="24" height="14"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="22d-vL-VaY">
+                        <rect key="frame" x="15" y="10" width="40" height="40"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain"/>
                     </button>
@@ -86,6 +91,7 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="dod-QH-wBa" secondAttribute="trailing" id="2HX-91-X6j"/>
                     <constraint firstItem="7el-sQ-W0G" firstAttribute="leading" secondItem="Me0-rb-FlA" secondAttribute="trailing" constant="35" id="5vq-4v-Ayt"/>
+                    <constraint firstItem="22d-vL-VaY" firstAttribute="top" secondItem="e34-gF-Omd" secondAttribute="top" id="6gc-5n-ZAM"/>
                     <constraint firstItem="aFb-hG-gTQ" firstAttribute="centerY" secondItem="2Yp-Z7-pW8" secondAttribute="centerY" id="7B0-2i-niL"/>
                     <constraint firstAttribute="trailing" secondItem="gd1-dg-sS0" secondAttribute="trailing" id="8fF-yG-krF"/>
                     <constraint firstAttribute="bottom" secondItem="gd1-dg-sS0" secondAttribute="bottom" id="Aru-mz-nyw"/>
@@ -97,11 +103,13 @@
                     <constraint firstItem="aFb-hG-gTQ" firstAttribute="leading" secondItem="2Yp-Z7-pW8" secondAttribute="trailing" constant="35" id="NIF-pk-sAF"/>
                     <constraint firstItem="dod-QH-wBa" firstAttribute="centerY" secondItem="2Yp-Z7-pW8" secondAttribute="centerY" id="Oom-6R-EnJ"/>
                     <constraint firstItem="e34-gF-Omd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="RIw-4p-9PP"/>
+                    <constraint firstItem="22d-vL-VaY" firstAttribute="leading" secondItem="e34-gF-Omd" secondAttribute="leading" id="TNT-yk-FPX"/>
                     <constraint firstItem="7el-sQ-W0G" firstAttribute="centerY" secondItem="2Yp-Z7-pW8" secondAttribute="centerY" id="UTK-Hf-QMC"/>
                     <constraint firstItem="gd1-dg-sS0" firstAttribute="top" secondItem="2Yp-Z7-pW8" secondAttribute="bottom" constant="10" id="a0h-tk-U7T"/>
                     <constraint firstItem="Zkd-pZ-4Oa" firstAttribute="centerY" secondItem="2Yp-Z7-pW8" secondAttribute="centerY" id="cwj-EB-0an"/>
                     <constraint firstItem="Me0-rb-FlA" firstAttribute="centerY" secondItem="2Yp-Z7-pW8" secondAttribute="centerY" id="grD-tg-bnt"/>
                     <constraint firstItem="2Yp-Z7-pW8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="h4i-48-Mqj"/>
+                    <constraint firstItem="22d-vL-VaY" firstAttribute="height" secondItem="e34-gF-Omd" secondAttribute="height" id="kNH-47-nxK"/>
                     <constraint firstItem="BB7-lr-wjL" firstAttribute="leading" secondItem="e34-gF-Omd" secondAttribute="trailing" constant="10" id="kkx-bc-gk3"/>
                     <constraint firstItem="MMp-r5-OjL" firstAttribute="centerY" secondItem="e34-gF-Omd" secondAttribute="centerY" id="p8q-Ua-CTh"/>
                     <constraint firstItem="gd1-dg-sS0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="rD7-68-bmN"/>
@@ -109,6 +117,7 @@
                     <constraint firstItem="unD-Rs-6JX" firstAttribute="top" secondItem="e34-gF-Omd" secondAttribute="bottom" constant="15" id="tZv-Jn-pbG"/>
                     <constraint firstItem="Zkd-pZ-4Oa" firstAttribute="leading" secondItem="2Yp-Z7-pW8" secondAttribute="trailing" id="tiM-lV-arL"/>
                     <constraint firstItem="BB7-lr-wjL" firstAttribute="centerY" secondItem="e34-gF-Omd" secondAttribute="centerY" id="yRG-t8-5cz"/>
+                    <constraint firstItem="22d-vL-VaY" firstAttribute="width" secondItem="e34-gF-Omd" secondAttribute="width" id="yn2-o8-aAQ"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -116,6 +125,7 @@
                 <outlet property="bookMarkButton" destination="7el-sQ-W0G" id="G3D-VL-6C8"/>
                 <outlet property="bubbleButton" destination="aFb-hG-gTQ" id="uaj-LX-fWZ"/>
                 <outlet property="bubbleLabel" destination="Me0-rb-FlA" id="1uR-au-AHj"/>
+                <outlet property="buttonOnImageView1" destination="22d-vL-VaY" id="LIT-yb-el2"/>
                 <outlet property="commentButton" destination="dod-QH-wBa" id="m5D-WJ-Q60"/>
                 <outlet property="contentOfPostLabel" destination="unD-Rs-6JX" id="UEB-yr-3Ws"/>
                 <outlet property="heartButton" destination="2Yp-Z7-pW8" id="ANI-GI-ME1"/>
