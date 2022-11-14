@@ -7,10 +7,11 @@
 
 import Alamofire
 import Firebase
+import FirebaseAuth
 import SVProgressHUD
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var mailAddressTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var displayNameTextField: UITextField!
@@ -19,6 +20,9 @@ class LoginViewController: UIViewController {
     @IBOutlet var logoutButton: UIButton!
     @IBOutlet var deleteAccountButton: UIButton!
     @IBOutlet var view1: UIView!
+    @IBOutlet var changePasswordButton: UIButton!
+
+    var maxPasswordLength: Int = 10
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +49,18 @@ class LoginViewController: UIViewController {
         let buttonArr: [UIButton] = [loginButton, createAccountButton]
         self.setTextFieldsAndButtons(textFieldArr: textFieldArr, buttonArr: buttonArr)
         self.setDoneToolBar(textFieldArr: textFieldArr)
+
+        self.displayNameTextField.delegate = self
+    }
+
+    override func viewWillAppear(_: Bool) {
+        super.viewWillAppear(true)
+
+        if Auth.auth().currentUser == nil {
+            self.changePasswordButton.isEnabled = false
+        } else {
+            self.changePasswordButton.isEnabled = true
+        }
     }
 
     func setTextFieldsAndButtons(textFieldArr: [UITextField]!, buttonArr: [UIButton]!) {
@@ -79,10 +95,18 @@ class LoginViewController: UIViewController {
         self.displayNameTextField.endEditing(true)
     }
 
+    func textFieldDidChangeSelection(_: UITextField) {
+        guard let userName = displayNameTextField.text else { return }
+
+        if userName.count > self.maxPasswordLength {
+            self.displayNameTextField.text = String(userName.prefix(self.maxPasswordLength))
+        }
+    }
+
     //    アカウント作成ボタン
     @IBAction func createAccountButton(_: Any) {
         if let address = self.mailAddressTextField.text, let password = self.passwordTextField.text, let displayName = displayNameTextField.text {
-            if address.isEmpty || password.isEmpty || displayName.isEmpty || displayName == "ー" {
+            if address.isEmpty || password.isEmpty || displayName.isEmpty {
                 print("何かが入力されていません")
                 return
             }
@@ -184,9 +208,9 @@ class LoginViewController: UIViewController {
 
 //    アカウント削除ボタン
     @IBAction func deleteAccountButton(_: Any) {
-        let alert = UIAlertController(title: "アカウント削除", message: "アカウントを削除しますか？", preferredStyle: .alert)
+        let alert = UIAlertController(title: "アカウントを削除する", message: "アカウントを削除した場合、全ての投稿データも削除されます。", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "削除", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "削除する", style: .default, handler: { _ in
             SVProgressHUD.show()
 //            削除処理
             let user = Auth.auth().currentUser!
@@ -200,8 +224,10 @@ class LoginViewController: UIViewController {
                     postRef.delete(completion: { error in
                         if let error = error {
                             print("profileDataの削除失敗\(error)")
+                            SVProgressHUD.showError(withStatus: "アカウント削除に失敗しました\nもう一度ログインし、アカウントを削除してください")
+                            return
                         } else {
-                            print("profileDataの削除成功")
+                            print("\(user.displayName!)のドキュメントの削除に成功しました")
                         }
                     })
 
@@ -221,6 +247,31 @@ class LoginViewController: UIViewController {
 //                self.profileViewController.setImageFromStorage()
             }
         }))
+        present(alert, animated: true, completion: nil)
+    }
+
+    @IBAction func changePasswordButton(_: Any) {
+        self.passwordResetting()
+    }
+
+    func passwordResetting() {
+        let user = Auth.auth().currentUser!
+        Auth.auth().languageCode = "ja_JP" // 日本語に変換
+        guard let email = user.email else { return }
+        Auth.auth().sendPasswordReset(withEmail: email) { err in
+            if let err = err {
+                print("再設定メールの送信に失敗しました。\(err)")
+                return
+            }
+            print("再設定メールの送信に成功しました。")
+            self.setAlert()
+        }
+    }
+
+    func setAlert() {
+        let user = Auth.auth().currentUser!
+        let alert = UIAlertController(title: "パスワード変更", message: "\(user.email!)へパスワード変更用のメールを送信しました", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
 

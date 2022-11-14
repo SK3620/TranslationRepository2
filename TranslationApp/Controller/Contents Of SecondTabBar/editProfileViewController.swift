@@ -16,6 +16,8 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     var textViewArr: [UITextView]! = []
     var textFieldAndView_textArr: [String] = []
 
+    var postArrayForDocId: [String] = []
+
     var profileViewController: ProfileViewController!
     var secondTabBarController: SecondTabBarController!
 
@@ -36,8 +38,14 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray4
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
         self.title = "編集"
-//        順番が大事
+        //        順番が大事
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.profileViewController.navigationController?.setNavigationBarHidden(false, animated: false)
         let rightBarButtonItem = UIBarButtonItem(title: "保存する", style: .plain, target: self, action: nil)
@@ -137,7 +145,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         self.birthdaytext = self.textFieldArr[4].text
         self.etcText = self.textViewArr[6].text
 
-//        もっとbetterな処理方法があるはず。↓
+        //        もっとbetterな処理方法があるはず。↓
         if self.userNameText == "" {
             self.userNameText = "ー"
         }
@@ -201,13 +209,35 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
             if let error = error {
                 // プロフィールの更新でエラーが発生
                 print("DEBUG_PRINT: " + error.localizedDescription)
-                SVProgressHUD.showError(withStatus: "表示名の設定に失敗しました")
                 return
             } else {
                 print("DEBUG_PRINT: [displayName = \(user!.displayName!)]の設定に成功しました。")
-                SVProgressHUD.showSuccess(withStatus: "保存しました")
             }
         }
+
+        //        既存の投稿データのuserNameも変更する
+        let postRef2 = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user!.uid)
+        postRef2.getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("取得失敗\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                print("取得成功\(querySnapshot)")
+                self.postArrayForDocId = querySnapshot.documents.map { document in
+                    print("DEBUG_PRINT: document取得 \(document.documentID)")
+                    let docIdArray = PostData(document: document).documentId
+                    return docIdArray
+                }
+                self.postArrayForDocId.forEach {
+                    let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document($0)
+                    postRef.updateData(["userName": self.userNameText!])
+                }
+                SVProgressHUD.showSuccess(withStatus: "保存しました")
+                SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
+                    self.navigationController?.popViewController(animated: true)
+                })
+            }
+        })
     }
 }
 

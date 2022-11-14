@@ -35,6 +35,10 @@ class OthersBookMarkCommentsSectionViewController: UIViewController, UITableView
         super.viewWillAppear(true)
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.white
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {

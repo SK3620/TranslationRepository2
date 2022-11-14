@@ -13,6 +13,7 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet var tableView: UITableView!
 
     var profileData: [String: Any] = [:]
+    var secondTabBarController: SecondTabBarController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,7 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
+        self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         self.setProfileData()
     }
 

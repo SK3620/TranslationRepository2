@@ -5,6 +5,7 @@
 //  Created by 鈴木健太 on 2022/11/09.
 //
 
+import Firebase
 import Parchment
 import UIKit
 
@@ -13,6 +14,7 @@ class SecondPagingViewController: UIViewController {
 
     var secondTabBarController: SecondTabBarController!
     var postData: PostData!
+    var savedTextView_text: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,31 +86,50 @@ class SecondPagingViewController: UIViewController {
         pagingViewController.selectedTextColor = .black
         pagingViewController.textColor = .systemGray4
         pagingViewController.indicatorColor = .systemBlue
+        pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
+        pagingViewController.menuItemLabelSpacing = 0
     }
 
-    override func viewDidAppear(_: Bool) {
-        super.viewDidAppear(true)
-    }
-
+//    viewWillAppearだけでsetRightBarButton()を呼ぶと、rightBarButtonItemが表示されない
+//    viewWillAppearとviewDidAppearで呼ぶと、表示される
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+        self.setRightBarButtonItem()
+    }
 
+    func setRightBarButtonItem() {
+        self.secondTabBarController.rightBarButtonItems = []
+        self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         self.secondTabBarController.tabBar.isHidden = false
         let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.tip.crop.circle.badge.plus"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
-        self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.secondTabBarController.rightBarButtonItems.append(rightBarButtonItem)
         self.secondTabBarController.title = "タイムライン"
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.secondTabBarController.navigationItem.rightBarButtonItem = rightBarButtonItem
+        self.secondTabBarController.navigationItem.rightBarButtonItems = self.secondTabBarController.rightBarButtonItems
+
+        if Auth.auth().currentUser == nil {
+            rightBarButtonItem.isEnabled = false
+        } else {
+            rightBarButtonItem.isEnabled = true
+        }
     }
 
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
         print("バーボタンタップされた")
-        let postViewContoller = storyboard!.instantiateViewController(withIdentifier: "Post")
-        present(postViewContoller, animated: true, completion: nil)
+        let NCForPostViewContoller = storyboard!.instantiateViewController(withIdentifier: "Post") as! UINavigationController
+        let postViewController = NCForPostViewContoller.viewControllers[0] as! PostViewController
+        postViewController.secondPagingViewController = self
+        postViewController.savedTextView_text = self.savedTextView_text
+
+        present(NCForPostViewContoller, animated: true, completion: nil)
     }
 
     func segue() {
         self.performSegue(withIdentifier: "ToCommentSection", sender: nil)
+    }
+
+    func segueToOthersProfile() {
+        self.performSegue(withIdentifier: "ToOthersProfile", sender: nil)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
@@ -116,6 +137,10 @@ class SecondPagingViewController: UIViewController {
             let commentSectionViewController = segue.destination as! CommentSectionViewController
             commentSectionViewController.secondTabBarController = self.secondTabBarController
             commentSectionViewController.postData = self.postData
+        } else if segue.identifier == "ToOthersProfile" {
+            let othersProfileViewController = segue.destination as! OthersProfileViewController
+            othersProfileViewController.postData = self.postData
+            othersProfileViewController.secondTabBarController = self.secondTabBarController
         }
     }
 

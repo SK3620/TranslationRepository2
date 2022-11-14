@@ -24,8 +24,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     var image: UIImage!
     var tabBarController1: TabBarController?
-    var secondTabBarController: SecondTabBarController?
+    var secondTabBarController: SecondTabBarController!
     var rightBarButtonItem: UIBarButtonItem!
+    var rightEdgeBarButtonItem: UIBarButtonItem!
 
     var profileData: [String: Any] = [:]
 
@@ -40,6 +41,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
 
         let introductionViewController = storyboard?.instantiateViewController(identifier: "introduction") as! IntroductionViewController
+        introductionViewController.secondTabBarController = self.secondTabBarController
+
         let navigationController = storyboard?.instantiateViewController(withIdentifier: "NC") as! UINavigationController
         let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "NC2") as! UINavigationController
 
@@ -63,16 +66,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         pagingViewController.selectedTextColor = .black
         pagingViewController.textColor = .systemGray4
         pagingViewController.indicatorColor = .systemBlue
+        pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
+        pagingViewController.menuItemLabelSpacing = 0
 
         self.navigationController?.navigationBar.backgroundColor = .systemGray4
-
-        if let secondTabBarController = self.secondTabBarController {
-            let rightEdgeBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.tappedRightEdgeBarButtonItem(_:)))
-            let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.tip.crop.circle.badge.plus"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
-            self.rightBarButtonItem = rightBarButtonItem
-            secondTabBarController.navigationItem.rightBarButtonItems = [rightEdgeBarButtonItem, rightBarButtonItem]
-            secondTabBarController.title = "プロフィール"
-        }
 
         //        丸いimageView
         self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
@@ -80,10 +77,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.imageView.image = UIImage(systemName: "person")
         self.imageView.layer.borderColor = UIColor.systemGray4.cgColor
         self.imageView.layer.borderWidth = 2.5
-
-        self.title = "プロフィール"
-        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(self.tappedRightEdgeBarButtonItem))
-        self.navigationItem.setRightBarButton(rightBarButtonItem, animated: true)
     }
 
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
@@ -97,6 +90,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+
+        self.setRightBarButtonItem()
 
         //        currentUserがnilなら
         if Auth.auth().currentUser == nil {
@@ -116,8 +111,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
         if Auth.auth().currentUser != nil {
             self.label1.text = ""
-            self.changePhotoButton.isEnabled = true
-            self.rightBarButtonItem.isEnabled = true
 
             self.setImageFromStorage()
             if let user = Auth.auth().currentUser {
@@ -139,9 +132,21 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
 
+    func setRightBarButtonItem() {
+        self.secondTabBarController.rightBarButtonItems = []
+        self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
+        let rightEdgeBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.tappedRightEdgeBarButtonItem(_:)))
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.tip.crop.circle.badge.plus"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
+        self.rightBarButtonItem = rightBarButtonItem
+        self.rightEdgeBarButtonItem = rightEdgeBarButtonItem
+        self.secondTabBarController.rightBarButtonItems.append(rightEdgeBarButtonItem)
+        self.secondTabBarController.rightBarButtonItems.append(rightBarButtonItem)
+        self.secondTabBarController.navigationItem.rightBarButtonItems = self.secondTabBarController.rightBarButtonItems
+        self.secondTabBarController.title = "プロフィール"
+    }
+
     func setProfileDataOnLabels(profileData _: [String: Any]) {
         self.userNameLabel.text = Auth.auth().currentUser?.displayName!
-        print("ユーザー名確認\(Auth.auth().currentUser?.displayName!)")
         if let genderText = self.profileData["gender"] as? String {
             self.genderLabel.text = genderText
         } else {

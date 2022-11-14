@@ -24,6 +24,7 @@
 		836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */; };
 		83724E9529190BD40074ED1E /* ButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83724E9429190BD40074ED1E /* ButtonModel.swift */; };
 		83724E98291926EA0074ED1E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83724E97291926EA0074ED1E /* Alamofire */; };
+		83734B75291E62F8007B9A72 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83734B74291E62F8007B9A72 /* Alamofire */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
 		837D41E929150F4C00A80342 /* SecondPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D41E829150F4C00A80342 /* SecondPostData.swift */; };
 		8382E93D28F728E100877DD8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382E93C28F728E100877DD8 /* Alamofire */; };
@@ -203,6 +204,7 @@
 				8389C3F8290A7993007347AE /* Alamofire in Frameworks */,
 				839CDF632906939100F78F44 /* Alamofire in Frameworks */,
 				8382FD4628F987B20021715C /* Alamofire in Frameworks */,
+				83734B75291E62F8007B9A72 /* Alamofire in Frameworks */,
 				83724E98291926EA0074ED1E /* Alamofire in Frameworks */,
 				8342F77728FD760E005C8FD5 /* Alamofire in Frameworks */,
 				83A2E1AE29018C5D00F1117A /* Alamofire in Frameworks */,
@@ -440,7 +442,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				836F9AAA2908D01C00EB9C70 /* ShellScript */,
-				5F55B4A3EACE412DD84EE836 /* [CP] Embed Pods Frameworks */,
+				4F15B3C0DBD7309EED5D7ABD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -457,6 +459,7 @@
 				8389C3F7290A7993007347AE /* Alamofire */,
 				8389C404290AC6AF007347AE /* Alamofire */,
 				83724E97291926EA0074ED1E /* Alamofire */,
+				83734B74291E62F8007B9A72 /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
@@ -501,6 +504,7 @@
 				8389C3F6290A7993007347AE /* XCRemoteSwiftPackageReference "Alamofire" */,
 				8389C403290AC6AF007347AE /* XCRemoteSwiftPackageReference "Alamofire" */,
 				83724E96291926EA0074ED1E /* XCRemoteSwiftPackageReference "Alamofire" */,
+				83734B73291E62F8007B9A72 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83071CF628B91AC70003734C /* Products */;
 			projectDirPath = "";
@@ -559,7 +563,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5F55B4A3EACE412DD84EE836 /* [CP] Embed Pods Frameworks */ = {
+		4F15B3C0DBD7309EED5D7ABD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -925,6 +929,14 @@
 				kind = branch;
 			};
 		};
+		83734B73291E62F8007B9A72 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		8382E93B28F728E100877DD8 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1024,6 +1036,11 @@
 		83724E97291926EA0074ED1E /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		83734B74291E62F8007B9A72 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		8382E93C28F728E100877DD8 /* Alamofire */ = {

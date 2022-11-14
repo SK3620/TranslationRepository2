@@ -21,6 +21,11 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.white
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
         self.navigationController?.setNavigationBarHidden(false, animated: false)
 
         self.tableView.delegate = self
@@ -109,6 +114,8 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         cell.commentButton.isHidden = true
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+        cell.cellEditButton.isEnabled = false
+        cell.cellEditButton.isHidden = true
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)

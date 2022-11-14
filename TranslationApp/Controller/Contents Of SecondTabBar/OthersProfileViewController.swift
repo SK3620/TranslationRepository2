@@ -21,7 +21,7 @@ class OthersProfileViewController: UIViewController {
     var postData: PostData!
     var profileData: [String: Any] = [:]
 
-//    var secondTabBarController: SecondTabBarController!
+    var secondTabBarController: SecondTabBarController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +59,8 @@ class OthersProfileViewController: UIViewController {
         pagingViewController.selectedTextColor = .black
         pagingViewController.textColor = .systemGray4
         pagingViewController.indicatorColor = .systemBlue
+        pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
+        pagingViewController.menuItemLabelSpacing = 0
 
         //        丸いimageView
         self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
@@ -71,8 +73,14 @@ class OthersProfileViewController: UIViewController {
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-//        self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.secondTabBarController.tabBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray4
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
         self.getProfileDataDocument()
     }
 

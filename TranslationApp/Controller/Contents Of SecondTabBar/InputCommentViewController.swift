@@ -91,34 +91,36 @@ class InputCommentViewController: UIViewController {
         let user = Auth.auth().currentUser
         let textView_text = self.textView.text
 
-        if user != nil, textView_text!.isEmpty != true {
-            //        uidとdisplayNameとコメント投稿日とコメント内容を格納する配列
+        guard user != nil, textView_text!.isEmpty != true else {
+            SVProgressHUD.showError(withStatus: "コメントを入力してください")
+            SVProgressHUD.dismiss(withDelay: 1.5)
+            return
+        }
+        //        uidとdisplayNameとコメント投稿日とコメント内容を格納する配列
 //            更新データ作成
-            let postDic = [
-                "uid": user!.uid,
-                "userName": user!.displayName!,
-                "comment": textView_text!,
-                "commentedDate": FieldValue.serverTimestamp(),
-            ] as [String: Any]
+        let postDic = [
+            "uid": user!.uid,
+            "userName": user!.displayName!,
+            "comment": textView_text!,
+            "commentedDate": FieldValue.serverTimestamp(),
+        ] as [String: Any]
 
 //            ネスト化された配列にservserTimestampは使えないっぽい
-            Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").addDocument(data: postDic, completion: { error in
-                if let error = error {
-                    print("追加失敗\(error)")
-                    SVProgressHUD.showError(withStatus: "コメントを入力してください")
-                    return
-                } else {
-                    print("追加成功")
-                    self.listner()
-                }
-            })
-        }
+        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").addDocument(data: postDic, completion: { error in
+            if let error = error {
+                print("追加失敗\(error)")
+                return
+            } else {
+                print("追加成功")
+                self.listner()
+            }
+        })
     }
 
     func listner() {
         print("リスナー")
         // ログイン済みか確認
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
@@ -141,14 +143,17 @@ class InputCommentViewController: UIViewController {
                 self.commentSectionViewController.secondPostArray = self.secondPostArray
                 self.commentSectionViewController.reloadTableView()
                 self.textView.endEditing(true)
-                self.dismiss(animated: true)
+                SVProgressHUD.showSuccess(withStatus: "コメントしました")
+                SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
+                    self.dismiss(animated: true)
+                })
             }
         }
     }
 
 //    投稿ボタンがおされたら、コメントしたドキュメントIDの数分をfirestoreにupdateData()で書き込むメソッド（コメント数の表示のため）
     func writeNumberOfCommentsInFireStore() {
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
             let numberOfComments = String(self.secondPostArray.count)
             let postDic = [

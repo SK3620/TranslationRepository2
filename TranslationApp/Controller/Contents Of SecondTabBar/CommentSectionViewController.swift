@@ -13,7 +13,6 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet var tableView: UITableView!
 
     var secondTabBarController: SecondTabBarController!
-//    var timeLineViewController: TimeLineViewController!
     var postData: PostData!
 
     // Firestoreのリスナー
@@ -27,9 +26,11 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray4
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
-//        self.timeLineViewController.navigationController?.setNavigationBarHidden(false, animated: false)
         self.title = "詳細"
 
         self.tableView.delegate = self
@@ -132,10 +133,14 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton), for: .touchUpInside)
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+        cell.cellEditButton.isEnabled = false
+        cell.cellEditButton.isHidden = true
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
 
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
+
+        cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
 
         if indexPath.row == 0 {
             cell.setPostData(self.postData)
@@ -146,6 +151,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
         cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
         cell2.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButtonInComment(_:forEvent:)), for: .touchUpInside)
+        cell2.copyButton.addTarget(self, action: #selector(self.tappedCopyButtonInCommentSection(_:forEvent:)), for: .touchUpInside)
 
         cell2.bookMarkButton.isEnabled = false
         cell2.bookMarkButton.isHidden = true
@@ -263,6 +269,36 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
             postRef.updateData(["likes": updateValue])
         }
+    }
+
+    @objc func tappedCopyButton(_: UIButton, forEvent _: UIEvent) {
+        // タップされたセルのインデックスを求める
+//        投稿内容をコピー
+        SVProgressHUD.show()
+        // 配列からタップされたインデックスのデータを取り出す
+        UIPasteboard.general.string = self.postData.contentOfPost
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
+//            SVProgressHUD.dismiss()
+//        }
+    }
+
+    @objc func tappedCopyButtonInCommentSection(_: UIButton, forEvent event: UIEvent) {
+        // タップされたセルのインデックスを求める
+//        コメント内容をコピー
+        SVProgressHUD.show()
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.secondPostArray[indexPath!.row - 1]
+        UIPasteboard.general.string = postData.comment
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
+//            SVProgressHUD.dismiss()
+//        }
     }
 
     /*

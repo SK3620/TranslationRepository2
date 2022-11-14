@@ -5,6 +5,8 @@
 //  Created by 鈴木健太 on 2022/10/30.
 //
 
+import Alamofire
+import CoreMIDI
 import Firebase
 import SVProgressHUD
 import UIKit
@@ -77,7 +79,54 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         cell.commentButton.isEnabled = false
         cell.commentButton.isHidden = true
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
+        cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEfitButton(_:forEvent:)), for: .touchUpInside)
+        cell.cellEditButton.isEnabled = true
+        cell.cellEditButton.isHidden = false
         return cell
+    }
+
+    @objc func tappedCellEfitButton(_: UIButton, forEvent event: UIEvent) {
+        //        投稿内容削除処理
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        let deleteAction = UIAlertAction(title: "削除する", style: .destructive) { _ in
+            // 削除機能のコード
+            let touch = event.allTouches?.first
+            let point = touch!.location(in: self.tableView)
+            let indexPath = self.tableView.indexPathForRow(at: point)
+
+            let postData = self.postArray[indexPath!.row]
+            Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId).delete { error in
+                if let error = error {
+                    print("投稿データの削除失敗\(error)")
+                } else {
+                    print("投稿データの削除成功")
+                }
+            }
+
+            Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId).collection("commentDataCollection").getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("コメントの取得失敗/またはコメントがありません\(error)")
+                }
+                if let querySnapshot = querySnapshot {
+                    print("コメントを取得しました\(querySnapshot)")
+                    querySnapshot.documents.forEach {
+                        $0.reference.delete(completion: { error in
+                            if let error = error {
+                                print("コメント削除失敗\(error)")
+                            } else {
+                                print("コメント削除成功")
+                            }
+                        })
+                    }
+                }
+            }
+        }
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {

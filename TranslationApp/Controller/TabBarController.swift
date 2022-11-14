@@ -19,14 +19,19 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        selectedIndex = 2
+        let appearanceForNB = UINavigationBarAppearance()
+        appearanceForNB.backgroundColor = UIColor.systemGray5
+        self.navigationController?.navigationBar.standardAppearance = appearanceForNB
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearanceForNB
+
+        self.selectedIndex = 2
         // タブアイコンの色
         tabBar.tintColor = UIColor.systemBlue
         // タブバーの背景色を設定
-        let appearance = UITabBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray4
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = appearance
+        let appearanceForTB = UITabBarAppearance()
+        appearanceForTB.backgroundColor = UIColor.systemGray5
+        tabBar.standardAppearance = appearanceForTB
+        tabBar.scrollEdgeAppearance = appearanceForTB
 
         //        HistoryViewController（翻訳履歴画面）にある、tabBarControllerインスタンスを格納する変数tabBarController1にselfを指定
 
@@ -148,7 +153,8 @@ class TabBarController: UITabBarController {
             let navigationController = secondTabBarController.viewControllers![1] as! UINavigationController
             let profileViewController = navigationController.viewControllers[0] as! ProfileViewController
             profileViewController.secondTabBarController = secondTabBarController
-//            プロフィール画面へsecondTabBarControllerインスタンスを渡す
+//
+
             let navigationController1 = secondTabBarController.viewControllers![0] as! UINavigationController
             let secondPagingViewController = navigationController1.viewControllers[0] as! SecondPagingViewController
             secondPagingViewController.secondTabBarController = secondTabBarController

@@ -8,7 +8,7 @@
 import Firebase
 import UIKit
 
-class CustomCellForEditProfile: UITableViewCell {
+class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
     @IBOutlet var userNameTextField: UITextField!
     @IBOutlet var genderTextField: UITextField!
     @IBOutlet var ageTextField: UITextField!
@@ -22,22 +22,35 @@ class CustomCellForEditProfile: UITableViewCell {
     @IBOutlet var birthdayTextField: UITextField!
     @IBOutlet var etcTextView: UITextView!
 
+    var maxPasswordLength: Int = 10
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+
+        self.userNameTextField.delegate = self
+
         let textFieldArr: [UITextField]! = [userNameTextField, genderTextField, ageTextField, birthdayTextField, whereYouLiveTextField]
         let textViewArr: [UITextView]! = [workTextView, introductionTextView, academicHistoryTextView, hobbyTextView, visitedCountryTextView, wannaVisitCountryTextView, etcTextView]
         self.setTextFieldAndViewDesign(textFieldArr: textFieldArr, textViewArr: textViewArr)
     }
 
+    func textFieldDidChangeSelection(_: UITextField) {
+        guard let userName = userNameTextField.text else { return }
+
+        if userName.count > self.maxPasswordLength {
+            self.userNameTextField.text = String(userName.prefix(self.maxPasswordLength))
+        }
+    }
+
     func setTextFieldAndViewDesign(textFieldArr: [UITextField], textViewArr: [UITextView]) {
         textFieldArr.forEach {
-            $0.layer.borderColor = UIColor.systemGray.cgColor
+            $0.layer.borderColor = UIColor.systemGray4.cgColor
             $0.layer.borderWidth = 2
             $0.layer.cornerRadius = 6
         }
         textViewArr.forEach {
-            $0.layer.borderColor = UIColor.systemGray.cgColor
+            $0.layer.borderColor = UIColor.systemGray4.cgColor
             $0.layer.borderWidth = 2
             $0.layer.cornerRadius = 6
         }

@@ -20,12 +20,16 @@ class CustomCellForTimeLine: UITableViewCell {
     @IBOutlet var imageView1: UIImageView!
     @IBOutlet var commentButton: UIButton!
     @IBOutlet var buttonOnImageView1: UIButton!
+    @IBOutlet var copyButton: UIButton!
+    @IBOutlet var cellEditButton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.setButtonImage(button: self.bubbleButton, systemName: "bubble.left")
         self.setButtonImage(button: self.bookMarkButton, systemName: "bookMark")
+        self.setButtonImage(button: self.copyButton, systemName: "doc.on.doc")
+        self.setButtonImage(button: self.cellEditButton, systemName: "ellipsis")
         self.bubbleButton.tintColor = .darkGray
         //        丸いimageView
         self.imageView1.layer.cornerRadius = self.imageView1.frame.height / 2
@@ -94,7 +98,7 @@ class CustomCellForTimeLine: UITableViewCell {
     }
 
     func setButtonImage(button: UIButton, systemName: String) {
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
+        let config = UIImage.SymbolConfiguration(pointSize: 21, weight: .regular, scale: .small)
         button.setImage(UIImage(systemName: systemName, withConfiguration: config), for: .normal)
     }
 }

@@ -34,6 +34,12 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.white
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
         self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         // ログイン済みか確認
@@ -102,6 +108,8 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
         cell.commentButton.isHidden = true
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+        cell.cellEditButton.isEnabled = false
+        cell.cellEditButton.isHidden = true
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)

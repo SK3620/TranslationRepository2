@@ -5,6 +5,7 @@
 //  Created by 鈴木健太 on 2022/11/03.
 //
 
+import Alamofire
 import Firebase
 import SVProgressHUD
 import UIKit
@@ -23,18 +24,22 @@ class PostViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var certificationButton: UIButton!
     @IBOutlet var etcButton: UIButton!
 
+    var secondPagingViewController: SecondPagingViewController!
+    var savedTextView_text: String = ""
+
     var array: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.label1.text = "下の項目から関連のあるトピックを追加できます"
+        self.textView.text = self.savedTextView_text
 
         self.setButtonDesign(buttonArr: [self.correctButton, self.HowToLearnButton, self.wordButton, self.grammerButton, self.conversationButton, self.listeningButton, self.pronunciationButton, self.certificationButton, self.etcButton])
 
         self.textView.delegate = self
 
-        self.title = "タイムライン"
+        self.title = "投稿"
         self.textView.endEditing(false)
         // 決定バーの生成
         let toolbar = UIToolbar()
@@ -64,7 +69,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         if self.textView.text == "" {
             self.label1.text = "下の項目から関連のあるトピックを追加できます"
         } else {
-            self.label1.text == ""
+            self.label1.text = ""
         }
     }
 
@@ -73,6 +78,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         SVProgressHUD.show()
         if self.textView.text.isEmpty {
             SVProgressHUD.showError(withStatus: "投稿内容を入力してください")
+            SVProgressHUD.dismiss(withDelay: 1.5)
             return
         }
 
@@ -89,13 +95,28 @@ class PostViewController: UIViewController, UITextViewDelegate {
         let value = FieldValue.arrayUnion(self.array)
         postRef.updateData(["topic": value])
 
+        self.secondPagingViewController.savedTextView_text = ""
         SVProgressHUD.showSuccess(withStatus: "投稿しました")
-        self.dismiss(animated: true)
+        SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
+            self.dismiss(animated: true)
+        })
     }
 
     @IBAction func backButton(_: Any) {
-        self.dismiss(animated: true)
-        print(self.array)
+        if self.textView.text.isEmpty != true {
+            let alert = UIAlertController(title: "この編集を保存しますか？", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: { _ in
+                self.secondPagingViewController.savedTextView_text = ""
+                self.dismiss(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "はい", style: .default, handler: { _ in
+                self.secondPagingViewController.savedTextView_text = self.textView.text
+                self.dismiss(animated: true)
+            }))
+            present(alert, animated: true, completion: nil)
+        } else {
+            self.dismiss(animated: true)
+        }
     }
 
     @IBAction func correctButton(_: Any) {

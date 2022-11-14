@@ -20,7 +20,7 @@ class ButtonModel: NSObject {
             button.tintColor = .white
             button.layer.borderWidth = 1.5
             button.layer.cornerRadius = 6
-            button.layer.borderColor = UIColor.systemBlue.cgColor
+            button.layer.borderColor = UIColor.systemCyan.cgColor
             postViewController.array.append(button.titleLabel!.text!)
 
         } else {

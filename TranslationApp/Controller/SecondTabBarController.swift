@@ -8,6 +8,8 @@
 import UIKit
 
 class SecondTabBarController: UITabBarController {
+    var rightBarButtonItems: [UIBarButtonItem] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -15,11 +17,15 @@ class SecondTabBarController: UITabBarController {
         tabBar.tintColor = UIColor.systemBlue
         // タブバーの背景色を設定
         let appearance = UITabBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray4
+        appearance.backgroundColor = UIColor.systemGray5
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
 
         // Do any additional setup after loading the view.
+    }
+
+    override func viewWillAppear(_: Bool) {
+        super.viewWillAppear(true)
     }
 
     /*
