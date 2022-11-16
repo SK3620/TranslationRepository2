@@ -22,6 +22,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet var changePhotoButton: UIButton!
     @IBOutlet var label1: UILabel!
 
+    @IBOutlet var likeNumberLabel: UILabel!
+    @IBOutlet var postNumberLabel: UILabel!
+
     var image: UIImage!
     var tabBarController1: TabBarController?
     var secondTabBarController: SecondTabBarController!
@@ -29,6 +32,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var rightEdgeBarButtonItem: UIBarButtonItem!
 
     var profileData: [String: Any] = [:]
+
+//    var pagingViewController: PagingViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +49,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         introductionViewController.secondTabBarController = self.secondTabBarController
 
         let navigationController = storyboard?.instantiateViewController(withIdentifier: "NC") as! UINavigationController
+        let postsHistoryViewController = navigationController.viewControllers[0] as! PostsHistoryViewController
+        postsHistoryViewController.delegate = self
+
         let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "NC2") as! UINavigationController
 
         introductionViewController.title = "自己紹介"
@@ -68,6 +76,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         pagingViewController.indicatorColor = .systemBlue
         pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
         pagingViewController.menuItemLabelSpacing = 0
+//        self.pagingViewController = pagingViewController
+        introductionViewController.pagingViewController = pagingViewController
 
         self.navigationController?.navigationBar.backgroundColor = .systemGray4
 
@@ -90,6 +100,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+
+        //        indexを1にすることで、postsHistoryViewController画面をいったん表示させて、いいね数と投稿数を表示させる
+//        self.pagingViewController.select(index: 1)
 
         self.setRightBarButtonItem()
 
@@ -130,6 +143,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 print("実行されたを２")
             }
         }
+    }
+
+    override func viewDidAppear(_: Bool) {
+        super.viewDidAppear(true)
+
+//        indexを0から1に戻す
+//        self.pagingViewController.select(index: 0)
     }
 
     func setRightBarButtonItem() {
@@ -255,5 +275,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
             SVProgressHUD.dismiss()
         }
+    }
+}
+
+extension ProfileViewController: setLikeAndPostNumberLabelDelegate {
+//    いいね数と投稿数を表示させる
+    func setLikeAndPostNumberLabel(likeNumber: Int, postNumber: Int) {
+        self.likeNumberLabel.text = "いいね \(String(likeNumber))"
+        self.postNumberLabel.text = "投稿 \(String(postNumber))"
     }
 }

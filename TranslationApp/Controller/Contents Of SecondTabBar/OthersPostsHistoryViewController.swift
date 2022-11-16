@@ -9,12 +9,19 @@ import Firebase
 import SVProgressHUD
 import UIKit
 
+protocol setLikeAndPostNumberLabelForOthersDelegate: NSObject {
+    func setLikeAndPostNumberLabelForOthers(likeNumber: Int, postNumber: Int)
+}
+
 class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
     var postData: PostData!
     var postArray: [PostData] = []
     var listener: ListenerRegistration?
+
+    var delegate: setLikeAndPostNumberLabelForOthersDelegate!
+    var likeNumber: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +36,8 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+
+        self.likeNumber = 0
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
@@ -83,6 +92,11 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
+
+        self.likeNumber += cell.likeNumber
+        if indexPath.row == self.postArray.count - 1 {
+            self.delegate.setLikeAndPostNumberLabelForOthers(likeNumber: self.likeNumber, postNumber: self.postArray.count)
+        }
         return cell
     }
 

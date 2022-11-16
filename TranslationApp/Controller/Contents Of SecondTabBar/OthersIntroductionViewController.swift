@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import Parchment
 import SVProgressHUD
 import UIKit
 
@@ -15,8 +16,12 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
     var profileData: [String: Any] = [:]
     var postData: PostData!
 
+    var secondPagingViewController: PagingViewController!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.secondPagingViewController.select(index: 1)
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -27,6 +32,7 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+        self.secondPagingViewController.select(index: 0)
         print("確認\(self.postData.uid)")
         self.getProfileDataDocument()
     }

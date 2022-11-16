@@ -17,6 +17,8 @@ class OthersProfileViewController: UIViewController {
     @IBOutlet var workLabel: UILabel!
     @IBOutlet var pagingView: UIView!
     @IBOutlet var profileImageView: UIImageView!
+    @IBOutlet var likeNumberLabel: UILabel!
+    @IBOutlet var postNumberLabel: UILabel!
 
     var postData: PostData!
     var seocndPostData: SecondPostData!
@@ -34,9 +36,12 @@ class OthersProfileViewController: UIViewController {
 
         let othersIntroductionViewController = storyboard?.instantiateViewController(identifier: "OthersIntroduction") as! OthersIntroductionViewController
         othersIntroductionViewController.postData = self.postData
+
         let navigationController = storyboard?.instantiateViewController(withIdentifier: "OthersNC") as! UINavigationController
         let othersPostsHistoryViewController = navigationController.viewControllers[0] as! OthersPostsHistoryViewController
         othersPostsHistoryViewController.postData = self.postData
+        othersPostsHistoryViewController.delegate = self
+
         let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "OthersNC2") as! UINavigationController
         let othersBookMarkViewController = navigationController2.viewControllers[0] as! OthersBookMarkViewController
         othersBookMarkViewController.postData = self.postData
@@ -66,6 +71,8 @@ class OthersProfileViewController: UIViewController {
         pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
         pagingViewController.menuItemLabelSpacing = 0
 
+        othersIntroductionViewController.secondPagingViewController = pagingViewController
+
         //        丸いimageView
         self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
         //        画像にデフォルト設定
@@ -87,6 +94,10 @@ class OthersProfileViewController: UIViewController {
         self.secondTabBarController.tabBar.isHidden = true
 
         self.getProfileDataDocument()
+    }
+
+    override func viewDidAppear(_: Bool) {
+        super.viewDidAppear(true)
     }
 
     override func viewWillDisappear(_: Bool) {
@@ -148,4 +159,11 @@ class OthersProfileViewController: UIViewController {
          // Pass the selected object to the new view controller.
      }
      */
+}
+
+extension OthersProfileViewController: setLikeAndPostNumberLabelForOthersDelegate {
+    func setLikeAndPostNumberLabelForOthers(likeNumber: Int, postNumber: Int) {
+        self.likeNumberLabel.text = "いいね \(String(likeNumber))"
+        self.postNumberLabel.text = "投稿 \(String(postNumber))"
+    }
 }

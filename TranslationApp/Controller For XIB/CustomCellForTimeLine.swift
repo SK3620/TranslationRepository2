@@ -23,6 +23,9 @@ class CustomCellForTimeLine: UITableViewCell {
     @IBOutlet var copyButton: UIButton!
     @IBOutlet var cellEditButton: UIButton!
 
+//    プロフィール画面に表示するいいねの数
+    var likeNumber: Int = 0
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -77,6 +80,7 @@ class CustomCellForTimeLine: UITableViewCell {
         // いいね数の表示
         let likeNumber = postData.likes.count
         self.heartLabel.text = "\(likeNumber)"
+        self.likeNumber = likeNumber
 
         // いいねボタンの表示
         if postData.isLiked {

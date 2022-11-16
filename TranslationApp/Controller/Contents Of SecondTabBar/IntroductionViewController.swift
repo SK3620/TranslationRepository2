@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import Parchment
 import SVProgressHUD
 import UIKit
 
@@ -14,9 +15,12 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
 
     var profileData: [String: Any] = [:]
     var secondTabBarController: SecondTabBarController!
+    var pagingViewController: PagingViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.pagingViewController.select(index: 1)
 
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -28,6 +32,8 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+
+        self.pagingViewController.select(index: 0)
 
         self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         self.setProfileData()

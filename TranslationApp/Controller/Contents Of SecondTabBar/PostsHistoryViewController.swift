@@ -8,15 +8,26 @@
 import Alamofire
 import CoreMIDI
 import Firebase
+import Parchment
 import SVProgressHUD
 import UIKit
+
+// ProfileViewController画面で、いいねと投稿、各々の合計数をlabelに表示するdelegateMethod
+protocol setLikeAndPostNumberLabelDelegate: NSObject {
+    func setLikeAndPostNumberLabel(likeNumber: Int, postNumber: Int)
+}
 
 class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
     var postArray: [PostData] = []
-
     var listener: ListenerRegistration?
+
+    var delegate: setLikeAndPostNumberLabelDelegate!
+//    表示するいいね数の合計
+    var likeNumber: Int = 0
+//    表示する投稿数の合計
+    var postNumber: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +42,8 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+
+        self.likeNumber = 0
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
@@ -83,6 +96,15 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
+
+        self.likeNumber += cell.likeNumber
+        if indexPath.row == self.postArray.count - 1 {
+//            profileViewControllerのインスタンスを取ってきてもいいが、あえてdelegateを使う（delegate使い方の練習のため）
+            print("いいね数の合計は\(self.likeNumber)です")
+            print("投稿数の合計は\(self.postArray.count)です")
+            self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postArray.count)
+        }
+
         return cell
     }
 
