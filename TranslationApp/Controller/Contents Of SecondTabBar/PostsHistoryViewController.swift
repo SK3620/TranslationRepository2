@@ -80,6 +80,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         cell.commentButton.isHidden = true
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEfitButton(_:forEvent:)), for: .touchUpInside)
+        cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
         return cell
@@ -93,6 +94,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         }
         let deleteAction = UIAlertAction(title: "削除する", style: .destructive) { _ in
             // 削除機能のコード
+            SVProgressHUD.show()
             let touch = event.allTouches?.first
             let point = touch!.location(in: self.tableView)
             let indexPath = self.tableView.indexPathForRow(at: point)
@@ -118,6 +120,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
                                 print("コメント削除失敗\(error)")
                             } else {
                                 print("コメント削除成功")
+                                SVProgressHUD.dismiss()
                             }
                         })
                     }
@@ -155,6 +158,33 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
+        }
+    }
+
+    @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
+        print("bookMakrタップされた")
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.postArray[indexPath!.row]
+
+        // bookMarkを更新する
+        if let myid = Auth.auth().currentUser?.uid {
+            // 更新データを作成する
+            var updateValue: FieldValue
+            if postData.isBookMarked {
+                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
+                updateValue = FieldValue.arrayRemove([myid])
+            } else {
+                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
+                updateValue = FieldValue.arrayUnion([myid])
+            }
+            // bookMarksに更新データを書き込む
+            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+            postRef.updateData(["bookMarks": updateValue])
         }
     }
 

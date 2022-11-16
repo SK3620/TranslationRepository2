@@ -70,13 +70,20 @@
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain"/>
                     </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ocL-22-biF">
+                        <rect key="frame" x="15" y="10" width="40" height="40"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain"/>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="ocL-22-biF" firstAttribute="leading" secondItem="KSq-Nm-v0d" secondAttribute="leading" id="B9J-aX-xcm"/>
                     <constraint firstItem="Iv8-to-T7y" firstAttribute="centerY" secondItem="3dw-I4-opG" secondAttribute="centerY" id="EoU-2F-IjW"/>
                     <constraint firstItem="Iv8-to-T7y" firstAttribute="leading" secondItem="3dw-I4-opG" secondAttribute="trailing" id="I7C-pW-pW2"/>
                     <constraint firstAttribute="trailing" secondItem="Ue5-pM-Ny7" secondAttribute="trailing" constant="10" id="Ldd-h2-wlw"/>
                     <constraint firstItem="rrf-y3-SVo" firstAttribute="leading" secondItem="3dw-I4-opG" secondAttribute="trailing" constant="35" id="NdP-Gy-Cds"/>
                     <constraint firstAttribute="bottom" secondItem="3dw-I4-opG" secondAttribute="bottom" constant="5.5" id="Pb4-UN-GYl"/>
+                    <constraint firstItem="ocL-22-biF" firstAttribute="bottom" secondItem="KSq-Nm-v0d" secondAttribute="bottom" id="R5d-KJ-bZ0"/>
                     <constraint firstAttribute="trailing" secondItem="WL1-BW-Q9P" secondAttribute="trailing" constant="10" id="RSX-J2-J0G"/>
                     <constraint firstItem="KSq-Nm-v0d" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="S6H-NR-jCd"/>
                     <constraint firstItem="pPj-tg-h80" firstAttribute="leading" secondItem="3dw-I4-opG" secondAttribute="trailing" constant="35" id="S6J-6C-Uq1"/>
@@ -84,6 +91,7 @@
                     <constraint firstItem="KSq-Nm-v0d" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="YmK-tl-3f4"/>
                     <constraint firstItem="pPj-tg-h80" firstAttribute="top" secondItem="Ue5-pM-Ny7" secondAttribute="bottom" constant="11" id="j3F-06-C6Y"/>
                     <constraint firstItem="3dw-I4-opG" firstAttribute="centerX" secondItem="KSq-Nm-v0d" secondAttribute="centerX" id="k6w-un-6WI"/>
+                    <constraint firstItem="ocL-22-biF" firstAttribute="top" secondItem="KSq-Nm-v0d" secondAttribute="top" id="lbt-gX-e10"/>
                     <constraint firstItem="WL1-BW-Q9P" firstAttribute="centerY" secondItem="l7h-AL-20x" secondAttribute="centerY" id="mK0-dh-4zC"/>
                     <constraint firstItem="pPj-tg-h80" firstAttribute="centerY" secondItem="3dw-I4-opG" secondAttribute="centerY" id="nO8-sn-tqX"/>
                     <constraint firstItem="l7h-AL-20x" firstAttribute="leading" secondItem="KSq-Nm-v0d" secondAttribute="trailing" constant="10" id="oVf-M9-HS9"/>
@@ -93,11 +101,13 @@
                     <constraint firstItem="rrf-y3-SVo" firstAttribute="centerY" secondItem="3dw-I4-opG" secondAttribute="centerY" id="vsH-dX-mIL"/>
                     <constraint firstItem="l7h-AL-20x" firstAttribute="top" secondItem="KSq-Nm-v0d" secondAttribute="top" id="xqB-Cb-31f"/>
                     <constraint firstAttribute="bottom" secondItem="cbz-O5-fdz" secondAttribute="bottom" id="yWk-kN-NQy"/>
+                    <constraint firstItem="ocL-22-biF" firstAttribute="trailing" secondItem="KSq-Nm-v0d" secondAttribute="trailing" id="z2T-wy-SOX"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="bookMarkButton" destination="pPj-tg-h80" id="1Gi-Li-uOP"/>
+                <outlet property="buttonOnImageView1" destination="ocL-22-biF" id="PCg-xo-hMD"/>
                 <outlet property="commentLabel" destination="Ue5-pM-Ny7" id="aGy-6w-ALb"/>
                 <outlet property="copyButton" destination="rrf-y3-SVo" id="GjK-e9-CFD"/>
                 <outlet property="heartButton" destination="3dw-I4-opG" id="YoI-6r-wZt"/>

@@ -14,11 +14,15 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
 
     var secondTabBarController: SecondTabBarController!
     var postData: PostData!
+    var postData2: PostData?
 
     // Firestoreのリスナー
     var listener: ListenerRegistration?
     var listener2: ListenerRegistration?
     var secondPostArray: [SecondPostData] = []
+
+//    postDataのdocumentIdを格納する
+    var documentId: String!
 
 //    入力したコメントを保持させる
     var comment: String = ""
@@ -27,7 +31,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
 
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray4
+        appearance.backgroundColor = UIColor.systemGray5
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
@@ -50,10 +54,12 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         self.navigationController?.setNavigationBarHidden(false, animated: false)
 
         // ログイン済みか確認
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             //            タップされたドキュメントIDを指定　いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
+            self.documentId = self.postData.documentId
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+
             print("postRef確認\(postsRef)")
 //            単一のドキュメントが入ってる。
             self.listener = postsRef.addSnapshotListener { documentSnapshot, error in
@@ -72,7 +78,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         }
 
         // ログイン済みか確認
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
@@ -142,16 +148,21 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
 
         cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
 
+        cell.buttonOnImageView1.addTarget(self, action: #selector(self.tappedImageView1(_:forEvent:)), for: .touchUpInside)
+
         if indexPath.row == 0 {
             cell.setPostData(self.postData)
+            print("postDataの値確認\(self.postData)")
             return cell
         }
 
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
         cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
+        print("secondPostDataの値確認\(self.secondPostArray)")
         cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
         cell2.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButtonInComment(_:forEvent:)), for: .touchUpInside)
         cell2.copyButton.addTarget(self, action: #selector(self.tappedCopyButtonInCommentSection(_:forEvent:)), for: .touchUpInside)
+        cell2.buttonOnImageView1.addTarget(self, action: #selector(self.tappedImageView1ForCell2(_:forEvent:)), for: .touchUpInside)
 
         cell2.bookMarkButton.isEnabled = false
         cell2.bookMarkButton.isHidden = true
@@ -299,6 +310,60 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
 //            SVProgressHUD.dismiss()
 //        }
+    }
+
+    //    プロフィール写真上のタップジェスチャー
+    @objc func tappedImageView1(_: UIButton, forEvent _: UIEvent) {
+        print("タップジェスチャー")
+        self.performSegue(withIdentifier: "ToOthersProfile", sender: self.postData)
+    }
+
+    @objc func tappedImageView1ForCell2(_: UIButton, forEvent event: UIEvent) {
+        self.getDocumentForPostData2()
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+        // 配列からタップされたインデックスのデータを取り出す
+        let secondPostData = self.secondPostArray[indexPath!.row - 1]
+//        取り出したデータのドキュメントID取得して、再度whereFieldで取り出したデータをself.postDataへ格納する
+        let documentId = secondPostData.documentId
+        let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(documentId!)
+        postRef.getDocument(completion: { documentSnapshot, error in
+            if let error = error {
+                print("commentDataCollectionのドキュメント取得失敗\(error)")
+            }
+            if let documentSnapshot = documentSnapshot {
+                self.postData = PostData(document: documentSnapshot)
+
+                self.performSegue(withIdentifier: "ToOthersProfile", sender: self.postData)
+            }
+        })
+    }
+
+    func getDocumentForPostData2() {
+        print("getDocumentForPostData2メソッドが実行された")
+        let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+        postRef.getDocument(completion: { documentSnapshot, error in
+            if let error = error {
+                print("getDocumentForPostData2メソッドでドキュメントの取得に失敗しました。\(error)")
+            }
+            if let documentSnapshot = documentSnapshot {
+                print("getDocumentForPostData2メソッドでドキュメントの取得に成功しました")
+                self.postData2 = PostData(document: documentSnapshot)
+            }
+        })
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let otheresProfileViewController = segue.destination as! OthersProfileViewController
+        otheresProfileViewController.postData = sender as? PostData
+        otheresProfileViewController.documentId = self.documentId
+        otheresProfileViewController.secondTabBarController = self.secondTabBarController
+        otheresProfileViewController.commentSectionViewController = self
+
+        if let postData2 = self.postData2 {
+            otheresProfileViewController.postData2 = postData2
+        }
     }
 
     /*

@@ -277,7 +277,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     //                    一般的に、アプリがAPIサーバーと通信する場合、データはJSON形式でやりとりすることが多いかと思います。Foundationフレームワークの JSONEncoder クラスを使用すると、Swiftの値をJSONに変換することができ、JSONDecoder クラスはJSONをSwiftの値にデコードすることができます
                     let result = try self.decoder.decode(DeepLResult.self, from: response.data!)
                     // 結果のテキストを取得&画面に反映
-                    self.translateTextView2.text = result.translations[0].text
+                    let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
+                    self.translateTextView2.text = text
 
                 } catch {
                     debugPrint("デコード失敗")
@@ -328,7 +329,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     // 結果をデコード
                     let result = try self.decoder.decode(DeepLResult.self, from: response.data!)
                     // 結果のテキストを取得&画面に反映
-                    self.translateTextView2.text = result.translations[0].text
+                    let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
+                    self.translateTextView2.text = text
 
                     // 結果をNCMBに保存する処理を呼び出し
                     //                                        saveResult()
@@ -531,8 +533,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     }
 
     func speak(textView: UITextView) {
-        let english = ContextMenuItemWithImage(title: "英語", image: UIImage())
-        let japanese = ContextMenuItemWithImage(title: "日本語", image: UIImage())
+        let english = ContextMenuItemWithImage(title: "英語音声", image: UIImage())
+        let japanese = ContextMenuItemWithImage(title: "日本語音声", image: UIImage())
         let stop = ContextMenuItemWithImage(title: "停止", image: UIImage())
 
         CM.items = [english, japanese, stop]

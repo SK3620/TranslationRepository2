@@ -56,7 +56,7 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true).whereField("topic", arrayContains: "英会話")
 
             print("postRef確認\(postsRef)")
             self.listener = postsRef.addSnapshotListener { querySnapshot, error in

@@ -40,7 +40,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
 
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray4
+        appearance.backgroundColor = UIColor.systemGray5
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 

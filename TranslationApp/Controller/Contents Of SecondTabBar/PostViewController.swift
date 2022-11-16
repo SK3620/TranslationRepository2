@@ -35,6 +35,11 @@ class PostViewController: UIViewController, UITextViewDelegate {
         self.label1.text = "下の項目から関連のあるトピックを追加できます"
         self.textView.text = self.savedTextView_text
 
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .systemGray5
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
         self.setButtonDesign(buttonArr: [self.correctButton, self.HowToLearnButton, self.wordButton, self.grammerButton, self.conversationButton, self.listeningButton, self.pronunciationButton, self.certificationButton, self.etcButton])
 
         self.textView.delegate = self

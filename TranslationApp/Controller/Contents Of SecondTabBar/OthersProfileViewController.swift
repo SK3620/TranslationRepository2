@@ -19,9 +19,13 @@ class OthersProfileViewController: UIViewController {
     @IBOutlet var profileImageView: UIImageView!
 
     var postData: PostData!
+    var seocndPostData: SecondPostData!
     var profileData: [String: Any] = [:]
+    var postData2: PostData!
+    var documentId: String?
 
     var secondTabBarController: SecondTabBarController!
+    var commentSectionViewController: CommentSectionViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,11 +81,19 @@ class OthersProfileViewController: UIViewController {
         self.secondTabBarController.tabBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray4
+        appearance.backgroundColor = UIColor.systemGray5
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        self.secondTabBarController.tabBar.isHidden = true
 
         self.getProfileDataDocument()
+    }
+
+    override func viewWillDisappear(_: Bool) {
+        super.viewWillDisappear(true)
+        if let postData2 = self.postData2 {
+            self.commentSectionViewController.postData = postData2
+        }
     }
 
     func getProfileDataDocument() {

@@ -96,6 +96,8 @@ class OthersBookMarkViewController: UIViewController, UITableViewDelegate, UITab
         cell.commentButton.isHidden = true
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+        cell.cellEditButton.isEnabled = false
+        cell.cellEditButton.isHidden = true
 
         cell.setPostData(self.postArray[indexPath.row])
 

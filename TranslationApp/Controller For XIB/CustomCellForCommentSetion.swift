@@ -19,6 +19,7 @@ class CustomCellForCommentSetion: UITableViewCell {
     @IBOutlet var heartLabel: UILabel!
     @IBOutlet var bookMarkButton: UIButton!
     @IBOutlet var copyButton: UIButton!
+    @IBOutlet var buttonOnImageView1: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()

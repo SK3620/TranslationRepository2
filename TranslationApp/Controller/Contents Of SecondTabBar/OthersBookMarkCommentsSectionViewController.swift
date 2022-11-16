@@ -102,6 +102,8 @@ class OthersBookMarkCommentsSectionViewController: UIViewController, UITableView
         cell.commentButton.isHidden = true
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+        cell.cellEditButton.isEnabled = false
+        cell.cellEditButton.isHidden = true
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.heartButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)

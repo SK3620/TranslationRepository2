@@ -108,6 +108,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if let address = self.mailAddressTextField.text, let password = self.passwordTextField.text, let displayName = displayNameTextField.text {
             if address.isEmpty || password.isEmpty || displayName.isEmpty {
                 print("何かが入力されていません")
+                SVProgressHUD.showError(withStatus: "必要項目を入力してください")
+                SVProgressHUD.dismiss(withDelay: 1.5)
                 return
             }
 
@@ -218,36 +220,78 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 if let error = error {
                     // An error happened.
                     print("削除失敗\(error)")
+                    SVProgressHUD.showError(withStatus: "アカウント削除に失敗しました\nもう一度ログインし、アカウントを削除してください")
+                    SVProgressHUD.dismiss(withDelay: 2.5)
+                    return
                 } else {
                     // Account deleted.
+                    print("アカウントの削除に成功しました")
                     let postRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument")
-                    postRef.delete(completion: { error in
+                    postRef.getDocument(completion: { documentSnapshot, error in
                         if let error = error {
-                            print("profileDataの削除失敗\(error)")
+                            print("profileDataの取得失敗\(error)")
                             SVProgressHUD.showError(withStatus: "アカウント削除に失敗しました\nもう一度ログインし、アカウントを削除してください")
-                            return
-                        } else {
-                            print("\(user.displayName!)のドキュメントの削除に成功しました")
+                            SVProgressHUD.dismiss(withDelay: 2.5)
+//                            return
                         }
-                    })
-
-                    Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg").delete(completion: { error in
-                        if let error = error {
-                            print("画像削除失敗\(error)")
-                        } else {
-                            print("画像削除成功")
+                        if let documentSnapshot = documentSnapshot {
+                            documentSnapshot.reference.delete()
+                            print("\(user.displayName!)のドキュメントの削除に成功しました")
+                            self.deletePostDocuments()
                         }
                     })
                 }
             }
-            SVProgressHUD.showSuccess(withStatus: "アカウント削除が完了しました")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
-                SVProgressHUD.dismiss()
-                self.dismiss(animated: true, completion: nil)
-//                self.profileViewController.setImageFromStorage()
-            }
         }))
         present(alert, animated: true, completion: nil)
+    }
+
+    func deletePostDocuments() {
+        let user = Auth.auth().currentUser!
+        let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid)
+        postRef.getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("投稿データ取得失敗\(error)")
+                SVProgressHUD.showError(withStatus: "アカウント削除に失敗しました\nもう一度ログインし、アカウントを削除してください")
+                SVProgressHUD.dismiss(withDelay: 2.5)
+//                return
+            }
+            if let querySnapshot = querySnapshot {
+                for document in querySnapshot.documents {
+                    document.reference.delete { error in
+                        if let error = error {
+                            print("投稿データの削除失敗\(error)")
+                            SVProgressHUD.showError(withStatus: "アカウント削除に失敗しました\nもう一度ログインし、アカウントを削除してください")
+                            SVProgressHUD.dismiss(withDelay: 2.5)
+//                            return
+                        } else {
+                            print("投稿データの削除成功")
+                            self.deleteProfileImage()
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    func deleteProfileImage() {
+        let user = Auth.auth().currentUser!
+        Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg").getMetadata(completion: { storageMetaData, error in
+            if let error = error {
+                print("画像の削除に失敗しました\(error)")
+                SVProgressHUD.showError(withStatus: "アカウント削除に失敗しました\nもう一度ログインし、アカウントを削除してください")
+                SVProgressHUD.dismiss(withDelay: 2.5)
+//                return
+            }
+            if let storageMetaData = storageMetaData {
+                storageMetaData.storageReference?.delete()
+                print("画像の削除に成功しました")
+                SVProgressHUD.showSuccess(withStatus: "アカウント削除が完了しました")
+                SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
+                    self.dismiss(animated: true, completion: nil)
+                })
+            }
+        })
     }
 
     @IBAction func changePasswordButton(_: Any) {
