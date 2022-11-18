@@ -33,7 +33,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     var profileData: [String: Any] = [:]
 
-//    var pagingViewController: PagingViewController!
+    var pagingViewController: PagingViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,7 +76,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         pagingViewController.indicatorColor = .systemBlue
         pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
         pagingViewController.menuItemLabelSpacing = 0
-//        self.pagingViewController = pagingViewController
+        pagingViewController.select(index: 1)
+        self.pagingViewController = pagingViewController
         introductionViewController.pagingViewController = pagingViewController
 
         self.navigationController?.navigationBar.backgroundColor = .systemGray4
@@ -101,8 +102,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-        //        indexを1にすることで、postsHistoryViewController画面をいったん表示させて、いいね数と投稿数を表示させる
-//        self.pagingViewController.select(index: 1)
+        self.pagingViewController.select(index: 0)
 
         self.setRightBarButtonItem()
 

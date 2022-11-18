@@ -27,6 +27,8 @@
 		83734B75291E62F8007B9A72 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83734B74291E62F8007B9A72 /* Alamofire */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
 		837D41E929150F4C00A80342 /* SecondPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D41E829150F4C00A80342 /* SecondPostData.swift */; };
+		838085F42926073900574D2D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838085F32926073900574D2D /* SearchViewController.swift */; };
+		838085F72926728C00574D2D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 838085F62926728C00574D2D /* Alamofire */; };
 		8382E93D28F728E100877DD8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382E93C28F728E100877DD8 /* Alamofire */; };
 		8382FD4628F987B20021715C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8382FD4528F987B20021715C /* Alamofire */; };
 		83833545290F60CF00C374F9 /* CustomCellForEditProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */; };
@@ -126,6 +128,7 @@
 		83724E9429190BD40074ED1E /* ButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonModel.swift; sourceTree = "<group>"; };
 		837CD1B228BE264F00823D17 /* TranslationFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFolder.swift; sourceTree = "<group>"; };
 		837D41E829150F4C00A80342 /* SecondPostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPostData.swift; sourceTree = "<group>"; };
+		838085F32926073900574D2D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForEditProfile.swift; sourceTree = "<group>"; };
 		83833544290F60CF00C374F9 /* CustomCellForEditProfile.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForEditProfile.xib; sourceTree = "<group>"; };
 		8385E729291816C100DBDBAC /* BookMarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkViewController.swift; sourceTree = "<group>"; };
@@ -212,6 +215,7 @@
 				839EBCEC2924C540003E8393 /* Alamofire in Frameworks */,
 				8389C401290AC663007347AE /* Pods_TranslationApp.framework in Frameworks */,
 				8382E93D28F728E100877DD8 /* Alamofire in Frameworks */,
+				838085F72926728C00574D2D /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +404,7 @@
 				83C2CCA4291D1D1900A671AE /* PronunciationViewController.swift */,
 				83C2CCA6291D1D4100A671AE /* CertificationViewController.swift */,
 				83C2CCA8291D1D5E00A671AE /* EtcViewController.swift */,
+				838085F32926073900574D2D /* SearchViewController.swift */,
 				8385E72B2918C92F00DBDBAC /* OthersProfileViewController.swift */,
 				8385E72D2918D12800DBDBAC /* OthersIntroductionViewController.swift */,
 				8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */,
@@ -444,7 +449,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				836F9AAA2908D01C00EB9C70 /* ShellScript */,
-				4F15B3C0DBD7309EED5D7ABD /* [CP] Embed Pods Frameworks */,
+				C51EEC6C2B147680FCD529D9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -463,6 +468,7 @@
 				83724E97291926EA0074ED1E /* Alamofire */,
 				83734B74291E62F8007B9A72 /* Alamofire */,
 				839EBCEB2924C540003E8393 /* Alamofire */,
+				838085F62926728C00574D2D /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
@@ -509,6 +515,7 @@
 				83724E96291926EA0074ED1E /* XCRemoteSwiftPackageReference "Alamofire" */,
 				83734B73291E62F8007B9A72 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				839EBCEA2924C540003E8393 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				838085F52926728C00574D2D /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83071CF628B91AC70003734C /* Products */;
 			projectDirPath = "";
@@ -567,23 +574,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4F15B3C0DBD7309EED5D7ABD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		836F9AAA2908D01C00EB9C70 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -600,6 +590,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "$ Pods/SwiftFormat/CommandLineTool/swiftformat .\n$ Pods/SwiftFormat/CommandLineTool/swiftformat . --self insert\n\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --self insert\n";
+		};
+		C51EEC6C2B147680FCD529D9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -644,6 +651,7 @@
 				83AF317228CF037200FDA0E1 /* MemoForStudyViewController.swift in Sources */,
 				837D41E929150F4C00A80342 /* SecondPostData.swift in Sources */,
 				83C15AFA28BF451F00280694 /* SelectFolderForTranslateViewContoller.swift in Sources */,
+				838085F42926073900574D2D /* SearchViewController.swift in Sources */,
 				8385E72C2918C92F00DBDBAC /* OthersProfileViewController.swift in Sources */,
 				832D4CB028D848B5004C4D7C /* QuickMemoViewContoller.swift in Sources */,
 				83C292182912E92D00386EE9 /* CustomCellForTimeLine.swift in Sources */,
@@ -941,6 +949,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		838085F52926728C00574D2D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		8382E93B28F728E100877DD8 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1053,6 +1069,11 @@
 		83734B74291E62F8007B9A72 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		838085F62926728C00574D2D /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		8382E93C28F728E100877DD8 /* Alamofire */ = {

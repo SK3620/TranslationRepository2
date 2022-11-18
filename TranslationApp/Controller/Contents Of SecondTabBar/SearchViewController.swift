@@ -1,27 +1,31 @@
 //
-//  TimeLineViewController.swift
+//  SearchViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/10/27.
+//  Created by 鈴木健太 on 2022/11/17.
 //
 
-import Alamofire
 import Firebase
+import Parchment
 import SVProgressHUD
 import UIKit
 
-class TimeLineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var label: UILabel!
 
     var secondTabBarController: SecondTabBarController!
     var secondPagingViewController: SecondPagingViewController!
+//    投稿内容を格納させる
+    var contentOfPostArray: [String] = []
     // 投稿データを格納する配列
     var postArray: [PostData] = []
-    // Firestoreのリスナー
+//     Firestoreのリスナー
     var listener: ListenerRegistration?
-
     var secondPostArray: [SecondPostData] = []
+
+    var searchBar: UISearchBar?
+    var searchBarText: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,47 +49,93 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        print("すまほ")
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
+
         //        ログインしていなければ、returnし、ログインまたはアカウント作成を促す
         guard Auth.auth().currentUser != nil else {
             self.label.text = "アカウントを作成/ログインしてください"
             self.tableView.reloadData()
             return
         }
-
         self.label.text = ""
-        SVProgressHUD.show(withStatus: "データを取得中中...")
-        // ログイン済みか確認
-        if Auth.auth().currentUser != nil {
-            // listenerを登録して投稿データの更新を監視する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
 
-            print("postRef確認\(postsRef)")
-            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
-                    return
-                }
-                // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                self.postArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    return postData
-                }
-                print("データかくにん\(self.postArray)")
-                self.tableView.reloadData()
-                SVProgressHUD.dismiss()
-            }
-        }
+        guard let searchBarText = self.searchBarText else { return }
+        print("guard let 実行 \(searchBarText)")
+        self.getDocuments(searchBarText: searchBarText)
+        self.secondPagingViewController.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("DEBUG_PRINT: viewWillDisappear")
         // listenerを削除して監視を停止する
-        self.listener?.remove()
+//        self.listener?.remove()
+
+//        self.secondPagingViewController.navigationController?.setNavigationBarHidden(true, animated: true)
         print("全て")
+    }
+
+//    一度全ての投稿データのドキュメントを取得(whereFieldメソッドには、containsがない、arrayContainsは機能が違う）
+    func getDocuments(searchBarText: String) {
+        self.contentOfPostArray = []
+        self.postArray = []
+        self.searchBarText = searchBarText
+
+        SVProgressHUD.show(withStatus: "データを取得中だよ...")
+        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("検索結果用のドキュメントの取得に失敗しました\(error)")
+                SVProgressHUD.showInfo(withStatus: "ドキュメント取得失敗")
+                return
+            }
+            if let querySnapshot = querySnapshot {
+                print("検索結果用のドキュメント取得に成功しました")
+                self.contentOfPostArray = querySnapshot.documents.map { document in
+                    //                    投稿内容を格納させる
+                    let postDataForContentOfPost = PostData(document: document).contentOfPost
+                    return postDataForContentOfPost!
+                }
+                print("検索結果用のドキュメント\(self.contentOfPostArray)")
+
+                //    投稿内容を格納したcontentOfPostArrayから、filterで文字列検索する
+                let filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
+                if filteredArr.isEmpty {
+                    SVProgressHUD.showSuccess(withStatus: "検索結果 0件")
+                    SVProgressHUD.dismiss(withDelay: 1.5)
+//                    self.postArray = []
+                    self.tableView.reloadData()
+                    return
+                }
+                self.getContentOfPostDocument(filteredArr: filteredArr)
+            }
+        })
+    }
+
+//    filteredArrからwhereFieldで条件検索して、ドキュメントを取り出し、self.postArrayへ格納
+    func getContentOfPostDocument(filteredArr: [String]) {
+        for contentOfPost in filteredArr {
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("contentOfPost", isEqualTo: contentOfPost).order(by: "postedDate", descending: true)
+            postsRef.getDocuments(completion: { querySnapshot, error in
+                if let error = error {
+                    print("getContentOfPostDocumentメソッドのドキュメント取得に失敗しました\(error)")
+                    SVProgressHUD.showInfo(withStatus: "getContentOfPostDocumentメソッドのドキュメント取得失敗")
+                }
+                if let querySnapshot = querySnapshot {
+                    print("getContentOfPostDocumentメソッドのドキュメント取得に成功しました")
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        self.postArray.append(PostData(document: queryDocumentSnapshot))
+                        SVProgressHUD.showSuccess(withStatus: "検索結果 \(self.postArray.count)件")
+                        SVProgressHUD.dismiss(withDelay: 1.5)
+                        self.tableView.reloadData()
+
+                        self.postArray.forEach {
+                            print($0.documentId)
+                        }
+                    }
+                }
+            })
+        }
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -157,7 +207,13 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
             }
             // bookMarksに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
-            postRef.updateData(["bookMarks": updateValue])
+            postRef.updateData(["bookMarks": updateValue], completion: { error in
+                if let error = error {
+                    print("bookMarksへのupdate失敗\(error)")
+                    return
+                }
+                self.getDocumentsWithoutSvProgress(searchBarText: self.searchBarText!)
+            })
         }
     }
 
@@ -170,8 +226,9 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         let indexPath = self.tableView.indexPathForRow(at: point)
 
         // 配列からタップされたインデックスのデータを取り出す
+        print("self.postArrayの値確認\(self.postArray)")
         let postData = self.postArray[indexPath!.row]
-        print("postData確認\(postData)")
+        print("postData確認値があるかな？\(postData.documentId)")
 
         // likesを更新する
         if let myid = Auth.auth().currentUser?.uid {
@@ -186,7 +243,13 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
             }
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
-            postRef.updateData(["likes": updateValue])
+            postRef.updateData(["likes": updateValue]) { error in
+                if let error = error {
+                    print("likesへのupdate失敗\(error)")
+                    return
+                }
+                self.getDocumentsWithoutSvProgress(searchBarText: self.searchBarText!)
+            }
         }
     }
 
@@ -220,14 +283,55 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
             othersProfileViewController.postData = sender as? PostData
         }
     }
+
+    func getDocumentsWithoutSvProgress(searchBarText: String) {
+        self.contentOfPostArray = []
+        self.postArray = []
+        self.searchBarText = searchBarText
+
+        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("検索結果用のドキュメントの取得に失敗しました\(error)")
+
+                return
+            }
+            if let querySnapshot = querySnapshot {
+                print("検索結果用のドキュメント取得に成功しました")
+                self.contentOfPostArray = querySnapshot.documents.map { document in
+                    //                    投稿内容を格納させる
+                    let postDataForContentOfPost = PostData(document: document).contentOfPost
+                    return postDataForContentOfPost!
+                }
+                print("検索結果用のドキュメント\(self.contentOfPostArray)")
+
+                //    投稿内容を格納したcontentOfPostArrayから、filterで文字列検索する
+                let filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
+                if filteredArr.isEmpty {
+                    //                    self.postArray = []
+                    self.tableView.reloadData()
+                    return
+                }
+                self.getContentOfPostDocumentWithoutSVProgress(filteredArr: filteredArr)
+            }
+        })
+    }
+
+//    filteredArrからwhereFieldで条件検索して、ドキュメントを取り出し、self.postArrayへ格納
+    func getContentOfPostDocumentWithoutSVProgress(filteredArr: [String]) {
+        for contentOfPost in filteredArr {
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("contentOfPost", isEqualTo: contentOfPost).order(by: "postedDate", descending: true)
+            postsRef.getDocuments(completion: { querySnapshot, error in
+                if let error = error {
+                    print("getContentOfPostDocumentメソッドのドキュメント取得に失敗しました\(error)")
+                }
+                if let querySnapshot = querySnapshot {
+                    print("getContentOfPostDocumentメソッドのドキュメント取得に成功しました")
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        self.postArray.append(PostData(document: queryDocumentSnapshot))
+                        self.tableView.reloadData()
+                    }
+                }
+            })
+        }
+    }
 }
-
-/*
- // MARK: - Navigation
-
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
- }
- */

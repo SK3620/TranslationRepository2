@@ -43,8 +43,6 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-        self.likeNumber = 0
-
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
         if let user = Auth.auth().currentUser {
@@ -62,9 +60,18 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
                     let postData = PostData(document: document)
                     return postData
                 }
+
                 print("データかくにん\(self.postArray)")
                 self.tableView.reloadData()
                 SVProgressHUD.dismiss()
+
+                self.likeNumber = 0
+                self.postNumber = 0
+                querySnapshot?.documents.forEach { queryDocumentSnapshot in
+                    self.likeNumber += PostData(document: queryDocumentSnapshot).likes.count
+                }
+                self.postNumber = self.postArray.count
+                self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postNumber)
             }
         }
     }
@@ -96,14 +103,6 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
-
-        self.likeNumber += cell.likeNumber
-        if indexPath.row == self.postArray.count - 1 {
-//            profileViewControllerのインスタンスを取ってきてもいいが、あえてdelegateを使う（delegate使い方の練習のため）
-            print("いいね数の合計は\(self.likeNumber)です")
-            print("投稿数の合計は\(self.postArray.count)です")
-            self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postArray.count)
-        }
 
         return cell
     }

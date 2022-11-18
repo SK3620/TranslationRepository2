@@ -18,8 +18,8 @@ target 'TranslationApp' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Storage'
   pod 'FirebaseUI/Storage'
-  pod 'SwiftFormat/CLI'
   pod 'CLImageEditor/AllTools','0.2.4'
+  pod 'SwiftFormat/CLI'
   pod 'Parchment', '~> 3.0'
    post_install do |installer|
    installer.pods_project.targets.each do |target|

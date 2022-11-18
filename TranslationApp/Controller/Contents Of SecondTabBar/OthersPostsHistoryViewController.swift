@@ -21,7 +21,9 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
     var listener: ListenerRegistration?
 
     var delegate: setLikeAndPostNumberLabelForOthersDelegate!
+
     var likeNumber: Int = 0
+    var postNumber: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +38,6 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
-        self.likeNumber = 0
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
@@ -58,6 +58,14 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
             print("データかくにん\(self.postArray)")
             self.tableView.reloadData()
             SVProgressHUD.dismiss()
+
+            self.likeNumber = 0
+            self.postNumber = 0
+            querySnapshot?.documents.forEach { queryDocumentSnapshot in
+                self.likeNumber += PostData(document: queryDocumentSnapshot).likes.count
+            }
+            self.postNumber = self.postArray.count
+            self.delegate.setLikeAndPostNumberLabelForOthers(likeNumber: self.likeNumber, postNumber: self.postNumber)
         }
     }
 
@@ -93,10 +101,6 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
 
-        self.likeNumber += cell.likeNumber
-        if indexPath.row == self.postArray.count - 1 {
-            self.delegate.setLikeAndPostNumberLabelForOthers(likeNumber: self.likeNumber, postNumber: self.postArray.count)
-        }
         return cell
     }
 
@@ -129,6 +133,8 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
         print("DEBUG_PRINT: likeボタンがタップされました。")
+
+        self.likeNumber = 0
 
         // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first

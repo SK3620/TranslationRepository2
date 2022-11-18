@@ -28,6 +28,7 @@ class OthersProfileViewController: UIViewController {
 
     var secondTabBarController: SecondTabBarController!
     var commentSectionViewController: CommentSectionViewController!
+    var pagingViewController: PagingViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,8 +71,10 @@ class OthersProfileViewController: UIViewController {
         pagingViewController.indicatorColor = .systemBlue
         pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
         pagingViewController.menuItemLabelSpacing = 0
+        pagingViewController.select(index: 1)
 
         othersIntroductionViewController.secondPagingViewController = pagingViewController
+        self.pagingViewController = pagingViewController
 
         //        丸いimageView
         self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
@@ -84,9 +87,11 @@ class OthersProfileViewController: UIViewController {
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
+        self.pagingViewController.select(index: 0)
+
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.secondTabBarController.tabBar.isHidden = true
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = UIColor.systemGray5
         self.navigationController?.navigationBar.standardAppearance = appearance
@@ -149,16 +154,6 @@ class OthersProfileViewController: UIViewController {
         self.profileImageView.sd_setImage(with: imageRef)
         print("画像取り出せた？\(imageRef)")
     }
-
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
 }
 
 extension OthersProfileViewController: setLikeAndPostNumberLabelForOthersDelegate {

@@ -227,17 +227,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     // Account deleted.
                     print("アカウントの削除に成功しました")
                     let postRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument")
-                    postRef.getDocument(completion: { documentSnapshot, error in
+//                    postRef.getDocument(completion: { documentSnapshot, error in
+                    postRef.delete(completion: { error in
                         if let error = error {
                             print("profileDataの取得失敗\(error)")
                             SVProgressHUD.showError(withStatus: "アカウント削除に失敗しました\nもう一度ログインし、アカウントを削除してください")
                             SVProgressHUD.dismiss(withDelay: 2.5)
-//                            return
-                        }
-                        if let documentSnapshot = documentSnapshot {
-                            documentSnapshot.reference.delete()
-                            print("\(user.displayName!)のドキュメントの削除に成功しました")
-                            self.deletePostDocuments()
+                            return
+                        } else {
+                            print("profileDataのドキュメント削除成功")
+//                        if let documentSnapshot = documentSnapshot {
+//                            documentSnapshot.reference.delete()
+//                            print("\(user.displayName!)のドキュメントの削除に成功しました")
+//                            self.deletePostDocuments()
                         }
                     })
                 }
@@ -248,6 +250,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     func deletePostDocuments() {
         let user = Auth.auth().currentUser!
+//        firestoreで複合indexを作成する必要がある
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid)
         postRef.getDocuments(completion: { querySnapshot, error in
             if let error = error {

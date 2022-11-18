@@ -5,6 +5,7 @@
 //  Created by 鈴木健太 on 2022/11/09.
 //
 
+import Alamofire
 import Firebase
 import Parchment
 import UIKit
@@ -12,9 +13,13 @@ import UIKit
 class SecondPagingViewController: UIViewController {
     @IBOutlet var pagingView: UIView!
 
+    var searchBar: UISearchBar!
+
     var secondTabBarController: SecondTabBarController!
     var postData: PostData!
     var savedTextView_text: String = ""
+    var pagingViewController: PagingViewController!
+    var searchViewController: SearchViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +64,11 @@ class SecondPagingViewController: UIViewController {
         let etcViewController = navigationController12.viewControllers[0] as! EtcViewController
         etcViewController.secondPagingViewController = self
 
+        let navigationController13 = storyboard?.instantiateViewController(withIdentifier: "NC13") as! UINavigationController
+        let searchViewController = navigationController13.viewControllers[0] as! SearchViewController
+        searchViewController.secondPagingViewController = self
+        self.searchViewController = searchViewController
+
         navigationController3.title = "全て"
         navigationController4.title = "修正/教えて"
         navigationController5.title = "学習法"
@@ -69,9 +79,10 @@ class SecondPagingViewController: UIViewController {
         navigationController10.title = "発音"
         navigationController11.title = "資格試験"
         navigationController12.title = "その他"
+        navigationController13.title = "検索"
 
 //        pagingViewControllerのインスタンス生成
-        let pagingViewController = PagingViewController(viewControllers: [navigationController3, navigationController4, navigationController5, navigationController6, navigationController7, navigationController8, navigationController9, navigationController10, navigationController11, navigationController12])
+        let pagingViewController = PagingViewController(viewControllers: [navigationController13, navigationController3, navigationController4, navigationController5, navigationController6, navigationController7, navigationController8, navigationController9, navigationController10, navigationController11, navigationController12])
 
 //        Adds the specified view controller as a child of the current view controller.
         addChild(pagingViewController)
@@ -88,12 +99,16 @@ class SecondPagingViewController: UIViewController {
         pagingViewController.indicatorColor = .systemBlue
         pagingViewController.menuItemSize = .sizeToFit(minWidth: 100, height: 50)
         pagingViewController.menuItemLabelSpacing = 0
+        self.pagingViewController = pagingViewController
+
+        pagingViewController.select(index: 1)
     }
 
 //    viewWillAppearだけでsetRightBarButton()を呼ぶと、rightBarButtonItemが表示されない
 //    viewWillAppearとviewDidAppearで呼ぶと、表示される
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.setRightBarButtonItem()
     }
 
@@ -102,7 +117,9 @@ class SecondPagingViewController: UIViewController {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         self.secondTabBarController.tabBar.isHidden = false
         let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.tip.crop.circle.badge.plus"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
+        let searchBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(self.tappedSearchBarButtonItem(_:)))
         self.secondTabBarController.rightBarButtonItems.append(rightBarButtonItem)
+        self.secondTabBarController.rightBarButtonItems.append(searchBarButtonItem)
         self.secondTabBarController.title = "タイムライン"
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.secondTabBarController.navigationItem.rightBarButtonItems = self.secondTabBarController.rightBarButtonItems
@@ -112,6 +129,52 @@ class SecondPagingViewController: UIViewController {
         } else {
             rightBarButtonItem.isEnabled = true
         }
+    }
+
+    override func viewWillDisappear(_: Bool) {
+        super.viewWillDisappear(true)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+
+    // 検索アイコンが押された時
+    @objc func tappedSearchBarButtonItem(_: UIBarButtonItem) {
+        print("searchBarButtonItemがタップされた")
+
+        if self.navigationController!.isNavigationBarHidden {
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+//        navigationBar上に検索バーを設置
+            self.setupSearchBarOnNavigationBar()
+        } else {
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }
+    }
+
+    func setupSearchBarOnNavigationBar() {
+        if let navigationBarFrame = self.navigationController?.navigationBar.bounds {
+            let searchBar = UISearchBar(frame: navigationBarFrame)
+            searchBar.delegate = self
+            searchBar.placeholder = "検索する"
+            searchBar.tintColor = UIColor.gray
+            searchBar.keyboardType = UIKeyboardType.default
+            navigationItem.titleView = searchBar
+            navigationItem.titleView?.frame = searchBar.frame
+            self.searchBar = searchBar
+            self.searchBar.enablesReturnKeyAutomatically = true
+            self.setDoneOnKeyBoard()
+        }
+    }
+
+    func setDoneOnKeyBoard() {
+        let doneToolbar = UIToolbar()
+        doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneButton = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(self.doneButtonTapped))
+        doneToolbar.items = [spacer, doneButton]
+        self.searchBar.inputAccessoryView = doneToolbar
+    }
+
+    @objc func doneButtonTapped() {
+        self.searchBar.endEditing(true)
     }
 
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
@@ -143,14 +206,15 @@ class SecondPagingViewController: UIViewController {
             othersProfileViewController.secondTabBarController = self.secondTabBarController
         }
     }
+}
 
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
+extension SecondPagingViewController: UISearchBarDelegate {
+//    入力された文字列をsearachViewControllerへ受け渡す。
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.pagingViewController.select(index: 0)
+        searchBar.endEditing(true)
+        if let searchBarText = self.searchBar.text {
+            self.searchViewController.getDocuments(searchBarText: searchBarText)
+        }
+    }
 }

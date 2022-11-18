@@ -1373,7 +1373,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYX-Gc-W7F">
                                         <rect key="frame" x="220.33333333333337" y="35" width="154.66666666666663" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bvm-oV-hba">
@@ -1743,7 +1743,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="g0k-Lg-tz1">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="pencil.tip.crop.circle.badge.plus" catalog="system" id="TKD-TD-5YJ"/>
+                        <barButtonItem key="rightBarButtonItem" id="TKD-TD-5YJ"/>
                     </navigationItem>
                     <connections>
                         <outlet property="pagingView" destination="fvD-Yj-Ps4" id="1cr-GA-C5q"/>
@@ -2861,9 +2861,7 @@
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="uys-M0-qhA" customClass="SecondTabBarController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="wwn-yb-6rT">
-                        <barButtonItem key="rightBarButtonItem" id="OcM-Zr-4uz"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="wwn-yb-6rT"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rN5-Ok-66n">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -3605,6 +3603,46 @@
             </objects>
             <point key="canvasLocation" x="7124" y="-5028"/>
         </scene>
+        <!--Search View Controller-->
+        <scene sceneID="ctm-kV-i66">
+            <objects>
+                <viewController id="qFm-Jp-ObK" customClass="SearchViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vh5-1c-rl5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="LX0-Yt-w3D">
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="アカウント作成/ログインしてください" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yld-7S-nMI">
+                                <rect key="frame" x="38" y="395.66666666666669" width="299.33333333333331" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <color key="textColor" systemColor="systemOrangeColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="bM0-3v-4jy"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="LX0-Yt-w3D" firstAttribute="top" secondItem="bM0-3v-4jy" secondAttribute="top" id="7WB-ES-RZn"/>
+                            <constraint firstItem="yld-7S-nMI" firstAttribute="centerX" secondItem="vh5-1c-rl5" secondAttribute="centerX" id="RIW-GX-lG0"/>
+                            <constraint firstItem="yld-7S-nMI" firstAttribute="centerY" secondItem="vh5-1c-rl5" secondAttribute="centerY" id="V4x-R4-ik7"/>
+                            <constraint firstItem="LX0-Yt-w3D" firstAttribute="leading" secondItem="bM0-3v-4jy" secondAttribute="leading" id="aiA-eM-xag"/>
+                            <constraint firstItem="bM0-3v-4jy" firstAttribute="trailing" secondItem="LX0-Yt-w3D" secondAttribute="trailing" id="ciR-w7-l9S"/>
+                            <constraint firstItem="LX0-Yt-w3D" firstAttribute="bottom" secondItem="bM0-3v-4jy" secondAttribute="bottom" id="gNE-gY-gGS"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Sdp-XR-UNq"/>
+                    <connections>
+                        <outlet property="label" destination="yld-7S-nMI" id="ilQ-yZ-FSM"/>
+                        <outlet property="tableView" destination="LX0-Yt-w3D" id="Fgs-9r-4l5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="akv-Jt-erM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5919.1999999999998" y="-5728.8177339901476"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="zhK-JY-c5r">
             <objects>
@@ -3677,10 +3715,27 @@
             </objects>
             <point key="canvasLocation" x="4976.8000000000002" y="-3007.3891625615765"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="XeP-Ia-lvt">
+            <objects>
+                <navigationController storyboardIdentifier="NC13" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="Iar-72-wWU" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="BFk-NP-Xvb">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="qFm-Jp-ObK" kind="relationship" relationship="rootViewController" id="Ght-VN-7Xu"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n2v-dJ-wyr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4976.8000000000002" y="-5729.5566502463053"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="FV4-rL-Ffl"/>
-        <segue reference="aWM-ff-PQn"/>
+        <segue reference="QyF-43-l7R"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.left.and.right" catalog="system" width="128" height="78"/>
@@ -3699,7 +3754,6 @@
         <image name="pause.circle.fill" catalog="system" width="128" height="121"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="pencil.and.ellipsis.rectangle" catalog="system" width="128" height="81"/>
-        <image name="pencil.tip.crop.circle.badge.plus" catalog="system" width="128" height="113"/>
         <image name="person" catalog="system" width="128" height="117"/>
         <image name="person.3" catalog="system" width="128" height="62"/>
         <image name="plus" catalog="system" width="128" height="113"/>
