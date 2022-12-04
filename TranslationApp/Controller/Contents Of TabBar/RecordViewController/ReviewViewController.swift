@@ -11,11 +11,8 @@ import UIKit
 
 class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var textField: UITextField!
-    @IBOutlet var backButton: UIButton!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var label1: UILabel!
-    @IBOutlet var editButton: UIButton!
-    @IBOutlet var label3: UILabel!
     @IBOutlet var view1: UIView!
 
     var reviewDate = [String]()
@@ -37,17 +34,19 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+
         self.tableView.separatorColor = .gray
 
         let nib = UINib(nibName: "CustomCellForReview", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
 
-        self.textField.layer.borderColor = UIColor.gray.cgColor
+        self.textField.layer.borderColor = UIColor.systemGray3.cgColor
         self.textField.layer.borderWidth = 2
         self.textField.layer.cornerRadius = 6
 
         self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
-        self.tableView.layer.borderWidth = 2.5
+        self.tableView.layer.borderWidth = 2
 
         self.datePicker.datePickerMode = UIDatePicker.Mode.date
         self.datePicker.preferredDatePickerStyle = .wheels
@@ -62,7 +61,14 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
+
+        self.setPlaceHolderForTextView()
         // Do any additional setup after loading the view.
+    }
+
+    func setPlaceHolderForTextView() {
+        self.textField.attributedPlaceholder = NSAttributedString(string: "日付を入力してください",
+                                                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
     }
 
     func setDoneToolBarForTextField() {
@@ -117,7 +123,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 self.resultsArr = self.recordArr
 
-                self.label1.text = "\(dateString)に復習する内容はありません\n代わりに全データを日付順に表示しています"
+                self.label1.text = "\(dateString)に復習する内容はありません\n代わりに全データを設定した復習日の日付順に表示しています"
             }
         } else {
             self.folderName = []
@@ -147,7 +153,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.inputDate.append($0.inputDate)
             }
             self.resultsArr = self.recordArr
-            self.label1.text = "全てのデータを日付順に表示しています"
+            self.label1.text = "全てのデータを設定した復習日の日付順に表示しています"
         } else {
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
@@ -165,9 +171,9 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.setNavigationBarHidden(false, animated: true)
-        title = "次回復習日・内容 \(dateString)"
-        navigationController?.navigationBar.barTintColor = .systemGray4
-        navigationController?.navigationBar.backgroundColor = .systemGray4
+        title = "今日 \(dateString)"
+        navigationController?.navigationBar.barTintColor = .systemGray5
+        navigationController?.navigationBar.backgroundColor = .systemGray5
         let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.editButton(_:)))
         navigationItem.rightBarButtonItems = [editBarButtonItem]
 
@@ -181,31 +187,20 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.inputDate.append($0.inputDate)
             }
             self.resultsArr = self.recordArr
-            self.label1.text = "全てのデータを日付順に表示しています"
+            self.label1.text = "全てのデータを設定した復習日の日付順に表示しています"
         } else {
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
         if self.studyViewController == nil {
-            self.backButton.isHidden = true
-            self.backButton.isEnabled = false
-            self.editButton.isEnabled = false
-            self.editButton.isHidden = true
-            self.label3.text = ""
-            self.editButton.setTitle("", for: .normal)
             self.view1.backgroundColor = .systemGray4
         } else {
-            self.label3.text = "次回復習日・内容 \(dateString)"
-            self.editButton.setTitle("編集", for: .normal)
             self.view1.backgroundColor = .white
-            self.backButton.setTitle("戻る", for: .normal)
-            self.backButton.isEnabled = true
-            self.backButton.isHidden = false
         }
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        if self.label1.text == "全てのデータを日付順に表示しています", self.textField.text == "", self.folderName.isEmpty {
+        if self.label1.text == "全てのデータを設定した復習日の日付順に表示しています", self.textField.text == "", self.folderName.isEmpty {
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
         return self.folderName.count
@@ -274,7 +269,7 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if self.resultsArr.count == 0, self.recordArr.count == 0 {
                 self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
             } else if self.resultsArr.count == 0 {
-                self.label1.text = "\(String(describing: self.dateString))に登録されたデータはありません\n代わりに全てのデータを日付順に表示しています"
+                self.label1.text = "\(String(describing: self.dateString))に登録されたデータはありません\n代わりに全てのデータを設定した復習日の日付順に表示しています"
                 self.resultsArr = self.recordArr
             }
             tableView.reloadData()
@@ -284,24 +279,8 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @objc func editButton(_: UIBarButtonItem) {
         if self.tableView.isEditing {
             self.tableView.isEditing = false
-            self.editButton.setTitle("編集", for: .normal)
         } else {
             self.tableView.isEditing = true
-            self.editButton.setTitle("完了", for: .normal)
         }
-    }
-
-    @IBAction func editButton1(_: Any) {
-        if self.tableView.isEditing {
-            self.tableView.isEditing = false
-            self.editButton.setTitle("編集", for: .normal)
-        } else {
-            self.tableView.isEditing = true
-            self.editButton.setTitle("完了", for: .normal)
-        }
-    }
-
-    @IBAction func backButton(_: Any) {
-        dismiss(animated: true)
     }
 }

@@ -102,7 +102,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-        self.pagingViewController.select(index: 0)
+//        self.pagingViewController.select(index: 0)
 
         self.setRightBarButtonItem()
 
@@ -187,7 +187,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
 
     func setImageFromStorage() {
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             //            storageから画像を取り出して、imageViewに設置
             let user = Auth.auth().currentUser!
             let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")

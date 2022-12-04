@@ -5,6 +5,9 @@
 //  Created by 鈴木健太 on 2022/09/08.
 //
 
+// 日付タップでrecordViewCOntroller画面のlabel表示
+// アカウント削除複数の非同期処理
+
 import RealmSwift
 import SVProgressHUD
 import UIKit
@@ -14,28 +17,33 @@ class TabBarController: UITabBarController {
     let realm = try! Realm()
     var translationFolder: TranslationFolder!
     var array = [String]()
+//    フォルダー作成時の文字数制限
     var maxCharactersLength: Int = 13
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setNavigationBarAppearence()
+        self.giveTabBarControllerToEachOfViewControllers()
+    }
 
-        let appearanceForNB = UINavigationBarAppearance()
-        appearanceForNB.backgroundColor = UIColor.systemGray5
-        self.navigationController?.navigationBar.standardAppearance = appearanceForNB
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearanceForNB
+    func setNavigationBarAppearence() {
+        let appearance1 = UINavigationBarAppearance()
+        appearance1.backgroundColor = UIColor.systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearance1
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance1
 
         self.selectedIndex = 2
         // タブアイコンの色
         tabBar.tintColor = UIColor.systemBlue
         // タブバーの背景色を設定
-        let appearanceForTB = UITabBarAppearance()
-        appearanceForTB.backgroundColor = UIColor.systemGray5
-        tabBar.standardAppearance = appearanceForTB
-        tabBar.scrollEdgeAppearance = appearanceForTB
+        let appearance2 = UITabBarAppearance()
+        appearance2.backgroundColor = UIColor.systemGray6
+        tabBar.standardAppearance = appearance2
+        tabBar.scrollEdgeAppearance = appearance2
+    }
 
-        //        HistoryViewController（翻訳履歴画面）にある、tabBarControllerインスタンスを格納する変数tabBarController1にselfを指定
-
-        //        ３９〜５７行目までの処理について、何かメソッドをつかって簡潔に書きたいです。
+    func giveTabBarControllerToEachOfViewControllers() {
+        //        tabBarControllerへつながる各々のviewControlleクラスのtabBarControllerインスタンスを格納する変数tabBarController1にselfを指定
         let navigationController0 = viewControllers![0] as! UINavigationController
         let historyViewController = navigationController0.viewControllers[0] as! HistoryViewController
         historyViewController.tabBarController1 = self
@@ -49,8 +57,8 @@ class TabBarController: UITabBarController {
         translateViewController.tabBarController1 = self
 
         let navigationController3 = viewControllers![3] as! UINavigationController
-        let phraseWordViewController = navigationController3.viewControllers[0] as! PhraseWordViewController
-        phraseWordViewController.tabBarController1 = self
+        let pagingPhraseWordViewController = navigationController3.viewControllers[0] as! PagingPhraseWordViewController
+        pagingPhraseWordViewController.tabBarController1 = self
 
         let navigationController4 = viewControllers![4] as! UINavigationController
         let recordViewController = navigationController4.viewControllers[0] as! RecordViewController
@@ -74,7 +82,7 @@ class TabBarController: UITabBarController {
     }
 
     func setBarButtonItem4() {
-        navigationItem.title = "単語・フレーズ"
+        navigationItem.title = "お気に入り"
     }
 
     // folderViewContoller画面を表示中にフォルダー作成した時に呼ばれる
@@ -87,7 +95,12 @@ class TabBarController: UITabBarController {
         }
     }
 
+//    右上のフォルダー作成アイコンタップ時
     @IBAction func button(_: Any) {
+        self.createFolder()
+    }
+
+    func createFolder() {
         let alert = UIAlertController(title: "新規フォルダー作成", message: "フォルダーを作成してください", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
         alert.addTextField { textField in

@@ -5,6 +5,7 @@
 //  Created by 鈴木健太 on 2022/09/08.
 //
 
+import Alamofire
 import RealmSwift
 import SVProgressHUD
 import UIKit
@@ -30,12 +31,14 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
         self.setTextView(textViewArr: textViewArr)
 
         self.setDoneToolBar()
+        self.setBarButtonItem()
     }
 
     func setTextView(textViewArr: [UITextView]!) {
         textViewArr.forEach {
-            $0.layer.borderColor = UIColor.systemGray.cgColor
+            $0.layer.borderColor = UIColor.systemGray3.cgColor
             $0.layer.borderWidth = 2
+            $0.layer.cornerRadius = 6
         }
     }
 
@@ -61,16 +64,13 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
         view.endEditing(true)
     }
 
-    override func viewWillAppear(_: Bool) {
-        super.viewWillAppear(true)
-
-        self.textView1.text = self.inputDataTextView1
-        self.textView2.text = self.resultDataTextView2
+    func setBarButtonItem() {
+        let rightBarButtonItem = UIBarButtonItem(title: "保存する", style: .done, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
+        self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
     }
 
-    override func viewWillDisappear(_: Bool) {
-        super.viewWillDisappear(true)
-
+//    保存ボタン
+    @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
         SVProgressHUD.show()
         let translationArr = self.realm.objects(Translation.self).filter("id == \(self.translationId)").first!
 
@@ -82,8 +82,19 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
         }
 
         SVProgressHUD.showSuccess(withStatus: "保存しました")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { () in
-            SVProgressHUD.dismiss()
+        SVProgressHUD.dismiss(withDelay: 1.5) {
+            self.navigationController?.popViewController(animated: true)
         }
+    }
+
+    override func viewWillAppear(_: Bool) {
+        super.viewWillAppear(true)
+
+        self.textView1.text = self.inputDataTextView1
+        self.textView2.text = self.resultDataTextView2
+    }
+
+    override func viewWillDisappear(_: Bool) {
+        super.viewWillDisappear(true)
     }
 }

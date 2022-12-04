@@ -6,11 +6,11 @@
 //
 
 import RealmSwift
+import SVProgressHUD
 import UIKit
 
 class MemoForStudyViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var memoTextView: UITextView!
-    @IBOutlet var memoButton: UIButton!
 
     var folderNameString: String!
     var realm = try! Realm()
@@ -51,12 +51,11 @@ class MemoForStudyViewController: UIViewController, UITextViewDelegate {
         self.memoTextView.text = memo
     }
 
-    @IBAction func backButton(_: Any) {
-        dismiss(animated: true)
+    @IBAction func backBarButtonItem(_: Any) {
+        dismiss(animated: true, completion: nil)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    @IBAction func saveBarButtonItem(_: Any) {
         if let memoTextView_text = memoTextView.text {
             let translationFolderArr = try! Realm().objects(TranslationFolder.self).filter("folderName == %@", self.folderNameString!).first
 
@@ -64,11 +63,13 @@ class MemoForStudyViewController: UIViewController, UITextViewDelegate {
                 translationFolderArr!.memo = memoTextView_text
                 self.realm.add(translationFolderArr!, update: .modified)
             }
-
             self.memoTextViewText = memoTextView_text
         }
+        SVProgressHUD.showSuccess(withStatus: "保存しました")
+        SVProgressHUD.dismiss(withDelay: 1.0) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
-
     /*
      // MARK: - Navigation
 

@@ -1,23 +1,22 @@
 //
-//  PhraseViewController.swift
+//  SecondPhraseWordViewController.swift
 //  TranslationApp
 //
-//  Created by 鈴木健太 on 2022/09/18.
+//  Created by 鈴木健太 on 2022/11/28.
 //
 
-import Parchment
 import RealmSwift
+import SideMenu
 import SVProgressHUD
 import UIKit
 
-class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SecondPhraseWordViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var view1: UIView!
     @IBOutlet var label1: UILabel!
 
     let realm = try! Realm()
     var phraseWordArr: Results<PhraseWord>!
-//    入力した文章とその翻訳結果を格納する配列
+    //    入力した文章とその翻訳結果を格納する配列
     var inputDataList = [String]()
     var resultDataList = [String]()
 
@@ -34,6 +33,7 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
 
         let nib = UINib(nibName: "CustomCellForPhraseWord", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
@@ -41,7 +41,6 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
 
         if self.studyViewController != nil {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
-            print("studyViewControllerが実行された")
         }
 
         let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.tappedEditBarButtonItem(_:)))
@@ -56,27 +55,25 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.pagingPhraseWordViewController!.navigationItem.rightBarButtonItems = []
             self.pagingPhraseWordViewController!.navigationItem.rightBarButtonItems = [editBarButtonItem]
         }
-
         self.tableView.isEditing = false
-        self.setValueForPhraseWord()
+        self.setValueForPhraseWordArr()
         self.tableView.reloadData()
     }
 
     @objc func tappedEditBarButtonItem(_: UIBarButtonItem) {
         if self.tableView.isEditing {
             self.tableView.isEditing = false
-            print("false")
         } else {
             self.tableView.isEditing = true
-            print("true")
         }
     }
 
-    func setValueForPhraseWord() {
+    func setValueForPhraseWordArr() {
         //        phraseWordArrに値があれば、appendする。
         self.inputDataList = []
         self.resultDataList = []
-        self.phraseWordArr = try! Realm().objects(PhraseWord.self).sorted(byKeyPath: "date", ascending: true).filter("isChecked == 0")
+
+        self.phraseWordArr = try! Realm().objects(PhraseWord.self).sorted(byKeyPath: "date", ascending: true).filter("isChecked == 1")
         if self.phraseWordArr.count != 0 {
             //            self.editButton.isEnabled = true
             for number in 0 ... self.phraseWordArr.count - 1 {
@@ -86,17 +83,6 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
             }
         } else {
             self.label1.text = "お気に入りの単語・フレーズを追加しよう！"
-        }
-    }
-
-    @objc func tappedBackBarButtonItem(_: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
-    }
-
-    override func viewDidDisappear(_: Bool) {
-        super.viewDidDisappear(true)
-        if self.studyViewController == nil {
-            self.navigationController?.setNavigationBarHidden(true, animated: false)
         }
     }
 
@@ -165,7 +151,7 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
 
     //　　　checkMarkButton(星マークボタン）タップ時
     @objc func tapCellButton(_ sender: UIButton) {
-        let alert = UIAlertController(title: "登録", message: "'星0.5'へ登録しますか？", preferredStyle: .alert)
+        let alert = UIAlertController(title: "登録", message: "'星1.0'へ登録しますか？", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: nil)
         let register = UIAlertAction(title: "登録", style: .default) { _ in
 
@@ -192,7 +178,7 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
             }
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.setValueForPhraseWord()
+                self.setValueForPhraseWordArr()
                 self.tableView.reloadData()
                 SVProgressHUD.showSuccess(withStatus: "登録完了")
                 SVProgressHUD.dismiss(withDelay: 1.5)
@@ -208,6 +194,8 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
     //    文章タップで表示、非表示切り替えボタンタップ時
     @objc func tapDisplayButton(_ sender: UIButton) {
         let isDisplayed = self.phraseWordArr[sender.tag].isDisplayed
+//        self.editButton.setTitle("編集", for: .normal)
+
         switch isDisplayed {
         case false:
             try! Realm().write {
@@ -220,7 +208,7 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
                 realm.add(phraseWordArr, update: .modified)
             }
         }
-        self.setValueForPhraseWord()
+        self.setValueForPhraseWordArr()
         self.tableView.reloadData()
     }
 
@@ -238,104 +226,8 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.resultDataList.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
-            self.setValueForPhraseWord()
+            self.setValueForPhraseWordArr()
             tableView.reloadData()
         }
     }
 }
-
-//    編集ボタンタップ時
-//    @IBAction func editButtonAction(_: Any) {
-//        self.tableView.isEditing = false
-//        //        コンテキストメニューの内容を作成
-//        let delete = ContextMenuItemWithImage(title: "一部削除する", image: UIImage())
-//        let deleteAll = ContextMenuItemWithImage(title: "全て削除する", image: UIImage())
-//
-//        //        表示するアイテムを決定
-//        CM.items = [delete, deleteAll]
-//        //        表示します
-//        CM.showMenu(viewTargeted: self.view1, delegate: self, animated: true)
-//    }
-// }
-//
-// extension PhraseWordViewController: ContextMenuDelegate {
-//    func contextMenuDidDeselect(_: ContextMenu, cell _: ContextMenuCell, targetedView _: UIView, didSelect _: ContextMenuItem, forRowAt _: Int) {}
-//
-//    //    コンテキストメニューが表示された時の挙動を設定
-//
-//    //    コンテキストメニューの選択肢が選択された時に実行される
-//    //            - Parameters:
-//    //                - contextMenu: そのコンテキストメニューだと思われる
-//    //                - cell: **選択されたコンテキストメニューの**セル
-//    //                - targetView: コンテキストメニューの発生源のビュー
-//    //                - item: 選択されたコンテキストのアイテム(タイトルとか画像とかが入ってる)
-//    //                - index: **選択されたコンテキストのアイテムの**座標
-//    //            - Returns: よくわからない(多分成功したらtrue...?
-//    //         */
-//    func contextMenuDidSelect(_: ContextMenu,
-//                              cell _: ContextMenuCell,
-//                              targetedView _: UIView,
-//                              didSelect _: ContextMenuItem,
-//                              forRowAt index: Int) -> Bool
-//    {
-//        switch index {
-//        case 0:
-//            self.tableView.isEditing = true
-////            self.editButton.setTitle("完了", for: .normal)
-//        case 1:
-//            self.setUIAlertController()
-//        default:
-//            print("他の値")
-//        }
-//        return true
-//    }
-//
-//    //         コンテキストメニューが表示されたら呼ばれる
-//    func contextMenuDidAppear(_: ContextMenu) {
-//        print("コンテキストメニュー表示されました")
-//    }
-//
-//    //         コンテキストメニューが消えたら呼ばれる
-//    func contextMenuDidDisappear(_: ContextMenu) {
-//        print("コンテキストメニューが消えました")
-//    }
-//
-//    func setUIAlertController() {
-//        let alert = UIAlertController(title: "削除", message: "本当に全て削除してもよろしいですか？", preferredStyle: .alert)
-//        let delete = UIAlertAction(title: "削除", style: .default, handler: { _ in
-//
-//            do {
-//                let realm = try Realm()
-//                try realm.write {
-//                    self.realm.delete(self.phraseWordArr)
-//                    self.inputDataList = []
-//                    self.resultDataList = []
-//                }
-//
-//                self.tableView.reloadData()
-////                self.editButton.setTitle("編集", for: .normal)
-//            } catch {
-//                print("エラー")
-//            }
-//            self.label1.text = "お気に入りの単語・フレーズを追加しよう！"
-//        })
-//
-//        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: { _ in print("キャンセルボタンがタップされた。")
-//        })
-//
-//        alert.addAction(delete)
-//        alert.addAction(cencel)
-//
-//        present(alert, animated: true, completion: nil)
-//    }
-// }
-
-/*
- // MARK: - Navigation
-
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
- // Get the new view controller using segue.destination.
- // Pass the selected object to the new view controller.
- }
- */

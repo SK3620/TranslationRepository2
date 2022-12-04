@@ -15,10 +15,7 @@ class AddViewController: UIViewController {
     @IBOutlet var textField3: UITextField!
     @IBOutlet var textField4: UITextField!
     @IBOutlet var textView1: UITextView!
-    @IBOutlet var label1: UILabel!
     @IBOutlet var label2: UILabel!
-    @IBOutlet var button1: UIButton!
-    @IBOutlet var button2: UIButton!
 
     var pickerView1: UIPickerView = .init()
     var pickerView3: UIPickerView = .init()
@@ -41,8 +38,8 @@ class AddViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        "\(year).\(month).\(day)"をラベルに表示
-        self.label1.text = self.dateString2
+
+        self.setNavigationBar()
 
         self.textField3.delegate = self
 
@@ -57,6 +54,7 @@ class AddViewController: UIViewController {
             self.folderNames.append($0.folderName)
         }
 
+        self.setPlaceHolderForTextField()
         self.setDoneToolBarForTextField1()
         self.setDoneToolBarForTextField3()
         self.setDoneTooBarForTextField4()
@@ -72,14 +70,96 @@ class AddViewController: UIViewController {
         self.setTextField(textFieldArr: textFieldArr)
 
         self.textView1.layer.borderWidth = 2
-        self.textView1.layer.borderColor = UIColor.gray.cgColor
+        self.textView1.layer.borderColor = UIColor.systemGray2.cgColor
         self.textView1.layer.cornerRadius = 6
+    }
+
+    func setPlaceHolderForTextField() {
+        self.textField1.attributedPlaceholder = NSAttributedString(string: "学習したフォルダー名",
+                                                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+        self.textField2.attributedPlaceholder = NSAttributedString(string: "学習した文章番号/内容(例:1〜10)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+        self.textField3.attributedPlaceholder = NSAttributedString(string: "復習した回数(〜回目)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+        self.textField4.attributedPlaceholder = NSAttributedString(string: "次回復習日を設定しよう！", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+    }
+
+    func setNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
+        let rightBarButtonItem = UIBarButtonItem(title: "追加する", style: .done, target: self, action: #selector(self.tappedRightBarButtonImte(_:)))
+        let leftBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(self.tappedLeftBarButtonItem(_:)))
+        self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
+        self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
+        //        "\(year).\(month).\(day)"をタイトルに表示
+        self.title = self.dateString2
+    }
+
+//    戻るボタン
+    @objc func tappedLeftBarButtonItem(_: UIBarButtonItem) {
+        print("LeftBarButtonItemがタップされた")
+        self.dismiss(animated: true, completion: nil)
+    }
+
+//    追加ボタン
+    @objc func tappedRightBarButtonImte(_: UIBarButtonItem) {
+        print("rightBarButtonItemがタップされました")
+        SVProgressHUD.show()
+
+        let textField_text1 = self.textField1.text
+        let textField_text2 = self.textField2.text
+        let textField_text3 = self.textField3.text
+        //        String型の次回復習日"yyyy.M.d"
+        let textField_text4 = self.textField4.text
+        //        Int型の次回復習日"yyyyMd'
+        let textField_text4ForSorting = self.dateStringForSorting
+        let textView_text1 = self.textView1.text
+
+        let record = Record()
+        record.folderName = textField_text1!
+        record.number = textField_text2!
+        record.times = textField_text3!
+        record.nextReviewDate = textField_text4!
+        record.memo = textView_text1!
+        //        "yyyyMMdd"
+        record.date1 = self.dateString
+        //        "\(year).\(month).\(day)"
+        record.inputDate = self.dateString2
+        if textField_text4 != "" {
+            //            Int型に変換したyyyyMMdd
+            record.nextReviewDateForSorting = textField_text4ForSorting!
+        } else {
+            //            何も入力がなければ、12月31日以降をInt型で指定　並べ替え時に一番下に表示される
+            record.nextReviewDateForSorting = 1232
+        }
+
+        if self.recordArr.count != 0 {
+            record.id = self.recordArr.max(ofProperty: "id")! + 1
+        }
+        do {
+            let realm = try Realm()
+
+            try realm.write {
+                realm.add(record)
+            }
+            self.recordViewController.filteredRecordArr(recordArrFilter1: self.recordArr)
+            self.recordViewController.dateString = self.dateString
+            SVProgressHUD.showSuccess(withStatus: "追加しました")
+        } catch {
+            print("エラー発生")
+        }
+        self.recordViewController.fscalendar.reloadData()
+        self.recordViewController.tableView.reloadData()
+        SVProgressHUD.dismiss(withDelay: 1.5) {
+            self.dismiss(animated: true)
+        }
     }
 
     func setTextField(textFieldArr: [UITextField]) {
         textFieldArr.forEach {
             $0.layer.borderWidth = 2
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.systemGray3.cgColor
             $0.layer.cornerRadius = 6
         }
     }
@@ -191,61 +271,6 @@ class AddViewController: UIViewController {
         self.textField2.endEditing(true)
         self.textView1.endEditing(true)
     } // Do any additional setup after loading the view.
-
-    @IBAction func backButton(_: Any) {
-        dismiss(animated: true)
-    }
-
-    @IBAction func addButtonAction(_: Any) {
-        SVProgressHUD.show()
-
-        let textField_text1 = self.textField1.text
-        let textField_text2 = self.textField2.text
-        let textField_text3 = self.textField3.text
-        //        String型の次回復習日"yyyy.M.d"
-        let textField_text4 = self.textField4.text
-        //        Int型の次回復習日"yyyyMd'
-        let textField_text4ForSorting = self.dateStringForSorting
-        let textView_text1 = self.textView1.text
-
-        let record = Record()
-        record.folderName = textField_text1!
-        record.number = textField_text2!
-        record.times = textField_text3!
-        record.nextReviewDate = textField_text4!
-        record.memo = textView_text1!
-        //        "yyyyMMdd"
-        record.date1 = self.dateString
-        //        "\(year).\(month).\(day)"
-        record.inputDate = self.dateString2
-        if textField_text4 != "" {
-            //            Int型に変換したyyyyMMdd
-            record.nextReviewDateForSorting = textField_text4ForSorting!
-        } else {
-            //            何も入力がなければ、12月31日以降をInt型で指定　並べ替え時に一番下に表示される
-            record.nextReviewDateForSorting = 1232
-        }
-
-        if self.recordArr.count != 0 {
-            record.id = self.recordArr.max(ofProperty: "id")! + 1
-        }
-        do {
-            let realm = try Realm()
-
-            try realm.write {
-                realm.add(record)
-            }
-            self.recordViewController.filteredRecordArr(recordArrFilter1: self.recordArr)
-            self.recordViewController.dateString = self.dateString
-            SVProgressHUD.showSuccess(withStatus: "追加しました")
-        } catch {
-            print("エラー発生")
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { () in
-            SVProgressHUD.dismiss()
-        }
-        dismiss(animated: true)
-    }
 }
 
 extension AddViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
@@ -274,7 +299,7 @@ extension AddViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITex
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == self.textField3, self.textField3.text != "", self.textField3.text != "1" {
             let textField3_text: Int = .init(textField3.text!)!
-            self.label2.text = "〜 Tip 〜" + "\n" + "入力した前回の学習記録欄（\(textField3_text - 1)回目の学習記録欄) に「復習完了マーク✅」をつけよう！"
+            self.label2.text = "入力した前回の学習記録欄（\(textField3_text - 1)回目の学習記録欄) に「復習完了マーク✅」をつけよう！"
         } else {
             self.label2.text = ""
         }

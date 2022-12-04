@@ -12,7 +12,6 @@ import UIKit
 
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var editButton: UIButton!
     @IBOutlet var view1: UIView!
     @IBOutlet var label1: UILabel!
     @IBOutlet var searchBar: UISearchBar!
@@ -59,19 +58,22 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
-        self.editButton.setTitle("編集", for: .normal)
-
-//        navigationBarのタイトルを設定
-        self.tabBarController1.setBarButtonItem2()
-        self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+        //        navigationbarの設定
+        if let tabBarController1 = tabBarController1 {
+            self.tabBarController1.setBarButtonItem2()
+            tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+//            let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self,
+//                                                    action: #selector(self.tappedEditBarButtonItem(_:)))
+            let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
+            self.tabBarController1?.navigationItem.rightBarButtonItems = [self.setMenuBarButtonItem(), createFolderBarButtonItem]
+        }
 
         self.historyArr = self.realm.objects(Histroy.self).sorted(byKeyPath: "date", ascending: true)
         if self.historyArr.count == 0 {
             self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
-            self.editButton.isEnabled = false
+//            self.editButton.isEnabled = false
         } else {
-            self.editButton.isEnabled = true
+//            self.editButton.isEnabled = true
             self.label1.text = ""
         }
 
@@ -81,6 +83,31 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
 
         self.tableView.reloadData()
+    }
+
+    func setMenuBarButtonItem() -> UIBarButtonItem {
+        let deleteSome = UIAction(title: "一部削除する", image: UIImage()) { [self] _ in
+            self.tableView.isEditing = true
+            self.tabBarController1?.navigationItem.rightBarButtonItems?.remove(at: 0)
+            let editDoneBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(tappedEditDoneBarButtonItem(_:)))
+            self.tabBarController1.navigationItem.rightBarButtonItems?.insert(editDoneBarButtonItem, at: 0)
+        }
+        let deleteAll = UIAction(title: "全て削除する", image: UIImage()) { _ in
+            self.setUIAlertController()
+        }
+        let menu = UIMenu(title: "", children: [deleteSome, deleteAll])
+        let menuBarItem = UIBarButtonItem(title: "編集", menu: menu)
+        return menuBarItem
+    }
+
+    @objc func tappedEditDoneBarButtonItem(_: UIBarButtonItem) {
+        self.tableView.isEditing = false
+        self.tabBarController1.navigationItem.rightBarButtonItems?.remove(at: 0)
+        self.tabBarController1.navigationItem.rightBarButtonItems?.insert(self.setMenuBarButtonItem(), at: 0)
+    }
+
+    @objc func tappedCreateFolderBarButtonItem(_: UIBarButtonItem) {
+        self.tabBarController1?.createFolder()
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -106,11 +133,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, numberOfRowsInSection _: Int) -> Int {
         if self.historyArr.count == 0 {
             tableView.isEditing = false
-            self.editButton.isEnabled = false
-            self.editButton.setTitle("編集", for: .normal)
+//            self.editButton.isEnabled = false
+//            self.editButton.setTitle("編集", for: .normal)
             self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
         } else {
-            self.editButton.isEnabled = true
+//            self.editButton.isEnabled = true
             tableView.isEditing = false
             self.label1.text = ""
         }
@@ -198,12 +225,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 //        self.present(alert, animated: true, completion: nil)
 //    }
 
-    @IBAction func editButtonAction(_: Any) {
-        if self.editButton.titleLabel!.text! == "完了" {
-            self.tableView.isEditing = false
-            self.editButton.setTitle("編集", for: .normal)
-            return
-        }
+    func createContextMenu() {
 //        コンテキストメニューの内容を作成
         let delete = ContextMenuItemWithImage(title: "一部削除する", image: UIImage())
         let deleteAll = ContextMenuItemWithImage(title: "全て削除する", image: UIImage())
@@ -223,7 +245,7 @@ extension HistoryViewController: ContextMenuDelegate {
         switch index {
         case 0:
             self.tableView.isEditing = true
-            self.editButton.setTitle("完了", for: .normal)
+//            self.editButton.setTitle("完了", for: .normal)
         case 1:
             self.setUIAlertController()
         default:
@@ -244,7 +266,10 @@ extension HistoryViewController: ContextMenuDelegate {
 
     func setUIAlertController() {
         let alert = UIAlertController(title: "履歴の削除", message: "本当に全ての履歴を削除してもよろしいですか？", preferredStyle: .alert)
-        let delete = UIAlertAction(title: "削除", style: .default, handler: { _ in
+        //        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
+        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in print("キャンセルボタンがタップされた。")
+        })
+        let delete = UIAlertAction(title: "削除", style: .destructive, handler: { _ in
 //            for number1 in 1...self.historyArr.count{
 //            var number2 = number1
 //            number2 = 0
@@ -270,12 +295,9 @@ extension HistoryViewController: ContextMenuDelegate {
             self.tableView.reloadData()
 
         })
-        //        handlerで削除orキャンセルボタンが押された時に実行されるメソッドを実装
-        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: { _ in print("キャンセルボタンがタップされた。")
-        })
 
+        alert.addAction(cancel)
         alert.addAction(delete)
-        alert.addAction(cencel)
 
         present(alert, animated: true, completion: nil)
     }

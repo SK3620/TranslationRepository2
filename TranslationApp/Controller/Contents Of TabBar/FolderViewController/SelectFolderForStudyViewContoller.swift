@@ -11,9 +11,8 @@ import SVProgressHUD
 import UIKit
 
 class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var label1: UILabel!
     @IBOutlet var label2: UILabel!
-    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var saveButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
 
     let realm = try! Realm()
@@ -34,14 +33,9 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
         self.tableView.delegate = self
         self.tableView.dataSource = self
 
-        self.label1.text = "保存先を選択してください"
         self.label2.text = self.string
 
         self.saveButton.isEnabled = false
-        self.saveButton.layer.borderColor = UIColor.systemBlue.cgColor
-        self.saveButton.layer.borderWidth = 1
-        self.saveButton.layer.cornerRadius = 10
-
         // Do any additional setup after loading the view.
     }
 

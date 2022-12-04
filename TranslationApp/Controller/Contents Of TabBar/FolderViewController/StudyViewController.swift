@@ -63,6 +63,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.setNavigationBar()
         // 利用可能な英語音声の確認
         let voices = AVSpeechSynthesisVoice.speechVoices()
         for voice in voices {
@@ -109,6 +110,13 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @objc func doneButtonTapped(sender _: UIButton) {
         self.searchBar.endEditing(true)
+    }
+
+    func setNavigationBar() {
+        let appearence = UINavigationBarAppearance()
+        appearence.backgroundColor = .systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearence
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
     }
 
     override func viewWillAppear(_: Bool) {
@@ -210,15 +218,24 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tappedSettingsItem(indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            let pharseWordViewController = storyboard?.instantiateViewController(withIdentifier: "PhraseWord")
-            present(pharseWordViewController!, animated: true, completion: nil)
+//            let pharseWordViewController = storyboard?.instantiateViewController(withIdentifier: "PhraseWord")
+//            present(pharseWordViewController!, animated: true, completion: nil)
+
+            let navigationController = storyboard?.instantiateViewController(withIdentifier: "NVCForPhraseWord") as! UINavigationController
+            let pagingPharseWordViewController = navigationController.viewControllers[0] as! PagingPhraseWordViewController
+            pagingPharseWordViewController.setItemsOnNavigationBar()
+            pagingPharseWordViewController.studyViewController = self
+            pagingPharseWordViewController.tabBarController1 = self.tabBarController1
+            present(navigationController, animated: true, completion: nil)
         case 1:
-            let recordViewController = storyboard?.instantiateViewController(withIdentifier: "Record") as! RecordViewController
+            let navigationController = storyboard?.instantiateViewController(withIdentifier: "NVCForRecordView") as! UINavigationController
+            let recordViewController = navigationController.viewControllers[0] as! RecordViewController
             recordViewController.tabBarController1 = self.tabBarController1
             recordViewController.studyViewController = self
-
-            present(recordViewController, animated: true, completion: nil)
+            recordViewController.setItemsOnNaviationBar()
+            present(navigationController, animated: true, completion: nil)
         case 2:
+
             let memoForStudyViewController = storyboard?.instantiateViewController(withIdentifier: "MemoView") as! MemoForStudyViewController
 
             if let sheet = memoForStudyViewController.sheetPresentationController {
@@ -499,11 +516,11 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @objc func tapCellEditButton(_ sender: UIButton) {
-        let edit = ContextMenuItemWithImage(title: "編集する", image: UIImage())
-        let save = ContextMenuItemWithImage(title: "お気に入りにする", image: UIImage())
-        let folder = ContextMenuItemWithImage(title: "保存先を変更する", image: UIImage())
-        let copy = ContextMenuItemWithImage(title: "コピーする", image: UIImage())
-        let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage())
+        let edit = ContextMenuItemWithImage(title: "編集する", image: UIImage(systemName: "square.and.pencil")!)
+        let save = ContextMenuItemWithImage(title: "お気に入りにする", image: UIImage(systemName: "heart")!)
+        let folder = ContextMenuItemWithImage(title: "保存先を変更する", image: UIImage(systemName: "folder")!)
+        let copy = ContextMenuItemWithImage(title: "コピーする", image: UIImage(systemName: "doc.on.doc")!)
+        let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage(systemName: "trash")!)
 
         let cellForRow = IndexPath(row: sender.tag, section: 0)
         self.sender_tag = sender.tag
@@ -748,22 +765,23 @@ extension StudyViewController: ContextMenuDelegate {
         case 1:
             self.savePhraseButton()
         case 2:
-            let folderList2ViewController = storyboard?.instantiateViewController(withIdentifier: "SelectFolderForStudy") as! SelectFolderForStudyViewContoller
-            folderList2ViewController.sender_tag = self.sender_tag
+            let navigationController = storyboard?.instantiateViewController(withIdentifier: "NVCForSelectFolder") as! UINavigationController
+            let selectFolderForStrudyViewController = navigationController.viewControllers[0] as! SelectFolderForStudyViewContoller
+            selectFolderForStrudyViewController.sender_tag = self.sender_tag
 
             if self.searchBar.text == "" {
-                folderList2ViewController.inputData = self.translationFolderArr.first!.results[self.sender_tag].inputData
-                folderList2ViewController.resultData = self.translationFolderArr.first!.results[self.sender_tag].resultData
-                folderList2ViewController.inputAndResultData = self.translationFolderArr.first!.results[self.sender_tag].inputAndResultData
+                selectFolderForStrudyViewController.inputData = self.translationFolderArr.first!.results[self.sender_tag].inputData
+                selectFolderForStrudyViewController.resultData = self.translationFolderArr.first!.results[self.sender_tag].resultData
+                selectFolderForStrudyViewController.inputAndResultData = self.translationFolderArr.first!.results[self.sender_tag].inputAndResultData
             } else {
-                folderList2ViewController.inputData = self.translationArr[self.sender_tag].inputData
-                folderList2ViewController.resultData = self.translationArr[self.sender_tag].resultData
-                folderList2ViewController.inputAndResultData = self.translationArr[self.sender_tag].inputAndResultData
+                selectFolderForStrudyViewController.inputData = self.translationArr[self.sender_tag].inputData
+                selectFolderForStrudyViewController.resultData = self.translationArr[self.sender_tag].resultData
+                selectFolderForStrudyViewController.inputAndResultData = self.translationArr[self.sender_tag].inputAndResultData
             }
 
-            if let sheet = folderList2ViewController.sheetPresentationController {
+            if let sheet = navigationController.sheetPresentationController {
                 sheet.detents = [.medium()]
-                present(folderList2ViewController, animated: true, completion: nil)
+                present(navigationController, animated: true, completion: nil)
             }
 
         case 3:
@@ -794,21 +812,18 @@ extension StudyViewController: ContextMenuDelegate {
     }
 
     func copyButton() {
-        let alert = UIAlertController(title: "コピーしました", message: "", preferredStyle: .alert)
-        let alert1 = UIAlertAction(title: "OK", style: .default, handler: { _ in
-            if self.searchBar.text != "" {
-                UIPasteboard.general.string = self.translationArr[self.sender_tag].inputAndResultData
-            } else {
-                UIPasteboard.general.string = self.translationFolderArr[0].results[self.sender_tag].inputAndResultData
-            }
-        })
-        alert.addAction(alert1)
-        present(alert, animated: true, completion: nil)
+        if self.searchBar.text != "" {
+            UIPasteboard.general.string = self.translationArr[self.sender_tag].inputAndResultData
+        } else {
+            UIPasteboard.general.string = self.translationFolderArr[0].results[self.sender_tag].inputAndResultData
+        }
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
     func deleteButton() {
         let alert = UIAlertController(title: "本当に削除しますか？", message: "保存した文章を\n左スワイプで削除することもできます", preferredStyle: .alert)
-        let delete = UIAlertAction(title: "削除", style: .default, handler: { _ in
+        let delete = UIAlertAction(title: "削除", style: .destructive, handler: { _ in
             try! self.realm.write {
                 if self.searchBar.text != "" {
                     self.realm.delete(self.translationArr[self.sender_tag])
@@ -828,7 +843,7 @@ extension StudyViewController: ContextMenuDelegate {
             self.tableView.reloadData()
         })
 
-        let cencel = UIAlertAction(title: "キャンセル", style: .default, handler: { _ in print("キャンセルボタンがタップされた。")
+        let cencel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in print("キャンセルボタンがタップされた。")
         })
 
         alert.addAction(delete)
@@ -839,10 +854,6 @@ extension StudyViewController: ContextMenuDelegate {
 
     //    右のドキュメントシステムアイコンをタップしたら、Realm（TranslationFolderファイル）のRecord2クラスに書き込み保存
     func savePhraseButton() {
-        let alert = UIAlertController(title: "保存しました", message: "「単語・フレーズ」に保存されました", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-
         if self.searchBar.text != "" {
             self.inputData3 = self.translationArr[self.sender_tag].inputData
             self.resultData3 = self.translationArr[self.sender_tag].resultData
@@ -871,6 +882,8 @@ extension StudyViewController: ContextMenuDelegate {
         } catch {
             print("エラー")
         }
+        SVProgressHUD.showSuccess(withStatus: "'お気に入り'へ保存しました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
     @IBAction func backButtton(_: Any) {

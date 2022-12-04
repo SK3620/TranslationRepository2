@@ -10,15 +10,11 @@ import SVProgressHUD
 import UIKit
 
 class EditRecordViewController: UIViewController, UINavigationBarDelegate {
-    @IBOutlet var label1: UILabel!
-    @IBOutlet var editLabel: UILabel!
     @IBOutlet var textField1: UITextField!
     @IBOutlet var textField2: UITextField!
     @IBOutlet var textField3: UITextField!
     @IBOutlet var textField4: UITextField!
     @IBOutlet var textView1: UITextView!
-    @IBOutlet var button1: UIButton!
-    @IBOutlet var button2: UIButton!
     @IBOutlet var view1: UIView!
 
     var datePicker: UIDatePicker = .init()
@@ -31,7 +27,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
 
     var toolBar: UIToolbar!
 
-    var number: Int!
+//    var number: Int!
 
     var numbers = [String]()
 
@@ -45,7 +41,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
     var dateString1: Int!
     var studyViewContoller: StudyViewController!
 
-    //    タップされた日付をlabelに表示
+    //    タップされた日付をタイトルに表示
     var label1_text: String!
     var textField1_text: String!
     var textField2_text: String!
@@ -55,6 +51,8 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.setNavigationBar()
 
         for number in 1 ... 30 {
             let number = String(number)
@@ -77,26 +75,47 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         self.SetTextFields(textFieldArr: textFieldArr)
 
         self.textView1.layer.borderWidth = 2
-        self.textView1.layer.borderColor = UIColor.gray.cgColor
+        self.textView1.layer.borderColor = UIColor.systemGray2.cgColor
         self.textView1.layer.cornerRadius = 6
 
-        self.label1.text = self.label1_text
         self.textField1.text = self.textField1_text
         self.textField2.text = self.textField2_text
         self.textField3.text = self.textField3_text
         self.textField4.text = self.textField4_text
         self.textView1.text = self.textView1_text
 
+        self.setPlaceHolderForTextField()
         self.setDoneToolBarForTextField1()
         self.setDoneToolBarForTextField3()
         self.setDoneToolBarForTextField4()
         self.setDoneToolBarForTextView1()
     }
 
+    func setPlaceHolderForTextField() {
+        self.textField1.attributedPlaceholder = NSAttributedString(string: "学習したフォルダー名",
+                                                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+        self.textField2.attributedPlaceholder = NSAttributedString(string: "学習した文章番号/内容(例:1〜10)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+        self.textField3.attributedPlaceholder = NSAttributedString(string: "復習した回数(〜回目)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+        self.textField4.attributedPlaceholder = NSAttributedString(string: "次回復習日を設定しよう！", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
+    }
+
+    func setNavigationBar() {
+        let appearence = UINavigationBarAppearance()
+        appearence.backgroundColor = .systemGray6
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
+        self.navigationController?.navigationBar.standardAppearance = appearence
+
+        let rightBarButtonItem = UIBarButtonItem(title: "編集完了", style: .done, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
+        self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
+
+//        日付を表示
+        self.title = self.label1_text
+    }
+
     func SetTextFields(textFieldArr: [UITextField]!) {
         textFieldArr.forEach {
             $0.layer.borderWidth = 2
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.systemGray3.cgColor
             $0.layer.cornerRadius = 6
         }
     }
@@ -214,25 +233,12 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
 
         self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.setNavigationBarHidden(false, animated: true)
-        title = "編集"
-        navigationController?.navigationBar.barTintColor = .systemGray4
-        navigationController?.navigationBar.backgroundColor = .systemGray4
-
-        self.editLabel.text = ""
-        self.view1.backgroundColor = .systemGray4
-        self.button1.isEnabled = false
-        self.button1.isHidden = true
-
-        if self.studyViewContoller != nil {
-            self.editLabel.text = "編集"
-            self.view1.backgroundColor = .white
-            self.button1.isEnabled = true
-            self.button1.isHidden = false
-        }
+        navigationController?.navigationBar.barTintColor = .systemGray5
+        navigationController?.navigationBar.backgroundColor = .systemGray5
     }
 
-    //    保存ボタン
-    @IBAction func Button2Action(_: Any) {
+//    保存ボタン
+    @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
         SVProgressHUD.show()
 
         self.textField1_text = self.textField1.text
@@ -257,17 +263,12 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
             self.recordViewController.filteredRecordArr(recordArrFilter1: self.recordArr)
 
             SVProgressHUD.showSuccess(withStatus: "保存しました")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { () in
-                SVProgressHUD.dismiss()
-            }
         } catch {
             print("エラー発生")
         }
-        dismiss(animated: true)
-    }
-
-    @IBAction func button1Action(_: Any) {
-        dismiss(animated: true)
+        SVProgressHUD.dismiss(withDelay: 1.5) {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 }
 

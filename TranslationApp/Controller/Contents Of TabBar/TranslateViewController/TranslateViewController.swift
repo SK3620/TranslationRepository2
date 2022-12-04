@@ -176,10 +176,13 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
-//        navigationBarのタイトルを設定
-        self.tabBarController1.setBarButtonItem0()
-        self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+        //        navigationbarの設定
+        if let tabBarController1 = tabBarController1 {
+            tabBarController1.setBarButtonItem0()
+            tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+            let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
+            self.tabBarController1?.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
+        }
 
         if let folderNameString = folderNameString {
             let translationFolderArr2 = self.realm.objects(TranslationFolder.self)
@@ -202,6 +205,10 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                 self.saveButton.isHidden = true
             }
         }
+    }
+
+    @objc func tappedCreateFolderBarButtonItem(_: UIBarButtonItem) {
+        self.tabBarController1.createFolder()
     }
 
     @IBAction func translateButton(_: Any) {

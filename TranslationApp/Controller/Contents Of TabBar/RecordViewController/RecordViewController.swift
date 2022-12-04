@@ -46,6 +46,11 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         self.tableView.dataSource = self
         self.tableView.separatorColor = .gray
 
+        let appearence = UINavigationBarAppearance()
+        appearence.backgroundColor = .systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearence
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
+
         let nib = UINib(nibName: "CustomCellForRecord", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
     }
@@ -59,22 +64,47 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             self.tabBarController1.setBarButtonItem3()
             self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+            let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
+            self.tabBarController1.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
         }
 
         navigationController?.setNavigationBarHidden(true, animated: false)
 
         if let studyViewController = studyViewController {
             studyViewController.SetTabBarController1()
+            self.setItemsOnNaviationBar()
         }
         self.tableView.reloadData()
         self.fscalendar.reloadData()
     }
 
+    @objc func tappedCreateFolderBarButtonItem(_: UIBarButtonItem) {
+        self.tabBarController1.createFolder()
+    }
+
+    func setItemsOnNaviationBar() {
+        let appearence = UINavigationBarAppearance()
+        appearence.backgroundColor = .systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearence
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
+
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.title = "学習記録"
+        let leftBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(self.tappedBackBarButtonItem(_:)))
+        self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
+    }
+
+    @objc func tappedBackBarButtonItem(_: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
+
     override func viewWillDisappear(_: Bool) {
         super.viewWillDisappear(true)
 
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         if let studyViewController = studyViewController {
             studyViewController.SetTabBarController1()
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
     }
 
@@ -139,7 +169,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     func calendar(_: FSCalendar, didSelect date: Date, at _: FSCalendarMonthPosition) {
         self.addButton.isEnabled = true
 
-        self.reviewButton.setTitle("次回復習日・内容を確認する", for: .normal)
+//        self.reviewButton.setTitle("次回復習日・内容を確認する", for: .normal)
 
         //        このdate変数をCalendarクラスを利用して、年、月、日で分解させる
         let tmpCalendar = Calendar(identifier: .gregorian)
@@ -171,20 +201,16 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
 
         if self.recordArrFilter != nil {
+            self.label1.text = ""
             return self.recordArrFilter.count
         } else {
+            self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
             return 0
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForRecord
-
-        if self.recordArrFilter.isEmpty {
-            self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
-        } else {
-            self.label1.text = ""
-        }
 
         if self.recordArrFilter != nil {
             cell.setData(self.recordArrFilter[indexPath.row])
@@ -270,13 +296,19 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     }
 
     @IBAction func addButton(_: Any) {
-        let addViewController = storyboard?.instantiateViewController(withIdentifier: "add") as! AddViewController
+        let navigationController = storyboard?.instantiateViewController(withIdentifier: "NVCForAddVC") as! UINavigationController
+        let addViewController = navigationController.viewControllers[0] as! AddViewController
         addViewController.recordViewController = self
         //       "yyyyMMdd"
         addViewController.dateString = self.dateString
         //        "\(year).\(month).\(day)"
         addViewController.dateString2 = self.dateString2
-        present(addViewController, animated: true, completion: nil)
+        if self.studyViewController != nil {
+            navigationController.modalPresentationStyle = .automatic
+        } else {
+            navigationController.modalPresentationStyle = .fullScreen
+        }
+        present(navigationController, animated: true, completion: nil)
     }
 
     //    日付にドットマークをつけるメソッド　dateの数だけ呼ばれる

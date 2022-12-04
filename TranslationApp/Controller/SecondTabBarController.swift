@@ -13,6 +13,11 @@ class SecondTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.setNavigationBar()
+        // Do any additional setup after loading the view.
+    }
+
+    func setNavigationBar() {
         // タブアイコンの色
         tabBar.tintColor = UIColor.systemBlue
         // タブバーの背景色を設定
@@ -20,21 +25,5 @@ class SecondTabBarController: UITabBarController {
         appearance.backgroundColor = UIColor.systemGray5
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-
-        // Do any additional setup after loading the view.
     }
-
-    override func viewWillAppear(_: Bool) {
-        super.viewWillAppear(true)
-    }
-
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
 }

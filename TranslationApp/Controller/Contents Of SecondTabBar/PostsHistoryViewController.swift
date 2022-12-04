@@ -99,7 +99,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         cell.commentButton.isEnabled = false
         cell.commentButton.isHidden = true
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
-        cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEfitButton(_:forEvent:)), for: .touchUpInside)
+        cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
@@ -107,13 +107,13 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         return cell
     }
 
-    @objc func tappedCellEfitButton(_: UIButton, forEvent event: UIEvent) {
+    @objc func tappedCellEditButton(_: UIButton, forEvent event: UIEvent) {
         //        投稿内容削除処理
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { _ in
             alert.dismiss(animated: true, completion: nil)
         }
-        let deleteAction = UIAlertAction(title: "削除する", style: .destructive) { _ in
+        let deleteAction = UIAlertAction(title: "削除", style: .destructive) { _ in
             // 削除機能のコード
             SVProgressHUD.show()
             let touch = event.allTouches?.first

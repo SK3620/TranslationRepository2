@@ -15,7 +15,6 @@ import UIKit
 class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var editButton: UIButton!
     @IBOutlet var label: UILabel!
 
     var folderNameString: String?
@@ -64,19 +63,39 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
 //        フォルダーがない場合、画面に表示
         self.label.text = "右上のボタンでフォルダーを作成しよう！"
-        self.editButton.setTitle("編集", for: .normal)
-        self.tableView.isEditing = false
+//        self.editButton.setTitle("編集", for: .normal)
+//        self.tableView.isEditing = false
 
         navigationController!.setNavigationBarHidden(true, animated: false)
-        self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.tabBarController1.setBarButtonItem1()
+        //        navigationbarの設定
+        if let tabBarController1 = tabBarController1 {
+            tabBarController1.setBarButtonItem1()
+            tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+            let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self,
+                                                    action: #selector(self.tappedEditBarButtonItem(_:)))
+            let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
+            self.tabBarController1?.navigationItem.rightBarButtonItems = [editBarButtonItem, createFolderBarButtonItem]
+        }
+
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         if self.translationFolderArr.count == 0 {
-            self.editButton.isEnabled = false
+//            self.editButton.isEnabled = false
         }
 
         self.tableView.reloadData()
+    }
+
+    @objc func tappedCreateFolderBarButtonItem(_: UIBarButtonItem) {
+        self.tabBarController1?.createFolder()
+    }
+
+    @objc func tappedEditBarButtonItem(_: UIBarButtonItem) {
+        if self.tableView.isEditing {
+            self.tableView.isEditing = false
+        } else {
+            self.tableView.isEditing = true
+        }
     }
 
 //     検索ボタン押下時
@@ -110,11 +129,11 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if self.translationFolderArr.count == 0 {
             tableView.isEditing = false
             self.label.text = "右上のボタンでフォルダーを作成しよう！"
-            self.editButton.setTitle("編集", for: .normal)
-            self.editButton.isEnabled = false
+//            self.editButton.setTitle("編集", for: .normal)
+//            self.editButton.isEnabled = false
         } else {
             self.label.text = ""
-            self.editButton.isEnabled = true
+//            self.editButton.isEnabled = true
         }
         return self.translationFolderArr.count
     }
@@ -193,10 +212,10 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func editButtonAction(_: Any) {
         if self.tableView.isEditing {
             self.tableView.isEditing = false
-            self.editButton.setTitle("編集", for: .normal)
+//            self.editButton.setTitle("編集", for: .normal)
         } else {
             self.tableView.isEditing = true
-            self.editButton.setTitle("完了", for: .normal)
+//            self.editButton.setTitle("完了", for: .normal)
         }
     }
 

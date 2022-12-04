@@ -16,7 +16,7 @@ class SettingsForStudyViewController: UIViewController, UITableViewDelegate, UIT
     let speak = Speak()
     var indexPath_row: Int?
     var indexPathArr: [IndexPath] = [IndexPath(row: 3, section: 0), IndexPath(row: 4, section: 0)]
-    var menuArr: [String] = ["単語・フレーズ", "学習記録", "メモ", "太字を再生", "小文字を再生", "閉じる"]
+    var menuArr: [String] = ["お気に入り", "学習記録", "メモ", "太字を再生", "小文字を再生", "閉じる"]
     var delegate: SettingsDelegate!
 
     override func viewDidLoad() {

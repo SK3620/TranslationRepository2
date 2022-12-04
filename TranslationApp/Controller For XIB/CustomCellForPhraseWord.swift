@@ -41,7 +41,7 @@ class CustomCellForPhraseWord: UITableViewCell {
         if indexPath_row % 2 == 0 {
             self.numberLabel.backgroundColor = UIColor.systemGray6
         } else {
-            self.numberLabel.backgroundColor = UIColor.systemGray4
+            self.numberLabel.backgroundColor = UIColor.systemGray6
         }
         self.numberLabel.text = "\(indexPath_row + 1)"
     }
