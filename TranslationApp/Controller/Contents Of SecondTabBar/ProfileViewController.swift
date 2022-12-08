@@ -52,14 +52,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let postsHistoryViewController = navigationController.viewControllers[0] as! PostsHistoryViewController
         postsHistoryViewController.delegate = self
 
+        let postedCommentsHistoryViewController = storyboard?.instantiateViewController(withIdentifier: "postedCommentsHistory") as! PostedCommentsHistoryViewController
+
         let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "NC2") as! UINavigationController
 
         introductionViewController.title = "自己紹介"
         navigationController.title = "投稿履歴"
+        postedCommentsHistoryViewController.title = "コメント履歴"
         navigationController2.title = "ブックマーク"
 
 //        pagingViewControllerのインスタンス生成
-        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, navigationController2])
+        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, postedCommentsHistoryViewController, navigationController2])
 
 //        Adds the specified view controller as a child of the current view controller.
         addChild(pagingViewController)
@@ -102,13 +105,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
-//        self.pagingViewController.select(index: 0)
-
         self.setRightBarButtonItem()
 
         //        currentUserがnilなら
         if Auth.auth().currentUser == nil {
-            print("currentUserがnilです")
+            self.changePhotoButton.isEnabled = false
+            self.likeNumberLabel.text = ""
+            self.postNumberLabel.text = ""
+
             self.userNameLabel.text = "ー"
             self.genderLabel.text = "ー"
             self.ageLabel.text = "ー"
@@ -122,7 +126,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             self.changePhotoButton.isEnabled = false
         }
 
+        SVProgressHUD.show(withStatus: "データ取得中...")
         if Auth.auth().currentUser != nil {
+            self.changePhotoButton.isEnabled = true
             self.label1.text = ""
 
             self.setImageFromStorage()
@@ -139,17 +145,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                         self.profileData = profileData
                     }
                     self.setProfileDataOnLabels(profileData: self.profileData)
+                    SVProgressHUD.dismiss()
                 }
                 print("実行されたを２")
             }
         }
-    }
-
-    override func viewDidAppear(_: Bool) {
-        super.viewDidAppear(true)
-
-//        indexを0から1に戻す
-//        self.pagingViewController.select(index: 0)
     }
 
     func setRightBarButtonItem() {
@@ -192,6 +192,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             let user = Auth.auth().currentUser!
             let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
 
+            // キャッシュを更新して、画像をセット
             self.imageView.sd_setImage(with: imageRef)
             print("画像取り出せた？\(imageRef)")
         }
@@ -248,15 +249,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     //    画像ファイルをstorageに保存する
     func saveImageToStorage() {
-        //        画像をJPEG形式に変換
+        //        プロフィール画像sekf.imageをJPEG形式に変換
         let imageData = self.image.jpegData(compressionQuality: 0.75)
         //        画像の保存場所定義
         let user = Auth.auth().currentUser!
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyyMMddHHmm"
-//        let dateString: String = formatter.string(from: Date())
-//        let path = "user'sImage/\(user.uid)/profile_\(dateString).jpg"
-
         let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
 //        let imageRef: StorageReference? = Storage.storage().reference(withPath: path)
 

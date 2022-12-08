@@ -199,9 +199,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
         self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
-
         if self.recordArrFilter != nil {
-            self.label1.text = ""
             return self.recordArrFilter.count
         } else {
             self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
@@ -211,6 +209,8 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForRecord
+        print("cellForRowAtが実行された")
+        self.label1.text = ""
 
         if self.recordArrFilter != nil {
             cell.setData(self.recordArrFilter[indexPath.row])

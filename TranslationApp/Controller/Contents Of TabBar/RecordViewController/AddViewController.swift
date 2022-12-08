@@ -125,7 +125,7 @@ class AddViewController: UIViewController {
         //        "yyyyMMdd"
         record.date1 = self.dateString
         //        "\(year).\(month).\(day)"
-        record.inputDate = self.dateString2
+        record.inputDate = self.today()
         if textField_text4 != "" {
             //            Int型に変換したyyyyMMdd
             record.nextReviewDateForSorting = textField_text4ForSorting!
@@ -154,6 +154,15 @@ class AddViewController: UIViewController {
         SVProgressHUD.dismiss(withDelay: 1.5) {
             self.dismiss(animated: true)
         }
+    }
+
+//    今日の日付を返すメソッド
+    func today() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd"
+        let dateString: String = formatter.string(from: Date())
+        print("今日の日付を返すメソッド\(dateString)")
+        return dateString
     }
 
     func setTextField(textFieldArr: [UITextField]) {

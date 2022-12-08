@@ -93,7 +93,7 @@ class OthersProfileViewController: UIViewController {
         self.secondTabBarController.tabBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray5
+        appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.secondTabBarController.tabBar.isHidden = true

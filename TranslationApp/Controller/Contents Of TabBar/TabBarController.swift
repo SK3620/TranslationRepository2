@@ -5,8 +5,8 @@
 //  Created by 鈴木健太 on 2022/09/08.
 //
 
-// 日付タップでrecordViewCOntroller画面のlabel表示
-// アカウント削除複数の非同期処理
+// プロフィール画像処理
+// 絞り込み表示にて、whererFieldは使えるのか？機能がないと思う
 
 import RealmSwift
 import SVProgressHUD

@@ -693,11 +693,11 @@
                                 <rect key="frame" x="0.0" y="88" width="375" height="724"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="GbU-QA-dOb">
-                                        <rect key="frame" x="0.0" y="51" width="375" height="589.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="51" width="375" height="598"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ux-a6-WD7">
-                                        <rect key="frame" x="0.0" y="640.66666666666663" width="375" height="83.333333333333371"/>
+                                        <rect key="frame" x="0.0" y="649" width="375" height="75"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="mzu-06-V37">
                                                 <rect key="frame" x="122.33333333333333" y="8.0000000000000018" width="130.66666666666669" height="30.666666666666671"/>
@@ -763,7 +763,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6N-TM-zSY">
-                                                <rect key="frame" x="168.33333333333334" y="36.666666666666742" width="38.333333333333343" height="18"/>
+                                                <rect key="frame" x="168.33333333333334" y="36.666666666666629" width="38.333333333333343" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <color key="textColor" systemColor="systemOrangeColor"/>
                                                 <nil key="highlightedColor"/>
@@ -797,7 +797,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <constraints>
                                             <constraint firstItem="zJ6-ie-Rsb" firstAttribute="centerX" secondItem="aKt-0p-VqD" secondAttribute="centerX" id="7pK-Qg-zvJ"/>
                                             <constraint firstItem="che-rl-key" firstAttribute="top" secondItem="nfl-Hx-cfO" secondAttribute="bottom" constant="-7" id="Anm-Ra-sWh"/>
@@ -828,17 +828,17 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="GbU-QA-dOb" secondAttribute="bottom" constant="75" id="3hd-C1-Doo"/>
                                     <constraint firstItem="AII-q7-IU0" firstAttribute="top" secondItem="YDI-wG-5Wj" secondAttribute="top" id="5Ia-vk-3Nr"/>
                                     <constraint firstAttribute="trailing" secondItem="GbU-QA-dOb" secondAttribute="trailing" id="69s-Uk-npk"/>
                                     <constraint firstItem="6Ux-a6-WD7" firstAttribute="leading" secondItem="YDI-wG-5Wj" secondAttribute="leading" id="8do-ZY-qI5"/>
                                     <constraint firstItem="GbU-QA-dOb" firstAttribute="top" secondItem="AII-q7-IU0" secondAttribute="bottom" id="STN-OP-sak"/>
-                                    <constraint firstItem="6Ux-a6-WD7" firstAttribute="top" secondItem="GbU-QA-dOb" secondAttribute="bottom" id="SgC-on-LvC"/>
-                                    <constraint firstAttribute="bottom" secondItem="GbU-QA-dOb" secondAttribute="bottom" multiplier="1.13" id="Wbs-5f-H4K"/>
                                     <constraint firstAttribute="trailing" secondItem="6Ux-a6-WD7" secondAttribute="trailing" id="Ym0-Bh-z8c"/>
                                     <constraint firstAttribute="trailing" secondItem="AII-q7-IU0" secondAttribute="trailing" id="Zq2-xB-fqY"/>
                                     <constraint firstAttribute="bottom" secondItem="6Ux-a6-WD7" secondAttribute="bottom" id="iXU-vJ-gy8"/>
                                     <constraint firstItem="GbU-QA-dOb" firstAttribute="leading" secondItem="YDI-wG-5Wj" secondAttribute="leading" id="kyV-ny-Wtq"/>
                                     <constraint firstItem="AII-q7-IU0" firstAttribute="leading" secondItem="YDI-wG-5Wj" secondAttribute="leading" id="rGl-7i-lgA"/>
+                                    <constraint firstItem="6Ux-a6-WD7" firstAttribute="top" secondItem="GbU-QA-dOb" secondAttribute="bottom" id="xHY-Ff-UcC"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -1096,7 +1096,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="修正/教えて">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="correctButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="R7p-m9-jhS"/>
@@ -1111,7 +1111,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="学習法">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="howToLearnButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="onC-Bz-w6X"/>
@@ -1126,7 +1126,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="単語">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="wordButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="5it-Oy-jDu"/>
@@ -1143,7 +1143,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="発音">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="pronunciationButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="QEx-zG-vu7"/>
@@ -1155,7 +1155,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="資格試験">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="certificationButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="u1D-vz-qRe"/>
@@ -1167,7 +1167,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="その他">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="etcButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="3o2-7I-awO"/>
@@ -1187,7 +1187,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="文法">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="grammerButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="XJH-2E-rdN"/>
@@ -1199,7 +1199,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="英会話">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="conversationButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="pZj-xI-8Ag"/>
@@ -1211,7 +1211,7 @@
                                         <color key="tintColor" systemColor="systemGray2Color"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="リスニング">
-                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="listeningButton:" destination="4ML-cq-n35" eventType="touchUpInside" id="4DQ-hJ-JZP"/>
@@ -3443,6 +3443,36 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nqc-gk-7MI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="11634" y="225"/>
+        </scene>
+        <!--Posted Comments History View Controller-->
+        <scene sceneID="1hT-sU-OhA">
+            <objects>
+                <viewController storyboardIdentifier="postedCommentsHistory" id="qaF-0I-vnA" customClass="PostedCommentsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nQM-FP-sPQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Zm0-E2-IiZ">
+                                <rect key="frame" x="0.0" y="44" width="375" height="768"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="egB-NO-Z2W"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Zm0-E2-IiZ" secondAttribute="bottom" id="8g5-wO-ZPK"/>
+                            <constraint firstItem="egB-NO-Z2W" firstAttribute="trailing" secondItem="Zm0-E2-IiZ" secondAttribute="trailing" id="frR-Kp-VJG"/>
+                            <constraint firstItem="Zm0-E2-IiZ" firstAttribute="leading" secondItem="egB-NO-Z2W" secondAttribute="leading" id="oqp-vI-rzN"/>
+                            <constraint firstItem="Zm0-E2-IiZ" firstAttribute="top" secondItem="egB-NO-Z2W" secondAttribute="top" id="u3j-7g-lmg"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="Zm0-E2-IiZ" id="CcN-1V-z4E"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Apg-C9-WxX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="11632.799999999999" y="975.3694581280788"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2xn-nD-ZNc">

@@ -54,7 +54,7 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         }
 
         self.label.text = ""
-        SVProgressHUD.show(withStatus: "データを取得中中...")
+        SVProgressHUD.show(withStatus: "データを取得中...")
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する

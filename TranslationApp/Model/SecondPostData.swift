@@ -27,6 +27,7 @@ class SecondPostData {
     var bookMarks: [String] = []
     var isBookMarked: Bool = false
     var uid: String?
+    var stringCommentedDate: String?
 
     init(document: QueryDocumentSnapshot) {
         print("secondPostDataクラスが実行された")
@@ -76,5 +77,7 @@ class SecondPostData {
         }
 //        投稿者のuid
         self.uid = postDic["uid"] as? String
+
+        self.stringCommentedDate = postDic["stringCommentedDate"] as? String
     }
 }

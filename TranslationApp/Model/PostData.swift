@@ -23,6 +23,11 @@ class PostData: NSObject {
     var numberOfComments: String?
     var uid: String?
 
+//    var timeStamp: Timestamp?
+//    var commentedDate: Date?
+    var stringCommentedDate: String?
+    var documentIdForPosts: String?
+
     init(document: QueryDocumentSnapshot) {
         print("postDataクラスが実行された")
         self.documentId = document.documentID
@@ -66,6 +71,12 @@ class PostData: NSObject {
 
 //        投稿者のuid
         self.uid = postDic["uid"] as? String
+
+//        self.timeStamp = postDic["commentedDate"] as? Timestamp
+//        self.commentedDate = self.timeStamp?.dateValue()
+
+        self.stringCommentedDate = postDic["stringCommentedDate"] as? String
+        self.documentIdForPosts = postDic["documentIdForPosts"] as? String
     }
 
 //    CommentSectionViewController画面で単一のドキュメントを監視した時

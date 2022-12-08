@@ -103,6 +103,7 @@
 		83C2CCA5291D1D1900A671AE /* PronunciationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C2CCA4291D1D1900A671AE /* PronunciationViewController.swift */; };
 		83C2CCA7291D1D4100A671AE /* CertificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C2CCA6291D1D4100A671AE /* CertificationViewController.swift */; };
 		83C2CCA9291D1D5E00A671AE /* EtcViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C2CCA8291D1D5E00A671AE /* EtcViewController.swift */; };
+		83CE5511293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE5510293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift */; };
 		83D29A6B291BDC6000DFF928 /* SecondPagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */; };
 		83D896322913F5CD00E570AD /* CommentSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896312913F5CD00E570AD /* CommentSectionViewController.swift */; };
 		83D896342914190500E570AD /* InputCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896332914190500E570AD /* InputCommentViewController.swift */; };
@@ -198,6 +199,7 @@
 		83C2CCA4291D1D1900A671AE /* PronunciationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PronunciationViewController.swift; sourceTree = "<group>"; };
 		83C2CCA6291D1D4100A671AE /* CertificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationViewController.swift; sourceTree = "<group>"; };
 		83C2CCA8291D1D5E00A671AE /* EtcViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EtcViewController.swift; sourceTree = "<group>"; };
+		83CE5510293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostedCommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPagingViewController.swift; sourceTree = "<group>"; };
 		83D896312913F5CD00E570AD /* CommentSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionViewController.swift; sourceTree = "<group>"; };
 		83D896332914190500E570AD /* InputCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommentViewController.swift; sourceTree = "<group>"; };
@@ -319,7 +321,6 @@
 				832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */,
 				83AD2C1A290A48AB009B0C84 /* SecondTabBarController.swift */,
 				8389C3F5290A6677007347AE /* Contents Of SecondTabBar */,
-				8388DA5928C9E25D008DE6FF /* TabBarController.swift */,
 				8356E95F2906467C00FD9236 /* Contents Of TabBar */,
 			);
 			path = Controller;
@@ -344,6 +345,7 @@
 		8356E95F2906467C00FD9236 /* Contents Of TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				8388DA5928C9E25D008DE6FF /* TabBarController.swift */,
 				8356E9602906479700FD9236 /* PhraseWordViewController */,
 				8356E961290647D200FD9236 /* FolderViewController */,
 				8356E9622906480100FD9236 /* TranslateViewController */,
@@ -436,6 +438,7 @@
 				83920AA3290BB2BE00F1F2D6 /* EditProfileViewController.swift */,
 				83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */,
 				836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */,
+				83CE5510293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift */,
 				8385E729291816C100DBDBAC /* BookMarkViewController.swift */,
 				83BC07ED291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift */,
 				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
@@ -687,6 +690,7 @@
 				830D9FF42912DE2000F8761B /* PostViewController.swift in Sources */,
 				83B6AF1F28E7254000700DBF /* CustomCellForReview.swift in Sources */,
 				83C2CC9D291D1C6500A671AE /* WordViewController.swift in Sources */,
+				83CE5511293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift in Sources */,
 				83D8963729141D9500E570AD /* CustomCellForCommentSetion.swift in Sources */,
 				83AF317628CF863100FDA0E1 /* HistoryViewContoller.swift in Sources */,
 				83D896322913F5CD00E570AD /* CommentSectionViewController.swift in Sources */,

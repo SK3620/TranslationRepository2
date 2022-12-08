@@ -40,7 +40,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
 
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray5
+        appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
@@ -48,7 +48,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         //        順番が大事
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.profileViewController.navigationController?.setNavigationBarHidden(false, animated: false)
-        let rightBarButtonItem = UIBarButtonItem(title: "保存する", style: .plain, target: self, action: nil)
+        let rightBarButtonItem = UIBarButtonItem(title: "保存する", style: .done, target: self, action: nil)
         self.profileViewController.navigationController?.navigationItem.rightBarButtonItems = [rightBarButtonItem]
 
         self.tableView.delegate = self

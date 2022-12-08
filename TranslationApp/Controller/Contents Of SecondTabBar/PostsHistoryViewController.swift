@@ -45,6 +45,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
+        SVProgressHUD.show(withStatus: "データ取得中...")
         if let user = Auth.auth().currentUser {
             //            複合インデックスを作成する必要がある
             //            クエリで指定している複数のインデックスをその順にインデックスに登録する
@@ -73,6 +74,11 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
                 self.postNumber = self.postArray.count
                 self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postNumber)
             }
+        }
+
+        if Auth.auth().currentUser == nil {
+            self.tableView.reloadData()
+            SVProgressHUD.dismiss()
         }
     }
 

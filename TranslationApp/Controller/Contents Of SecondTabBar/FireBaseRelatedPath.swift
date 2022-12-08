@@ -13,4 +13,6 @@ struct FireBaseRelatedPath {
 //    firestore内の投稿データの保存場所
     static let PostPath = "posts"
     static let profileData = "profileData"
+//    コメントの保存場所
+    static let commentsPath = "comments"
 }

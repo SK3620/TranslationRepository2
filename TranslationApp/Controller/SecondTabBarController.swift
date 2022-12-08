@@ -22,7 +22,7 @@ class SecondTabBarController: UITabBarController {
         tabBar.tintColor = UIColor.systemBlue
         // タブバーの背景色を設定
         let appearance = UITabBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray5
+        appearance.backgroundColor = UIColor.systemGray6
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
     }

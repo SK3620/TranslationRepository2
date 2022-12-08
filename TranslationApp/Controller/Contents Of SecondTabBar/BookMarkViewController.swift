@@ -40,9 +40,10 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.allowsSelection = true
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+
         //        自分のuidで絞り込んだドキュメントを取得
+        SVProgressHUD.show(withStatus: "データ取得中...")
         if let user = Auth.auth().currentUser {
-            SVProgressHUD.show(withStatus: "データを読み込み中...")
             //            複合インデックスを作成する必要がある
             //            クエリで指定している複数のインデックスをその順にインデックスに登録する
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("bookMarks", arrayContains: user.uid).order(by: "postedDate", descending: true)
@@ -66,6 +67,9 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
 
 //            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document().collection("commentDataCollection").whereField("bookMarks", arrayContains: user.uid).order(by: "postedDate", descending: true)
 //            この処理では、firebaseに定義された保存場所を取得できない .document()の部分がおそらくダメ。
+        }
+        if Auth.auth().currentUser == nil {
+            SVProgressHUD.dismiss()
         }
     }
 

@@ -20,17 +20,18 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var contentOfPostArray: [String] = []
     // 投稿データを格納する配列
     var postArray: [PostData] = []
-//     Firestoreのリスナー
-    var listener: ListenerRegistration?
+    var filteredArr: [String] = []
+
     var secondPostArray: [SecondPostData] = []
 
     var searchBar: UISearchBar?
     var searchBarText: String?
 
+    //  willAppearで、getDocumentsメソッドを実行させないために用意する変数
+    var notExcuteGetDocumentMethod: SecondPagingViewController?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationController?.navigationBar.backgroundColor = .systemGray4
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -48,10 +49,6 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
-        print("すまほ")
-//        self.navigationController?.setNavigationBarHidden(true, animated: true)
-
         //        ログインしていなければ、returnし、ログインまたはアカウント作成を促す
         guard Auth.auth().currentUser != nil else {
             self.label.text = "アカウントを作成/ログインしてください"
@@ -60,20 +57,11 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         self.label.text = ""
 
-        guard let searchBarText = self.searchBarText else { return }
-        print("guard let 実行 \(searchBarText)")
-        self.getDocuments(searchBarText: searchBarText)
-        self.secondPagingViewController.navigationController?.setNavigationBarHidden(false, animated: false)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        print("DEBUG_PRINT: viewWillDisappear")
-        // listenerを削除して監視を停止する
-//        self.listener?.remove()
-
-//        self.secondPagingViewController.navigationController?.setNavigationBarHidden(true, animated: true)
-        print("全て")
+        if self.notExcuteGetDocumentMethod == nil, self.searchBarText != nil {
+            print("guard let 実行 \(self.searchBarText!)")
+            self.getDocuments(searchBarText: self.searchBarText!)
+            self.secondPagingViewController.navigationController?.setNavigationBarHidden(false, animated: false)
+        }
     }
 
 //    一度全ての投稿データのドキュメントを取得(whereFieldメソッドには、containsがない、arrayContainsは機能が違う）
@@ -82,38 +70,50 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.postArray = []
         self.searchBarText = searchBarText
 
-        SVProgressHUD.show(withStatus: "データを取得中だよ...")
+        print("String確認\(searchBarText)")
+
+        SVProgressHUD.show(withStatus: "データ取得中...")
         Firestore.firestore().collection(FireBaseRelatedPath.PostPath).getDocuments(completion: { querySnapshot, error in
             if let error = error {
                 print("検索結果用のドキュメントの取得に失敗しました\(error)")
-                SVProgressHUD.showInfo(withStatus: "ドキュメント取得失敗")
+                SVProgressHUD.showInfo(withStatus: "エラー")
+                SVProgressHUD.dismiss(withDelay: 1.5)
                 return
             }
             if let querySnapshot = querySnapshot {
                 print("検索結果用のドキュメント取得に成功しました")
+                if querySnapshot.isEmpty {
+                    print("querySnapshotが空でした")
+                    SVProgressHUD.showSuccess(withStatus: "検索結果 0件")
+                    SVProgressHUD.dismiss(withDelay: 1.5)
+                    return
+                }
                 self.contentOfPostArray = querySnapshot.documents.map { document in
                     //                    投稿内容を格納させる
                     let postDataForContentOfPost = PostData(document: document).contentOfPost
                     return postDataForContentOfPost!
                 }
                 print("検索結果用のドキュメント\(self.contentOfPostArray)")
-
+                self.filteredArr = []
                 //    投稿内容を格納したcontentOfPostArrayから、filterで文字列検索する
-                let filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
-                if filteredArr.isEmpty {
+                self.filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
+                print(self.filteredArr)
+                if self.filteredArr.isEmpty {
                     SVProgressHUD.showSuccess(withStatus: "検索結果 0件")
                     SVProgressHUD.dismiss(withDelay: 1.5)
 //                    self.postArray = []
                     self.tableView.reloadData()
                     return
                 }
-                self.getContentOfPostDocument(filteredArr: filteredArr)
+                self.getContentOfPostDocument(filteredArr: self.filteredArr)
             }
         })
     }
 
 //    filteredArrからwhereFieldで条件検索して、ドキュメントを取り出し、self.postArrayへ格納
     func getContentOfPostDocument(filteredArr: [String]) {
+        print(self.postArray)
+        print(filteredArr)
         for contentOfPost in filteredArr {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("contentOfPost", isEqualTo: contentOfPost).order(by: "postedDate", descending: true)
             postsRef.getDocuments(completion: { querySnapshot, error in
@@ -125,9 +125,11 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     print("getContentOfPostDocumentメソッドのドキュメント取得に成功しました")
                     querySnapshot.documents.forEach { queryDocumentSnapshot in
                         self.postArray.append(PostData(document: queryDocumentSnapshot))
+
                         SVProgressHUD.showSuccess(withStatus: "検索結果 \(self.postArray.count)件")
                         SVProgressHUD.dismiss(withDelay: 1.5)
                         self.tableView.reloadData()
+                        self.notExcuteGetDocumentMethod = nil
 
                         self.postArray.forEach {
                             print($0.documentId)
@@ -304,14 +306,15 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 print("検索結果用のドキュメント\(self.contentOfPostArray)")
 
+                self.filteredArr = []
                 //    投稿内容を格納したcontentOfPostArrayから、filterで文字列検索する
-                let filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
-                if filteredArr.isEmpty {
+                self.filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
+                if self.filteredArr.isEmpty {
                     //                    self.postArray = []
                     self.tableView.reloadData()
                     return
                 }
-                self.getContentOfPostDocumentWithoutSVProgress(filteredArr: filteredArr)
+                self.getContentOfPostDocumentWithoutSVProgress(filteredArr: self.filteredArr)
             }
         })
     }

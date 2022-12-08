@@ -40,6 +40,7 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func setProfileData() {
+        SVProgressHUD.show(withStatus: "データ取得中")
         if let user = Auth.auth().currentUser {
             Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument").getDocument { snap, error in
                 if let error = error {
@@ -50,9 +51,11 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
                 //                func data() -> [String : Any]?
                 guard let profileData = snap?.data() else { return }
                 self.profileData = profileData
+                SVProgressHUD.dismiss()
                 self.tableView.reloadData()
             }
         } else {
+            SVProgressHUD.dismiss()
             self.tableView.reloadData()
         }
     }

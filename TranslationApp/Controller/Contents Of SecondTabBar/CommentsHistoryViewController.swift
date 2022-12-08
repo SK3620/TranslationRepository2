@@ -45,7 +45,8 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         // ログイン済みか確認
-        if let user = Auth.auth().currentUser {
+        SVProgressHUD.show(withStatus: "データ取得中")
+        if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             //            タップされたドキュメントIDを指定　いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
@@ -66,7 +67,7 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         }
 
         // ログイン済みか確認
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
@@ -85,9 +86,13 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
 
                     return secondPostData
                 }
+                SVProgressHUD.dismiss()
                 self.tableView.reloadData()
                 print("tableViewがリロードされた2")
             }
+        }
+        if Auth.auth().currentUser == nil {
+            SVProgressHUD.dismiss()
         }
     }
 

@@ -36,7 +36,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         self.textView.text = self.savedTextView_text
 
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .systemGray5
+        appearance.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
@@ -95,16 +95,23 @@ class PostViewController: UIViewController, UITextViewDelegate {
             "userName": user.displayName!,
             "uid": user.uid,
         ] as [String: Any]
-        postRef.setData(postDic)
+        postRef.setData(postDic) { error in
+            if let error = error {
+                print(error)
+                SVProgressHUD.showError(withStatus: "投稿できませんでした")
+                SVProgressHUD.dismiss(withDelay: 1.5)
+                return
+            }
 
-        let value = FieldValue.arrayUnion(self.array)
-        postRef.updateData(["topic": value])
+            let value = FieldValue.arrayUnion(self.array)
+            postRef.updateData(["topic": value])
 
-        self.secondPagingViewController.savedTextView_text = ""
-        SVProgressHUD.showSuccess(withStatus: "投稿しました")
-        SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
-            self.dismiss(animated: true)
-        })
+            self.secondPagingViewController.savedTextView_text = ""
+            SVProgressHUD.showSuccess(withStatus: "投稿しました")
+            SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
+                self.dismiss(animated: true)
+            })
+        }
     }
 
     @IBAction func backButton(_: Any) {

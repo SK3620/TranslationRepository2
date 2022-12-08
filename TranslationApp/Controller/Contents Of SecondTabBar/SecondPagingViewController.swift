@@ -126,8 +126,10 @@ class SecondPagingViewController: UIViewController {
 
         if Auth.auth().currentUser == nil {
             rightBarButtonItem.isEnabled = false
+            searchBarButtonItem.isEnabled = false
         } else {
             rightBarButtonItem.isEnabled = true
+            searchBarButtonItem.isEnabled = true
         }
     }
 
@@ -142,6 +144,10 @@ class SecondPagingViewController: UIViewController {
 
         if self.navigationController!.isNavigationBarHidden {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
+            let appearance = UINavigationBarAppearance()
+            appearance.backgroundColor = UIColor.systemGray6
+            self.navigationController?.navigationBar.standardAppearance = appearance
+            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 //        navigationBar上に検索バーを設置
             self.setupSearchBarOnNavigationBar()
         } else {
@@ -211,9 +217,10 @@ class SecondPagingViewController: UIViewController {
 extension SecondPagingViewController: UISearchBarDelegate {
 //    入力された文字列をsearachViewControllerへ受け渡す。
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.pagingViewController.select(index: 0)
+        self.pagingViewController.select(index: 0, animated: true)
         searchBar.endEditing(true)
         if let searchBarText = self.searchBar.text {
+            self.searchViewController.notExcuteGetDocumentMethod = self
             self.searchViewController.getDocuments(searchBarText: searchBarText)
         }
     }

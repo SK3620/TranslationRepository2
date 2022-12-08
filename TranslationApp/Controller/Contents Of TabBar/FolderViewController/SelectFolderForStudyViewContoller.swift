@@ -30,6 +30,8 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.setNavigationBarAppearence()
+
         self.tableView.delegate = self
         self.tableView.dataSource = self
 
@@ -37,6 +39,13 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
 
         self.saveButton.isEnabled = false
         // Do any additional setup after loading the view.
+    }
+
+    func setNavigationBarAppearence() {
+        let appearence = UINavigationBarAppearance()
+        appearence.backgroundColor = .systemGray6
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
+        self.navigationController?.navigationBar.standardAppearance = appearence
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -91,11 +100,9 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
         }
 
         SVProgressHUD.showSuccess(withStatus: "'\(self.folderName!)'へ保存しました")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { () in
-            SVProgressHUD.dismiss()
+        SVProgressHUD.dismiss(withDelay: 1.5) {
+            self.dismiss(animated: true, completion: nil)
         }
-
-        dismiss(animated: true, completion: nil)
     }
 
     @IBAction func backButton(_: Any) {

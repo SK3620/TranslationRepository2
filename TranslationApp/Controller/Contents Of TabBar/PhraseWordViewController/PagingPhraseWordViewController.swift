@@ -90,9 +90,7 @@ class PagingPhraseWordViewController: UIViewController {
 
     func setItemsOnNavigationBar() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-//        let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.tappedEditBarButtonItem(_:)))
         let leftBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(self.tappedBackBarButtonItem(_:)))
-//        self.navigationItem.rightBarButtonItems = [editBarButtonItem]
         self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
         let appearence = UINavigationBarAppearance()
         appearence.backgroundColor = .systemGray6

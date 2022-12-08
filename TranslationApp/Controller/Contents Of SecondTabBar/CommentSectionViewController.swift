@@ -31,7 +31,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
 
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray5
+        appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
@@ -279,6 +279,24 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
             postRef.updateData(["likes": updateValue])
+
+            //        "comments"コレクション内のlikesも更新
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: secondPostData.uid!).whereField("stringCommentedDate", isEqualTo: secondPostData.stringCommentedDate!)
+            commentsRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("”comments”コレクション内のlikesを更新に失敗しました\(error)")
+                    SVProgressHUD.dismiss()
+                    return
+                }
+                if let querySnapshot = querySnapshot {
+                    print("”comments”コレクション内のlikesの更新に成功しました\(error)")
+                    //                単一のドキュメント
+                    querySnapshot.documents.forEach { queryDocumentSnaoshot in
+                        let documentId = PostData(document: queryDocumentSnaoshot).documentId
+                        Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(documentId).updateData(["likes": updateValue])
+                    }
+                }
+            }
         }
     }
 

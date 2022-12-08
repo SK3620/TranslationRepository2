@@ -31,6 +31,11 @@ class InputCommentViewController: UIViewController {
 
         self.textView.text = self.textView_text
 
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
         // Do any additional setup after loading the view.
     }
 
@@ -86,8 +91,6 @@ class InputCommentViewController: UIViewController {
 
 //    コメント投稿ボタン
     @IBAction func postCommentButton(_: Any) {
-        SVProgressHUD.show()
-
         let user = Auth.auth().currentUser
         let textView_text = self.textView.text
 
@@ -96,6 +99,9 @@ class InputCommentViewController: UIViewController {
             SVProgressHUD.dismiss(withDelay: 1.5)
             return
         }
+
+//        今日の日付を格納
+        let today: String = self.getToday()
         //        uidとdisplayNameとコメント投稿日とコメント内容を格納する配列
 //            更新データ作成
         let postDic = [
@@ -103,22 +109,25 @@ class InputCommentViewController: UIViewController {
             "userName": user!.displayName!,
             "comment": textView_text!,
             "commentedDate": FieldValue.serverTimestamp(),
+            "stringCommentedDate": today,
+//            "uid/commentedDate": "\(user!.uid):\(FieldValue.serverTimestamp())",
+//            "documentIdForPosts": self.postData.documentId
         ] as [String: Any]
 
 //            ネスト化された配列にservserTimestampは使えないっぽい
         Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").addDocument(data: postDic, completion: { error in
             if let error = error {
-                print("追加失敗\(error)")
+                print("エラー\(error)")
                 return
             } else {
-                print("追加成功")
-                self.listner()
+//                self.getDocumentIdForComments(uidCommentedDate: uidCommentedDate, textView_text: textView_text!)
+                self.wrtieCommentsInFireStore(textView_text: textView_text!, today: today)
+                self.getDocuments()
             }
         })
     }
 
-    func listner() {
-        print("リスナー")
+    func getDocuments() {
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
@@ -146,6 +155,7 @@ class InputCommentViewController: UIViewController {
                 SVProgressHUD.showSuccess(withStatus: "コメントしました")
                 SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
                     self.dismiss(animated: true)
+                    self.textView.text = ""
                 })
             }
         }
@@ -160,9 +170,60 @@ class InputCommentViewController: UIViewController {
                 "numberOfComments": numberOfComments,
             ]
             postRef.setData(postDic, merge: true)
-            SVProgressHUD.showSuccess(withStatus: "コメントを投稿しました")
-            self.textView.text = ""
+//            SVProgressHUD.showSuccess(withStatus: "コメントを投稿しました")
+//            self.textView.text = ""
         }
+    }
+
+//    func getDocumentIdForComments(uidCommentedDate: String, textView_text: String){
+//           if let user = Auth.auth().currentUser {
+//               let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid/commentedDate", isEqualTo: uidCommentedDate)
+//               commentsRef.getDocuments { querySnapshot, error in
+//                   if let error = error {
+//                       print("ドキュメントID取得失敗\(error)")
+//                   }
+//                   if let querySnapshot = querySnapshot {
+//                       print("ドキュメントID取得成功")
+    //   //                    このquerySnapshotは単一のドキュメント
+//                       querySnapshot.documents.forEach { querySnapshotDocument in
+//                           let documentIdForComments = querySnapshotDocument.documentID
+//                           self.wrtieCommentsInFireStore(textView_text: textView_text, uidCommentedDate: uidCommentedDate, documentIdForComments: documentIdForComments)
+//                       }
+//                   }
+//               }
+//           }
+//       }
+
+//    新たなfirestoreの保存場所"comments"に、コメント内容などを書き込む
+    func wrtieCommentsInFireStore(textView_text: String, today: String) {
+        if let user = Auth.auth().currentUser {
+            let commentsDic = [
+                "uid": user.uid,
+                "userName": user.displayName!,
+                "comment": textView_text,
+                "commentedDate": FieldValue.serverTimestamp(),
+                "stringCommentedDate": today,
+                "documentIdForPosts": self.postData.documentId,
+            ] as [String: Any]
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
+            commentsRef.setData(commentsDic, merge: false) { error in
+                if let error = error {
+                    print("”comments”にへの書き込み失敗\(error)")
+                } else {
+                    print("”comments”への書き込み成功")
+                }
+            }
+        }
+    }
+
+//    今日の日付を返すメソッド
+    func getToday() -> String {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        // DateFormatter を使用して書式とロケールを指定する
+        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHms", options: 0, locale: Locale(identifier: "ja_JP"))
+        let today = dateFormatter.string(from: date)
+        return today
     }
 
 //    更新データを作成

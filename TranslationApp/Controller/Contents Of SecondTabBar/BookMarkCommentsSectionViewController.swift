@@ -41,6 +41,7 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
 
+        SVProgressHUD.show(withStatus: "データ取得中")
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
@@ -82,9 +83,13 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
 
                     return secondPostData
                 }
+                SVProgressHUD.dismiss()
                 self.tableView.reloadData()
                 print("tableViewがリロードされた2")
             }
+        }
+        if Auth.auth().currentUser == nil {
+            SVProgressHUD.dismiss()
         }
     }
 
@@ -103,6 +108,8 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
         cell.commentButton.isHidden = true
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
+        cell.cellEditButton.isEnabled = false
+        cell.cellEditButton.isHidden = true
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.heartButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
