@@ -3494,6 +3494,36 @@
             </objects>
             <point key="canvasLocation" x="13410" y="-1610"/>
         </scene>
+        <!--Others Posted Comments History View Controller-->
+        <scene sceneID="ciM-MH-3wF">
+            <objects>
+                <viewController storyboardIdentifier="OthersPostedCommentsHistory" id="zaR-WJ-dm6" customClass="OthersPostedCommentsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="To0-Cf-Qb4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dzO-71-aV5">
+                                <rect key="frame" x="0.0" y="44" width="375" height="768"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="lTL-zb-XWW"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lTL-zb-XWW" firstAttribute="trailing" secondItem="dzO-71-aV5" secondAttribute="trailing" id="1VT-bu-9lW"/>
+                            <constraint firstAttribute="bottom" secondItem="dzO-71-aV5" secondAttribute="bottom" id="4Nu-if-ude"/>
+                            <constraint firstItem="dzO-71-aV5" firstAttribute="leading" secondItem="lTL-zb-XWW" secondAttribute="leading" id="LB6-VJ-x4i"/>
+                            <constraint firstItem="dzO-71-aV5" firstAttribute="top" secondItem="lTL-zb-XWW" secondAttribute="top" id="fgw-0e-vcV"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="dzO-71-aV5" id="arw-cD-GR6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8nz-a7-hwD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="12925.6" y="-907.38916256157643"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="WSH-uE-k8K">
             <objects>

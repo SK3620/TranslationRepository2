@@ -60,6 +60,7 @@
 		83966BF728E8C1060098A39E /* CustomCellForStudy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83966BF528E8C1060098A39E /* CustomCellForStudy.swift */; };
 		83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83966BF628E8C1060098A39E /* CustomCellForStudy.xib */; };
 		8396C0B32916ABF40034EDE7 /* CommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */; };
+		83975FE52941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83975FE42941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift */; };
 		839CDF632906939100F78F44 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 839CDF622906939100F78F44 /* Alamofire */; };
 		839EBCEC2924C540003E8393 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 839EBCEB2924C540003E8393 /* Alamofire */; };
 		839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */; };
@@ -160,6 +161,7 @@
 		83966BF528E8C1060098A39E /* CustomCellForStudy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForStudy.swift; sourceTree = "<group>"; };
 		83966BF628E8C1060098A39E /* CustomCellForStudy.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForStudy.xib; sourceTree = "<group>"; };
 		8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsHistoryViewController.swift; sourceTree = "<group>"; };
+		83975FE42941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersPostedCommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
 		839FBA3228BA101200BB64A5 /* FolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
 		839FBA3828BA5C8900BB64A5 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
@@ -426,6 +428,7 @@
 				8385E72B2918C92F00DBDBAC /* OthersProfileViewController.swift */,
 				8385E72D2918D12800DBDBAC /* OthersIntroductionViewController.swift */,
 				8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */,
+				83975FE42941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift */,
 				8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */,
 				83BC07EF291B84FC001FFE61 /* OthersBookMarkViewController.swift */,
 				83BC07F1291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift */,
@@ -649,6 +652,7 @@
 				8385E7302918D14300DBDBAC /* OthersPostsHistoryViewController.swift in Sources */,
 				8356E9572905584500FD9236 /* Record.swift in Sources */,
 				83BC07F2291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift in Sources */,
+				83975FE52941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift in Sources */,
 				83966BF728E8C1060098A39E /* CustomCellForStudy.swift in Sources */,
 				8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */,
 				83C2921B29137FF000386EE9 /* PostData.swift in Sources */,
