@@ -11,8 +11,8 @@ import UIKit
 
 class InputCommentViewController: UIViewController {
     @IBOutlet var textView: UITextView!
-
-//    タイムライン画面でタップされたcellの単一のドキュメント
+    @IBOutlet var postCommentButton: UIBarButtonItem!
+    //    タイムライン画面でタップされたcellの単一のドキュメント
     var postData: PostData!
 
     var listener: ListenerRegistration!
@@ -20,11 +20,16 @@ class InputCommentViewController: UIViewController {
     var secondPostArray: [SecondPostData] = []
 
     var commentSectionViewController: CommentSectionViewController!
+    var commentsHistoryViewController: CommentsHistoryViewController!
+    var bookMarkCommentsSectionViewController: BookMarkCommentsSectionViewController?
+    var othersCommentsHistoryViewController: OthersCommentsHistoryViewController?
 
     var textView_text: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.postCommentButton.isEnabled = true
 
         self.textView.endEditing(false)
         self.setDoneToolBar()
@@ -62,8 +67,20 @@ class InputCommentViewController: UIViewController {
         // listenerを削除して監視を停止する
         self.listener?.remove()
 
-        if let textView_text = self.textView.text {
-            self.commentSectionViewController.comment = textView_text
+        if let textView_text = self.textView.text, let commentSectionViewController = self.commentSectionViewController {
+            commentSectionViewController.comment = textView_text
+        }
+
+        if let textView_text = self.textView.text, let commentsHistroyViewController = self.commentsHistoryViewController {
+            commentsHistroyViewController.comment = textView_text
+        }
+
+        if let textView_text = self.textView.text, let bookMarkCommentsSectionViewController = self.bookMarkCommentsSectionViewController {
+            bookMarkCommentsSectionViewController.comment = textView_text
+        }
+
+        if let textView_text = self.textView.text, let othersCommentsHistoryViewController = self.othersCommentsHistoryViewController {
+            othersCommentsHistoryViewController.comment = textView_text
         }
 
 //        // ログイン済みか確認
@@ -94,9 +111,12 @@ class InputCommentViewController: UIViewController {
         let user = Auth.auth().currentUser
         let textView_text = self.textView.text
 
+        self.postCommentButton.isEnabled = false
+
         guard user != nil, textView_text!.isEmpty != true else {
             SVProgressHUD.showError(withStatus: "コメントを入力してください")
             SVProgressHUD.dismiss(withDelay: 1.5)
+            self.postCommentButton.isEnabled = true
             return
         }
 
@@ -121,10 +141,73 @@ class InputCommentViewController: UIViewController {
                 return
             } else {
 //                self.getDocumentIdForComments(uidCommentedDate: uidCommentedDate, textView_text: textView_text!)
-                self.wrtieCommentsInFireStore(textView_text: textView_text!, today: today)
+//                self.wrtieCommentsInFireStore(textView_text: textView_text!, today: today)
+//                self.getDocuments()
                 self.getDocuments()
+                self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
             }
         })
+    }
+
+    func excuteMultipleAsyncProcesses(textView_text: String, today: String) {
+        let dispatchGroup = DispatchGroup()
+//        直列で実行
+        let dispatchQueue = DispatchQueue(label: "queue")
+
+        dispatchGroup.enter()
+        dispatchQueue.async {
+            if let user = Auth.auth().currentUser {
+                let commentsDic = [
+                    "uid": user.uid,
+                    "userName": user.displayName!,
+                    "comment": textView_text,
+                    "commentedDate": FieldValue.serverTimestamp(),
+                    "stringCommentedDate": today,
+                    "documentIdForPosts": self.postData.documentId,
+                ] as [String: Any]
+                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
+                commentsRef.setData(commentsDic, merge: false) { error in
+                    if let error = error {
+                        print("”comments”にへの書き込み失敗\(error)")
+                    } else {
+                        print("”comments”への書き込み成功")
+                        dispatchGroup.leave()
+                        print("一つ目のleave()を実行しました")
+                    }
+                }
+            }
+        }
+
+        dispatchGroup.enter()
+        dispatchQueue.async {
+            if Auth.auth().currentUser != nil {
+                let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+                let numberOfComments = String(self.secondPostArray.count)
+                let postDic = [
+                    "numberOfComments": numberOfComments,
+                ]
+                postRef.setData(postDic, merge: true) { error in
+                    if let error = error {
+                        print("エラーでした\(error)")
+                    } else {
+                        dispatchGroup.leave()
+                        print("二つ目のleave()を実行しました")
+                    }
+                }
+
+                dispatchGroup.notify(queue: .main) {
+                    print("非同期処理終了")
+                    SVProgressHUD.showSuccess(withStatus: "コメントしました")
+                    SVProgressHUD.dismiss(withDelay: 1.5) {
+                        self.textView.text = ""
+                        self.textView.endEditing(true)
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                }
+                //            SVProgressHUD.showSuccess(withStatus: "コメントを投稿しました")
+                //            self.textView.text = ""
+            }
+        }
     }
 
     func getDocuments() {
@@ -149,14 +232,24 @@ class InputCommentViewController: UIViewController {
                 }
                 print("self.secondPostArray確認する\(self.secondPostArray)")
                 self.writeNumberOfCommentsInFireStore()
-                self.commentSectionViewController.secondPostArray = self.secondPostArray
-                self.commentSectionViewController.reloadTableView()
-                self.textView.endEditing(true)
-                SVProgressHUD.showSuccess(withStatus: "コメントしました")
-                SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
-                    self.dismiss(animated: true)
-                    self.textView.text = ""
-                })
+
+                if let commentSectionViewController = self.commentSectionViewController { commentSectionViewController.secondPostArray = self.secondPostArray
+                    commentSectionViewController.reloadTableView()
+                }
+                if let commentsHistroyViewController = self.commentsHistoryViewController {
+                    commentsHistroyViewController.secondPostArray = self.secondPostArray
+                    commentsHistroyViewController.reloadTableView()
+                }
+
+                if let bookMarkCommentsSectionViewController = self.bookMarkCommentsSectionViewController {
+                    bookMarkCommentsSectionViewController.secondPostArray = self.secondPostArray
+                    bookMarkCommentsSectionViewController.reloadTableView()
+                }
+
+                if let othersCommentsHistoryViewController = self.othersCommentsHistoryViewController {
+                    othersCommentsHistoryViewController.secondPostArray = self.secondPostArray
+                    othersCommentsHistoryViewController.reloadTableView()
+                }
             }
         }
     }
@@ -206,11 +299,16 @@ class InputCommentViewController: UIViewController {
                 "documentIdForPosts": self.postData.documentId,
             ] as [String: Any]
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
-            commentsRef.setData(commentsDic, merge: false) { error in
-                if let error = error {
-                    print("”comments”にへの書き込み失敗\(error)")
-                } else {
-                    print("”comments”への書き込み成功")
+            SVProgressHUD.showSuccess(withStatus: "コメントしました")
+            SVProgressHUD.dismiss(withDelay: 1.5) {
+                commentsRef.setData(commentsDic, merge: false) { error in
+                    if let error = error {
+                        print("”comments”にへの書き込み失敗\(error)")
+                    } else {
+                        print("”comments”への書き込み成功")
+                        self.dismiss(animated: true)
+                        self.textView.text = ""
+                    }
                 }
             }
         }

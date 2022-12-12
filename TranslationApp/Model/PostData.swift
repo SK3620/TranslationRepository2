@@ -27,6 +27,7 @@ class PostData: NSObject {
 //    var commentedDate: Date?
     var stringCommentedDate: String?
     var documentIdForPosts: String?
+    var commentedDate: Date?
 
     init(document: QueryDocumentSnapshot) {
         print("postDataクラスが実行された")
@@ -77,6 +78,9 @@ class PostData: NSObject {
 
         self.stringCommentedDate = postDic["stringCommentedDate"] as? String
         self.documentIdForPosts = postDic["documentIdForPosts"] as? String
+
+        let date = postDic["commentedDate"] as? Timestamp
+        self.commentedDate = date?.dateValue()
     }
 
 //    CommentSectionViewController画面で単一のドキュメントを監視した時

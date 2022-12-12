@@ -63,10 +63,16 @@ class CustomCellForTimeLine: UITableViewCell {
 
         // 日時の表示
         self.postedDateLabel.text = ""
-        if let date = postData.postedDate {
+        if let postedDate = postData.postedDate {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy.M.d HH:mm"
-            let dateString = formatter.string(from: date)
+            let dateString = formatter.string(from: postedDate)
+            self.postedDateLabel.text = dateString
+        }
+        if let commentedDate = postData.commentedDate {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy.M.d HH:mm"
+            let dateString = formatter.string(from: commentedDate)
             self.postedDateLabel.text = dateString
         }
 

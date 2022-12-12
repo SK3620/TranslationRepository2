@@ -46,19 +46,19 @@ class OthersProfileViewController: UIViewController {
         let othersPostedCommentsHistoryViewController = storyboard?.instantiateViewController(withIdentifier: "OthersPostedCommentsHistory") as! OthersPostedCommentsHistoryViewController
         othersPostedCommentsHistoryViewController.postData = self.postData
 
-        let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "OthersNC2") as! UINavigationController
-        let othersBookMarkViewController = navigationController2.viewControllers[0] as! OthersBookMarkViewController
-        othersBookMarkViewController.postData = self.postData
+//        let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "OthersNC2") as! UINavigationController
+//        let othersBookMarkViewController = navigationController2.viewControllers[0] as! OthersBookMarkViewController
+//        othersBookMarkViewController.postData = self.postData
 //        プロフィール画像設定
         self.setImageFromStorage()
 
         othersIntroductionViewController.title = "自己紹介"
         navigationController.title = "投稿履歴"
         othersPostedCommentsHistoryViewController.title = "コメント履歴"
-        navigationController2.title = "ブックマーク"
+//        navigationController2.title = "ブックマーク"
 
 //        pagingViewControllerのインスタンス生成
-        let pagingViewController = PagingViewController(viewControllers: [othersIntroductionViewController, navigationController, othersPostedCommentsHistoryViewController, navigationController2])
+        let pagingViewController = PagingViewController(viewControllers: [othersIntroductionViewController, navigationController, othersPostedCommentsHistoryViewController])
 
 //        Adds the specified view controller as a child of the current view controller.
         addChild(pagingViewController)

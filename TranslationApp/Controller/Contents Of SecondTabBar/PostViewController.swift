@@ -23,6 +23,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var pronunciationButton: UIButton!
     @IBOutlet var certificationButton: UIButton!
     @IBOutlet var etcButton: UIButton!
+    @IBOutlet var postButton: UIBarButtonItem!
 
     var secondPagingViewController: SecondPagingViewController!
     var savedTextView_text: String = ""
@@ -32,6 +33,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.postButton.isEnabled = true
         self.label1.text = "下の項目から関連のあるトピックを追加できます"
         self.textView.text = self.savedTextView_text
 
@@ -84,8 +86,10 @@ class PostViewController: UIViewController, UITextViewDelegate {
         if self.textView.text.isEmpty {
             SVProgressHUD.showError(withStatus: "投稿内容を入力してください")
             SVProgressHUD.dismiss(withDelay: 1.5)
+            self.postButton.isEnabled = true
             return
         }
+        self.postButton.isEnabled = false
 
         let user = Auth.auth().currentUser!
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document()
@@ -95,22 +99,18 @@ class PostViewController: UIViewController, UITextViewDelegate {
             "userName": user.displayName!,
             "uid": user.uid,
         ] as [String: Any]
-        postRef.setData(postDic) { error in
-            if let error = error {
-                print(error)
-                SVProgressHUD.showError(withStatus: "投稿できませんでした")
-                SVProgressHUD.dismiss(withDelay: 1.5)
-                return
+        SVProgressHUD.showSuccess(withStatus: "投稿しました")
+        SVProgressHUD.dismiss(withDelay: 1.5) {
+            postRef.setData(postDic) { error in
+                if let error = error {
+                    print("エラーでした\(error)")
+                    return
+                }
+                let value = FieldValue.arrayUnion(self.array)
+                postRef.updateData(["topic": value])
+                self.secondPagingViewController.savedTextView_text = ""
+                self.dismiss(animated: true, completion: nil)
             }
-
-            let value = FieldValue.arrayUnion(self.array)
-            postRef.updateData(["topic": value])
-
-            self.secondPagingViewController.savedTextView_text = ""
-            SVProgressHUD.showSuccess(withStatus: "投稿しました")
-            SVProgressHUD.dismiss(withDelay: 1.5, completion: { () in
-                self.dismiss(animated: true)
-            })
         }
     }
 

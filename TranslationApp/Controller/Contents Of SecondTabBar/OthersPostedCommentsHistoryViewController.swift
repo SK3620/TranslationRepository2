@@ -32,7 +32,7 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
 
         self.navigationController?.setNavigationBarHidden(false, animated: false)
 
-        SVProgressHUD.show(withStatus: "データ取得中")
+        SVProgressHUD.show(withStatus: "データ取得中...")
         if Auth.auth().currentUser != nil {
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: self.postData.uid!).order(by: "commentedDate", descending: true)
             self.listener = commentsRef.addSnapshotListener { querySnapshot, error in
@@ -83,13 +83,80 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
         cell.cellEditButton.isHidden = true
         cell.bookMarkButton.isEnabled = false
         cell.bookMarkButton.isHidden = true
-        cell.bubbleButton.isEnabled = false
-        cell.bubbleButton.isHidden = true
+        cell.copyButton.isEnabled = false
+        cell.copyButton.isHidden = true
         cell.commentButton.isEnabled = false
         cell.commentButton.isHidden = true
         cell.bubbleLabel.isHidden = true
 
+        //        コメント吹き出しボタンをコピーボタンに変える。
+        cell.bubbleButton.isEnabled = true
+        cell.bubbleButton.isHidden = false
+        cell.setButtonImage(button: cell.bubbleButton, systemName: "doc.on.doc")
+        cell.bubbleButton.tintColor = .systemBlue
+        cell.bubbleButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
+
+        cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
+
         return cell
+    }
+
+    @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
+        print("DEBUG_PRINT: likeボタンがタップされました。")
+
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.postArray[indexPath!.row]
+        print("postData確認\(postData)")
+
+        // likesを更新する
+        if let myid = Auth.auth().currentUser?.uid {
+            // 更新データを作成する
+            var updateValue: FieldValue
+            if postData.isLiked {
+                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
+                updateValue = FieldValue.arrayRemove([myid])
+            } else {
+                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
+                updateValue = FieldValue.arrayUnion([myid])
+            }
+            // likesに更新データを書き込む
+            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(postData.documentId)
+            postRef.updateData(["likes": updateValue])
+
+//            "posts"コレクション内の"commentDataCollection"内のlikesを更新する
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection").whereField("uid", isEqualTo: postData.uid!).whereField("stringCommentedDate", isEqualTo: postData.stringCommentedDate!)
+            postsRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("”commentDataCollection内のlikesの更新に失敗しました。\(error)")
+                    SVProgressHUD.dismiss()
+                    return
+                }
+                if let querySnapshot = querySnapshot {
+                    print("”commentDataCollection”内のlikesの更新に成功しました。")
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        let documentId = PostData(document: queryDocumentSnapshot).documentId
+                        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection").document(documentId).updateData(["likes": updateValue])
+                    }
+                }
+            }
+        }
+    }
+
+    @objc func tappedCopyButton(_: UIButton, forEvent event: UIEvent) {
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.postArray[indexPath!.row]
+        let comment = postData.comment
+        UIPasteboard.general.string = comment
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
     /*

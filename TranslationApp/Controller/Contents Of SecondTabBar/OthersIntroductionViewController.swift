@@ -39,6 +39,7 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
 
     func getProfileDataDocument() {
         print("実行だ")
+        SVProgressHUD.show(withStatus: "データ取得中...")
         Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(self.postData.uid!)'sProfileDocument").getDocument(completion: { queryDocument, error in
             if let error = error {
                 print("ドキュメント取得失敗\(error)")
@@ -46,6 +47,7 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
             if let queryDocument = queryDocument?.data() {
                 print("取得成功\(queryDocument)")
                 self.profileData = queryDocument
+                SVProgressHUD.dismiss()
                 self.tableView.reloadData()
             }
         })

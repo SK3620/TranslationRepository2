@@ -107,6 +107,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
+        cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
 
@@ -190,6 +191,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
     @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
         print("bookMakrタップされた")
+
         // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
@@ -197,22 +199,47 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
         // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
-
         // bookMarkを更新する
         if let myid = Auth.auth().currentUser?.uid {
             // 更新データを作成する
-            var updateValue: FieldValue
+
             if postData.isBookMarked {
-                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
-                updateValue = FieldValue.arrayRemove([myid])
+                let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
+                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
+                    let updateValue = FieldValue.arrayRemove([myid])
+                    let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                    SVProgressHUD.showSuccess(withStatus: "登録解除")
+                    SVProgressHUD.dismiss(withDelay: 1.0) {
+                        postRef.updateData(["bookMarks": updateValue])
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
             } else {
                 // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
-                updateValue = FieldValue.arrayUnion([myid])
+                let updateValue = FieldValue.arrayUnion([myid])
+                // bookMarksに更新データを書き込む
+                let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
+                SVProgressHUD.dismiss(withDelay: 1.0, completion: {
+                    postRef.updateData(["bookMarks": updateValue])
+                })
             }
-            // bookMarksに更新データを書き込む
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
-            postRef.updateData(["bookMarks": updateValue])
         }
+    }
+
+    @objc func tappedCopyButton(_: UIButton, forEvent event: UIEvent) {
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.postArray[indexPath!.row]
+        let contentOfPost = postData.contentOfPost
+        UIPasteboard.general.string = contentOfPost
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {

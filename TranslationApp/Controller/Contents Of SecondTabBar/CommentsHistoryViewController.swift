@@ -18,6 +18,8 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
     var listener2: ListenerRegistration?
     var secondPostArray: [SecondPostData] = []
 
+    var comment: String = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -104,6 +106,10 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         self.listener2?.remove()
     }
 
+    func reloadTableView() {
+        self.tableView.reloadData()
+    }
+
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
         if Auth.auth().currentUser != nil {
             return self.secondPostArray.count + 1
@@ -115,8 +121,8 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
 
-        cell.commentButton.isEnabled = false
-        cell.commentButton.isHidden = true
+        cell.commentButton.isEnabled = true
+        cell.commentButton.isHidden = false
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
         cell.cellEditButton.isEnabled = false
@@ -124,6 +130,8 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
+        cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
+        cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton(_:forEvent:)), for: .touchUpInside)
 
         if indexPath.row == 0 {
             cell.setPostData(self.postData)
@@ -132,9 +140,12 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
 
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
         cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
-        cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
         cell2.bookMarkButton.isEnabled = false
         cell2.bookMarkButton.isHidden = true
+
+        cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
+        cell2.copyButton.addTarget(self, action: #selector(self.tappedCopyButtonInComment(_:forEvent:)), for: .touchUpInside)
+
         return cell2
     }
 
@@ -158,6 +169,8 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
+
+//
         }
     }
 
@@ -169,18 +182,39 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         // bookMarkを更新する
         if let myid = Auth.auth().currentUser?.uid {
             // 更新データを作成する
-            var updateValue: FieldValue
             if postData.isBookMarked {
-                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
-                updateValue = FieldValue.arrayRemove([myid])
+                let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
+                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
+                    let updateValue = FieldValue.arrayRemove([myid])
+                    let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                    SVProgressHUD.showSuccess(withStatus: "登録解除")
+                    SVProgressHUD.dismiss(withDelay: 1.0) {
+                        postRef.updateData(["bookMarks": updateValue])
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
             } else {
                 // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
-                updateValue = FieldValue.arrayUnion([myid])
+                let updateValue = FieldValue.arrayUnion([myid])
+                // bookMarksに更新データを書き込む
+                let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
+                SVProgressHUD.dismiss(withDelay: 1.0) {
+                    postRef.updateData(["bookMarks": updateValue])
+                }
             }
-            // bookMarksに更新データを書き込む
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
-            postRef.updateData(["bookMarks": updateValue])
         }
+    }
+
+    @objc func tappedCopyButton(_: UIButton, forEvent _: UIEvent) {
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.postData
+        let contentOfPost = postData!.contentOfPost
+        UIPasteboard.general.string = contentOfPost
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
     @objc func tappedHeartButtonInComment(_: UIButton, forEvent event: UIEvent) {
@@ -208,7 +242,56 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
             postRef.updateData(["likes": updateValue])
+
+//            "commnets"コレクション内のlikesを更新
+            let commnetsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: secondPostData.uid!).whereField("stringCommentedDate", isEqualTo: secondPostData.stringCommentedDate!)
+            commnetsRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("”comments”コレクション内のlikesの更新に失敗しました、エラー内容は\(error)")
+                    SVProgressHUD.dismiss()
+                    return
+                }
+                if let querySnapshot = querySnapshot {
+                    print("”commentsコレクション内のlikesの更新に成功しました。")
+
+                    if querySnapshot.isEmpty {
+                        print("からでした")
+                    }
+
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        let documentId = SecondPostData(document: queryDocumentSnapshot).documentId
+
+                        Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(documentId!).updateData(["likes": updateValue])
+                    }
+                }
+            }
         }
+    }
+
+    @objc func tappedCopyButtonInComment(_: UIButton, forEvent event: UIEvent) {
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+        // 配列からタップされたインデックスのデータを取り出す
+        let secondPostData = self.secondPostArray[indexPath!.row - 1]
+        let comment = secondPostData.comment
+        UIPasteboard.general.string = comment
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
+    }
+
+    @objc func tappedCommentButton(_: UIButton, forEvent _: UIEvent) {
+        let postData = self.postData
+        let navigationController = storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
+        if let sheet = navigationController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
+        let inputCommentViewContoller = navigationController.viewControllers[0] as! InputCommentViewController
+        inputCommentViewContoller.postData = postData
+        inputCommentViewContoller.commentsHistoryViewController = self
+        inputCommentViewContoller.textView_text = self.comment
+        present(navigationController, animated: true, completion: nil)
     }
     /*
      // MARK: - Navigation

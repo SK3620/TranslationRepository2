@@ -1272,6 +1272,7 @@
                         <outlet property="grammerButton" destination="oU7-DJ-Rm9" id="1Zh-hK-Vex"/>
                         <outlet property="label1" destination="NmA-LA-Ejd" id="PS8-WW-0Di"/>
                         <outlet property="listeningButton" destination="enz-6C-sYz" id="nCu-FY-S8k"/>
+                        <outlet property="postButton" destination="3nD-4e-7F4" id="wgH-zG-el3"/>
                         <outlet property="pronunciationButton" destination="XUz-DZ-kkD" id="xed-Ta-Wa9"/>
                         <outlet property="textView" destination="n5w-4O-sJh" id="MO5-YR-BmP"/>
                         <outlet property="wordButton" destination="IcC-4f-GMq" id="vYt-82-KYs"/>
@@ -1779,6 +1780,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="postCommentButton" destination="OA9-QB-x8p" id="8FS-e7-wty"/>
                         <outlet property="textView" destination="ho2-H3-zQK" id="xGJ-qa-30l"/>
                     </connections>
                 </viewController>
@@ -3502,7 +3504,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dzO-71-aV5">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dzO-71-aV5">
                                 <rect key="frame" x="0.0" y="44" width="375" height="768"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>

@@ -35,7 +35,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
-        self.title = "詳細"
+        self.title = "コメント欄"
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -152,7 +152,6 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
 
         if indexPath.row == 0 {
             cell.setPostData(self.postData)
-            print("postDataの値確認\(self.postData)")
             return cell
         }
 
@@ -190,17 +189,30 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         // bookMarkを更新する
         if let myid = Auth.auth().currentUser?.uid {
             // 更新データを作成する
-            var updateValue: FieldValue
+
             if postData.isBookMarked {
-                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
-                updateValue = FieldValue.arrayRemove([myid])
+                let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
+                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
+                    let updateValue = FieldValue.arrayRemove([myid])
+                    let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                    SVProgressHUD.showSuccess(withStatus: "登録解除")
+                    SVProgressHUD.dismiss(withDelay: 1.0) {
+                        postRef.updateData(["bookMarks": updateValue])
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
             } else {
                 // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
-                updateValue = FieldValue.arrayUnion([myid])
+                let updateValue = FieldValue.arrayUnion([myid])
+                // bookMarksに更新データを書き込む
+                let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
+                SVProgressHUD.dismiss(withDelay: 1.0, completion: {
+                    postRef.updateData(["bookMarks": updateValue])
+                })
             }
-            // bookMarksに更新データを書き込む
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
-            postRef.updateData(["bookMarks": updateValue])
         }
     }
 

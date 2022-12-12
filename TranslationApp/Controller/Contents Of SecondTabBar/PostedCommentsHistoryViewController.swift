@@ -88,11 +88,16 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
         cell.commentButton.isHidden = true
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
-        cell.bubbleButton.isEnabled = false
-        cell.bubbleButton.isHidden = true
         cell.copyButton.isEnabled = false
         cell.copyButton.isHidden = true
         cell.bubbleLabel.isHidden = true
+
+//        コメント吹き出しボタンをコピーボタンに変える。
+        cell.bubbleButton.isEnabled = true
+        cell.bubbleButton.isHidden = false
+        cell.setButtonImage(button: cell.bubbleButton, systemName: "doc.on.doc")
+        cell.bubbleButton.tintColor = .systemBlue
+        cell.bubbleButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
 
         cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
 
@@ -259,6 +264,18 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
         }
     }
 
+    @objc func tappedCopyButton(_: UIButton, forEvent event: UIEvent) {
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = self.postArray[indexPath!.row]
+        let comment = postData.comment
+        UIPasteboard.general.string = comment
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
+    }
     /*
      // MARK: - Navigation
 

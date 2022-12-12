@@ -16,6 +16,7 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
     var listener: ListenerRegistration?
     var listener2: ListenerRegistration?
     var secondPostArray: [SecondPostData] = []
+    var comment: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,8 +43,7 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
 
         self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
-        // ログイン済みか確認
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             //            タップされたドキュメントIDを指定　いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
@@ -63,8 +63,7 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
             }
         }
 
-        // ログイン済みか確認
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
@@ -97,6 +96,10 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
         self.listener2?.remove()
     }
 
+    func reloadTableView() {
+        self.tableView.reloadData()
+    }
+
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
         return self.secondPostArray.count + 1
     }
@@ -104,8 +107,8 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
 
-        cell.commentButton.isEnabled = false
-        cell.commentButton.isHidden = true
+        cell.commentButton.isEnabled = true
+        cell.commentButton.isHidden = false
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
         cell.cellEditButton.isEnabled = false
@@ -113,6 +116,7 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
+        cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton(_:forEvent:)), for: .touchUpInside)
 
         if indexPath.row == 0 {
             cell.setPostData(self.postData)
@@ -137,17 +141,29 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
         // bookMarkを更新する
         if let myid = Auth.auth().currentUser?.uid {
             // 更新データを作成する
-            var updateValue: FieldValue
             if postData.isBookMarked {
-                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
-                updateValue = FieldValue.arrayRemove([myid])
+                let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
+                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
+                    let updateValue = FieldValue.arrayRemove([myid])
+                    let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                    SVProgressHUD.showSuccess(withStatus: "登録解除")
+                    SVProgressHUD.dismiss(withDelay: 1.0) {
+                        postRef.updateData(["bookMarks": updateValue])
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
             } else {
                 // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
-                updateValue = FieldValue.arrayUnion([myid])
+                let updateValue = FieldValue.arrayUnion([myid])
+                // bookMarksに更新データを書き込む
+                let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
+                SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
+                SVProgressHUD.dismiss(withDelay: 1.0) {
+                    postRef.updateData(["bookMarks": updateValue])
+                }
             }
-            // bookMarksに更新データを書き込む
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
-            postRef.updateData(["bookMarks": updateValue])
         }
     }
 
@@ -198,7 +214,43 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
             postRef.updateData(["likes": updateValue])
+
+            //            "commnets"コレクション内のlikesを更新
+            let commnetsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: secondPostData.uid!).whereField("stringCommentedDate", isEqualTo: secondPostData.stringCommentedDate!)
+            commnetsRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("”comments”コレクション内のlikesの更新に失敗しました、エラー内容は\(error)")
+                    SVProgressHUD.dismiss()
+                    return
+                }
+                if let querySnapshot = querySnapshot {
+                    print("”commentsコレクション内のlikesの更新に成功しました。")
+
+                    if querySnapshot.isEmpty {
+                        print("からでした")
+                    }
+
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        let documentId = SecondPostData(document: queryDocumentSnapshot).documentId
+
+                        Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(documentId!).updateData(["likes": updateValue])
+                    }
+                }
+            }
         }
+    }
+
+    @objc func tappedCommentButton(_: UIButton, forEvent _: UIEvent) {
+        let postData = self.postData
+        let navigationController = storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
+        if let sheet = navigationController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
+        let inputCommentViewContoller = navigationController.viewControllers[0] as! InputCommentViewController
+        inputCommentViewContoller.postData = postData
+        inputCommentViewContoller.othersCommentsHistoryViewController = self
+        inputCommentViewContoller.textView_text = self.comment
+        present(navigationController, animated: true, completion: nil)
     }
 }
 
