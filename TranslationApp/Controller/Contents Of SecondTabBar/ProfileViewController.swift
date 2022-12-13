@@ -38,6 +38,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
         if Auth.auth().currentUser == nil {
 //            ログインしていない時の処理
             let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController

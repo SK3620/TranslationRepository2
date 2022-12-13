@@ -24,6 +24,8 @@ class SecondPagingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
         let navigationController3 = storyboard?.instantiateViewController(withIdentifier: "NC3") as! UINavigationController
         let timeLineViewController = navigationController3.viewControllers[0] as! TimeLineViewController
         timeLineViewController.secondPagingViewController = self

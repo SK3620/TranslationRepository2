@@ -117,7 +117,8 @@ class OthersProfileViewController: UIViewController {
     }
 
     func getProfileDataDocument() {
-        Firestore.firestore().collection(FireBaseRelatedPath.profileData).document(self.postData.uid!).getDocument(completion: { queryDocument, error in
+        print("postDataのuid確認\(self.postData.uid)")
+        Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(self.postData.uid!)'sProfileDocument").getDocument(completion: { queryDocument, error in
             if let error = error {
                 print("ドキュメント取得失敗\(error)")
             }

@@ -25,6 +25,8 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.allowsSelection = false

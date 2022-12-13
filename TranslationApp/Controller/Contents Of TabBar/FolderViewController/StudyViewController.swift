@@ -63,6 +63,8 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
         self.setNavigationBar()
         // 利用可能な英語音声の確認
         let voices = AVSpeechSynthesisVoice.speechVoices()

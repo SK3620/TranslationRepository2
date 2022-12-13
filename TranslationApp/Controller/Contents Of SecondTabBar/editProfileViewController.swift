@@ -44,7 +44,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
-        self.title = "編集"
+        self.title = "プロフィール編集"
         //        順番が大事
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.profileViewController.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -85,8 +85,8 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt _: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell") as! CustomCellForEditProfile
 
-        self.textFieldArr = [cell.userNameTextField, cell.genderTextField, cell.ageTextField, cell.whereYouLiveTextField, cell.birthdayTextField]
-        self.textViewArr = [cell.workTextView, cell.introductionTextView, cell.academicHistoryTextView, cell.hobbyTextView, cell.visitedCountryTextView, cell.wannaVisitCountryTextView, cell.etcTextView]
+        self.textFieldArr = [cell.userNameTextField, cell.genderTextField, cell.ageTextField, cell.workTextField, cell.whereYouLiveTextField, cell.birthdayTextField]
+        self.textViewArr = [cell.introductionTextView, cell.academicHistoryTextView, cell.hobbyTextView, cell.visitedCountryTextView, cell.wannaVisitCountryTextView, cell.etcTextView]
         self.setDoneToolBar(textFieldArr: self.textFieldArr, textViewArr: self.textViewArr)
 
         cell.setProfileData(profileData: self.profileData)
@@ -135,15 +135,15 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
 
         self.genderText = self.textFieldArr[1].text
         self.ageText = self.textFieldArr[2].text
-        self.workText = self.textViewArr[0].text
-        self.introductionText = self.textViewArr[1].text
-        self.academicHistoryText = self.textViewArr[2].text
-        self.hobbyText = self.textViewArr[3].text
-        self.visitedCountryText = self.textViewArr[4].text
-        self.wannaVisitCountryText = self.textViewArr[5].text
-        self.whereYouLiveText = self.textFieldArr[3].text
-        self.birthdaytext = self.textFieldArr[4].text
-        self.etcText = self.textViewArr[6].text
+        self.workText = self.textFieldArr[3].text
+        self.introductionText = self.textViewArr[0].text
+        self.academicHistoryText = self.textViewArr[1].text
+        self.hobbyText = self.textViewArr[2].text
+        self.visitedCountryText = self.textViewArr[3].text
+        self.wannaVisitCountryText = self.textViewArr[4].text
+        self.whereYouLiveText = self.textFieldArr[4].text
+        self.birthdaytext = self.textFieldArr[5].text
+        self.etcText = self.textViewArr[5].text
 
         //        もっとbetterな処理方法があるはず。↓
         if self.userNameText == "" {

@@ -34,7 +34,6 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-
         self.title = "コメント欄"
 
         self.tableView.delegate = self
@@ -52,6 +51,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.secondTabBarController.tabBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         // ログイン済みか確認
         if Auth.auth().currentUser != nil {

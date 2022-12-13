@@ -1707,7 +1707,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bdh-Kl-MgE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3084" y="-2300"/>
+            <point key="canvasLocation" x="3084" y="-2503"/>
         </scene>
         <!--Comment Section View Controller-->
         <scene sceneID="efR-bN-Mkx">
@@ -1739,7 +1739,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1E-cZ-NfV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3084" y="-3007"/>
+            <point key="canvasLocation" x="3084" y="-3406"/>
         </scene>
         <!--コメントする-->
         <scene sceneID="QQc-Wk-zDp">

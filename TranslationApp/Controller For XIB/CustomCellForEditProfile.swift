@@ -12,7 +12,7 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
     @IBOutlet var userNameTextField: UITextField!
     @IBOutlet var genderTextField: UITextField!
     @IBOutlet var ageTextField: UITextField!
-    @IBOutlet var workTextView: UITextView!
+    @IBOutlet var workTextField: UITextField!
     @IBOutlet var introductionTextView: UITextView!
     @IBOutlet var academicHistoryTextView: UITextView!
     @IBOutlet var hobbyTextView: UITextView!
@@ -30,8 +30,8 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
 
         self.userNameTextField.delegate = self
 
-        let textFieldArr: [UITextField]! = [userNameTextField, genderTextField, ageTextField, birthdayTextField, whereYouLiveTextField]
-        let textViewArr: [UITextView]! = [workTextView, introductionTextView, academicHistoryTextView, hobbyTextView, visitedCountryTextView, wannaVisitCountryTextView, etcTextView]
+        let textFieldArr: [UITextField]! = [userNameTextField, genderTextField, ageTextField, workTextField, birthdayTextField, whereYouLiveTextField]
+        let textViewArr: [UITextView]! = [introductionTextView, academicHistoryTextView, hobbyTextView, visitedCountryTextView, wannaVisitCountryTextView, etcTextView]
         self.setTextFieldAndViewDesign(textFieldArr: textFieldArr, textViewArr: textViewArr)
     }
 
@@ -66,7 +66,7 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
         self.userNameTextField.text = Auth.auth().currentUser?.displayName!
         self.genderTextField.text = profileData["gender"] as? String
         self.ageTextField.text = profileData["age"] as? String
-        self.workTextView.text = profileData["work"] as? String
+        self.workTextField.text = profileData["work"] as? String
         self.introductionTextView.text = profileData["introduction"] as? String
         self.academicHistoryTextView.text = profileData["academicHistory"] as? String
         self.hobbyTextView.text = profileData["hobby"] as? String

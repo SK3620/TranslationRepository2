@@ -105,6 +105,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     //    アカウント作成ボタン
     @IBAction func createAccountButton(_: Any) {
+        self.mailAddressTextField.endEditing(true)
+        self.passwordTextField.endEditing(true)
+        self.displayNameTextField.endEditing(true)
         if let address = self.mailAddressTextField.text, let password = self.passwordTextField.text, let displayName = displayNameTextField.text {
             if address.isEmpty || password.isEmpty || displayName.isEmpty {
                 print("何かが入力されていません")
@@ -168,6 +171,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     //    ログインボタン
     @IBAction func loginButton(_: Any) {
+        self.mailAddressTextField.endEditing(true)
+        self.passwordTextField.endEditing(true)
         if let address = mailAddressTextField.text, let password = passwordTextField.text {
             // アドレスとパスワード名のいずれかでも入力されていない時は何もしない
             if address.isEmpty || password.isEmpty {
@@ -208,6 +213,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
 
+//    アカウント削除ボタン
     @IBAction func deleteAccountButton(_: Any) {
         let user = Auth.auth().currentUser!
         let alert = UIAlertController(title: "アカウントを削除する", message: "アカウントを削除した場合、'\(user.displayName!)'さんのすべての投稿やコメントなどが削除されます", preferredStyle: .alert)
@@ -263,8 +269,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         var documentIdArray: [String] = []
         // 非同期のグループ作成
         let dispatchGroup = DispatchGroup()
-        // 並列で実行する.concurrent
-        let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)
+        // 直列実行する.concurrentではない
+        let dispatchQueue = DispatchQueue(label: "queue")
 
         //        一つ目の処理はprofileDataの削除
         dispatchGroup.enter()
@@ -306,7 +312,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 print("”comments”内のコメントデータドキュメントの削除に失敗しました\(error)")
                                 return
                             } else {
-                                print("”comments”内のコメントデータドキュメントの削除に成功しました leave()を実行します")
+                                print("”comments”内のコメントデータドキュメントの削除に成功しました")
                                 countedQuerySnapshot = countedQuerySnapshot - 1
                                 if countedQuerySnapshot == 0 {
                                     dispatchGroup.leave()
@@ -361,6 +367,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                     print("ドキュメント数が0だったため、commentDataDocumentを削除する処理が実行されました")
                                     self.deleteCommentDataDocumentInPosts(documentIdArray: documentIdArray)
                                     print("leave()")
+                                    print("documentIdArray配列の値確認\(documentIdArray)")
                                     dispatchGroup.leave()
                                 }
                             }
@@ -370,19 +377,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
 
+//        "posts"コレクション内にあるコメントデータドキュメントを削除する
 //        dispatchGroup.enter()
 //        dispatchQueue.async {
-//            guard documentIdArray.isEmpty else {
-//                print("documentIdArrayが空でした。leave()してretrun")
+//            print("postsコレクション内にあるコメントデータドキュメントの削除開始")
+//            var countedDocumentIdArray: Int = documentIdArray.count
+//            print("documentIdArrayに値はありますか？\(documentIdArray)")
+//            if documentIdArray.isEmpty {
+//                print("documentIdArrが空でした leave()を実行します")
 //                dispatchGroup.leave()
 //                return
 //            }
-//            var commentDataDocumentArr: [
 //            for documentId in documentIdArray {
+//                countedDocumentIdArray = countedDocumentIdArray - 1
 //                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentId).collection("commentDataCollection")
 //                commentsRef.getDocuments { querySnapshot, error in
 //                    guard error == nil else {
-//                        print("コメントデータドキュメントの取得失敗\(error!)")
+//                        print("コメントデータドキュメントの取得失敗 leave'()を実行します\(error!)")
+//                        completion(error)
 //                        return
 //                    }
 //                    print("コメントデータドキュメントの取得成功")
@@ -391,16 +403,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 //                            print("取得したコメントデータドキュメントがisEmptyだったためreturnします")
 //                            return
 //                        }
-//                        var countedQuerySnapshot: Int = querySnapshot.documents.count
+//
 //                        querySnapshot.documents.forEach { queryDocumentSnapahot in
 //                            queryDocumentSnapahot.reference.delete { error in
 //                                if let error = error {
-//                                    print("コメントデータのドキュメント削除失敗\(error)")
+//                                    print("コメントデータのドキュメント削除失敗")
+//                                    completion(error)
+//                                    return
 //                                } else {
 //                                    print("コメントデータのドキュメント削除成功")
-//    //                                dispatch.leave()は最後のコメントデータドキュメントが削除された時に実行させる
-//                                    countedQuerySnapshot = countedQuerySnapshot - 1
-//                                    if countedQuerySnapshot == 0 {
+//                                    //                                dispatch.leave()は最後のコメントデータドキュメントが削除された時に実行させる
+//                                    print("countedDocumentIdArrayの確認：\(countedDocumentIdArray)")
+//                                    if countedDocumentIdArray == 0 {
+//                                        print("countedDocumentIdArrayが０のため、leave()を実行します")
 //                                        dispatchGroup.leave()
 //                                    }
 //                                }
@@ -459,10 +474,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 print("コメントデータドキュメントの取得成功")
                 if let querySnapshot = querySnapshot {
                     if querySnapshot.isEmpty {
-                        print("取得したコメントデータドキュメントがisEmptyだったためreturnします")
-                        return
+                        print("取得したコメントデータドキュメントがisEmptyでした")
                     }
-                    var countedQuerySnapshot: Int = querySnapshot.documents.count
+//                    var countedQuerySnapshot: Int = querySnapshot.documents.count
                     querySnapshot.documents.forEach { queryDocumentSnapahot in
                         queryDocumentSnapahot.reference.delete { error in
                             if let error = error {
@@ -471,8 +485,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                             } else {
                                 print("コメントデータのドキュメント削除成功")
 //                                dispatch.leave()は最後のコメントデータドキュメントが削除された時に実行させる
-                                countedQuerySnapshot = countedQuerySnapshot - 1
-                                if countedQuerySnapshot == 0 {}
+//                                countedQuerySnapshot = countedQuerySnapshot - 1
+//                                if countedQuerySnapshot == 0 {}
                             }
                         }
                     }

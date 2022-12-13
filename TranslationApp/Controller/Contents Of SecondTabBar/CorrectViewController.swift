@@ -44,7 +44,8 @@ class CorrectViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewWillAppear(true)
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        //        ログインしていなければ、returnし、ログインまたはアカウント作成を促す
+
+        // ログインしていなければ、returnし、ログインまたはアカウント作成を促す
         guard Auth.auth().currentUser != nil else {
             self.label.text = "アカウントを作成/ログインしてください"
             self.tableView.reloadData()

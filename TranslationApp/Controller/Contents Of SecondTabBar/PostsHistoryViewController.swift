@@ -32,6 +32,8 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
@@ -115,7 +117,12 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     @objc func tappedCellEditButton(_: UIButton, forEvent event: UIEvent) {
-        //        投稿内容削除処理
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        let postData = self.postArray[indexPath!.row]
+
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { _ in
             alert.dismiss(animated: true, completion: nil)
@@ -123,11 +130,6 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         let deleteAction = UIAlertAction(title: "削除", style: .destructive) { _ in
             // 削除機能のコード
             SVProgressHUD.show()
-            let touch = event.allTouches?.first
-            let point = touch!.location(in: self.tableView)
-            let indexPath = self.tableView.indexPathForRow(at: point)
-
-            let postData = self.postArray[indexPath!.row]
             Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId).delete { error in
                 if let error = error {
                     print("投稿データの削除失敗\(error)")

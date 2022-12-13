@@ -28,6 +28,8 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)

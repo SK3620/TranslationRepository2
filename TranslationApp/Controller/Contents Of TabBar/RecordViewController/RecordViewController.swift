@@ -34,6 +34,8 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
         self.addButton.isEnabled = false
 
         self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
@@ -63,7 +65,6 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         if self.tabBarController1 != nil, studyViewController == nil {
             self.tabBarController1.setBarButtonItem3()
             self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
-            navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
             let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
             self.tabBarController1.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
         }
