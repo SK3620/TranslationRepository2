@@ -52,7 +52,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             //            複合インデックスを作成する必要がある
             //            クエリで指定している複数のインデックスをその順にインデックスに登録する
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true)
-            postsRef.addSnapshotListener { querySnapshot, error in
+            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
                 if let error = error {
                     print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                     return
@@ -79,6 +79,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         }
 
         if Auth.auth().currentUser == nil {
+            self.postArray = []
             self.tableView.reloadData()
             SVProgressHUD.dismiss()
         }
@@ -129,30 +130,42 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         }
         let deleteAction = UIAlertAction(title: "削除", style: .destructive) { _ in
             // 削除機能のコード
-            SVProgressHUD.show()
-            Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId).delete { error in
-                if let error = error {
-                    print("投稿データの削除失敗\(error)")
-                } else {
-                    print("投稿データの削除成功")
-                }
-            }
+            let dispatchGroup = DispatchGroup()
+            let dispatchQueue = DispatchQueue(label: "queue")
 
-            Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId).collection("commentDataCollection").getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("コメントの取得失敗/またはコメントがありません\(error)")
+            SVProgressHUD.showSuccess(withStatus: "削除完了")
+            SVProgressHUD.dismiss(withDelay: 1.0) {
+                dispatchGroup.enter()
+                dispatchQueue.async {
+                    Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId).delete { error in
+                        if let error = error {
+                            print("投稿データの削除失敗\(error)")
+                        } else {
+                            print("投稿データの削除成功")
+                            dispatchGroup.leave()
+                        }
+                    }
                 }
-                if let querySnapshot = querySnapshot {
-                    print("コメントを取得しました\(querySnapshot)")
-                    querySnapshot.documents.forEach {
-                        $0.reference.delete(completion: { error in
-                            if let error = error {
-                                print("コメント削除失敗\(error)")
-                            } else {
-                                print("コメント削除成功")
-                                SVProgressHUD.dismiss()
+
+                dispatchGroup.notify(queue: .main) {
+                    let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: postData.documentId)
+
+                    commentsRef.getDocuments { querySnapshot, error in
+                        if let error = error {
+                            print("コメントの取得失敗/またはコメントがありません\(error)")
+                        }
+                        if let querySnapshot = querySnapshot {
+                            print("コメントを取得しました\(querySnapshot)")
+                            querySnapshot.documents.forEach {
+                                $0.reference.delete(completion: { error in
+                                    if let error = error {
+                                        print("コメント削除失敗\(error)")
+                                    } else {
+                                        print("コメント削除成功")
+                                    }
+                                })
                             }
-                        })
+                        }
                     }
                 }
             }

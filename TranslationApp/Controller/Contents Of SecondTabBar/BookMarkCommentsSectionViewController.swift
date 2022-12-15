@@ -72,7 +72,7 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
             print("postRef確認\(postsRef)")
             self.listener2 = postsRef.addSnapshotListener { querySnapshot, error in
                 if let error = error {
@@ -97,8 +97,16 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
             }
         }
         if Auth.auth().currentUser == nil {
+            self.secondPostArray = []
             SVProgressHUD.dismiss()
+            self.tableView.reloadData()
         }
+    }
+
+    override func viewWillDisappear(_: Bool) {
+        super.viewWillDisappear(true)
+        self.listener?.remove()
+        self.listener2?.remove()
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -226,32 +234,9 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
                 // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // likesに更新データを書き込む
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
-            postRef.updateData(["likes": updateValue])
-
             //            "commnets"コレクション内のlikesを更新
-            let commnetsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: secondPostData.uid!).whereField("stringCommentedDate", isEqualTo: secondPostData.stringCommentedDate!)
-            commnetsRef.getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("”comments”コレクション内のlikesの更新に失敗しました、エラー内容は\(error)")
-                    SVProgressHUD.dismiss()
-                    return
-                }
-                if let querySnapshot = querySnapshot {
-                    print("”commentsコレクション内のlikesの更新に成功しました。")
-
-                    if querySnapshot.isEmpty {
-                        print("からでした")
-                    }
-
-                    querySnapshot.documents.forEach { queryDocumentSnapshot in
-                        let documentId = SecondPostData(document: queryDocumentSnapshot).documentId
-
-                        Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(documentId!).updateData(["likes": updateValue])
-                    }
-                }
-            }
+            let commnetsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(secondPostData.documentId!)
+            commnetsRef.updateData(["likes": updateValue])
         }
     }
 

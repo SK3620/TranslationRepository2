@@ -112,14 +112,16 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
         }
         let deleteAction = UIAlertAction(title: "削除", style: .destructive) { _ in
             // 削除機能のコード
-            SVProgressHUD.show()
-            let touch = event.allTouches?.first
-            let point = touch!.location(in: self.tableView)
-            let indexPath = self.tableView.indexPathForRow(at: point)
+            SVProgressHUD.showSuccess(withStatus: "削除完了")
+            SVProgressHUD.dismiss(withDelay: 1.0) {
+                let touch = event.allTouches?.first
+                let point = touch!.location(in: self.tableView)
+                let indexPath = self.tableView.indexPathForRow(at: point)
 
-            let postData = self.postArray[indexPath!.row]
-            self.excuteMultipleAsyncProcesses(postData: postData) { error in
-                print("エラーでした。エラー内容：\(error)")
+                let postData = self.postArray[indexPath!.row]
+                self.excuteMultipleAsyncProcesses(postData: postData) { error in
+                    print("エラーでした。エラー内容：\(error)")
+                }
             }
         }
         alert.addAction(deleteAction)
@@ -131,41 +133,7 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
         let dispatchGruop = DispatchGroup()
         //        直列で実行 .concurrentではない
         let dispatchQueue = DispatchQueue(label: "queue")
-
-        var numberOfCommentsDocuments = 0
-
-        dispatchGruop.enter()
-        dispatchQueue.async {
-            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection").whereField("uid", isEqualTo: postData.uid!).whereField("stringCommentedDate", isEqualTo: postData.stringCommentedDate!)
-            commentsRef.getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("コメントの取得失敗")
-                    completion(error)
-                    SVProgressHUD.dismiss()
-                    dispatchGruop.leave()
-                    return
-                }
-                if let querySnapshot = querySnapshot {
-                    print("コメントを取得しました\(querySnapshot)")
-                    //                    単一のドキュメント
-                    querySnapshot.documents.forEach { queryDocumentSnapshot in
-                        queryDocumentSnapshot.reference.delete(completion: { error in
-                            if let error = error {
-                                print("コメント削除失敗")
-                                completion(error)
-                                dispatchGruop.leave()
-                                return
-                            } else {
-                                print("コメント削除成功")
-                                let data = PostData(document: queryDocumentSnapshot).documentId
-                                print("コメンデータドキュメントID確認\(data)")
-                                dispatchGruop.leave()
-                            }
-                        })
-                    }
-                }
-            }
-        }
+        var updatedNumberOfComments = "0"
 
         dispatchGruop.enter()
         dispatchQueue.async {
@@ -175,73 +143,38 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
                     completion(error)
                 } else {
                     print("コメントデータの削除成功")
-                    dispatchGruop.leave()
-                    //                    SVProgressHUD.dismiss(withDelay: 1.5) {
-                    //                        self.tableView.reloadData()
-                    //                    }
-                }
-            }
-        }
-
-        dispatchGruop.enter()
-        dispatchQueue.async {
-            let postsRefForComments = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection")
-            postsRefForComments.getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("postsRefForCommentsにて、ドキュメントの取得失敗　エラー内容\(error)")
-                }
-                if let querySnapshot = querySnapshot {
-                    if querySnapshot.isEmpty {
-                        print("postsRefForCommentsにて、ドキュメントが空でした ドキュメント数の確認：\(querySnapshot.documents.count)")
-                        numberOfCommentsDocuments = querySnapshot.documents.count
-                        dispatchGruop.leave()
-                    }
-                    print("postsRefForCommentsにて、ドキュメント数の確認：\(querySnapshot.documents.count)")
-                    numberOfCommentsDocuments = querySnapshot.documents.count
-                    dispatchGruop.leave()
-                }
-            }
-        }
-
-        dispatchGruop.notify(queue: .main, execute: {
-            //            コメント数の更新
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!)
-            postsRef.getDocument { documentSnapshot, error in
-                if let error = error {
-                    print("documentIdForPostsドキュメント取得失敗")
-                    completion(error)
-                    dispatchGruop.leave()
-                    return
-                }
-                if let documentSnapshot = documentSnapshot {
-                    print("documentIdForPsotsドキュメント取得成功")
-                    let postDic = documentSnapshot.data()
-                    let stringNumberOfComments: String = postDic!["numberOfComments"] as! String
-                    let numberOfComments = Int(stringNumberOfComments)!
-                    print("コメント数の確認\(numberOfComments)")
-                    //                    let updatedNumberOfComments = String(numberOfComments - 1)
-                    let updatedNumberOfComments = numberOfCommentsDocuments
-                    print("updatedNumberOfCommentsのコメント数の確認：\(updatedNumberOfComments)")
-                    let updatedPostDic = [
-                        "numberOfComments": updatedNumberOfComments,
-                    ]
-                    SVProgressHUD.showSuccess(withStatus: "削除完了")
-                    SVProgressHUD.dismiss(withDelay: 1.5) {
-                        postsRef.setData(updatedPostDic, merge: true) { error in
-                            if let error = error {
-                                print("updatedNumberOfCommentsの更新失敗")
-                                completion(error)
-                                return
-                            } else {
-                                print("updatedNumberOfCommentsの更新成功")
-                                self.tableView.reloadData()
-                            }
-                            //
+                    let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: postData.documentIdForPosts!)
+                    commentsRef.getDocuments { querySnapshot, error in
+                        if let error = error {
+                            print("エラーでした：エラー内容\(error)")
+                        }
+                        if let querySnapshot = querySnapshot {
+                            updatedNumberOfComments = String(querySnapshot.documents.count)
+                            dispatchGruop.leave()
                         }
                     }
                 }
             }
-        })
+
+            dispatchGruop.notify(queue: .main, execute: {
+                //            コメント数の更新
+                let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!)
+                let updatedPostDic = [
+                    "numberOfComments": updatedNumberOfComments,
+                ]
+                postsRef.setData(updatedPostDic, merge: true) { error in
+                    if let error = error {
+                        print("updatedNumberOfCommentsの更新失敗")
+                        completion(error)
+                        return
+                    } else {
+                        print("updatedNumberOfCommentsの更新成功")
+                        self.tableView.reloadData()
+                    }
+                }
+
+            })
+        }
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
@@ -270,23 +203,6 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
-
-//            "posts"コレクション内の"commentDataCollection"内のlikesを更新する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection").whereField("uid", isEqualTo: postData.uid!).whereField("stringCommentedDate", isEqualTo: postData.stringCommentedDate!)
-            postsRef.getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("”commentDataCollection内のlikesの更新に失敗しました。\(error)")
-                    SVProgressHUD.dismiss()
-                    return
-                }
-                if let querySnapshot = querySnapshot {
-                    print("”commentDataCollection”内のlikesの更新に成功しました。")
-                    querySnapshot.documents.forEach { queryDocumentSnapshot in
-                        let documentId = PostData(document: queryDocumentSnapshot).documentId
-                        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection").document(documentId).updateData(["likes": updateValue])
-                    }
-                }
-            }
         }
     }
 
@@ -302,8 +218,7 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
     }
-    /*
-     // MARK: - Navigation
+    /*     // MARK: - Navigation
 
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

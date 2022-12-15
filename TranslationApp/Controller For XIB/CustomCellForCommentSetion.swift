@@ -55,6 +55,11 @@ class CustomCellForCommentSetion: UITableViewCell {
             self.postedDateLabel.text = dateString
         }
 
+//        なぜかtimeStampがnilなので、いまはstringCommentedDateで妥協
+        if self.postedDateLabel.text == "" || self.postedDateLabel.text == nil {
+            self.postedDateLabel.text = secondPostData.stringCommentedDate
+        }
+
         self.commentLabel.text = secondPostData.comment!
 
         // いいね数の表示

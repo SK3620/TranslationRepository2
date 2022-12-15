@@ -127,23 +127,6 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
             // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
-
-//            "posts"コレクション内の"commentDataCollection"内のlikesを更新する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection").whereField("uid", isEqualTo: postData.uid!).whereField("stringCommentedDate", isEqualTo: postData.stringCommentedDate!)
-            postsRef.getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("”commentDataCollection内のlikesの更新に失敗しました。\(error)")
-                    SVProgressHUD.dismiss()
-                    return
-                }
-                if let querySnapshot = querySnapshot {
-                    print("”commentDataCollection”内のlikesの更新に成功しました。")
-                    querySnapshot.documents.forEach { queryDocumentSnapshot in
-                        let documentId = PostData(document: queryDocumentSnapshot).documentId
-                        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!).collection("commentDataCollection").document(documentId).updateData(["likes": updateValue])
-                    }
-                }
-            }
         }
     }
 

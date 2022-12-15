@@ -98,6 +98,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
             "postedDate": FieldValue.serverTimestamp(),
             "userName": user.displayName!,
             "uid": user.uid,
+            "numberOfComments": "0",
         ] as [String: Any]
         SVProgressHUD.showSuccess(withStatus: "投稿しました")
         SVProgressHUD.dismiss(withDelay: 1.5) {

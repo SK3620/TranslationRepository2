@@ -21,6 +21,7 @@
 		8356E95929055BCC00FD9236 /* PhraseWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95829055BCC00FD9236 /* PhraseWord.swift */; };
 		8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95B2906407500FD9236 /* FirstMemo.swift */; };
 		8356E95E290642D800FD9236 /* Speak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95D290642D800FD9236 /* Speak.swift */; };
+		835B38DE294B5DDA00D42F50 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 835B38DD294B5DDA00D42F50 /* Alamofire */; };
 		836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 836D1F89290A52360075AFEE /* GoogleService-Info.plist */; };
 		836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */; };
 		83724E9529190BD40074ED1E /* ButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83724E9429190BD40074ED1E /* ButtonModel.swift */; };
@@ -226,6 +227,7 @@
 				8382FD4628F987B20021715C /* Alamofire in Frameworks */,
 				83734B75291E62F8007B9A72 /* Alamofire in Frameworks */,
 				83724E98291926EA0074ED1E /* Alamofire in Frameworks */,
+				835B38DE294B5DDA00D42F50 /* Alamofire in Frameworks */,
 				8342F77728FD760E005C8FD5 /* Alamofire in Frameworks */,
 				83A2E1AE29018C5D00F1117A /* Alamofire in Frameworks */,
 				839EBCEC2924C540003E8393 /* Alamofire in Frameworks */,
@@ -471,7 +473,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				836F9AAA2908D01C00EB9C70 /* ShellScript */,
-				C51EEC6C2B147680FCD529D9 /* [CP] Embed Pods Frameworks */,
+				0478560E8A2E188F05607B71 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -493,6 +495,7 @@
 				838085F62926728C00574D2D /* Alamofire */,
 				839238022930D0C0005B0741 /* Alamofire */,
 				831398C1293A1395005B7B5D /* Alamofire */,
+				835B38DD294B5DDA00D42F50 /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
@@ -542,6 +545,7 @@
 				838085F52926728C00574D2D /* XCRemoteSwiftPackageReference "Alamofire" */,
 				839238012930D0C0005B0741 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				831398C0293A1395005B7B5D /* XCRemoteSwiftPackageReference "Alamofire" */,
+				835B38DC294B5DDA00D42F50 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83071CF628B91AC70003734C /* Products */;
 			projectDirPath = "";
@@ -578,6 +582,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0478560E8A2E188F05607B71 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		04B5B7BCA5BB9CCAD2CCCB20 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -616,23 +637,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "$ Pods/SwiftFormat/CommandLineTool/swiftformat .\n$ Pods/SwiftFormat/CommandLineTool/swiftformat . --self insert\n\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --self insert\n";
-		};
-		C51EEC6C2B147680FCD529D9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -973,6 +977,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		835B38DC294B5DDA00D42F50 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		83724E96291926EA0074ED1E /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1112,6 +1124,11 @@
 		8342F77628FD760E005C8FD5 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		835B38DD294B5DDA00D42F50 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		83724E97291926EA0074ED1E /* Alamofire */ = {

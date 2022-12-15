@@ -71,7 +71,9 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
 //            この処理では、firebaseに定義された保存場所を取得できない .document()の部分がおそらくダメ。
         }
         if Auth.auth().currentUser == nil {
+            self.postArray = []
             SVProgressHUD.dismiss()
+            self.tableView.reloadData()
         }
     }
 

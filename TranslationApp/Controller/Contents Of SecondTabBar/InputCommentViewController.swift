@@ -122,61 +122,81 @@ class InputCommentViewController: UIViewController {
 
 //        今日の日付を格納
         let today: String = self.getToday()
-        //        uidとdisplayNameとコメント投稿日とコメント内容を格納する配列
-//            更新データ作成
-        let postDic = [
-            "uid": user!.uid,
-            "userName": user!.displayName!,
-            "comment": textView_text!,
-            "commentedDate": FieldValue.serverTimestamp(),
-            "stringCommentedDate": today,
-//            "uid/commentedDate": "\(user!.uid):\(FieldValue.serverTimestamp())",
-//            "documentIdForPosts": self.postData.documentId
-        ] as [String: Any]
 
-//            ネスト化された配列にservserTimestampは使えないっぽい
-        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").addDocument(data: postDic, completion: { error in
-            if let error = error {
-                print("エラー\(error)")
-                return
-            } else {
-//                self.getDocumentIdForComments(uidCommentedDate: uidCommentedDate, textView_text: textView_text!)
-//                self.wrtieCommentsInFireStore(textView_text: textView_text!, today: today)
-//                self.getDocuments()
-                self.getDocuments()
-                self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
-            }
-        })
-    }
-
-    func excuteMultipleAsyncProcesses(textView_text: String, today: String) {
-        let dispatchGroup = DispatchGroup()
-//        直列で実行
-        let dispatchQueue = DispatchQueue(label: "queue")
-
-        dispatchGroup.enter()
-        dispatchQueue.async {
-            if let user = Auth.auth().currentUser {
-                let commentsDic = [
-                    "uid": user.uid,
-                    "userName": user.displayName!,
-                    "comment": textView_text,
-                    "commentedDate": FieldValue.serverTimestamp(),
-                    "stringCommentedDate": today,
-                    "documentIdForPosts": self.postData.documentId,
-                ] as [String: Any]
-                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
-                commentsRef.setData(commentsDic, merge: false) { error in
-                    if let error = error {
-                        print("”comments”にへの書き込み失敗\(error)")
-                    } else {
-                        print("”comments”への書き込み成功")
-                        dispatchGroup.leave()
-                        print("一つ目のleave()を実行しました")
-                    }
+        if let user = Auth.auth().currentUser {
+            let commentsDic = [
+                "uid": user.uid,
+                "userName": user.displayName!,
+                "comment": textView_text!,
+                "commentedDate": FieldValue.serverTimestamp(),
+                "stringCommentedDate": today,
+                "documentIdForPosts": self.postData.documentId,
+            ] as [String: Any]
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
+            commentsRef.setData(commentsDic, merge: false) { error in
+                if let error = error {
+                    print("”comments”にへの書き込み失敗\(error)")
+                } else {
+                    print("”comments”への書き込み成功")
+                    self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
                 }
             }
         }
+
+        //        uidとdisplayNameとコメント投稿日とコメント内容を格納する配列
+//            更新データ作成
+//        let postDic = [
+//            "uid": user!.uid,
+//            "userName": user!.displayName!,
+//            "comment": textView_text!,
+//            "commentedDate": FieldValue.serverTimestamp(),
+//            "stringCommentedDate": today
+//        ] as [String: Any]
+
+//            ネスト化された配列にservserTimestampは使えないっぽい
+//        Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").addDocument(data: postDic, completion: { error in
+//            if let error = error {
+//                print("エラー\(error)")
+//                return
+//            } else {
+//                self.getDocumentIdForComments(uidCommentedDate: uidCommentedDate, textView_text: textView_text!)
+//                self.wrtieCommentsInFireStore(textView_text: textView_text!, today: today)
+//                self.getDocuments()
+//                self.getDocuments()
+//                self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
+//            }
+//        })
+    }
+
+    func excuteMultipleAsyncProcesses(textView_text _: String, today _: String) {
+        print("複数の非同期処理を実行します")
+        let dispatchGroup = DispatchGroup()
+        //        直列で実行
+        let dispatchQueue = DispatchQueue(label: "queue")
+
+//        dispatchGroup.enter()
+//        dispatchQueue.async {
+//            if let user = Auth.auth().currentUser {
+//                let commentsDic = [
+//                    "uid": user.uid,
+//                    "userName": user.displayName!,
+//                    "comment": textView_text,
+//                    "commentedDate": FieldValue.serverTimestamp(),
+//                    "stringCommentedDate": today,
+//                    "documentIdForPosts": self.postData.documentId,
+//                ] as [String: Any]
+//                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
+//                commentsRef.setData(commentsDic, merge: false) { error in
+//                    if let error = error {
+//                        print("”comments”にへの書き込み失敗\(error)")
+//                    } else {
+//                        print("”comments”への書き込み成功")
+//                        dispatchGroup.leave()
+//                        print("一つ目のleave()を実行しました")
+//                    }
+//                }
+//            }
+//        }
 
         dispatchGroup.enter()
         dispatchQueue.async {
@@ -194,79 +214,161 @@ class InputCommentViewController: UIViewController {
                         print("二つ目のleave()を実行しました")
                     }
                 }
-
-                dispatchGroup.notify(queue: .main) {
-                    print("非同期処理終了")
-                    SVProgressHUD.showSuccess(withStatus: "コメントしました")
-                    SVProgressHUD.dismiss(withDelay: 1.5) {
-                        self.textView.text = ""
-                        self.textView.endEditing(true)
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                }
-                //            SVProgressHUD.showSuccess(withStatus: "コメントを投稿しました")
-                //            self.textView.text = ""
             }
         }
-    }
 
-    func getDocuments() {
-        // ログイン済みか確認
-        if Auth.auth().currentUser != nil {
-            // listenerを登録して投稿データの更新を監視する
-            // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
-            print("postRef確認\(postsRef)")
-            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
+        dispatchGroup.enter()
+        dispatchQueue.async {
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
+            commentsRef.getDocuments { querySnapshot, error in
                 if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    return
+                    print("エラーでした、commentsコレクション内のドキュメントの取得に失敗しました\(error)")
                 }
-                // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                //                mapの中のクロージャ引数documentはquerySnapshotDocumentで取り出された単一のドキュメント
-                self.secondPostArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 ここでは、自動生成（追加）されたドキュメントのIDがプリントされます。\(document.documentID)")
-                    let secondPostData = SecondPostData(document: document)
-                    print("DEBUG_PRINT: snapshotの取得が成功しました。")
-                    return secondPostData
-                }
-                print("self.secondPostArray確認する\(self.secondPostArray)")
-                self.writeNumberOfCommentsInFireStore()
-
-                if let commentSectionViewController = self.commentSectionViewController { commentSectionViewController.secondPostArray = self.secondPostArray
-                    commentSectionViewController.reloadTableView()
-                }
-                if let commentsHistroyViewController = self.commentsHistoryViewController {
-                    commentsHistroyViewController.secondPostArray = self.secondPostArray
-                    commentsHistroyViewController.reloadTableView()
-                }
-
-                if let bookMarkCommentsSectionViewController = self.bookMarkCommentsSectionViewController {
-                    bookMarkCommentsSectionViewController.secondPostArray = self.secondPostArray
-                    bookMarkCommentsSectionViewController.reloadTableView()
-                }
-
-                if let othersCommentsHistoryViewController = self.othersCommentsHistoryViewController {
-                    othersCommentsHistoryViewController.secondPostArray = self.secondPostArray
-                    othersCommentsHistoryViewController.reloadTableView()
+                if let querySnapshot = querySnapshot {
+                    var excuteLeaveAtTheEnd: Int = querySnapshot.documents.count
+                    print("commentsコレクション内のドキュメントの取得に成功しました")
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        self.secondPostArray.append(SecondPostData(document: queryDocumentSnapshot))
+                        excuteLeaveAtTheEnd = excuteLeaveAtTheEnd - 1
+                        if excuteLeaveAtTheEnd == 0 {
+                            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+                            let numberOfComments = String(self.secondPostArray.count)
+                            print("self.secondPostArray.count：\(self.secondPostArray.count)")
+                            let postDic = [
+                                "numberOfComments": numberOfComments,
+                            ]
+                            postRef.setData(postDic, merge: true) { error in
+                                if let error = error {
+                                    print("エラーでした\(error)")
+                                } else {
+                                    print("excuteLeaveATheEndのleave()を実行します")
+                                    print(self.secondPostArray[0].comment)
+                                    print(self.secondPostArray[0].commentedDate)
+                                    dispatchGroup.leave()
+                                }
+                            }
+                        }
+                    }
+                    //                    self.secondPostArray = querySnapshot.documents.map{ document in
+                    //                        let secondPostData = SecondPostData(document: document)
+                    //                        print("DEBUG_PRINT: snapshotの取得が成功しました。")
+                    //                        return secondPostData
+                    //                    }
                 }
             }
         }
+
+        //        dispatchGroup.enter()
+        //        dispatchQueue.async {
+        //            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+        //            let numberOfComments = String(self.secondPostArray.count)
+        //            print("self.secondPostArray.count：\(self.secondPostArray.count)")
+        //            let postDic = [
+        //                "numberOfComments": numberOfComments,
+        //            ]
+        //            postRef.setData(postDic, merge: true) { error in
+        //                if let error = error {
+        //                    print("エラーでした\(error)")
+        //                } else {
+        //                    print("numberOfCommentsのupdateに成功しました、leave()を実行します")
+        //                    dispatchGroup.leave()
+        //                }
+        //            }
+        //        }
+
+        dispatchGroup.notify(queue: .main) {
+            print("非同期処理完了")
+
+            if let commentSectionViewController = self.commentSectionViewController { commentSectionViewController.secondPostArray = self.secondPostArray
+                print("日付確認")
+                print(self.secondPostArray[0].commentedDate)
+                print(self.secondPostArray[0].comment)
+                print(self.secondPostArray[0].userName)
+                print(self.secondPostArray[0].uid)
+                print(self.secondPostArray[0].stringCommentedDate)
+
+                commentSectionViewController.reloadTableView()
+            }
+            if let commentsHistroyViewController = self.commentsHistoryViewController {
+                commentsHistroyViewController.secondPostArray = self.secondPostArray
+                commentsHistroyViewController.reloadTableView()
+            }
+
+            if let bookMarkCommentsSectionViewController = self.bookMarkCommentsSectionViewController {
+                bookMarkCommentsSectionViewController.secondPostArray = self.secondPostArray
+                bookMarkCommentsSectionViewController.reloadTableView()
+            }
+
+            if let othersCommentsHistoryViewController = self.othersCommentsHistoryViewController {
+                othersCommentsHistoryViewController.secondPostArray = self.secondPostArray
+                othersCommentsHistoryViewController.reloadTableView()
+            }
+            SVProgressHUD.showSuccess(withStatus: "コメントしました")
+            SVProgressHUD.dismiss(withDelay: 1.5) {
+                self.textView.text = ""
+                self.textView.endEditing(true)
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
+
+//    func getDocuments() {
+    // ログイン済みか確認
+//        if Auth.auth().currentUser != nil {
+    // listenerを登録して投稿データの更新を監視する
+    // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
+//            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
+//            print("postRef確認\(postsRef)")
+//            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
+//                if let error = error {
+//                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+//                    return
+//                }
+    // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
+    //                mapの中のクロージャ引数documentはquerySnapshotDocumentで取り出された単一のドキュメント
+//                self.secondPostArray = querySnapshot!.documents.map { document in
+//                    print("DEBUG_PRINT: document取得 ここでは、自動生成（追加）されたドキュメントのIDがプリントされます。\(document.documentID)")
+//                    let secondPostData = SecondPostData(document: document)
+//                    print("DEBUG_PRINT: snapshotの取得が成功しました。")
+//                    return secondPostData
+//                }
+//                print("self.secondPostArray確認する\(self.secondPostArray)")
+//                self.writeNumberOfCommentsInFireStore()
+//
+//                if let commentSectionViewController = self.commentSectionViewController { commentSectionViewController.secondPostArray = self.secondPostArray
+//                    commentSectionViewController.reloadTableView()
+//                }
+//                if let commentsHistroyViewController = self.commentsHistoryViewController {
+//                    commentsHistroyViewController.secondPostArray = self.secondPostArray
+//                    commentsHistroyViewController.reloadTableView()
+//                }
+//
+//                if let bookMarkCommentsSectionViewController = self.bookMarkCommentsSectionViewController {
+//                    bookMarkCommentsSectionViewController.secondPostArray = self.secondPostArray
+//                    bookMarkCommentsSectionViewController.reloadTableView()
+//                }
+//
+//                if let othersCommentsHistoryViewController = self.othersCommentsHistoryViewController {
+//                    othersCommentsHistoryViewController.secondPostArray = self.secondPostArray
+//                    othersCommentsHistoryViewController.reloadTableView()
+//                }
+//            }
+//        }
+//    }
 
 //    投稿ボタンがおされたら、コメントしたドキュメントIDの数分をfirestoreにupdateData()で書き込むメソッド（コメント数の表示のため）
-    func writeNumberOfCommentsInFireStore() {
-        if Auth.auth().currentUser != nil {
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
-            let numberOfComments = String(self.secondPostArray.count)
-            let postDic = [
-                "numberOfComments": numberOfComments,
-            ]
-            postRef.setData(postDic, merge: true)
+//    func writeNumberOfCommentsInFireStore() {
+//        if Auth.auth().currentUser != nil {
+//            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+//            let numberOfComments = String(self.secondPostArray.count)
+//            let postDic = [
+//                "numberOfComments": numberOfComments,
+//            ]
+//            postRef.setData(postDic, merge: true)
 //            SVProgressHUD.showSuccess(withStatus: "コメントを投稿しました")
 //            self.textView.text = ""
-        }
-    }
+//        }
+//    }
 
 //    func getDocumentIdForComments(uidCommentedDate: String, textView_text: String){
 //           if let user = Auth.auth().currentUser {
@@ -319,7 +421,7 @@ class InputCommentViewController: UIViewController {
         let date = Date()
         let dateFormatter = DateFormatter()
         // DateFormatter を使用して書式とロケールを指定する
-        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHms", options: 0, locale: Locale(identifier: "ja_JP"))
+        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d HH:mm", options: 0, locale: Locale(identifier: "ja_JP"))
         let today = dateFormatter.string(from: date)
         return today
     }

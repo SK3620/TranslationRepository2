@@ -65,7 +65,7 @@ class OthersBookMarkCommentsSectionViewController: UIViewController, UITableView
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
             // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
             print("postRef確認\(postsRef)")
             self.listener2 = postsRef.addSnapshotListener { querySnapshot, error in
                 if let error = error {
@@ -189,8 +189,8 @@ class OthersBookMarkCommentsSectionViewController: UIViewController, UITableView
                 updateValue = FieldValue.arrayUnion([myid])
             }
             // likesに更新データを書き込む
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
-            postRef.updateData(["likes": updateValue])
+            let commnetsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(secondPostData.documentId!)
+            commnetsRef.updateData(["likes": updateValue])
         }
     }
     /*

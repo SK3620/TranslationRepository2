@@ -38,8 +38,8 @@ class SecondPostData {
 
         self.userName = postDic["userName"] as? String
 
-        let commentedDate = postDic["commentedDate"] as? Timestamp
-        self.commentedDate = commentedDate?.dateValue()
+        let timeStamp = postDic["commentedDate"] as? Timestamp
+        self.commentedDate = timeStamp?.dateValue()
 
         self.comment = postDic["comment"] as? String
 

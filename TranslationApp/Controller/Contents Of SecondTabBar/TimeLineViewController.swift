@@ -20,6 +20,7 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     var postArray: [PostData] = []
     // Firestoreのリスナー
     var listener: ListenerRegistration?
+    var listener2: ListenerRegistration?
 
     var secondPostArray: [SecondPostData] = []
 

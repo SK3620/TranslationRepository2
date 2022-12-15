@@ -184,7 +184,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
             Auth.auth().signIn(withEmail: address, password: password) { _, error in
                 if let error = error {
-                    print("DEBUG_PRINT: " + error.localizedDescription)
+                    print("DEBUG_PRINTサインインに失敗しました: " + error.localizedDescription)
+                    print("エラー内容：\(error)")
                     SVProgressHUD.showError(withStatus: "サインインに失敗しました")
                     return
                 }
@@ -265,8 +266,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func excuteMultipleAsyncProcesses(user: User, completion: @escaping (Error?) -> Void) {
-//        documentIdを格納する配列
+        //        documentIdを格納する配列
         var documentIdArray: [String] = []
+        //        "comments"コレクション内にある"posts"コレクション内のドキュメントIDを格納する
+        var documentIdForPostsArr: [String] = []
         // 非同期のグループ作成
         let dispatchGroup = DispatchGroup()
         // 直列実行する.concurrentではない
@@ -277,18 +280,48 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         dispatchQueue.async {
             Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument").delete { error in
                 guard error == nil else { completion(error)
-//                    ここでクロージャを呼んでいる。
+                    //                    ここでクロージャを呼んでいる。
                     print("ProfileDataの削除失敗 leave()\(error!)")
                     dispatchGroup.leave()
+                    print("leave1")
                     return
                 }
                 print("ProfileDataの削除成功 leave()")
                 completion(nil)
                 dispatchGroup.leave()
+                print("leave1")
             }
         }
 
-//        二つ目は"comments"内のコメントデータドキュメントの削除
+        dispatchGroup.enter()
+        dispatchQueue.async {
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid)
+            commentsRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("エラーだよん\(error)")
+                }
+                if let querySnapshot = querySnapshot {
+                    var excuteProcessWhenZero: Int = querySnapshot.documents.count
+                    if querySnapshot.isEmpty {
+                        print("取得したquerySnapshotがからでした")
+                        dispatchGroup.leave()
+                        print("leave2")
+                    }
+                    print("コメント数更新用のドキュメント取得に成功しました")
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        documentIdForPostsArr.append(PostData(document: queryDocumentSnapshot).documentIdForPosts!)
+                        excuteProcessWhenZero = excuteProcessWhenZero - 1
+                        if excuteProcessWhenZero == 0 {
+                            //                        ここでコメント削除処理、または、dispatchGroup.leave()
+                            dispatchGroup.leave()
+                            print("leave2")
+                        }
+                    }
+                }
+            }
+        }
+
+        //        二つ目は"comments"内のコメントデータドキュメントの削除
         dispatchGroup.enter()
         dispatchQueue.async {
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid)
@@ -296,12 +329,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 if let error = error {
                     print("”comments”内のコメントデータドキュメントの取得に失敗しました、leave()を実行します。エラー内容は\(error)")
                     dispatchGroup.leave()
+                    print("leave3")
                     return
                 }
                 if let querySnapshot = querySnapshot {
                     if querySnapshot.isEmpty {
                         print("”comments”内のコメントデータドキュメントが空でした　leave()を実行します")
                         dispatchGroup.leave()
+                        print("leave3")
                         return
                     }
                     print("”comments”内のコメントデータドキュメントの取得に成功しました")
@@ -315,7 +350,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 print("”comments”内のコメントデータドキュメントの削除に成功しました")
                                 countedQuerySnapshot = countedQuerySnapshot - 1
                                 if countedQuerySnapshot == 0 {
-                                    dispatchGroup.leave()
+                                    switch documentIdForPostsArr.isEmpty {
+                                    case false:
+                                        self.updateNumberOfComments(documentIdForPostsArr: documentIdForPostsArr, completion: { () in
+                                            dispatchGroup.leave()
+                                            print("leave3")
+                                        })
+                                    case true:
+                                        dispatchGroup.leave()
+                                        print("leave3")
+                                    default:
+                                        print("エラー")
+                                    }
                                 }
                             }
                         }
@@ -324,7 +370,47 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
 
-//        三つ目の処理は投稿データの削除
+        //        dispatchGroup.enter()
+        //        dispatchQueue.async {
+        //            if documentIdForPostsArr.isEmpty {
+        //                print("documentIdForPostsが空でしたleave()を実行します")
+        //                dispatchGroup.leave()
+        //                print("leave4")
+        //            }
+        //            var excuteProcessWhenZero: Int = documentIdForPostsArr.count
+        //            for documentIdForPosts in documentIdForPostsArr {
+        //                excuteProcessWhenZero = excuteProcessWhenZero - 1
+        //                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: documentIdForPosts)
+        //                commentsRef.getDocuments { querySnapshot, error in
+        //                    if let error = error {
+        //                        print("エラーでした：エラー内容：\(error)")
+        //                    }
+        //                    if let querySnapshot = querySnapshot {
+        //                        print("コメント数更新用のドキュメント取得成功したよん")
+        //                        let updatedNumberOfComments = String(querySnapshot.documents.count)
+        //                        //                    ここでdispatch.leave()多分ここでleabe()はだめだと思う、または、このまま、コメント更新処理を書く
+        //                        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentIdForPosts)
+        //                        let postDic = [
+        //                            "numberOfComments": updatedNumberOfComments,
+        //                        ]
+        //                        if excuteProcessWhenZero == 0 {
+        //                            dispatchGroup.leave()
+        //                            print("leave4")
+        //                        }
+        //                        postsRef.updateData(postDic) { error in
+        //                            if let error = error {
+        //                                print("updatedNumberOfCommentsでエラーでした\(error)")
+        //                            } else {
+        //                                print("updatedNumberOfCommentsでコメント数の更新に成功しました")
+        //                                print("querySnapshotが空でも行われる？")
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        三つ目の処理は投稿データの削除
         dispatchGroup.enter()
         dispatchQueue.async {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid)
@@ -332,18 +418,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 guard error == nil else { completion(error)
                     print("投稿データの取得失敗 leave()\(error!)")
                     dispatchGroup.leave()
+                    print("leave5")
+
                     return
                 }
                 print("投稿データの取得成功")
-//                ここの処理はもしかたら、isEmptyを使うべきか？
+                //                ここの処理はもしかたら、isEmptyを使うべきか？
                 if let querySnapshot = querySnapshot {
                     if querySnapshot.isEmpty {
                         print("取得した投稿データがisEmptyでした leave()")
                         dispatchGroup.leave()
+                        print("leave5")
+
                         return
                     }
                     print("取得した投稿データがisEmptyではなかったため、以下の処理を実行します。")
-//                    取得したドキュメントの数を格納する定数
+                    //                    取得したドキュメントの数を格納する定数
                     var countedQuerySnapshot: Int = querySnapshot.documents.count
                     querySnapshot.documents.forEach { queryDocumentSnapshot in
                         queryDocumentSnapshot.reference.delete { error in
@@ -353,22 +443,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 print("ドキュメントの削除失敗 leave()\(error)")
                                 completion(error)
                                 dispatchGroup.leave()
+                                print("leave5")
                                 return
                             } else {
                                 print("ドキュメントの削除成功 leave()")
                                 completion(nil)
 
-//                                dispatchGroup.leave()は全ての（最後の）ドキュメント削除時に実行させる
+                                //                                dispatchGroup.leave()は全ての（最後の）ドキュメント削除時に実行させる
                                 //    querySnapshot.documets.countでforEachされるたびにcountから-1して、if文でleave()を実行させる
                                 countedQuerySnapshot = countedQuerySnapshot - 1
                                 print("ドキュメント数\(countedQuerySnapshot)")
                                 if countedQuerySnapshot == 0 {
-//                                    これで、forEachによって、dispatchGroup.leave()が何回も呼ばれることはない
+                                    //                                    これで、forEachによって、dispatchGroup.leave()が何回も呼ばれることはない
                                     print("ドキュメント数が0だったため、commentDataDocumentを削除する処理が実行されました")
-                                    self.deleteCommentDataDocumentInPosts(documentIdArray: documentIdArray)
-                                    print("leave()")
                                     print("documentIdArray配列の値確認\(documentIdArray)")
                                     dispatchGroup.leave()
+                                    print("leave5")
                                 }
                             }
                         }
@@ -377,56 +467,56 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
 
-//        "posts"コレクション内にあるコメントデータドキュメントを削除する
-//        dispatchGroup.enter()
-//        dispatchQueue.async {
-//            print("postsコレクション内にあるコメントデータドキュメントの削除開始")
-//            var countedDocumentIdArray: Int = documentIdArray.count
-//            print("documentIdArrayに値はありますか？\(documentIdArray)")
-//            if documentIdArray.isEmpty {
-//                print("documentIdArrが空でした leave()を実行します")
-//                dispatchGroup.leave()
-//                return
-//            }
-//            for documentId in documentIdArray {
-//                countedDocumentIdArray = countedDocumentIdArray - 1
-//                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentId).collection("commentDataCollection")
-//                commentsRef.getDocuments { querySnapshot, error in
-//                    guard error == nil else {
-//                        print("コメントデータドキュメントの取得失敗 leave'()を実行します\(error!)")
-//                        completion(error)
-//                        return
-//                    }
-//                    print("コメントデータドキュメントの取得成功")
-//                    if let querySnapshot = querySnapshot {
-//                        if querySnapshot.isEmpty {
-//                            print("取得したコメントデータドキュメントがisEmptyだったためreturnします")
-//                            return
-//                        }
-//
-//                        querySnapshot.documents.forEach { queryDocumentSnapahot in
-//                            queryDocumentSnapahot.reference.delete { error in
-//                                if let error = error {
-//                                    print("コメントデータのドキュメント削除失敗")
-//                                    completion(error)
-//                                    return
-//                                } else {
-//                                    print("コメントデータのドキュメント削除成功")
-//                                    //                                dispatch.leave()は最後のコメントデータドキュメントが削除された時に実行させる
-//                                    print("countedDocumentIdArrayの確認：\(countedDocumentIdArray)")
-//                                    if countedDocumentIdArray == 0 {
-//                                        print("countedDocumentIdArrayが０のため、leave()を実行します")
-//                                        dispatchGroup.leave()
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        //        "posts"コレクション内にあるコメントデータドキュメントを削除する
+        //        dispatchGroup.enter()
+        //        dispatchQueue.async {
+        //            print("postsコレクション内にあるコメントデータドキュメントの削除開始")
+        //            var countedDocumentIdArray: Int = documentIdArray.count
+        //            print("documentIdArrayに値はありますか？\(documentIdArray)")
+        //            if documentIdArray.isEmpty {
+        //                print("documentIdArrが空でした leave()を実行します")
+        //                dispatchGroup.leave()
+        //                return
+        //            }
+        //            for documentId in documentIdArray {
+        //                countedDocumentIdArray = countedDocumentIdArray - 1
+        //                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentId).collection("commentDataCollection")
+        //                commentsRef.getDocuments { querySnapshot, error in
+        //                    guard error == nil else {
+        //                        print("コメントデータドキュメントの取得失敗 leave'()を実行します\(error!)")
+        //                        completion(error)
+        //                        return
+        //                    }
+        //                    print("コメントデータドキュメントの取得成功")
+        //                    if let querySnapshot = querySnapshot {
+        //                        if querySnapshot.isEmpty {
+        //                            print("取得したコメントデータドキュメントがisEmptyだったためreturnします")
+        //                            return
+        //                        }
+        //
+        //                        querySnapshot.documents.forEach { queryDocumentSnapahot in
+        //                            queryDocumentSnapahot.reference.delete { error in
+        //                                if let error = error {
+        //                                    print("コメントデータのドキュメント削除失敗")
+        //                                    completion(error)
+        //                                    return
+        //                                } else {
+        //                                    print("コメントデータのドキュメント削除成功")
+        //                                    //                                dispatch.leave()は最後のコメントデータドキュメントが削除された時に実行させる
+        //                                    print("countedDocumentIdArrayの確認：\(countedDocumentIdArray)")
+        //                                    if countedDocumentIdArray == 0 {
+        //                                        print("countedDocumentIdArrayが０のため、leave()を実行します")
+        //                                        dispatchGroup.leave()
+        //                                    }
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
 
-//        プロフィール画像の削除処理
+        //        プロフィール画像の削除処理
         dispatchGroup.enter()
         dispatchQueue.async {
             let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
@@ -435,16 +525,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     print("画像の削除に失敗しました leave()\(error)")
                     completion(error)
                     dispatchGroup.leave()
+                    print("leave6")
+
                     return
                 } else {
                     print("画像の削除に成功しました leave()")
                     completion(nil)
                     dispatchGroup.leave()
+                    print("leave6")
                 }
             }
         }
 
         dispatchGroup.notify(queue: .main) {
+            print("コメント数更新処理の開始")
             print("アカウント削除処理以外の非同期処理が終了しました 次にアカウント削除処理を実行します")
             user.delete { error in
                 if let error = error {
@@ -463,37 +557,109 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func deleteCommentDataDocumentInPosts(documentIdArray: [String]) {
-        for documentId in documentIdArray {
-            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentId).collection("commentDataCollection")
+    //   なんかわからんけど、compltionクロージャが何回（一回以上）呼ばれておる
+    func updateNumberOfComments(documentIdForPostsArr: [String], completion: @escaping () -> Void) {
+        var excuteProcessWhenZero = documentIdForPostsArr.count
+        print("カウント数の確認\(excuteProcessWhenZero)")
+        for documentIdForPosts in documentIdForPostsArr {
+            print("疲れた1\(excuteProcessWhenZero)")
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: documentIdForPosts)
             commentsRef.getDocuments { querySnapshot, error in
-                guard error == nil else {
-                    print("コメントデータドキュメントの取得失敗\(error!)")
-                    return
+                excuteProcessWhenZero = excuteProcessWhenZero - 1
+                print("疲れた2\(excuteProcessWhenZero)")
+                if let error = error {
+                    print("エラーでした：エラー内容：\(error)")
                 }
-                print("コメントデータドキュメントの取得成功")
                 if let querySnapshot = querySnapshot {
-                    if querySnapshot.isEmpty {
-                        print("取得したコメントデータドキュメントがisEmptyでした")
+                    print("コメント数更新用のドキュメント取得成功したよん")
+                    print("疲れた3\(excuteProcessWhenZero)")
+                    let updatedNumberOfComments = String(querySnapshot.documents.count)
+                    //                    ここでdispatch.leave()多分ここでleabe()はだめだと思う、または、このまま、コメント更新処理を書く
+                    let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentIdForPosts)
+                    let postDic = [
+                        "numberOfComments": updatedNumberOfComments,
+                    ]
+
+                    print("マジで動いてくれ\(excuteProcessWhenZero)")
+                    if excuteProcessWhenZero == 0 {
+                        print("excuteProcessWhenZeroが0のため、completionクロージャを実行します")
+                        completion()
                     }
-//                    var countedQuerySnapshot: Int = querySnapshot.documents.count
-                    querySnapshot.documents.forEach { queryDocumentSnapahot in
-                        queryDocumentSnapahot.reference.delete { error in
-                            if let error = error {
-                                print("コメントデータのドキュメント削除失敗\(error)")
-                                return
-                            } else {
-                                print("コメントデータのドキュメント削除成功")
-//                                dispatch.leave()は最後のコメントデータドキュメントが削除された時に実行させる
-//                                countedQuerySnapshot = countedQuerySnapshot - 1
-//                                if countedQuerySnapshot == 0 {}
-                            }
+
+                    postsRef.updateData(postDic) { error in
+                        if let error = error {
+                            print("updatedNumberOfCommentsでエラーでした\(error)")
+                        } else {
+                            print("updatedNumberOfCommentsでコメント数の更新に成功しました")
                         }
                     }
                 }
             }
         }
     }
+
+    func updateNumberOf() {
+//        "comments"コレクション内にある"posts"コレクション内のドキュメントIDを格納
+        var documentIdForPostsArr: [String] = []
+        let user = Auth.auth().currentUser!
+
+        let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid)
+        commentsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("エラーだよん\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                var excuteProcessWhenZero: Int = querySnapshot.documents.count
+                print("コメント数更新用のドキュメント取得に成功しました")
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    documentIdForPostsArr.append(PostData(document: queryDocumentSnapshot).documentIdForPosts!)
+                    excuteProcessWhenZero = excuteProcessWhenZero - 1
+                    if excuteProcessWhenZero == 0 {
+//                        ここでコメント削除処理、または、dispatchGroup.leave()
+                    }
+                }
+            }
+        }
+    }
+
+    func getDocumentsInCommentCollection(documentIdForPostsArr: [String]) {
+//        ここは削除処理後に行う処理
+        for documentIdForPosts in documentIdForPostsArr {
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: documentIdForPosts)
+            commentsRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("エラーでした：エラー内容：\(error)")
+                }
+                if let querySnapshot = querySnapshot {
+                    print("コメント数更新用のドキュメント取得成功したよん")
+                    let updatedNumberOfComments = String(querySnapshot.documents.count)
+//                    ここでdispatch.leave()多分ここでleabe()はだめだと思う、または、このまま、コメント更新処理を書く
+                    self.updateNumberOfComments(updatedNumberOfComments: updatedNumberOfComments, documentIdForPosts: documentIdForPosts)
+                }
+            }
+        }
+    }
+
+    func updateNumberOfComments(updatedNumberOfComments: String, documentIdForPosts: String) {
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentIdForPosts)
+        let postDic = [
+            "numberOfComments": updatedNumberOfComments,
+        ]
+        postsRef.updateData(postDic) { error in
+            if let error = error {
+                print("updatedNumberOfCommentsでエラーでした\(error)")
+            } else {
+                print("updatedNumberOfCommentsでコメント数の更新に成功しました")
+            }
+        }
+    }
+
+//    １、削除するそれぞれのコメントのdocumentIdForPostsを取得
+//    ２、.whereField("documentIdForPosts", postData.documentId)
+//    ３、取得したドキュメントで、再度、firebaseRelatedPath.commentsPathの.whereField("document
+
+//    注意：コメントを削除する前に、.whereFieldのuidで自分のコメントを取得する必要がある
+//    　　　んで、取得した後だったら、自分のコメントは削除していい　その後、
 
 //    @IBAction func deleteButton(_: Any) {
 //        let alert = UIAlertController(title: "アカウントを削除する", message: "アカウントを削除した場合、全ての投稿データも削除されます。", preferredStyle: .alert)
