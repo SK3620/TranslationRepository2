@@ -12,6 +12,8 @@ import UIKit
 class InputCommentViewController: UIViewController {
     @IBOutlet var textView: UITextView!
     @IBOutlet var postCommentButton: UIBarButtonItem!
+    @IBOutlet var backBarButtonItem: UIBarButtonItem!
+
     //    タイムライン画面でタップされたcellの単一のドキュメント
     var postData: PostData!
 
@@ -112,11 +114,13 @@ class InputCommentViewController: UIViewController {
         let textView_text = self.textView.text
 
         self.postCommentButton.isEnabled = false
+        self.backBarButtonItem.isEnabled = false
 
         guard user != nil, textView_text!.isEmpty != true else {
             SVProgressHUD.showError(withStatus: "コメントを入力してください")
             SVProgressHUD.dismiss(withDelay: 1.5)
             self.postCommentButton.isEnabled = true
+            self.backBarButtonItem.isEnabled = true
             return
         }
 
@@ -242,8 +246,6 @@ class InputCommentViewController: UIViewController {
                                     print("エラーでした\(error)")
                                 } else {
                                     print("excuteLeaveATheEndのleave()を実行します")
-                                    print(self.secondPostArray[0].comment)
-                                    print(self.secondPostArray[0].commentedDate)
                                     dispatchGroup.leave()
                                 }
                             }

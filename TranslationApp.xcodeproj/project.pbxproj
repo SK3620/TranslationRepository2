@@ -22,12 +22,18 @@
 		8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95B2906407500FD9236 /* FirstMemo.swift */; };
 		8356E95E290642D800FD9236 /* Speak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95D290642D800FD9236 /* Speak.swift */; };
 		835B38DE294B5DDA00D42F50 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 835B38DD294B5DDA00D42F50 /* Alamofire */; };
+		835B38E0294C82B000D42F50 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */; };
+		835B38E2294C833500D42F50 /* MessageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38E1294C833500D42F50 /* MessageEntity.swift */; };
+		835B38E4294C839F00D42F50 /* MessageSenderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38E3294C839F00D42F50 /* MessageSenderType.swift */; };
+		835B38E6294FF58D00D42F50 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38E5294FF58D00D42F50 /* ChatListViewController.swift */; };
+		835B38EC2950070200D42F50 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38EB2950070100D42F50 /* ChatList.swift */; };
 		836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 836D1F89290A52360075AFEE /* GoogleService-Info.plist */; };
 		836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */; };
 		83724E9529190BD40074ED1E /* ButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83724E9429190BD40074ED1E /* ButtonModel.swift */; };
 		83724E98291926EA0074ED1E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83724E97291926EA0074ED1E /* Alamofire */; };
 		8372AD902932E91500E230BF /* PagingPhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8372AD8F2932E91500E230BF /* PagingPhraseWordViewController.swift */; };
 		83734B75291E62F8007B9A72 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83734B74291E62F8007B9A72 /* Alamofire */; };
+		8379101C29504682000790AB /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8379101B29504682000790AB /* Alamofire */; };
 		837BB0EB2939B02100648011 /* AllPhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BB0EA2939B02000648011 /* AllPhraseWordViewController.swift */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
 		837D41E929150F4C00A80342 /* SecondPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D41E829150F4C00A80342 /* SecondPostData.swift */; };
@@ -43,6 +49,7 @@
 		8385E72E2918D12800DBDBAC /* OthersIntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385E72D2918D12800DBDBAC /* OthersIntroductionViewController.swift */; };
 		8385E7302918D14300DBDBAC /* OthersPostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */; };
 		8385E7322918D16100DBDBAC /* OthersCommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */; };
+		8385EA0E2951858B0034E0F6 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385EA0D2951858A0034E0F6 /* ChatRoom.swift */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */; };
@@ -132,6 +139,11 @@
 		8356E95829055BCC00FD9236 /* PhraseWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseWord.swift; sourceTree = "<group>"; };
 		8356E95B2906407500FD9236 /* FirstMemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMemo.swift; sourceTree = "<group>"; };
 		8356E95D290642D800FD9236 /* Speak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speak.swift; sourceTree = "<group>"; };
+		835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
+		835B38E1294C833500D42F50 /* MessageEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEntity.swift; sourceTree = "<group>"; };
+		835B38E3294C839F00D42F50 /* MessageSenderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSenderType.swift; sourceTree = "<group>"; };
+		835B38E5294FF58D00D42F50 /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
+		835B38EB2950070100D42F50 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
 		836D1F89290A52360075AFEE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsHistoryViewController.swift; sourceTree = "<group>"; };
 		83724E9429190BD40074ED1E /* ButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonModel.swift; sourceTree = "<group>"; };
@@ -148,6 +160,7 @@
 		8385E72D2918D12800DBDBAC /* OthersIntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersIntroductionViewController.swift; sourceTree = "<group>"; };
 		8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersPostsHistoryViewController.swift; sourceTree = "<group>"; };
 		8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersCommentsHistoryViewController.swift; sourceTree = "<group>"; };
+		8385EA0D2951858A0034E0F6 /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStudyViewContoller.swift; sourceTree = "<group>"; };
@@ -230,6 +243,7 @@
 				835B38DE294B5DDA00D42F50 /* Alamofire in Frameworks */,
 				8342F77728FD760E005C8FD5 /* Alamofire in Frameworks */,
 				83A2E1AE29018C5D00F1117A /* Alamofire in Frameworks */,
+				8379101C29504682000790AB /* Alamofire in Frameworks */,
 				839EBCEC2924C540003E8393 /* Alamofire in Frameworks */,
 				8389C401290AC663007347AE /* Pods_TranslationApp.framework in Frameworks */,
 				8382E93D28F728E100877DD8 /* Alamofire in Frameworks */,
@@ -289,6 +303,10 @@
 				83C2921A29137FF000386EE9 /* PostData.swift */,
 				837D41E829150F4C00A80342 /* SecondPostData.swift */,
 				83724E9429190BD40074ED1E /* ButtonModel.swift */,
+				835B38E1294C833500D42F50 /* MessageEntity.swift */,
+				835B38E3294C839F00D42F50 /* MessageSenderType.swift */,
+				835B38EB2950070100D42F50 /* ChatList.swift */,
+				8385EA0D2951858A0034E0F6 /* ChatRoom.swift */,
 				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
 				8356E9542905574500FD9236 /* History.swift */,
 				8356E9562905584500FD9236 /* Record.swift */,
@@ -448,6 +466,8 @@
 				83BC07ED291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift */,
 				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
 				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
+				835B38E5294FF58D00D42F50 /* ChatListViewController.swift */,
+				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,
 			);
 			path = "Contents Of SecondTabBar";
 			sourceTree = "<group>";
@@ -473,7 +493,7 @@
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				836F9AAA2908D01C00EB9C70 /* ShellScript */,
-				0478560E8A2E188F05607B71 /* [CP] Embed Pods Frameworks */,
+				A7AB4DDB0951B51817300D76 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -496,6 +516,7 @@
 				839238022930D0C0005B0741 /* Alamofire */,
 				831398C1293A1395005B7B5D /* Alamofire */,
 				835B38DD294B5DDA00D42F50 /* Alamofire */,
+				8379101B29504682000790AB /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
@@ -546,6 +567,7 @@
 				839238012930D0C0005B0741 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				831398C0293A1395005B7B5D /* XCRemoteSwiftPackageReference "Alamofire" */,
 				835B38DC294B5DDA00D42F50 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				8379101A29504682000790AB /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 83071CF628B91AC70003734C /* Products */;
 			projectDirPath = "";
@@ -582,23 +604,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0478560E8A2E188F05607B71 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		04B5B7BCA5BB9CCAD2CCCB20 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -638,6 +643,23 @@
 			shellPath = /bin/sh;
 			shellScript = "$ Pods/SwiftFormat/CommandLineTool/swiftformat .\n$ Pods/SwiftFormat/CommandLineTool/swiftformat . --self insert\n\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --self insert\n";
 		};
+		A7AB4DDB0951B51817300D76 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -650,9 +672,11 @@
 				83B9C20428D3132D006138E2 /* EditRecordViewController.swift in Sources */,
 				83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */,
 				8356E9552905574500FD9236 /* History.swift in Sources */,
+				835B38EC2950070200D42F50 /* ChatList.swift in Sources */,
 				83D896342914190500E570AD /* InputCommentViewController.swift in Sources */,
 				83AD2C1B290A48AB009B0C84 /* SecondTabBarController.swift in Sources */,
 				83A2E1B029019CA100F1117A /* SelectFolderForStudyViewContoller.swift in Sources */,
+				8385EA0E2951858B0034E0F6 /* ChatRoom.swift in Sources */,
 				8385E7302918D14300DBDBAC /* OthersPostsHistoryViewController.swift in Sources */,
 				8356E9572905584500FD9236 /* Record.swift in Sources */,
 				83BC07F2291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift in Sources */,
@@ -673,8 +697,10 @@
 				83920AA4290BB2BE00F1F2D6 /* EditProfileViewController.swift in Sources */,
 				83724E9529190BD40074ED1E /* ButtonModel.swift in Sources */,
 				83C2CCA7291D1D4100A671AE /* CertificationViewController.swift in Sources */,
+				835B38E2294C833500D42F50 /* MessageEntity.swift in Sources */,
 				83A1D5C7290EC69D00B6F18A /* IntroductionViewController.swift in Sources */,
 				8372AD902932E91500E230BF /* PagingPhraseWordViewController.swift in Sources */,
+				835B38E0294C82B000D42F50 /* ChatRoomViewController.swift in Sources */,
 				83A564C928D7630300C3A9B9 /* PhraseWordViewController.swift in Sources */,
 				83AC1DC828E4427D00576CF4 /* CustomCellForPhraseWord.swift in Sources */,
 				839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */,
@@ -695,6 +721,7 @@
 				839FBA3328BA101200BB64A5 /* FolderViewController.swift in Sources */,
 				8385E72E2918D12800DBDBAC /* OthersIntroductionViewController.swift in Sources */,
 				83C2CCA1291D1CD000A671AE /* ConversationViewController.swift in Sources */,
+				835B38E4294C839F00D42F50 /* MessageSenderType.swift in Sources */,
 				830D9FF42912DE2000F8761B /* PostViewController.swift in Sources */,
 				83B6AF1F28E7254000700DBF /* CustomCellForReview.swift in Sources */,
 				83C2CC9D291D1C6500A671AE /* WordViewController.swift in Sources */,
@@ -705,6 +732,7 @@
 				8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */,
 				83C2CCA3291D1CF500A671AE /* ListeningViewController.swift in Sources */,
 				8356E95E290642D800FD9236 /* Speak.swift in Sources */,
+				835B38E6294FF58D00D42F50 /* ChatListViewController.swift in Sources */,
 				83A7917828F6654300BF7C2D /* SettingsForStudyViewController.swift in Sources */,
 				83071CFB28B91AC70003734C /* SceneDelegate.swift in Sources */,
 				8396C0B32916ABF40034EDE7 /* CommentsHistoryViewController.swift in Sources */,
@@ -1001,6 +1029,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		8379101A29504682000790AB /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		838085F52926728C00574D2D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1137,6 +1173,11 @@
 			productName = Alamofire;
 		};
 		83734B74291E62F8007B9A72 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		8379101B29504682000790AB /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;

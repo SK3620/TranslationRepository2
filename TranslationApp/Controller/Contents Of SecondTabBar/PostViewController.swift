@@ -25,6 +25,8 @@ class PostViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var etcButton: UIButton!
     @IBOutlet var postButton: UIBarButtonItem!
 
+    @IBOutlet var backBarButtonItem: UIBarButtonItem!
+
     var secondPagingViewController: SecondPagingViewController!
     var savedTextView_text: String = ""
 
@@ -87,9 +89,11 @@ class PostViewController: UIViewController, UITextViewDelegate {
             SVProgressHUD.showError(withStatus: "投稿内容を入力してください")
             SVProgressHUD.dismiss(withDelay: 1.5)
             self.postButton.isEnabled = true
+            self.backBarButtonItem.isEnabled = true
             return
         }
         self.postButton.isEnabled = false
+        self.backBarButtonItem.isEnabled = false
 
         let user = Auth.auth().currentUser!
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document()

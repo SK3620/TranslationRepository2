@@ -15,8 +15,8 @@
 // svprogressの部分に注意　全部、1.0秒だけ遅らせて処理実行
 // 二つのアカウントを作成して、アカウントを順番に削除しようとすると、別のアカウントにサインインできない　これはメールアドレスに空白（スペース）があるのが原因で、ログインできないから、スペースを削除する処理を書く必要がある
 // コメント数の表示は、firebaseに書き込むのではなく、secondPostArray.countで表示させる（この方法は少しきついかも）　代替として、fieldValueでuidをコメント数分appendして、その配列のカウントをコメント数として、表示させる。🟠
-//
 // 投稿ボタン、コメント投稿ボタンを押下時に、textView.text = ""をさせるタイミングと❌ボタンで戻るをisEnabled = false　にする
+// userNameLabelに表示する名前がダブってる displaynameだと思う
 
 import RealmSwift
 import SVProgressHUD
@@ -181,6 +181,10 @@ class TabBarController: UITabBarController {
             let navigationController1 = secondTabBarController.viewControllers![0] as! UINavigationController
             let secondPagingViewController = navigationController1.viewControllers[0] as! SecondPagingViewController
             secondPagingViewController.secondTabBarController = secondTabBarController
+
+            let navigationController2 = secondTabBarController.viewControllers![2] as! UINavigationController
+            let chatListViewController = navigationController2.viewControllers[0] as! ChatListViewController
+            chatListViewController.secondTabBarController = secondTabBarController
         }
     }
 }

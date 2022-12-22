@@ -119,7 +119,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             SVProgressHUD.show()
 
             //            アドレスとパスワードでユーザー作成　ユーザー作成に成功すると、自動でログインする
-            Auth.auth().createUser(withEmail: address, password: password) { _, error in
+            let trimmedAddress = address.trimmingCharacters(in: .whitespaces)
+            let trimmedPassword = password.trimmingCharacters(in: .whitespaces)
+            Auth.auth().createUser(withEmail: trimmedAddress, password: trimmedPassword) { _, error in
                 if let error = error {
                     // エラーがあったら原因をprintして、returnすることで以降の処理を実行せずに処理を終了する
                     print("DEBUG_PRINT: " + error.localizedDescription)
@@ -182,7 +184,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
             SVProgressHUD.show()
 
-            Auth.auth().signIn(withEmail: address, password: password) { _, error in
+            let trimmedAddress = address.trimmingCharacters(in: .whitespaces)
+            let trimmedPassword = password.trimmingCharacters(in: .whitespaces)
+            Auth.auth().signIn(withEmail: trimmedAddress, password: trimmedPassword) { _, error in
                 if let error = error {
                     print("DEBUG_PRINTサインインに失敗しました: " + error.localizedDescription)
                     print("エラー内容：\(error)")
@@ -237,7 +241,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         alert.addAction(UIAlertAction(title: "削除", style: .destructive, handler: { _ in
             SVProgressHUD.show()
             if let mailAddress = alert.textFields?.first?.text, let password = alert.textFields?.last?.text {
-                Auth.auth().signIn(withEmail: mailAddress, password: password) { _, error in
+                let trimmedAddress = mailAddress.trimmingCharacters(in: .whitespaces)
+                let trimmedPassword = password.trimmingCharacters(in: .whitespaces)
+                Auth.auth().signIn(withEmail: trimmedAddress, password: trimmedPassword) { _, error in
                     if let error = error {
                         print("アカウント削除のためのログイン失敗\(error)")
                         SVProgressHUD.showError(withStatus: "アカウントの削除に失敗しました")

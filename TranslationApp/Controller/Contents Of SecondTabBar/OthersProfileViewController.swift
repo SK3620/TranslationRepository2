@@ -96,17 +96,16 @@ class OthersProfileViewController: UIViewController {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.secondTabBarController.tabBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        let addFriendBarButtonItem = UIBarButtonItem(title: "友達追加", style: .plain, target: self, action: #selector(self.tappedAddFriendBarButtonItem))
+        self.navigationItem.rightBarButtonItem = addFriendBarButtonItem
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.secondTabBarController.tabBar.isHidden = true
 
+        self.makeAddFriendBarButtonItemEnabledFalse(addFriendBarButtonItem: addFriendBarButtonItem)
         self.getProfileDataDocument()
-    }
-
-    override func viewDidAppear(_: Bool) {
-        super.viewDidAppear(true)
     }
 
     override func viewWillDisappear(_: Bool) {
@@ -117,7 +116,7 @@ class OthersProfileViewController: UIViewController {
     }
 
     func getProfileDataDocument() {
-        print("postDataのuid確認\(self.postData.uid)")
+        print("postDataのuid確認\(self.postData.uid!)")
         Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(self.postData.uid!)'sProfileDocument").getDocument(completion: { queryDocument, error in
             if let error = error {
                 print("ドキュメント取得失敗\(error)")
@@ -132,7 +131,7 @@ class OthersProfileViewController: UIViewController {
     }
 
     func setProfileDataOnLabels(profileData _: [String: Any]) {
-        self.userNameLabel.text = Auth.auth().currentUser?.displayName!
+        self.userNameLabel.text = self.profileData["userName"] as? String
         if let genderText = self.profileData["gender"] as? String {
             self.genderLabel.text = genderText
         } else {
@@ -158,6 +157,78 @@ class OthersProfileViewController: UIViewController {
 
         self.profileImageView.sd_setImage(with: imageRef)
         print("画像取り出せた？\(imageRef)")
+    }
+
+//    プロフィールが自分の場合、友達追加ボタンのisenabledをfalseにする
+    func makeAddFriendBarButtonItemEnabledFalse(addFriendBarButtonItem: UIBarButtonItem) {
+        if let user = Auth.auth().currentUser {
+            if user.uid == self.postData.uid {
+                print("友達追加ボタンのiseabledをfalseにします")
+                addFriendBarButtonItem.isEnabled = false
+            } else {
+                addFriendBarButtonItem.isEnabled = true
+                print("友達追加ボタンのisEnabledをtrueにします")
+            }
+        }
+    }
+
+    @objc func tappedAddFriendBarButtonItem() {
+        guard let user = Auth.auth().currentUser else {
+            return
+        }
+//        completionで処理
+        self.seeIfThePartnerIsAlreadyAdded(user: user) {
+            self.showAlert()
+        }
+    }
+
+//    友達追加ボタン押下時に、既に友達に追加されているかどうかを判定する
+    func seeIfThePartnerIsAlreadyAdded(user: User, completion: @escaping () -> Void) {
+        let chatRef = Firestore.firestore().collection("chatLists").whereField("members", arrayContainsAny: [user.uid, self.postData.uid!])
+        chatRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("既に友達追加されているかどうか判定するためのメソッド内で、ドキュメントの取得に失敗しました ：エラー内容\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                print("既に友達追加されているかどうかを判定するためのメソッドで、ドキュメントの取得に成功しました。")
+                let isAlreadyAdded: Bool = querySnapshot.documents.isEmpty
+                guard isAlreadyAdded else {
+//                    すでに追加されているため、returnする
+                    SVProgressHUD.showError(withStatus: "'\(self.postData.userName!)'はすでに友達に追加されています")
+                    SVProgressHUD.dismiss(withDelay: 2.0)
+                    return
+                }
+//                まだ友達に追加されていない場合
+                completion()
+            }
+        }
+    }
+
+    func showAlert() {
+        let user = Auth.auth().currentUser!
+        let alert = UIAlertController(title: "友達に追加しますか？", message: "'\(self.postData.userName!)'がチャットリストに追加されます", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "追加", style: .default, handler: { _ in
+            SVProgressHUD.show()
+            let chatDic = [
+                "createdAt": FieldValue.serverTimestamp(),
+                "latestMessage": "",
+                "members": [user.uid, self.postData.uid],
+                "membersName": [user.displayName, self.postData.userName],
+                "partnerUid": self.postData.uid!,
+            ] as [String: Any]
+            Firestore.firestore().collection("chatLists").addDocument(data: chatDic) { error in
+                if let error = error {
+                    print("ChatRoomsの作成、追加に失敗しました\(error)")
+                    SVProgressHUD.dismiss()
+                } else {
+                    print("ChatRoomsの作成、追加に成功しました")
+                    SVProgressHUD.showSuccess(withStatus: "'\(self.postData.userName!)'をチャットリストに追加しました")
+                    SVProgressHUD.dismiss(withDelay: 1.5)
+                }
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
