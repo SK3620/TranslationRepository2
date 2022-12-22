@@ -27,6 +27,7 @@ class PagingPhraseWordViewController: UIViewController {
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+
         //        navigationbarの設定
         if let tabBarController1 = tabBarController1 {
             tabBarController1.setBarButtonItem4()

@@ -8,15 +8,8 @@
 // プロフィール画像処理
 // 絞り込み表示にて、whererFieldは使えるのか？機能がないと思う
 // profileモデルクラス
-// コメント削除時にコメント数が反映されない（データ削除時に起こるいいね数の反映はしなくていい）🟠
 // パスワードリセット確認メールの送信がされていない
 // 実機での実行ができていない（アップデートの必要性がある）
-// inputCommentVCで、コメント投稿後、なぜかtimeStampがnilになる　🟠
-// svprogressの部分に注意　全部、1.0秒だけ遅らせて処理実行
-// 二つのアカウントを作成して、アカウントを順番に削除しようとすると、別のアカウントにサインインできない　これはメールアドレスに空白（スペース）があるのが原因で、ログインできないから、スペースを削除する処理を書く必要がある
-// コメント数の表示は、firebaseに書き込むのではなく、secondPostArray.countで表示させる（この方法は少しきついかも）　代替として、fieldValueでuidをコメント数分appendして、その配列のカウントをコメント数として、表示させる。🟠
-// 投稿ボタン、コメント投稿ボタンを押下時に、textView.text = ""をさせるタイミングと❌ボタンで戻るをisEnabled = false　にする
-// userNameLabelに表示する名前がダブってる displaynameだと思う
 
 import RealmSwift
 import SVProgressHUD
@@ -34,6 +27,8 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         self.setNavigationBarAppearence()
         self.giveTabBarControllerToEachOfViewControllers()
+
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
     }
 
     func setNavigationBarAppearence() {

@@ -50,6 +50,7 @@
 		8385E7302918D14300DBDBAC /* OthersPostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */; };
 		8385E7322918D16100DBDBAC /* OthersCommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */; };
 		8385EA0E2951858B0034E0F6 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385EA0D2951858A0034E0F6 /* ChatRoom.swift */; };
+		8385EA14295476110034E0F6 /* ProfileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385EA13295476110034E0F6 /* ProfileData.swift */; };
 		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */; };
@@ -161,6 +162,7 @@
 		8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersPostsHistoryViewController.swift; sourceTree = "<group>"; };
 		8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersCommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		8385EA0D2951858A0034E0F6 /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
+		8385EA13295476110034E0F6 /* ProfileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileData.swift; sourceTree = "<group>"; };
 		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStudyViewContoller.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				839FBA3A28BA602700BB64A5 /* KeyManager.swift */,
 				83C2921A29137FF000386EE9 /* PostData.swift */,
 				837D41E829150F4C00A80342 /* SecondPostData.swift */,
+				8385EA13295476110034E0F6 /* ProfileData.swift */,
 				83724E9429190BD40074ED1E /* ButtonModel.swift */,
 				835B38E1294C833500D42F50 /* MessageEntity.swift */,
 				835B38E3294C839F00D42F50 /* MessageSenderType.swift */,
@@ -742,6 +745,7 @@
 				837BB0EB2939B02100648011 /* AllPhraseWordViewController.swift in Sources */,
 				83C2CC9F291D1CA400A671AE /* GrammerViewController.swift in Sources */,
 				83C2CC9B291D1BF600A671AE /* HowToLearnViewController.swift in Sources */,
+				8385EA14295476110034E0F6 /* ProfileData.swift in Sources */,
 				83B9C1FB28CFF10B006138E2 /* CustomCellForHistory.swift in Sources */,
 				8389C3FE290ABDBC007347AE /* ProfileViewController.swift in Sources */,
 				8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */,

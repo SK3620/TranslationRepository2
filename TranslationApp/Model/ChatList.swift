@@ -27,7 +27,7 @@ class ChatList {
 
         self.latestMessage = chatListDic["latestMessage"] as? String
 
-        let timeStamp = chatListDic["latestMessagedDate"] as? Timestamp
+        let timeStamp = chatListDic["latestSentDate"] as? Timestamp
         if let timeStamp = timeStamp {
             let latestMessagedDate = timeStamp.dateValue()
             let dateString = self.convertDateToString(date: latestMessagedDate)

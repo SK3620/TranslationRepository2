@@ -27,7 +27,6 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         self.tableView.delegate = self
@@ -90,6 +89,7 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
         cell.setPostData(self.postArray[indexPath.row])
+
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
         cell.commentButton.isEnabled = false

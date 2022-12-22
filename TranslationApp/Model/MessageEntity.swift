@@ -42,10 +42,10 @@ struct MessageEntity: MessageType {
     }
 
     static func createMyMessage(userName: String, text: String, sender: MessageSenderType, messageId: String, sentDate: Date) -> MessageEntity {
-        return MessageEntity(userName: userName, messageId: messageId, sentDate: sentDate, sender: sender, kind: .attributedText(NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 20), .foregroundColor: UIColor.white])))
+        return MessageEntity(userName: userName, messageId: messageId, sentDate: sentDate, sender: sender, kind: .attributedText(NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 17), .foregroundColor: UIColor.white])))
     }
 
     static func createPartnerMessage(userName: String, text: String, sender: MessageSenderType, messageId: String, sentDate: Date) -> MessageEntity {
-        return MessageEntity(userName: userName, messageId: messageId, sentDate: sentDate, sender: sender, kind: .attributedText(NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 20), .foregroundColor: UIColor.label])))
+        return MessageEntity(userName: userName, messageId: messageId, sentDate: sentDate, sender: sender, kind: .attributedText(NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 17), .foregroundColor: UIColor.label])))
     }
 }

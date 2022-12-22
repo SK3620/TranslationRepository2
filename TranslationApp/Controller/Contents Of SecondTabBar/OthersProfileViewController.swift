@@ -32,7 +32,6 @@ class OthersProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.title = "プロフィール"
 
         let othersIntroductionViewController = storyboard?.instantiateViewController(identifier: "OthersIntroduction") as! OthersIntroductionViewController
@@ -195,7 +194,7 @@ class OthersProfileViewController: UIViewController {
                 guard isAlreadyAdded else {
 //                    すでに追加されているため、returnする
                     SVProgressHUD.showError(withStatus: "'\(self.postData.userName!)'はすでに友達に追加されています")
-                    SVProgressHUD.dismiss(withDelay: 2.0)
+                    SVProgressHUD.dismiss(withDelay: 3.0)
                     return
                 }
 //                まだ友達に追加されていない場合

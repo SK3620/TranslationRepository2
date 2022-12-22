@@ -44,13 +44,6 @@ class ChatRoomViewController: MessagesViewController {
         self.partnerUser = MessageSenderType.partnerMessageSenderType(partnerSenderId: "partner", partnerDisplayName: self.getMyNameAndPartnerName()[1])
     }
 
-    func setDelegateMethod() {
-        self.messagesCollectionView.messagesDataSource = self
-        self.messagesCollectionView.messagesLayoutDelegate = self
-        self.messagesCollectionView.messagesDisplayDelegate = self
-        messageInputBar.delegate = self
-    }
-
     func keyBoardDisappearsWhenTapped() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
@@ -58,11 +51,12 @@ class ChatRoomViewController: MessagesViewController {
 
     @objc func dismissKeyboard() {}
 
-    func setMessageCollectionView() {
+    func setDelegateMethod() {
         messagesCollectionView.backgroundColor = UIColor.secondarySystemBackground
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+
         messageInputBar.delegate = self
         messageInputBar.sendButton.title = nil
         messageInputBar.sendButton.image = UIImage(systemName: "paperplane")
@@ -201,6 +195,25 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
                 print("messagesコレクション内への書き込みに失敗しました エラー内容：\(error)")
             } else {
                 print("メッセージ送信とmessagesコレクション内への書き込みに成功しました")
+                self.updateLatestMessageAndLatestSentDate(message: text)
+            }
+        }
+    }
+
+    func updateLatestMessageAndLatestSentDate(message: String) {
+        let chatListsRef = Firestore.firestore().collection("chatLists").document(self.chatListData.documentId!)
+        chatListsRef.updateData(["latestMessage": message]) { error in
+            if let error = error {
+                print(error)
+            } else {
+                print("latestMessageのupdate成功")
+            }
+            chatListsRef.updateData(["latestSentDate": FieldValue.serverTimestamp()]) { error in
+                if let error = error {
+                    print(error)
+                } else {
+                    print("latestSentDateのupdateに成功")
+                }
             }
         }
     }
@@ -285,3 +298,5 @@ extension ChatRoomViewController: MessagesLayoutDelegate {
         return 24
     }
 }
+
+extension MessageCollectionViewCell {}
