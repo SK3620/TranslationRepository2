@@ -70,23 +70,28 @@ class TabBarController: UITabBarController {
         recordViewController.tabBarController1 = self
     }
 
-    func setBarButtonItem0() {
+//    translateViewControllerクラスでアクセス
+    public func setStringToNavigationItemTitle0() {
         navigationItem.title = "翻訳"
     }
 
-    func setBarButtonItem1() {
+//    FolderViewControllerクラスでアクセス
+    public func setStringToNavigationItemTitle1() {
         navigationItem.title = "フォルダー"
     }
 
-    func setBarButtonItem2() {
+//    HistoryViewControllerクラスでアクセス
+    public func setStringToNavigationItemTitle2() {
         navigationItem.title = "履歴"
     }
 
-    func setBarButtonItem3() {
+//    RecordViewControllerクラスでアクセス
+    public func setStringToNavigationItemTitle3() {
         navigationItem.title = "学習記録"
     }
 
-    func setBarButtonItem4() {
+//    phraseWordViewControllerクラスでアクセス
+    public func setStringToNavigationItemTitle4() {
         navigationItem.title = "お気に入り"
     }
 

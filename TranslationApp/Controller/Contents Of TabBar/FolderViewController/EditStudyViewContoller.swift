@@ -24,6 +24,9 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         self.textView1.delegate = self
         self.textView2.delegate = self
 
@@ -32,6 +35,26 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
 
         self.setDoneToolBar()
         self.setBarButtonItem()
+    }
+
+    @objc func keyboardWillHide() {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if !self.textView2.isFirstResponder {
+            return
+        }
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height
+            } else {
+                let suggestionHeight = self.view.frame.origin.y + keyboardSize.height
+                self.view.frame.origin.y -= suggestionHeight
+            }
+        }
     }
 
     func setTextView(textViewArr: [UITextView]!) {

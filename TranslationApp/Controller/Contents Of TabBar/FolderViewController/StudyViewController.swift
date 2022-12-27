@@ -521,6 +521,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let edit = ContextMenuItemWithImage(title: "編集する", image: UIImage(systemName: "square.and.pencil")!)
         let save = ContextMenuItemWithImage(title: "お気に入りにする", image: UIImage(systemName: "heart")!)
         let folder = ContextMenuItemWithImage(title: "保存先を変更する", image: UIImage(systemName: "folder")!)
+
         let copy = ContextMenuItemWithImage(title: "コピーする", image: UIImage(systemName: "doc.on.doc")!)
         let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage(systemName: "trash")!)
 

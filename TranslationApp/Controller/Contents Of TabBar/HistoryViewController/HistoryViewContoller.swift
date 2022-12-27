@@ -60,7 +60,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewWillAppear(true)
         //        navigationbarの設定
         if let tabBarController1 = tabBarController1 {
-            self.tabBarController1.setBarButtonItem2()
+            self.tabBarController1.setStringToNavigationItemTitle2()
             tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
 //            let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self,
 //                                                    action: #selector(self.tappedEditBarButtonItem(_:)))

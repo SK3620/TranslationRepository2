@@ -210,7 +210,7 @@ class OthersProfileViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "追加", style: .default, handler: { _ in
             SVProgressHUD.show()
             let chatDic = [
-                "createdAt": FieldValue.serverTimestamp(),
+                "latestSentDate": FieldValue.serverTimestamp(),
                 "latestMessage": "",
                 "members": [user.uid, self.postData.uid],
                 "membersName": [user.displayName, self.postData.userName],

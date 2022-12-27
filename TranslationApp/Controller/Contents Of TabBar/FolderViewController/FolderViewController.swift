@@ -69,7 +69,7 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationController!.setNavigationBarHidden(true, animated: false)
         //        navigationbarの設定
         if let tabBarController1 = tabBarController1 {
-            tabBarController1.setBarButtonItem1()
+            tabBarController1.setStringToNavigationItemTitle1()
             tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
             let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self,
                                                     action: #selector(self.tappedEditBarButtonItem(_:)))

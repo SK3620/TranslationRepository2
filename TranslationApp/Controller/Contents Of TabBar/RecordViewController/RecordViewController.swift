@@ -63,7 +63,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
 
         if self.tabBarController1 != nil, studyViewController == nil {
-            self.tabBarController1.setBarButtonItem3()
+            self.tabBarController1.setStringToNavigationItemTitle3()
             self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
             let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
             self.tabBarController1.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]

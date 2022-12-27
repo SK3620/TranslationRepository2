@@ -9,7 +9,6 @@ import Firebase
 import Foundation
 
 class ChatList {
-    var name: String?
     var latestMessage: String?
     var latestMessagedDate: String?
     var chatMembers: [String]?
@@ -22,8 +21,6 @@ class ChatList {
         self.documentId = queryDocumentSnapshot.documentID
 
         let chatListDic = queryDocumentSnapshot.data()
-
-        self.name = chatListDic["name"] as? String
 
         self.latestMessage = chatListDic["latestMessage"] as? String
 

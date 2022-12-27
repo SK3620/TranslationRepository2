@@ -30,7 +30,7 @@ class PagingPhraseWordViewController: UIViewController {
 
         //        navigationbarの設定
         if let tabBarController1 = tabBarController1 {
-            tabBarController1.setBarButtonItem4()
+            tabBarController1.setStringToNavigationItemTitle4()
             tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
             let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
             self.tabBarController1?.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]

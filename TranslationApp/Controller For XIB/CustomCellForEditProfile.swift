@@ -27,7 +27,6 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-
         self.userNameTextField.delegate = self
 
         let textFieldArr: [UITextField]! = [userNameTextField, genderTextField, ageTextField, workTextField, birthdayTextField, whereYouLiveTextField]

@@ -30,12 +30,28 @@ class ChatListViewController: UIViewController {
     }
 
     override func viewWillAppear(_: Bool) {
+        self.tableView.isEditing = false
         let backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
-        self.secondTabBarController.navigationItem.rightBarButtonItems = []
+
+        let editBarButtonBarItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.tappedEditBarButtonItem(_:)))
+        self.secondTabBarController.navigationItem.rightBarButtonItems = [editBarButtonBarItem]
 
         self.fetchChatListsInfoFromFirestore()
         self.observeIfYouAreAboutToBeAddedAsFriend()
+    }
+
+    override func viewWillDisappear(_: Bool) {
+        super.viewWillDisappear(true)
+//        self.secondTabBarController.navigationItem.rightBarButtonItems = []
+    }
+
+    @objc func tappedEditBarButtonItem(_: UIBarButtonItem) {
+        if self.tableView.isEditing {
+            self.tableView.isEditing = false
+        } else {
+            self.tableView.isEditing = true
+        }
     }
 
     func fetchChatListsInfoFromFirestore() {
@@ -43,7 +59,7 @@ class ChatListViewController: UIViewController {
         self.chatListsData.removeAll()
         self.tableView.reloadData()
 
-        self.listener = Firestore.firestore().collection("chatLists").order(by: "createdAt", descending: true).addSnapshotListener { snapshots, error in
+        self.listener = Firestore.firestore().collection("chatLists").order(by: "latestSentDate", descending: true).addSnapshotListener { snapshots, error in
             if let error = error {
                 print("ChatLists情報の取得に失敗しました。\(error)")
                 return
@@ -53,7 +69,11 @@ class ChatListViewController: UIViewController {
                 if snapshots.isEmpty {
                     print("ChatListsのsnapshotsは空でした")
                     self.setTitle(numberOfFriends: self.chatListsData.count)
+                    self.tableView.reloadData()
+                    return
                 }
+                self.documentIdArray = []
+                self.chatListsData = []
                 snapshots.documents.forEach { queryDocumentSnapshot in
                     self.chatListsData.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot))
                     self.documentIdArray.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot).documentId!)
@@ -156,6 +176,74 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         self.performSegue(withIdentifier: "ToChatRoom", sender: chatListData)
     }
 
+    func tableView(_: UITableView, editingStyleForRowAt _: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+
+//    deleteボタンが押された時
+    func tableView(_: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+//            データベースから削除する
+            self.showUIAlertForDeleting(indexPath: indexPath)
+        }
+    }
+
+    func showUIAlertForDeleting(indexPath: IndexPath) {
+        let alert = UIAlertController(title: "削除しますか？", message: "削除した場合、あなたと相手の全てのチャット履歴が削除されます", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "削除する", style: .destructive, handler: { _ in
+            SVProgressHUD.show()
+            let messageRef = Firestore.firestore().collection("chatLists").document(self.documentIdArray[indexPath.row]).collection("messages")
+            messageRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("エラー\(error)")
+                }
+                if let querySnapshot = querySnapshot {
+                    if querySnapshot.isEmpty {
+                        print("空でした")
+                        self.deleteDocumentInChatListsCollection(indexPath: indexPath)
+                        return
+                    }
+                    var countedQuerySnapshot: Int = querySnapshot.documents.count
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        queryDocumentSnapshot.reference.delete { error in
+                            if let error = error {
+                                print("エラー\(error)")
+                                SVProgressHUD.showError(withStatus: "削除に失敗しました")
+                            } else {
+                                countedQuerySnapshot -= 1
+                                if countedQuerySnapshot == 0 {
+                                    print("messagesコレクション内の全てのドキュメントの削除に成功しました")
+                                    self.deleteDocumentInChatListsCollection(indexPath: indexPath)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    func deleteDocumentInChatListsCollection(indexPath: IndexPath) {
+        let chatListsRef = Firestore.firestore().collection("chatLists").document(self.documentIdArray[indexPath.row])
+        chatListsRef.delete { error in
+            if let error = error {
+                print("エラー\(error)")
+                SVProgressHUD.showError(withStatus: "削除に失敗しました")
+            } else {
+                print("chatListsコレクション内のドキュメントの削除に成功しました")
+                SVProgressHUD.showSuccess(withStatus: "削除完了")
+                SVProgressHUD.dismiss(withDelay: 1.5) {
+                    self.documentIdArray.remove(at: indexPath.row)
+                    self.chatListsData.remove(at: indexPath.row)
+                    self.setTitle(numberOfFriends: self.chatListsData.count)
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ToChatRoom" {
             let chatRoomViewController = segue.destination as! ChatRoomViewController
@@ -174,6 +262,8 @@ class ChatListTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.profileImageView.layer.cornerRadius = 35
+        self.profileImageView.layer.borderColor = UIColor.systemGray4.cgColor
+        self.profileImageView.layer.borderWidth = 2.5
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

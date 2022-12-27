@@ -12,10 +12,51 @@ import RealmSwift
 import SVProgressHUD
 import UIKit
 
-// クロージャの非同期処理時のprogresss処理
-// firebaseと連携するためのファイル　googleservice.info.plistをgitIgnoreする（API情報があるから）
-
 class TranslateViewController: UIViewController, UITextViewDelegate {
+    //    フォルダー名を格納
+    var folderNameString: String?
+
+    //    TabBarControllerインスタンス格納用の変数
+    var tabBarController1: TabBarController!
+
+    var realm = try! Realm()
+    var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+
+    // 音声再生時の判別用の変数
+    var shouldSpeakWhenTappedVolumeButton1: Bool!
+    var shouldSpeakWhenTappedVolumeButton2: Bool!
+
+//    上のtextView
+    @IBOutlet private var translateTextView1: UITextView!
+//    下のtextView
+    @IBOutlet private var translateTextView2: UITextView!
+
+    @IBOutlet private var label1: UILabel!
+
+    //    日本語、英語切り替え
+    @IBOutlet private var languageLabel1: UILabel!
+    @IBOutlet private var languageLabel2: UILabel!
+
+    @IBOutlet private var changeLanguageButton: UIButton!
+    @IBOutlet private var saveButton: UIButton!
+    @IBOutlet private var translateButton: UIButton!
+    @IBOutlet private var selectFolderButton: UIButton!
+
+    @IBOutlet private var view1: UIView!
+    @IBOutlet private var view2: UIView!
+
+    @IBOutlet private var copyButton1: UIButton!
+    @IBOutlet private var copyButton2: UIButton!
+    @IBOutlet private var volumeButton1: UIButton!
+    @IBOutlet private var volumeButton2: UIButton!
+    @IBOutlet private var deleteTextButton1: UIButton!
+    @IBOutlet private var deleteTextButton2: UIButton!
+
+    private var talker = AVSpeechSynthesizer()
+
+    private var numberForVolumeButton2: Int = 0
+
+    let decoder: JSONDecoder = .init()
     // DeepL APIのレスポンス用構造体
     //    Codableとは、API通信等で取得したJSONやプロパティリストを任意のデータ型に変換するプロトコル →データをアプリを実装しやすいデータ型に変換することで処理が楽になる
     //    データ型とは要は、StringやIntのこと　swiftで扱えるようにする
@@ -29,106 +70,65 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         }
     }
 
-    //    フォルダー名を格納
-    var folderNameString: String?
-    var realm = try! Realm()
-    var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-    //    TabBarControllerインスタンス格納用の変数
-    var tabBarController1: TabBarController!
-
-    @IBOutlet var translateTextView1: UITextView!
-    @IBOutlet var translateTextView2: UITextView!
-    @IBOutlet var label1: UILabel!
-
-    //    日本語、英語切り替え
-    @IBOutlet var languageLabel1: UILabel!
-    @IBOutlet var languageLabel2: UILabel!
-
-    @IBOutlet var changeLanguageButton: UIButton!
-    @IBOutlet var saveButton: UIButton!
-    @IBOutlet var translateButton: UIButton!
-    @IBOutlet var selectFolderButton: UIButton!
-
-    @IBOutlet var view1: UIView!
-    @IBOutlet var view2: UIView!
-
-    @IBOutlet var copyButton1: UIButton!
-    @IBOutlet var copyButton2: UIButton!
-    @IBOutlet var volumeButton1: UIButton!
-    @IBOutlet var volumeButton2: UIButton!
-    @IBOutlet var deleteTextButton1: UIButton!
-    @IBOutlet var deleteTextButton2: UIButton!
-
-    var talker = AVSpeechSynthesizer()
-
-    var numberForVolumeButton2: Int = 0
-
-    //    JSONデコード用（？）
-    let decoder: JSONDecoder = .init()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("Realm確認\(Realm.Configuration.defaultConfiguration.fileURL!)")
+        self.translateTextView1.delegate = self
 
-        self.label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
+//        translateTextView2（下のtextView）タップして、viewをキーボードの高さ分あげるためのNotificationCenter
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        self.setButton1(button: [self.selectFolderButton], pointSize: 18, weight: .medium, scale: .medium, systemName: ["square.and.arrow.down"], borderWidth: 1, borderColor: UIColor.systemBlue.cgColor, cornerRadius: 10)
+//        textViewとviewのデザイン設定
+        self.setTranslateTextViewAndView()
 
-        let buttonArr: [UIButton]! = [copyButton1, copyButton2, volumeButton1, volumeButton2, deleteTextButton1, deleteTextButton2]
+//        右下の保存先選択ボタンのデザイン設定
+        self.setButtonDesign1(button: [self.selectFolderButton], pointSize: 18, weight: .medium, scale: .medium, systemName: ["square.and.arrow.down"], borderWidth: 1, borderColor: UIColor.systemBlue.cgColor, cornerRadius: 10)
+
+//        ボタンを格納して、それぞれボタンにデザイン設定
+        let buttonArr1: [UIButton]! = [copyButton1, copyButton2, volumeButton1, volumeButton2, deleteTextButton1, deleteTextButton2]
         let systemNameArr = ["doc.on.doc", "doc.on.doc", "volume.3", "volume.3", "delete.left", "delete.left"]
-        self.setButton1(button: buttonArr, pointSize: 20, weight: .regular, scale: .small, systemName: systemNameArr, borderWidth: nil, borderColor: nil, cornerRadius: nil)
+        self.setButtonDesign1(button: buttonArr1, pointSize: 20, weight: .regular, scale: .small, systemName: systemNameArr, borderWidth: nil, borderColor: nil, cornerRadius: nil)
 
-        self.setButton2(button: [self.changeLanguageButton, self.saveButton, self.translateButton], borderColor: UIColor.systemBlue.cgColor, borderWidth: 1, cornerRadius: 10)
+//        ボタンを格納して、それぞれのボタンにデザイン設定
+        let buttonArr2: [UIButton]! = [self.changeLanguageButton, self.saveButton, self.translateButton]
+        self.setButtonDesign2(button: buttonArr2, borderColor: UIColor.systemBlue.cgColor, borderWidth: 1, cornerRadius: 10)
+
+//        左したに表示される保存ボタンの設定
         self.saveButton.isEnabled = false
         self.saveButton.isHidden = true
         self.saveButton.titleLabel?.numberOfLines = 1
-        // ボタンの横幅に応じてフォントサイズを自動調整する設定
-        self.saveButton.titleLabel?.adjustsFontSizeToFitWidth = true
-
-        self.setTranslateTextViewAndView()
-        self.translateTextView1.delegate = self
-
-        self.languageLabel1.text = "Japanese"
-        self.languageLabel2.text = "English"
-
-        if let folderNameString = folderNameString {
-            self.saveButton.isHidden = false
-            self.saveButton.isEnabled = true
-            self.saveButton.setTitle("\(folderNameString)　へ保存する", for: .normal)
-        }
-
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
 
         // キーボードに完了のツールバーを作成
         self.setDoneTooBar()
 
-        self.tabBarController1.setBarButtonItem0()
+//        TabBarControllerクラスに定義したメソッドにアクセスして、titleに"翻訳"と表示する
+        self.tabBarController1.setStringToNavigationItemTitle0()
         self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+
+        // self.label1はtextViewの上に表示させる（placeHolderみたいな感じ）
+        self.label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
+        self.languageLabel1.text = "Japanese"
+        self.languageLabel2.text = "English"
     }
 
-    //    UIButtonの設定
-    func setButton1(button: [UIButton], pointSize: CGFloat, weight: UIImage.SymbolWeight, scale: UIImage.SymbolScale, systemName: [String], borderWidth: CGFloat?, borderColor: CGColor?, cornerRadius: CGFloat?) {
-        let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: weight, scale: scale)
-
-        for i in 0 ... button.count - 1 {
-            let systemIcon = UIImage(systemName: systemName[i], withConfiguration: config)
-            button[i].setImage(systemIcon, for: .normal)
-            if borderWidth != nil {
-                button[i].layer.borderWidth = borderWidth!
-                button[i].layer.borderColor = borderColor!
-                button[i].layer.cornerRadius = cornerRadius!
-            }
+    @objc func keyboardWillHide() {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
         }
     }
 
-    //    UIbuttonの設定
-    func setButton2(button: [UIButton], borderColor: CGColor, borderWidth: CGFloat, cornerRadius: CGFloat) {
-        button.forEach {
-            $0.layer.borderColor = borderColor
-            $0.layer.borderWidth = borderWidth
-            $0.layer.cornerRadius = cornerRadius
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if !self.translateTextView2.isFirstResponder {
+            return
+        }
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height
+            } else {
+                let suggestionHeight = self.view.frame.origin.y + keyboardSize.height
+                self.view.frame.origin.y -= suggestionHeight
+            }
         }
     }
 
@@ -150,7 +150,32 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         self.view2.layer.borderColor = color
     }
 
-    func setDoneTooBar() {
+    //    UIButtonのデザイン設定
+    private func setButtonDesign1(button: [UIButton], pointSize: CGFloat, weight: UIImage.SymbolWeight, scale: UIImage.SymbolScale, systemName: [String], borderWidth: CGFloat?, borderColor: CGColor?, cornerRadius: CGFloat?) {
+        let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: weight, scale: scale)
+
+        for i in 0 ... button.count - 1 {
+            let systemIcon = UIImage(systemName: systemName[i], withConfiguration: config)
+            button[i].setImage(systemIcon, for: .normal)
+            if borderWidth != nil {
+                button[i].layer.borderWidth = borderWidth!
+                button[i].layer.borderColor = borderColor!
+                button[i].layer.cornerRadius = cornerRadius!
+            }
+        }
+    }
+
+    //    UIbuttonのデザイン設定
+    private func setButtonDesign2(button: [UIButton], borderColor: CGColor, borderWidth: CGFloat, cornerRadius: CGFloat) {
+        button.forEach {
+            $0.layer.borderColor = borderColor
+            $0.layer.borderWidth = borderWidth
+            $0.layer.cornerRadius = cornerRadius
+        }
+    }
+
+//    キーボードに完了バー
+    private func setDoneTooBar() {
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         // 左側のBarButtonItemはflexibleSpace。これがないと右に寄らない。flexibleSpaceはBlank space to add between other items
@@ -176,34 +201,21 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-        //        navigationbarの設定
+
+        //        tabBarController1(TabBarControllerクラスのインスタンス)がある場合の処理
+        self.setCreateFolderBarButtonItem()
+
+        //        selectFolderForTranslateViewController（保存先指定画面）で作成したフォルダー名を保存先に指定し選択ボタンを押下して、translateViewController画面へ戻ってきた時の処理
+        self.displaySaveButtonWithFolderName()
+    }
+
+//    tabBarController1(TabBarControllerクラスのインスタンス)がある場合の処理
+    private func setCreateFolderBarButtonItem() {
         if let tabBarController1 = tabBarController1 {
-            tabBarController1.setBarButtonItem0()
+            tabBarController1.setStringToNavigationItemTitle0()
             tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
             let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
             self.tabBarController1?.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
-        }
-
-        if let folderNameString = folderNameString {
-            let translationFolderArr2 = self.realm.objects(TranslationFolder.self)
-            var FolderNameArr = [String]()
-            if translationFolderArr2.count == 0 {
-                self.saveButton.isEnabled = false
-                self.saveButton.isHidden = true
-            } else {
-                for number in 0 ... translationFolderArr2.count - 1 {
-                    FolderNameArr.append(translationFolderArr2[number].folderName)
-                }
-            }
-
-            if FolderNameArr.contains(folderNameString) {
-                self.saveButton.setTitle("保存先▷\(folderNameString)", for: .normal)
-                self.saveButton.isHidden = false
-                self.saveButton.isEnabled = true
-            } else {
-                self.saveButton.isEnabled = false
-                self.saveButton.isHidden = true
-            }
         }
     }
 
@@ -211,16 +223,49 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         self.tabBarController1.createFolder()
     }
 
+    private func displaySaveButtonWithFolderName() {
+        //        self.folderNameStringには、保存先指定画面で指定したフォルダー名が格納される
+        guard let folderNameString = self.folderNameString else { return }
+        let translationFolderArr = self.realm.objects(TranslationFolder.self)
+        var folderNameArr = [String]()
+
+        if translationFolderArr.count == 0 {
+            self.saveButton.isEnabled = false
+            self.saveButton.isHidden = true
+        } else {
+            translationFolderArr.forEach { translationFolder in
+                folderNameArr.append(translationFolder.folderName)
+            }
+        }
+
+        if folderNameArr.contains(folderNameString) {
+            self.saveButton.configuration?.title = "保存先▷\(folderNameString)"
+            self.saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+            self.saveButton.isHidden = false
+            self.saveButton.isEnabled = true
+        } else {
+            self.saveButton.isEnabled = false
+            self.saveButton.isHidden = true
+        }
+    }
+
+//    翻訳ボタン押下時
     @IBAction func translateButton(_: Any) {
+        //        何も入力がなかった場合returnする
         if self.translateTextView1.text == "" {
             SVProgressHUD.show()
-            SVProgressHUD.showError(withStatus: "赤枠内にテキストを入力して、翻訳して下さい")
-            self.translateTextView1.layer.borderColor = UIColor.red.cgColor
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: self.changeIcon)
+            SVProgressHUD.showError(withStatus: "テキストを入力して、翻訳して下さい")
+            SVProgressHUD.dismiss(withDelay: 1.5)
             return
-        } else if self.languageLabel1.text == "Japanese" {
+        }
+
+        //        Japanese → English の場合
+        if self.languageLabel1.text == "Japanese" {
+            //        日本語から英語に訳す処理
             self.translateJapanese()
         } else {
+            //        English → Japanese の場合
+            //        英語から日本語に訳す処理
             self.translateEnglish()
         }
     }
@@ -229,33 +274,32 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         if self.languageLabel1.text == "Japanese" {
             self.languageLabel1.text = "English"
             self.languageLabel2.text = "Japanese"
-
         } else {
             self.languageLabel1.text = "Japanese"
             self.languageLabel2.text = "English"
         }
     }
 
+    // 入力があるたびに呼ばれる
     func textViewDidChange(_ textView: UITextView) {
-        if textView == self.translateTextView1 {
-            if self.translateTextView1.text != "" {
-                self.label1.text = ""
-            } else {
-                self.label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
-            }
+        guard textView == self.translateTextView1 else { return }
 
-            if self.languageLabel1.text == "Japanese" {
-                self.translateJapanese()
-            } else {
-                self.translateEnglish()
-            }
+        if self.translateTextView1.text != "" {
+            self.label1.text = ""
+        } else {
+            self.label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
+        }
+
+        if self.languageLabel1.text == "Japanese" {
+            self.translateJapanese()
+        } else {
+            self.translateEnglish()
         }
     }
 
-    func translateEnglish() {
+    // 英語を訳す
+    private func translateEnglish() {
         let authKey1 = KeyManager().getValue(key: "apiKey") as! String
-        print("DEBUG : \(authKey1)")
-        //            print結果　914cbb6c-40d6-0314-6e30-5fbd278de0ac:fx
 
         //            前後のスペースと改行を削除
         let authKey = authKey1.trimmingCharacters(in: .newlines)
@@ -272,16 +316,14 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         let headers: HTTPHeaders = [
             "Content-Type": "application/x-www-form-urlencoded",
         ]
-        // DeepL APIリクエストを実行
-        //        AF = Almofireのこと
-        //        Almofireはapi情報を取得するための便利なライブラリ　通常はswift側で用意されているURLSessionを使う。
+
+        // DeepL APIリクエストを実行　Almofireはapi情報を取得するための便利なライブラリ　通常はswift側で用意されているURLSessionを使う。
         //        requestメソッドでAPIを呼ぶ
         AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
-
             if case .success = response.result {
                 do {
                     // 結果をデコード
-                    //                    一般的に、アプリがAPIサーバーと通信する場合、データはJSON形式でやりとりすることが多いかと思います。Foundationフレームワークの JSONEncoder クラスを使用すると、Swiftの値をJSONに変換することができ、JSONDecoder クラスはJSONをSwiftの値にデコードすることができます
+                    //                    一般的に、アプリがAPIサーバーと通信する場合、データはJSON形式でやりとりすることが多い。Foundationフレームワークの JSONEncoder クラスを使用すると、Swiftの値をJSONに変換することができ、JSONDecoder クラスはJSONをSwiftの値にデコードすることができます
                     let result = try self.decoder.decode(DeepLResult.self, from: response.data!)
                     // 結果のテキストを取得&画面に反映
                     let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
@@ -296,11 +338,10 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         }
     }
 
-    func translateJapanese() {
+    // 日本語を訳す
+    private func translateJapanese() {
         // APIKey.plistに保存したDeepLの認証キーを取得
         let authKey1 = KeyManager().getValue(key: "apiKey") as! String
-        print("DEBUG : \(authKey1)")
-        //            print結果　914cbb6c-40d6-0314-6e30-5fbd278de0ac:fx
 
         //            前後のスペースと改行を削除
         let authKey = authKey1.trimmingCharacters(in: .newlines)
@@ -338,9 +379,6 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     // 結果のテキストを取得&画面に反映
                     let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
                     self.translateTextView2.text = text
-
-                    // 結果をNCMBに保存する処理を呼び出し
-                    //                                        saveResult()
                 } catch {
                     debugPrint("デコード失敗")
                 }
@@ -350,102 +388,64 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         }
     }
 
+//    （保存ボタン）保存先▷（フォルダー名）ボタンタップ時
     @IBAction func SaveButton(_: Any) {
-        if self.translateTextView2.text != "", self.translateTextView2.text != "" {
-            if let folderNameString = folderNameString {
-                SVProgressHUD.show()
-                let translateTextView1Text = self.translateTextView1.text
-                let translateTextView2Text = self.translateTextView2.text
+        // どっちも、または、どちらかのtextViewが空の場合、return
+        if self.translateTextView1.text.isEmpty || self.translateTextView2.text.isEmpty {
+            SVProgressHUD.showError(withStatus: "保存に失敗しました\nテキストを入力してください")
+            SVProgressHUD.dismiss(withDelay: 1.5)
+            return
+        }
+        // どちらのtextViewにも入力があった場合はRealmに保存処理
+        self.saveDataInTranslationFolderAndHistoryClass()
+    }
 
-                let predict = NSPredicate(format: "folderName == %@", folderNameString)
-                self.translationFolderArr = self.realm.objects(TranslationFolder.self).filter(predict)
+    // TranslationFolderクラスとHistoryクラスへデータを保存
+    private func saveDataInTranslationFolderAndHistoryClass() {
+        if let folderNameString = folderNameString, let translateTextView1Text = self.translateTextView1.text, let translateTextView2Text = self.translateTextView2.text {
+            // すでに作成して、realmに保存されたフォルダー名から、folderNameStringと同名のフォルダー名を検索して、
+            let predicate = NSPredicate(format: "folderName == %@", folderNameString)
+            // そのデータを取り出す
+            // (同名のフォルダー名は存在しないようにしているため、self.translationFolderArrのデータの数は一つだけになる）
+            self.translationFolderArr = self.realm.objects(TranslationFolder.self).filter(predicate)
 
-                let translation = Translation()
-                translation.inputData = translateTextView1Text!
-                translation.resultData = translateTextView2Text! + "\n" + "メモ : "
-                translation.inputAndResultData = translation.inputData + translation.resultData
-                let translationArr = self.realm.objects(Translation.self)
-                if translationArr.count != 0 {
-                    translation.id = translationArr.max(ofProperty: "id")! + 1
-                }
-
-                try! self.realm.write {
-                    translationFolderArr.first!.results.append(translation)
-                }
-
-//                    HistoryViewContoller(翻訳履歴画面）用にHistoryモデルクラスへ保存
-                let history = Histroy()
-
-                let historyArr = self.realm.objects(Histroy.self)
-                if historyArr.count != 0 {
-                    history.id = historyArr.max(ofProperty: "id")! + 1
-                }
-
-                try! self.realm.write {
-                    history.inputData = translateTextView1Text!
-                    history.resultData = translateTextView2Text!
-                    history.date = Date()
-                    history.inputAndResultData = translateTextView1Text! + translateTextView2Text!
-                    self.realm.add(history)
-                }
-
-                SVProgressHUD.showSuccess(withStatus: "'\(folderNameString)' へ保存しました")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: self.showDismiss)
-
-                if self.translateTextView1.layer.borderWidth == 2 {
-                    self.translateTextView1.layer.borderWidth = 2
-                    self.translateTextView1.layer.borderColor = UIColor.systemGray4.cgColor
-                }
-
-                if self.translateTextView2.layer.borderWidth == 2 {
-                    self.translateTextView2.layer.borderWidth = 2
-                    self.translateTextView2.layer.borderColor = UIColor.systemGray4.cgColor
-                }
+            let translation = Translation()
+            // 入力されたテキスト
+            translation.inputData = translateTextView1Text
+            // 翻訳結果テキスト
+            translation.resultData = translateTextView2Text + "\n" + "メモ : "
+            // 入力されたテキストと翻訳結果テキスト
+            translation.inputAndResultData = translation.inputData + translation.resultData
+            let translationArr = self.realm.objects(Translation.self)
+            // idが被らないようにする
+            if translationArr.count != 0 {
+                translation.id = translationArr.max(ofProperty: "id")! + 1
             }
 
-        } else if self.translateTextView1.text == "", self.translateTextView2.text == "" {
-            self.error1()
-            self.error2()
-        } else if self.translateTextView1.text == "" {
-            self.error1()
-            SVProgressHUD.show()
-            SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストを入力してください")
-        } else {
-            self.error2()
+            // 書き込み（データは一つだけのため、firstで取り出す）
+            try! self.realm.write {
+                translationFolderArr.first!.results.append(translation)
+            }
+
+            //                    HistoryViewContoller(翻訳履歴画面）用にHistoryクラスへ保存
+            let history = Histroy()
+            let historyArr = self.realm.objects(Histroy.self)
+            if historyArr.count != 0 {
+                history.id = historyArr.max(ofProperty: "id")! + 1
+            }
+
+            // 書き込み
+            try! self.realm.write {
+                history.inputData = translateTextView1Text
+                history.resultData = translateTextView2Text
+                history.date = Date()
+                history.inputAndResultData = history.inputData + history.resultData
+                self.realm.add(history)
+            }
+
+            SVProgressHUD.showSuccess(withStatus: "'\(folderNameString)' へ保存しました")
+            SVProgressHUD.dismiss(withDelay: 1.5)
         }
-    }
-
-    func showDismiss() {
-        SVProgressHUD.dismiss()
-    }
-
-    func error1() {
-        let borderColor1 = UIColor.red.cgColor
-        self.translateTextView1.layer.borderWidth = 2
-        self.translateTextView1.layer.borderColor = borderColor1
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: self.changeIcon)
-    }
-
-    func error2() {
-        SVProgressHUD.show()
-        let borderColor1 = UIColor.red.cgColor
-        self.translateTextView2.layer.borderWidth = 2
-        self.translateTextView2.layer.borderColor = borderColor1
-        SVProgressHUD.showError(withStatus: "保存失敗\n赤枠内にテキストを入力してください")
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: self.changeIcon)
-    }
-
-    func changeIcon() {
-        let borderColor1 = UIColor.systemGray4.cgColor
-        self.translateTextView1.layer.borderWidth = 2
-        self.translateTextView2.layer.borderColor = borderColor1
-
-        self.translateTextView2.layer.borderWidth = 2
-        self.translateTextView2.layer.borderColor = borderColor1
-
-        SVProgressHUD.dismiss()
     }
 
     @IBAction func deleteButton1(_: Any) {
@@ -457,9 +457,9 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         self.translateTextView2.text = ""
     }
 
+    // 右下のフォルダー選択ボタン押下時
     @IBAction func selectFolderButton(_: Any) {
         let selectFolderForTranslateViewContoller = storyboard?.instantiateViewController(withIdentifier: "FolderList") as! SelectFolderForTranslateViewContoller
-
         if let sheet = selectFolderForTranslateViewContoller.sheetPresentationController {
             sheet.detents = [.medium()]
         }
@@ -467,44 +467,40 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         present(selectFolderForTranslateViewContoller, animated: true, completion: nil)
     }
 
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-
-    func setStringForButton2() {
-        self.tabBarController1.setBarButtonItem0()
+    internal func setFolderNameStringOnButton2() {
+        self.tabBarController1.setStringToNavigationItemTitle0()
         self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
-
-        if let folderNameString = folderNameString {
-            let translationFolderArr2 = self.realm.objects(TranslationFolder.self)
-            var FolderNameArr = [String]()
-            if translationFolderArr2.count == 0 {
-                self.saveButton.isEnabled = false
-                self.saveButton.isHidden = true
-                return
-            } else {
-                for number in 0 ... translationFolderArr2.count - 1 {
-                    FolderNameArr.append(translationFolderArr2[number].folderName)
-                }
+        
+        guard let folderNameString = self.folderNameString else {
+            return
+        }
+        let translationFolderArr = self.realm.objects(TranslationFolder.self)
+        var folderNameArr = [String]()
+        if translationFolderArr.count == 0 {
+            self.saveButton.isEnabled = false
+            self.saveButton.isHidden = true
+            return
+        } else {
+            for number in 0 ... translationFolderArr.count - 1 {
+                folderNameArr.append(translationFolderArr[number].folderName)
             }
-
-            if FolderNameArr.contains(folderNameString) {
-                self.saveButton.setTitle("保存先▷\(folderNameString)", for: .normal)
-                self.saveButton.isHidden = false
-                self.saveButton.isEnabled = true
-
-            } else {
-                self.saveButton.isEnabled = false
-                self.saveButton.isHidden = true
+            translationFolderArr.forEach { translationFolder in
+                folderNameArr.append(translationFolder.folderName)
             }
         }
+        
+        if folderNameArr.contains(folderNameString) {
+            self.saveButton.configuration?.title = "保存先▷\(folderNameString)"
+            self.saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+            self.saveButton.isHidden = false
+            self.saveButton.isEnabled = true
+            
+        } else {
+            self.saveButton.isEnabled = false
+            self.saveButton.isHidden = true
+        }
     }
+    
 
     @IBAction func copyButton1(_: Any) {
         self.copyTextView(textView: self.translateTextView1, button: self.copyButton1)
@@ -514,36 +510,33 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         self.copyTextView(textView: self.translateTextView2, button: self.copyButton2)
     }
 
-    func copyTextView(textView: UITextView, button: UIButton) {
+    func copyTextView(textView: UITextView, button _: UIButton) {
         UIPasteboard.general.string = textView.text
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
-        button.setImage(UIImage(systemName: "checkmark", withConfiguration: config), for: .normal)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: self.chageCopyIcon)
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
-    func chageCopyIcon() {
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
-        self.copyButton1.setImage(UIImage(systemName: "doc.on.doc", withConfiguration: config), for: .normal)
-        self.copyButton2.setImage(UIImage(systemName: "doc.on.doc", withConfiguration: config), for: .normal)
-    }
-
-    //　音声再生
+    //　translateTextView1の音声再生
     @IBAction func volumeButton1(_: Any) {
+        // contextMenuを表示
         self.speak(textView: self.translateTextView1)
-        self.numberForVolumeButton2 = 0
+        self.shouldSpeakWhenTappedVolumeButton1 = true
+        self.shouldSpeakWhenTappedVolumeButton2 = false
     }
 
-//    音声再生
+    //　translateTextView2の音声再生
     @IBAction func volumeButton2(_: Any) {
+        // contextMenuを表示
         self.speak(textView: self.translateTextView2)
-        self.numberForVolumeButton2 = 1
+        self.shouldSpeakWhenTappedVolumeButton2 = true
+        self.shouldSpeakWhenTappedVolumeButton1 = false
     }
 
-    func speak(textView: UITextView) {
+    // contextMenuを表示
+    private func speak(textView: UITextView) {
         let english = ContextMenuItemWithImage(title: "英語音声", image: UIImage())
         let japanese = ContextMenuItemWithImage(title: "日本語音声", image: UIImage())
         let stop = ContextMenuItemWithImage(title: "停止", image: UIImage())
-
         CM.items = [english, japanese, stop]
         CM.showMenu(viewTargeted: textView, delegate: self, animated: true)
     }
@@ -551,45 +544,45 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
 extension TranslateViewController: ContextMenuDelegate {
     func contextMenuDidSelect(_: ContextMenu, cell _: ContextMenuCell, targetedView _: UIView, didSelect _: ContextMenuItem, forRowAt index: Int) -> Bool {
+        //            音声再生停止
+        self.talker.stopSpeaking(at: AVSpeechBoundary.immediate)
+
         switch index {
         case 0:
-            if self.numberForVolumeButton2 == 0 {
-                let englishText = self.translateTextView1.text!
-//                話す内容をセット
-                let utterance = AVSpeechUtterance(string: englishText)
-                //            言語を英語に設定
-                utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                //            実行
-                self.talker.speak(utterance)
-            } else {
-                self.numberForVolumeButton2 = 0
-                let englishText = self.translateTextView2.text!
-                let utterance = AVSpeechUtterance(string: englishText)
-                utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                self.talker.speak(utterance)
+            if self.shouldSpeakWhenTappedVolumeButton1 {
+                self.implementSpeaking(translateTextView: self.translateTextView1, language: "en-US")
             }
-//
+
+            if self.shouldSpeakWhenTappedVolumeButton2 {
+                self.implementSpeaking(translateTextView: self.translateTextView2, language: "en-US")
+            }
+        //
         case 1:
-            if self.numberForVolumeButton2 == 0 {
-                let japaneseText = self.translateTextView1.text!
-                let utterance = AVSpeechUtterance(string: japaneseText)
-                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-                self.talker.speak(utterance)
-            } else {
-                self.numberForVolumeButton2 = 0
-                let japaneseText = self.translateTextView2.text!
-                let utterance = AVSpeechUtterance(string: japaneseText)
-                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-                self.talker.speak(utterance)
+            if self.shouldSpeakWhenTappedVolumeButton1 {
+                self.implementSpeaking(translateTextView: self.translateTextView1, language: "ja-JP")
+            }
+
+            if self.shouldSpeakWhenTappedVolumeButton2 {
+                self.implementSpeaking(translateTextView: self.translateTextView2, language: "ja-JP")
             }
         case 2:
-//            音声再生停止
+            //            音声再生停止
             self.talker.stopSpeaking(at: AVSpeechBoundary.immediate)
-
         default:
             print("nilです")
         }
         return true
+    }
+
+//    音声再生を実行するメソッド
+    private func implementSpeaking(translateTextView: UITextView, language: String) {
+        let spokenText = translateTextView.text!
+        //                話す内容をセット
+        let utterance = AVSpeechUtterance(string: spokenText)
+        //            言語を英語に設定
+        utterance.voice = AVSpeechSynthesisVoice(language: language)
+        //            実行
+        self.talker.speak(utterance)
     }
 
     func contextMenuDidDeselect(_: ContextMenu, cell _: ContextMenuCell, targetedView _: UIView, didSelect _: ContextMenuItem, forRowAt _: Int) {}
