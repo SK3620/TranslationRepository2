@@ -14,24 +14,28 @@ import UIKit
 
 class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var label: UILabel!
 
-    var folderNameString: String?
-    var resultsArr = [TranslationFolder]()
+    @IBOutlet private var searchBar: UISearchBar!
+
+    @IBOutlet private var label: UILabel!
+
+    private var folderNameString: String?
+
+    private var resultsArr = [TranslationFolder]()
+
     var tabBarController1: TabBarController!
 
-    let realm = try! Realm()
-    var translationFolderArr: Results<TranslationFolder> = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+    private let realm = try! Realm()
+    private var translationFolderArr: Results<TranslationFolder> = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // wrtie to Speak realm database in advance
         let speak = Speak()
         speak.playInputData = false
-//        入力した文章を音声読み上げ
+        // if it reads out input text or not
         speak.playResultData = true
-//        翻訳結果を音声読み上げ
+        // if it reads out result text or not
         try! Realm().write {
             self.realm.add(speak, update: .modified)
         }
@@ -41,49 +45,49 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.separatorColor = .systemBlue
         self.searchBar.delegate = self
         self.searchBar.backgroundImage = UIImage()
-        //        何も入力されていなくてもreturnキー押せるようにする
+
+        // Allow the return key to be pressed even if nothing is typed.
         self.searchBar.enablesReturnKeyAutomatically = false
 
         // キーボードに完了のツールバーを作成
         self.setDoneOnKeyBoard()
     }
 
-//    検索時の完了のボタンタップ時
+    // when done button tapped
     @objc func doneButtonTaped(sender _: UIButton) {
         self.searchBar.endEditing(true)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
 
-//        StudyViewControllerで音声再生されていたら、音声停止する
+        // Stop audio if it is playing in StudyViewController
         AVSpeechSynthesizer().stopSpeaking(at: .immediate)
 
-//        フォルダーがない場合、画面に表示
+//       if there are no folders, display
         self.label.text = "右上のボタンでフォルダーを作成しよう！"
-//        self.editButton.setTitle("編集", for: .normal)
-//        self.tableView.isEditing = false
 
         navigationController!.setNavigationBarHidden(true, animated: false)
-        //        navigationbarの設定
+        //        navigationbar settings
+        self.navigationBarSettings()
+
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
+        self.tableView.reloadData()
+    }
+
+    private func navigationBarSettings() {
         if let tabBarController1 = tabBarController1 {
+            // display "フォルダー" in title
             tabBarController1.setStringToNavigationItemTitle1()
             tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+
             let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self,
                                                     action: #selector(self.tappedEditBarButtonItem(_:)))
             let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
             self.tabBarController1?.navigationItem.rightBarButtonItems = [editBarButtonItem, createFolderBarButtonItem]
         }
-
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
-
-        if self.translationFolderArr.count == 0 {
-//            self.editButton.isEnabled = false
-        }
-
-        self.tableView.reloadData()
     }
 
     @objc func tappedCreateFolderBarButtonItem(_: UIBarButtonItem) {
@@ -104,24 +108,19 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func searchBar(_: UISearchBar, textDidChange _: String) {
-//        検索欄に何もなければ
+        //　if there are no characters in the seachBar, return
         if self.searchBar.text == "" {
             self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-
-        } else {
-//            あれば、
-            self.translationFolderArr = self.translationFolderArr.filter("folderName CONTAINS '\(self.searchBar.text!)'")
-//            検索欄に入力があり、さらにtranslationFolderArrが空なら、全て表示する
-            if self.translationFolderArr.count == 0 {
-                self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-            }
+            self.tableView.reloadData()
+            return
         }
+        // if there are any characters in the search bar
+        self.translationFolderArr = self.translationFolderArr.filter("folderName CONTAINS '\(self.searchBar.text!)'")
 
-        self.tableView.reloadData()
-    }
-
-    func tableViewReload() {
-        self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+        // if there are any characters entered in the search bar and translationFolderArr is empty, display all the folderNames
+        if self.translationFolderArr.count == 0 {
+            self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+        }
         self.tableView.reloadData()
     }
 
@@ -129,37 +128,36 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if self.translationFolderArr.count == 0 {
             tableView.isEditing = false
             self.label.text = "右上のボタンでフォルダーを作成しよう！"
-//            self.editButton.setTitle("編集", for: .normal)
-//            self.editButton.isEnabled = false
         } else {
             self.label.text = ""
-//            self.editButton.isEnabled = true
         }
         return self.translationFolderArr.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.numberOfLines = 0
 
-//        セルに内容設定
+        let date = self.translationFolderArr[indexPath.row].date
+        let dateString = self.getDate(date: date)
+        cell.detailTextLabel?.text = "作成日:\(dateString)"
+        cell.textLabel?.numberOfLines = 0
         cell.imageView?.image = UIImage(systemName: "folder")
         cell.textLabel?.text = self.translationFolderArr[indexPath.row].folderName
+        return cell
+    }
 
+    private func getDate(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd HH:mm"
-
-        let dateString: String = formatter.string(from: self.translationFolderArr[indexPath.row].date)
-        cell.detailTextLabel?.text = "作成日:\(dateString)"
-
-        return cell
+        let dateString = formatter.string(from: date)
+        return dateString
     }
 
     func tableView(_: UITableView, editingStyleForRowAt _: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
 
-//    deleteボタンが押された時
+    // when the delete button is tapped
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
 //            データベースから削除する
@@ -167,37 +165,33 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 self.realm.delete(self.translationFolderArr[indexPath.row])
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
-            tableView.reloadData()
+            self.tableViewReload()
         }
     }
 
-//    セルがタップされた時
+    private func tableViewReload() {
+        self.translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+        self.tableView.reloadData()
+    }
+
+    // when the cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var translationFolderArr = try! Realm().objects(TranslationFolder.self)
-
         self.folderNameString = self.translationFolderArr[indexPath.row].folderName
-
-        let predict = NSPredicate(format: "folderName == %@", folderNameString!)
-        translationFolderArr = translationFolderArr.filter(predict)
+        let predicate = NSPredicate(format: "folderName == %@", folderNameString!)
+        translationFolderArr = translationFolderArr.filter(predicate)
 
         tableView.deselectRow(at: indexPath, animated: true)
 
-//        resultsに何も値があれば、フォルダー名をhitory2ViewControllerへ渡す+画面遷移
+//        If results has any value, pass the folder name to hitory2ViewController and perform screen transition
         if translationFolderArr[0].results.count != 0 {
             let studyViewContoller = storyboard!.instantiateViewController(withIdentifier: "StudyViewController") as! StudyViewController
-
             studyViewContoller.folderNameString = self.folderNameString!
-
             performSegue(withIdentifier: "ToStudyViewController", sender: self.folderNameString)
-//                number = 1
-
         } else {
-            SVProgressHUD.show()
+            // if it doesn't have any value
             SVProgressHUD.showError(withStatus: "'\(self.folderNameString!)' フォルダー内に保存されたデータがありません")
-//                number = 1
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { () in
-                SVProgressHUD.dismiss()
-            }
+            SVProgressHUD.dismiss(withDelay: 2.0)
         }
     }
 
@@ -212,14 +206,13 @@ class FolderViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func editButtonAction(_: Any) {
         if self.tableView.isEditing {
             self.tableView.isEditing = false
-//            self.editButton.setTitle("編集", for: .normal)
         } else {
             self.tableView.isEditing = true
-//            self.editButton.setTitle("完了", for: .normal)
         }
     }
 
-    func setDoneOnKeyBoard() {
+    // install done bar on keyboard
+    private func setDoneOnKeyBoard() {
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)

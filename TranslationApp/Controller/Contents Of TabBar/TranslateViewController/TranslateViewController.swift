@@ -13,19 +13,6 @@ import SVProgressHUD
 import UIKit
 
 class TranslateViewController: UIViewController, UITextViewDelegate {
-    //    フォルダー名を格納
-    var folderNameString: String?
-
-    //    TabBarControllerインスタンス格納用の変数
-    var tabBarController1: TabBarController!
-
-    var realm = try! Realm()
-    var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-
-    // 音声再生時の判別用の変数
-    var shouldSpeakWhenTappedVolumeButton1: Bool!
-    var shouldSpeakWhenTappedVolumeButton2: Bool!
-
 //    上のtextView
     @IBOutlet private var translateTextView1: UITextView!
 //    下のtextView
@@ -52,9 +39,20 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     @IBOutlet private var deleteTextButton1: UIButton!
     @IBOutlet private var deleteTextButton2: UIButton!
 
-    private var talker = AVSpeechSynthesizer()
+    //    フォルダー名を格納
+    var folderNameString: String?
 
-    private var numberForVolumeButton2: Int = 0
+    //    TabBarControllerインスタンス格納用の変数
+    var tabBarController1: TabBarController!
+
+    private var realm = try! Realm()
+    private var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+
+    // 音声再生時の判別用の変数
+    private var shouldSpeakWhenTappedVolumeButton1: Bool!
+    private var shouldSpeakWhenTappedVolumeButton2: Bool!
+
+    private var talker = AVSpeechSynthesizer()
 
     let decoder: JSONDecoder = .init()
     // DeepL APIのレスポンス用構造体
@@ -133,7 +131,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     }
 
     //　　textViewとViewのデザイン設定
-    func setTranslateTextViewAndView() {
+    private func setTranslateTextViewAndView() {
         let color = UIColor.systemGray4.cgColor
         self.translateTextView1.layer.borderColor = color
         self.translateTextView1.layer.borderWidth = 2
@@ -470,7 +468,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     internal func setFolderNameStringOnButton2() {
         self.tabBarController1.setStringToNavigationItemTitle0()
         self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
-        
+
         guard let folderNameString = self.folderNameString else {
             return
         }
@@ -488,19 +486,18 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                 folderNameArr.append(translationFolder.folderName)
             }
         }
-        
+
         if folderNameArr.contains(folderNameString) {
             self.saveButton.configuration?.title = "保存先▷\(folderNameString)"
             self.saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
             self.saveButton.isHidden = false
             self.saveButton.isEnabled = true
-            
+
         } else {
             self.saveButton.isEnabled = false
             self.saveButton.isHidden = true
         }
     }
-    
 
     @IBAction func copyButton1(_: Any) {
         self.copyTextView(textView: self.translateTextView1, button: self.copyButton1)

@@ -16,14 +16,16 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
 
     var inputDataTextView1: String = ""
     var resultDataTextView2: String = ""
+    
     var translationId: Int = 0
 
-    var realm = try! Realm()
-    var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
+    private var realm = try! Realm()
+    private var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+//       notification center to raise the view by the height of the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
@@ -36,7 +38,14 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
         self.setDoneToolBar()
         self.setBarButtonItem()
     }
+    
+    override func viewWillAppear(_: Bool) {
+           super.viewWillAppear(true)
 
+           self.textView1.text = self.inputDataTextView1
+           self.textView2.text = self.resultDataTextView2
+       }
+    
     @objc func keyboardWillHide() {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
@@ -66,7 +75,6 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
     }
 
     func setDoneToolBar() {
-        // キーボードに完了のツールバーを作成
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -92,32 +100,19 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
         self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
     }
 
-//    保存ボタン
+//   a button to save
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
         SVProgressHUD.show()
         let translationArr = self.realm.objects(Translation.self).filter("id == \(self.translationId)").first!
-
         try! self.realm.write {
             translationArr.inputData = textView1.text
             translationArr.resultData = textView2.text
             translationArr.inputAndResultData = textView1.text + textView2.text
             self.realm.add(translationArr, update: .modified)
         }
-
         SVProgressHUD.showSuccess(withStatus: "保存しました")
         SVProgressHUD.dismiss(withDelay: 1.5) {
             self.navigationController?.popViewController(animated: true)
         }
-    }
-
-    override func viewWillAppear(_: Bool) {
-        super.viewWillAppear(true)
-
-        self.textView1.text = self.inputDataTextView1
-        self.textView2.text = self.resultDataTextView2
-    }
-
-    override func viewWillDisappear(_: Bool) {
-        super.viewWillDisappear(true)
     }
 }

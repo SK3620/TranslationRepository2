@@ -465,7 +465,7 @@
         <!--フォルダー-->
         <scene sceneID="g8O-Ns-qW5">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gca-Zk-cvt" customClass="NavigationControllerForFolder" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gca-Zk-cvt" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="フォルダー" image="folder" catalog="system" id="ZMz-ZV-9oz"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cNo-a8-ak7">

@@ -17,11 +17,12 @@ import UIKit
 
 class TabBarController: UITabBarController {
     var tabBarController1: UITabBarController!
-    let realm = try! Realm()
-    var translationFolder: TranslationFolder!
-    var array = [String]()
-//    フォルダー作成時の文字数制限
-    var maxCharactersLength: Int = 13
+    private let realm = try! Realm()
+    private var translationFolder: TranslationFolder!
+    private var folderNameArr = [String]()
+
+    // limited number of characters
+    private var maxCharactersLength: Int = 13
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,24 +32,23 @@ class TabBarController: UITabBarController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
     }
 
-    func setNavigationBarAppearence() {
+    private func setNavigationBarAppearence() {
         let appearance1 = UINavigationBarAppearance()
         appearance1.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance1
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance1
 
         self.selectedIndex = 2
-        // タブアイコンの色
+        // the color of the tab icon
         tabBar.tintColor = UIColor.systemBlue
-        // タブバーの背景色を設定
+        // settings for backGround color
         let appearance2 = UITabBarAppearance()
         appearance2.backgroundColor = UIColor.systemGray6
         tabBar.standardAppearance = appearance2
         tabBar.scrollEdgeAppearance = appearance2
     }
 
-    func giveTabBarControllerToEachOfViewControllers() {
-        //        tabBarControllerへつながる各々のviewControlleクラスのtabBarControllerインスタンスを格納する変数tabBarController1にselfを指定
+    private func giveTabBarControllerToEachOfViewControllers() {
         let navigationController0 = viewControllers![0] as! UINavigationController
         let historyViewController = navigationController0.viewControllers[0] as! HistoryViewController
         historyViewController.tabBarController1 = self
@@ -70,34 +70,34 @@ class TabBarController: UITabBarController {
         recordViewController.tabBarController1 = self
     }
 
-//    translateViewControllerクラスでアクセス
+    // access in TranslateViewController
     public func setStringToNavigationItemTitle0() {
         navigationItem.title = "翻訳"
     }
 
-//    FolderViewControllerクラスでアクセス
+    // access in FolderViewController
     public func setStringToNavigationItemTitle1() {
         navigationItem.title = "フォルダー"
     }
 
-//    HistoryViewControllerクラスでアクセス
+    // access in HistoryViewController
     public func setStringToNavigationItemTitle2() {
         navigationItem.title = "履歴"
     }
 
-//    RecordViewControllerクラスでアクセス
+    // access in RecodViewController
     public func setStringToNavigationItemTitle3() {
         navigationItem.title = "学習記録"
     }
 
-//    phraseWordViewControllerクラスでアクセス
+    // access in PhraseWordViewController
     public func setStringToNavigationItemTitle4() {
         navigationItem.title = "お気に入り"
     }
 
-    // folderViewContoller画面を表示中にフォルダー作成した時に呼ばれる
+    // called when a new folder is created while FolderViewController screen is displayed
     func tableViewReload() {
-        //        「１」は　folderViewController
+        //        「１」represents folderViewController
         if selectedIndex == 1 {
             let navigationController = viewControllers![1] as! UINavigationController
             let folderViewController = navigationController.viewControllers[0] as! FolderViewController
@@ -105,7 +105,7 @@ class TabBarController: UITabBarController {
         }
     }
 
-//    右上のフォルダー作成アイコンタップ時
+    // called when the button is tapped on the upper right corner of the screen
     @IBAction func button(_: Any) {
         self.createFolder()
     }
@@ -121,62 +121,75 @@ class TabBarController: UITabBarController {
         alert.addAction(UIAlertAction(title: "作成", style: .default, handler: { _ in
 
             if let textField_text = alert.textFields?.first?.text {
+                let textField_text = textField_text.trimmingCharacters(in: .whitespaces)
                 let translationFolderArr = self.realm.objects(TranslationFolder.self)
-                if translationFolderArr.isEmpty {
-                } else {
-                    for number in 0 ... translationFolderArr.count - 1 {
-                        self.array.append(translationFolderArr[number].folderName)
+                // if the retrived data is not empty
+                if translationFolderArr.isEmpty != true {
+                    self.folderNameArr = []
+                    translationFolderArr.forEach { translationFolder in
+                        self.folderNameArr.append(translationFolder.folderName)
                     }
                 }
 
-                //                同じフォルダー名や空文字の場合、作成できません。
-                if self.array.contains(textField_text) != true, textField_text != "" {
-                    self.translationFolder = TranslationFolder()
-
-                    SVProgressHUD.show()
-
-                    //            プライマリーキーであるidに値を設定（他のidと被らないように）
-                    let allTranslationFolder = self.realm.objects(TranslationFolder.self)
-                    if allTranslationFolder.count != 0 {
-                        self.translationFolder.id = allTranslationFolder.max(ofProperty: "id")! + 1
-                    }
-
-                    //            （保存時の）現在の日付を取得
-                    try! self.realm.write {
-                        self.translationFolder.folderName = textField_text
-                        self.translationFolder.date = Date()
-                        self.realm.add(self.translationFolder)
-                    }
-
-                    SVProgressHUD.showSuccess(withStatus: "新規フォルダー\n\(textField_text)\nを追加しました。")
-                }
-
-                //                何も入力されていないなら
-                if textField_text == "" {
-                    SVProgressHUD.show()
-                    SVProgressHUD.showError(withStatus: "フォルダー名を入力してください")
-                    //                        同じフォルダー名があったら
-                } else if self.array.contains(textField_text) {
-                    SVProgressHUD.show()
-                    SVProgressHUD.showError(withStatus: "同じフォルダー名は作成できません")
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { () in SVProgressHUD.dismiss() }
-                self.tableViewReload()
+                self.determineIfTheNewFileCanBeCreated(textField_text: textField_text, completion: { () in
+                    self.wrtieFolderNameToDatabase(textField_text: textField_text)
+                    self.tableViewReload()
+                })
             }
         }))
         present(alert, animated: true, completion: nil)
     }
 
-//    タイムライン画面への遷移時
+    // determine if the new file can be created
+    private func determineIfTheNewFileCanBeCreated(textField_text: String, completion: @escaping () -> Void) {
+        // if nothing is entered
+        if textField_text.isEmpty {
+            SVProgressHUD.showError(withStatus: "フォルダー名を入力してください")
+            SVProgressHUD.dismiss(withDelay: 2.0)
+            return
+                // if there is a folder with the same name as the one you attempt to create
+        } else if self.folderNameArr.contains(textField_text) {
+            SVProgressHUD.show()
+            SVProgressHUD.showError(withStatus: "同じフォルダー名は作成できません")
+            SVProgressHUD.dismiss(withDelay: 2.0)
+            return
+        }
+        // if both of the above 2 conditions are not met (satisfied), implement closure whose process is descrebed right below this one
+        completion()
+    }
+
+    // process called as a closure for writing folderName to Realm database
+    private func wrtieFolderNameToDatabase(textField_text: String) {
+        // a folder cannot be created with the same name and with no characters
+        if self.folderNameArr.contains(textField_text) != true, textField_text != "" {
+            self.translationFolder = TranslationFolder()
+            let allTranslationFolder = self.realm.objects(TranslationFolder.self)
+            // set the value to the id that is the primary key so that id doesn't cover any of the id
+            if allTranslationFolder.count != 0 {
+                self.translationFolder.id = allTranslationFolder.max(ofProperty: "id")! + 1
+            }
+
+            // wrtie to Realm DataBase
+            try! self.realm.write {
+                self.translationFolder.folderName = textField_text
+                self.translationFolder.date = Date()
+                self.realm.add(self.translationFolder)
+            }
+
+            SVProgressHUD.showSuccess(withStatus: "新規フォルダー\n'\(textField_text)'\nを作成しました。")
+            SVProgressHUD.dismiss(withDelay: 2.0)
+        }
+    }
+
+    // when excuting a transition to timeline screeen
     override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
         if segue.identifier == "ToSecondTabBarController" {
             let secondTabBarController = segue.destination as! SecondTabBarController
-//            プロフィール画面へsecondTabBarControllerインスタンスを渡す
+
+            // pass the SecondTabBarController instance to each of specified viewControllers which are described below
             let navigationController = secondTabBarController.viewControllers![1] as! UINavigationController
             let profileViewController = navigationController.viewControllers[0] as! ProfileViewController
             profileViewController.secondTabBarController = secondTabBarController
-//
 
             let navigationController1 = secondTabBarController.viewControllers![0] as! UINavigationController
             let secondPagingViewController = navigationController1.viewControllers[0] as! SecondPagingViewController
@@ -191,9 +204,9 @@ class TabBarController: UITabBarController {
 
 extension TabBarController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        //        テキストフィールドのセレクションが変更される度に実行される　ここでテキストの最大文字数とスペースの規制を行う
+        // run each time the selection in the textField is changed
+        // regulate maximun number of characters and spaces in the textField
         guard let textField_text = textField.text else { return }
-
         if textField_text.count > self.maxCharactersLength {
             textField.text = String(textField_text.prefix(self.maxCharactersLength))
         }

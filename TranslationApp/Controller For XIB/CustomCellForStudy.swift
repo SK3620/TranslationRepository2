@@ -22,7 +22,7 @@ class CustomCellForStudy: UITableViewCell {
 
     var delegate: LongPressDetectionDelegate!
     var indexPath_row: Int!
-    var cell: CustomCellForStudy!
+    var customCellForStudy: CustomCellForStudy!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -44,7 +44,7 @@ class CustomCellForStudy: UITableViewCell {
         print("タップ")
         if sender.state == UIGestureRecognizer.State.began {
             print("長押し開始")
-            self.delegate.longPressDetection(self.indexPath_row, self.cell)
+            self.delegate.longPressDetection(self.indexPath_row, self.customCellForStudy)
         } else if sender.state == UIGestureRecognizer.State.ended {
             print("長押し終了")
         }

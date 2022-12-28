@@ -72,7 +72,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         navigationController?.setNavigationBarHidden(true, animated: false)
 
         if let studyViewController = studyViewController {
-            studyViewController.SetTabBarController1()
+            studyViewController.hideNavigationControllerOfTabBarController()
             self.setItemsOnNaviationBar()
         }
         self.tableView.reloadData()
@@ -104,7 +104,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         if let studyViewController = studyViewController {
-            studyViewController.SetTabBarController1()
+            studyViewController.hideNavigationControllerOfTabBarController()
             self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
     }

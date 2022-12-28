@@ -120,7 +120,6 @@
 		83D8963729141D9500E570AD /* CustomCellForCommentSetion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */; };
 		83D8963829141D9500E570AD /* CustomCellForCommentSetion.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83D8963629141D9500E570AD /* CustomCellForCommentSetion.xib */; };
 		83F021B128C0CC56009FFDD2 /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021B028C0CC56009FFDD2 /* StudyViewController.swift */; };
-		83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -224,7 +223,6 @@
 		83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForCommentSetion.swift; sourceTree = "<group>"; };
 		83D8963629141D9500E570AD /* CustomCellForCommentSetion.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForCommentSetion.xib; sourceTree = "<group>"; };
 		83F021B028C0CC56009FFDD2 /* StudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewController.swift; sourceTree = "<group>"; };
-		83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerForFolder.swift; sourceTree = "<group>"; };
 		C116E1FDCFAEA5860B3B5F33 /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -395,7 +393,6 @@
 		8356E961290647D200FD9236 /* FolderViewController */ = {
 			isa = PBXGroup;
 			children = (
-				83F41A6D28F3B39E004F653F /* NavigationControllerForFolder.swift */,
 				839FBA3228BA101200BB64A5 /* FolderViewController.swift */,
 				83F021B028C0CC56009FFDD2 /* StudyViewController.swift */,
 				83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */,
@@ -673,7 +670,6 @@
 				83C2CCA5291D1D1900A671AE /* PronunciationViewController.swift in Sources */,
 				83920A9F290B946100F1F2D6 /* CustomCellForIntroduction.swift in Sources */,
 				83B9C20428D3132D006138E2 /* EditRecordViewController.swift in Sources */,
-				83F41A6E28F3B39E004F653F /* NavigationControllerForFolder.swift in Sources */,
 				8356E9552905574500FD9236 /* History.swift in Sources */,
 				835B38EC2950070200D42F50 /* ChatList.swift in Sources */,
 				83D896342914190500E570AD /* InputCommentViewController.swift in Sources */,

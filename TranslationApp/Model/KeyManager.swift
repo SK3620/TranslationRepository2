@@ -7,11 +7,12 @@
 
 import Foundation
 // apikey.plist(APIKeyファイル）を呼ぶヘルパークラスの作成
-// apikeyが複数あるとすれば、その中からkeyを指定してValueを返す。
+// If there is more than one apikey, specify the key and return the Value.
 
 struct KeyManager {
-    // 参考URL http://yuu.1000quu.com/retrieve_the_files_in_the_project
-//    APIKey.plistファイルを取得 Bundle.main.pathメソッドで、指定したプロジェクト内のファイルを取得することができる
+    // referenceURL http://yuu.1000quu.com/retrieve_the_files_in_the_project
+    //    get APIKey.plist file
+    // with Bundle.main.path method, you can get specified file in the project
     private let keyFilePath = Bundle.main.path(forResource: "APIKey", ofType: "plist")
 
     func getKeys() -> NSDictionary? {
@@ -20,11 +21,11 @@ struct KeyManager {
         }
         print("確認 : \(keyFilePath)")
         return NSDictionary(contentsOfFile: keyFilePath)
-        //        An initialized dictionary　を返す
-        // 指定されたパスのファイルにあるキーと値を使用して、新しく割り当てられた辞書を初期化する。
+        //        return an initialized dictionary
+        // Initializes a newly allocated dictionary using the keys and values found in a file at a given path.
     }
 
-    // 値を取り出す
+    // retrive apikey
     func getValue(key: String) -> AnyObject? {
         guard let keys = getKeys() else {
             return nil
