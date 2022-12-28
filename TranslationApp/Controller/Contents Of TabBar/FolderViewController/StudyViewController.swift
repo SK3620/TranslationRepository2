@@ -13,7 +13,6 @@ import SVProgressHUD
 import UIKit
 
 class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
-    
     @IBOutlet private var tableView: UITableView!
 
     @IBOutlet private var searchBar: UISearchBar!
@@ -39,11 +38,11 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     private var inputDataArr = [String]()
     private var resultDataArr = [String]()
 
-    private var sender_tag: Int!
+    var sender_tag: Int!
 
     var indexPath_row: Int!
 
-   private var menuNavigationController: SideMenuNavigationController!
+    private var menuNavigationController: SideMenuNavigationController!
 
     private let speechSynthesizer = AVSpeechSynthesizer()
     private var speakSpeed: Float = 0.5
@@ -486,7 +485,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let delete = ContextMenuItemWithImage(title: "削除する", image: UIImage(systemName: "trash")!)
 
         let cellForRow = IndexPath(row: sender.tag, section: 0)
-        //store the information of the tapped indexPath
+        // store the information of the tapped indexPath
         self.sender_tag = sender.tag
 
         CM.items = [edit, save, folder, copy, delete]
@@ -513,7 +512,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
-    //scroll to the next cell when tapped
+    // scroll to the next cell when tapped
     @IBAction func nextCellButton(_: Any) {
         if self.speechSynthesizer.isPaused || self.speechSynthesizer.isPaused != true && self.speechSynthesizer.isSpeaking != true {
             if self.indexPath_row < self.inputDataArr.count - 1 {
@@ -540,8 +539,8 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-    
-    //scroll to the previous cell when tapped
+
+    // scroll to the previous cell when tapped
     @IBAction func backCellButton(_: Any) {
         if self.speechSynthesizer.isPaused || self.speechSynthesizer.isPaused != true && self.speechSynthesizer.isSpeaking != true {
             if self.indexPath_row > 0 {
@@ -627,7 +626,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
-    //male voice or female voice
+    // male voice or female voice
     @IBAction func speakVoiceButton(_: Any) {
         switch self.voice {
         case "com.apple.ttsbundle.siri_Nicky_en-US_compact":
@@ -659,12 +658,12 @@ extension StudyViewController: ContextMenuDelegate {
     func contextMenuDidSelect(_: ContextMenu,
                               cell _: ContextMenuCell,
                               targetedView _: UIView,
-                              didSelect item: ContextMenuItem,
+                              didSelect _: ContextMenuItem,
                               forRowAt index: Int) -> Bool
     {
         switch index {
         case 0:
-            //screen transition to EditStudyVC
+            // screen transition to EditStudyVC
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { () in
                 self.performSegue(withIdentifier: "ToEditStudy", sender: nil)
             }
@@ -716,14 +715,14 @@ extension StudyViewController: ContextMenuDelegate {
     func contextMenuDidDisappear(_: ContextMenu) {
         print("コンテキストメニューが消えた!")
     }
-    
+
     // After tapping the document system icon on the right, write and save to the PhraseWord class of the Realm
     func savePhraseButton() {
         var inputData: String
         var resultData: String
-        
-        //if any characters are entered in the search bar
-        //self.sender_tag stores the infromation of the tapped indexPath
+
+        // if any characters are entered in the search bar
+        // self.sender_tag stores the infromation of the tapped indexPath
         if self.searchBar.text != "" {
             inputData = self.translationArr[self.sender_tag].inputData
             resultData = self.translationArr[self.sender_tag].resultData
@@ -752,10 +751,10 @@ extension StudyViewController: ContextMenuDelegate {
         SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
-    //a process to delete data
+    // a process to delete data
     func deleteButton() {
         let alert = UIAlertController(title: "本当に削除しますか？", message: "保存した文章を\n左スワイプで削除することもできます", preferredStyle: .alert)
-        let cencel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in print("キャンセルボタンがタップされた。")})
+        let cencel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in print("キャンセルボタンがタップされた。") })
         let delete = UIAlertAction(title: "削除", style: .destructive, handler: { _ in
             try! self.realm.write {
                 if self.searchBar.text != "" {
@@ -779,8 +778,8 @@ extension StudyViewController: ContextMenuDelegate {
         alert.addAction(cencel)
         present(alert, animated: true, completion: nil)
     }
-    
-    //copy
+
+    // copy
     func copyButton() {
         if self.searchBar.text != "" {
             UIPasteboard.general.string = self.translationArr[self.sender_tag].inputAndResultData

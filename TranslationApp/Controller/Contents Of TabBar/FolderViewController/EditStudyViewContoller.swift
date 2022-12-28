@@ -16,7 +16,7 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
 
     var inputDataTextView1: String = ""
     var resultDataTextView2: String = ""
-    
+
     var translationId: Int = 0
 
     private var realm = try! Realm()
@@ -38,14 +38,14 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
         self.setDoneToolBar()
         self.setBarButtonItem()
     }
-    
-    override func viewWillAppear(_: Bool) {
-           super.viewWillAppear(true)
 
-           self.textView1.text = self.inputDataTextView1
-           self.textView2.text = self.resultDataTextView2
-       }
-    
+    override func viewWillAppear(_: Bool) {
+        super.viewWillAppear(true)
+
+        self.textView1.text = self.inputDataTextView1
+        self.textView2.text = self.resultDataTextView2
+    }
+
     @objc func keyboardWillHide() {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
@@ -100,7 +100,7 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
         self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
     }
 
-//   a button to save
+    //   a button to save
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
         SVProgressHUD.show()
         let translationArr = self.realm.objects(Translation.self).filter("id == \(self.translationId)").first!

@@ -12,56 +12,56 @@ import UIKit
 
 class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
-    
+
     @IBOutlet private var label2: UILabel!
-    
+
     @IBOutlet private var saveButton: UIBarButtonItem!
-    
+
     private let realm = try! Realm()
     private var translationFolderArr = try! Realm().objects(TranslationFolder.self).sorted(byKeyPath: "date", ascending: true)
-    
-    //values are passed to these below 5 variables from StudyVC when the screen transition to self is performed
-    private var folderName: String!
-    private var sender_tag: Int!
-    private var inputData: String!
-    private var resultData: String!
-    private var inputAndResultData: String!
-    
-   private var string = "保存先 : "
-    
+
+    // values are passed to these below 5 variables from StudyVC when the screen transition to self is performed
+    var folderName: String!
+    var sender_tag: Int!
+    var inputData: String!
+    var resultData: String!
+    var inputAndResultData: String!
+
+    private var string = "保存先 : "
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarAppearence()
-        
+
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        
+
         self.label2.text = self.string
-        
+
         self.saveButton.isEnabled = false
     }
-    
-   private func setNavigationBarAppearence() {
+
+    private func setNavigationBarAppearence() {
         let appearence = UINavigationBarAppearance()
         appearence.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
         self.navigationController?.navigationBar.standardAppearance = appearence
     }
-    
+
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
         self.translationFolderArr.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
+
         let folderNameString = self.translationFolderArr[indexPath.row].folderName
-        
+
         let date = self.translationFolderArr[indexPath.row].date
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd HH:mm"
         let dateString: String = formatter.string(from: date)
-        
+
         // Conditional branching by section number
         if indexPath.section == 0 {
             cell.imageView?.image = UIImage(systemName: "folder")
@@ -71,15 +71,15 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
         }
         return cell
     }
-    
+
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.folderName = self.translationFolderArr[indexPath.row].folderName
-        
+
         self.saveButton.isEnabled = true
         self.label2.text = self.string + self.folderName
     }
-    
-    //save the inputData and resultData of the tapped cell in StudyVC to realm database
+
+    // save the inputData and resultData of the tapped cell in StudyVC to realm database
     @IBAction func saveButton(_: Any) {
         let predicate = NSPredicate(format: "folderName == %@", folderName)
         self.translationFolderArr = self.realm.objects(TranslationFolder.self).filter(predicate).sorted(byKeyPath: "date", ascending: true)
@@ -87,7 +87,7 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
         translation.inputData = self.inputData
         translation.resultData = self.resultData
         translation.inputAndResultData = self.inputAndResultData
-        
+
         let allTranslation = self.realm.objects(Translation.self)
         if allTranslation.count != 0 {
             translation.id = allTranslation.max(ofProperty: "id")! + 1
@@ -100,7 +100,7 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
             self.dismiss(animated: true, completion: nil)
         }
     }
-    
+
     @IBAction func backButton(_: Any) {
         dismiss(animated: true, completion: nil)
     }

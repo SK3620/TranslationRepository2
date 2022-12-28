@@ -9,13 +9,15 @@ import Parchment
 import UIKit
 
 class PagingPhraseWordViewController: UIViewController {
-    @IBOutlet var pagingView: UIView!
+    @IBOutlet private var pagingView: UIView!
 
     var tabBarController1: TabBarController!
+
     var phraseWordViewController: PhraseWordViewController!
     var secondPhraseWordViewController: SecondPhraseWordViewController!
     var thirdPhraseWordViewController: ThirdPhraseWordViewController!
     var allPhraseWordViewController: AllPhraseWordViewController!
+
     var rightBarButtonItems: [UIBarButtonItem]!
 
     var studyViewController: StudyViewController?
@@ -27,20 +29,24 @@ class PagingPhraseWordViewController: UIViewController {
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
-        //        navigationbarの設定
-        if let tabBarController1 = tabBarController1 {
-            tabBarController1.setStringToNavigationItemTitle4()
-            tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
-            let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
-            self.tabBarController1?.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
+        //       settings for navigationController and navigationbar
+        if self.tabBarController1 != nil {
+            self.settingsForNavigationControllerAndBar()
         }
+    }
+
+    private func settingsForNavigationControllerAndBar() {
+        self.tabBarController1.setStringToNavigationItemTitle4()
+        self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+        let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
+        self.tabBarController1?.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
     }
 
     @objc func tappedCreateFolderBarButtonItem(_: UIBarButtonItem) {
         self.tabBarController1?.createFolder()
     }
 
+    // settings for paging view
     func setPagingViewController() {
         let phraseWordViewController = storyboard?.instantiateViewController(withIdentifier: "phraseWord") as! PhraseWordViewController
         self.phraseWordViewController = phraseWordViewController
@@ -109,11 +115,5 @@ class PagingPhraseWordViewController: UIViewController {
         if self.studyViewController != nil {
             self.tabBarController1.navigationController?.setNavigationBarHidden(true, animated: false)
         }
-    }
-
-    override func viewDidDisappear(_: Bool) {
-        super.viewDidDisappear(true)
-//        self.navigationController?.setNavigationBarHidden(true, animated: false)
-//        　この処理が原因で、PagingViewControllerのUIlabel（viewController画面お.titleに表示できなかった
     }
 }

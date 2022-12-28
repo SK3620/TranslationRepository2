@@ -65,8 +65,8 @@ class SettingsForStudyViewController: UIViewController, UITableViewDelegate, UIT
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-    private func playResultData(){
+
+    private func playResultData() {
         try! Realm().write {
             self.speak.playInputData = true
             self.speak.playResultData = false
@@ -75,8 +75,8 @@ class SettingsForStudyViewController: UIViewController, UITableViewDelegate, UIT
         SVProgressHUD.showSuccess(withStatus: "太文字を音声再生します")
         SVProgressHUD.dismiss(withDelay: 1.5)
     }
-    
-    private func playInputData(){
+
+    private func playInputData() {
         try! Realm().write {
             self.speak.playInputData = false
             self.speak.playResultData = true
