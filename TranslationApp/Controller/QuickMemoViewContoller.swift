@@ -9,29 +9,26 @@ import RealmSwift
 import UIKit
 
 class QuickMemoViewContoller: UIViewController, UITextViewDelegate {
-    @IBOutlet var textView: UITextView!
+    @IBOutlet private var textView: UITextView!
 
-    let realm = try! Realm()
-    let firstMemoArr = try! Realm().objects(FirstMemo.self)
+    private let realm = try! Realm()
+    private let firstMemoArr = try! Realm().objects(FirstMemo.self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.textView.delegate = self
 
-//        キーボードに完了バーを設定
         self.setDoneToolBar()
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
         if self.firstMemoArr.count != 0 {
             self.textView.text = self.firstMemoArr[0].memo
         }
     }
 
-    func setDoneToolBar() {
+    private func setDoneToolBar() {
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -48,6 +45,7 @@ class QuickMemoViewContoller: UIViewController, UITextViewDelegate {
         view.endEditing(true)
     }
 
+    // write the memo to realm database
     func textViewDidChange(_: UITextView) {
         let firstMemo = FirstMemo()
         do {

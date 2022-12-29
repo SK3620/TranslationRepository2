@@ -10,11 +10,12 @@ import SVProgressHUD
 import UIKit
 
 class EditProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
-    var textFieldArr: [UITextField]! = []
-    var textViewArr: [UITextView]! = []
-    var textFieldAndView_textArr: [String] = []
+    private var textFieldArr: [UITextField]! = []
+    private var textViewArr: [UITextView]! = []
+    
+    private var textFieldAndView_textArr: [String] = []
 
     var postArrayForDocId: [String] = []
 
@@ -23,39 +24,27 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
 
     var profileData: [String: Any] = [:]
 
-    var userNameText: String?
-    var genderText: String?
-    var ageText: String?
-    var workText: String?
-    var introductionText: String?
-    var academicHistoryText: String?
-    var hobbyText: String?
-    var visitedCountryText: String?
-    var wannaVisitCountryText: String?
-    var whereYouLiveText: String?
-    var birthdaytext: String?
-    var etcText: String?
+    private var userNameText: String?
+    private var genderText: String?
+    private var ageText: String?
+    private var workText: String?
+    private var introductionText: String?
+    private var academicHistoryText: String?
+    private var hobbyText: String?
+    private var visitedCountryText: String?
+    private var wannaVisitCountryText: String?
+    private var whereYouLiveText: String?
+    private var birthdaytext: String?
+    private var etcText: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray6
-        self.navigationController?.navigationBar.standardAppearance = appearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-
-        self.title = "プロフィール編集"
-        //        順番が大事
-        self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.profileViewController.navigationController?.setNavigationBarHidden(false, animated: false)
-        let rightBarButtonItem = UIBarButtonItem(title: "保存する", style: .done, target: self, action: nil)
-        self.profileViewController.navigationController?.navigationItem.rightBarButtonItems = [rightBarButtonItem]
-
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        let nib = UINib(nibName: "CustomCellForEditProfile", bundle: nil)
-        self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
-
+        self.settingsForNavigationBarAppearence()
+        
+        self.settingsForNaivigationControllerAndBar()
+        
+        self.settingsForTableView()
+     
         if let user = Auth.auth().currentUser {
             Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument").getDocument { snap, error in
                 if let error = error {
@@ -67,9 +56,30 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
                 guard let profileData = snap?.data() else { return }
                 self.profileData = profileData
                 self.tableView.reloadData()
-                print("データ確認\(self.profileData)")
             }
         }
+    }
+    
+    private func settingsForNavigationBarAppearence(){
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+    
+    private func settingsForNaivigationControllerAndBar(){
+        self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.profileViewController.navigationController?.setNavigationBarHidden(false, animated: false)
+        let rightBarButtonItem = UIBarButtonItem(title: "保存する", style: .done, target: self, action: nil)
+        self.profileViewController.navigationController?.navigationItem.rightBarButtonItems = [rightBarButtonItem]
+        self.title = "プロフィール編集"
+    }
+    
+    private func settingsForTableView(){
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        let nib = UINib(nibName: "CustomCellForEditProfile", bundle: nil)
+        self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
     }
 
     override func viewWillDisappear(_: Bool) {
@@ -90,24 +100,19 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         self.setDoneToolBar(textFieldArr: self.textFieldArr, textViewArr: self.textViewArr)
 
         cell.setProfileData(profileData: self.profileData)
-        print("実行")
-        print(self.profileData)
 
         return cell
     }
 
-    func setDoneToolBar(textFieldArr: [UITextField]!, textViewArr: [UITextView]!) {
-        // 決定バーの生成
+   private func setDoneToolBar(textFieldArr: [UITextField]!, textViewArr: [UITextView]!) {
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneItem = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(self.done))
         toolbar.setItems([spaceItem, doneItem], animated: true)
-        // インプットビュー設定
         textFieldArr.forEach {
             $0.inputAccessoryView = toolbar
         }
-
         textViewArr.forEach {
             $0.inputAccessoryView = toolbar
         }
@@ -123,13 +128,12 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }
 
     @IBAction func rightBarButtonItem(_: Any) {
-        print("バーボタンアイテム")
-
         SVProgressHUD.show()
 
         self.userNameText = self.textFieldArr[0].text
         if self.userNameText == "" || self.userNameText == "ー" {
             SVProgressHUD.showError(withStatus: "名前を入力してください")
+            SVProgressHUD.dismiss(withDelay: 2.0)
             return
         }
 
@@ -145,7 +149,6 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         self.birthdaytext = self.textFieldArr[5].text
         self.etcText = self.textViewArr[5].text
 
-        //        もっとbetterな処理方法があるはず。↓
         if self.userNameText == "" {
             self.userNameText = "ー"
         }
@@ -183,7 +186,6 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
             self.etcText = "ー"
         }
 
-        //        プロフィールデータをfirebaseへ保存（更新も可）
         let user = Auth.auth().currentUser
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user!.uid)'sProfileDocument")
         let postDic = [
@@ -200,22 +202,20 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
             "birthday": self.birthdaytext!,
             "etc": self.etcText!,
         ] as [String: Any]
-        print(postDic)
-        postRef.setData(postDic, merge: true)
-
-        let changeRequest = user!.createProfileChangeRequest()
-        changeRequest.displayName = self.userNameText!
-        changeRequest.commitChanges { error in
+        postRef.setData(postDic, merge: true, completion: { error in
             if let error = error {
-                // プロフィールの更新でエラーが発生
-                print("DEBUG_PRINT: " + error.localizedDescription)
-                return
+                print(error)
             } else {
-                print("DEBUG_PRINT: [displayName = \(user!.displayName!)]の設定に成功しました。")
+                self.updateUserNameOfPostsDocuments(user: user!, userName: self.userNameText!)
+                self.updateUserNameOfCommentsDocuments(user: user!, userName: self.userNameText!)
+                self.updateUserNameOfChatListsDocument(user: user!)
             }
-        }
+        })
 
-        //        既存の投稿データのuserNameも変更する
+        //also update display name
+        self.updateDisplayName(user: user!, userNameText: self.userNameText!)
+
+        // also change the userName of the existing posted data
         let postRef2 = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user!.uid)
         postRef2.getDocuments(completion: { querySnapshot, error in
             if let error = error {
@@ -238,6 +238,112 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
                 })
             }
         })
+    }
+
+   private func updateUserNameOfPostsDocuments(user: User, userName: String) {
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid)
+        postsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("userNameのupdateに失敗\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    let doc = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(queryDocumentSnapshot.documentID)
+                    doc.updateData(["userName": userName]) { error in
+                        if let error = error {
+                            print("userNameのupdateに失敗\(error)")
+                        } else {
+                            print("userNameのupdateに成功")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+   private func updateUserNameOfCommentsDocuments(user: User, userName: String) {
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid)
+        postsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("userNameのupdateに失敗\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    let doc = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(queryDocumentSnapshot.documentID)
+                    doc.updateData(["userName": userName]) { error in
+                        if let error = error {
+                            print("userNameのupdateに失敗\(error)")
+                        } else {
+                            print("userNameのupdateに成功")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+   private func updateUserNameOfChatListsDocument(user: User) {
+        let chatListsRef = Firestore.firestore().collection("chatLists").whereField("members", arrayContains: user.uid)
+        chatListsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print(error)
+            }
+            if let querySnapshot = querySnapshot {
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    let firstMemberUid = ChatList(queryDocumentSnapshot: queryDocumentSnapshot).chatMembers![0]
+                    let secondMemberUid = ChatList(queryDocumentSnapshot: queryDocumentSnapshot).chatMembers![1]
+                    let documentId = queryDocumentSnapshot.documentID
+                    self.seoncdUpdateUserName(firstMemberUid: firstMemberUid, seoncdMemberUid: secondMemberUid, docId: documentId)
+                }
+            }
+        }
+    }
+
+   private func seoncdUpdateUserName(firstMemberUid: String, seoncdMemberUid: String, docId: String) {
+        let firstProfileDataRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(firstMemberUid)'sProfileDocument")
+        firstProfileDataRef.getDocument { documentSnapshot, error in
+            if let error = error {
+                print(error)
+            }
+            if let documentSnapshot = documentSnapshot {
+                let firstUserName = ProfileData(documentSnapshot: documentSnapshot).userName
+
+                let secondProfileDataRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(seoncdMemberUid)'sProfileDocument")
+                secondProfileDataRef.getDocument { documentSnapshot, error in
+                    if let error = error {
+                        print(error)
+                    }
+                    if let documentSnapshot = documentSnapshot {
+                        let secondUserName = ProfileData(documentSnapshot: documentSnapshot).userName
+                        self.thirdUpdateUserName(firstUserName: firstUserName!, secondUserName: secondUserName!, docId: docId)
+                    }
+                }
+            }
+        }
+    }
+
+   private func thirdUpdateUserName(firstUserName: String, secondUserName: String, docId: String) {
+        let chatListsRef = Firestore.firestore().collection("chatLists").document(docId)
+        chatListsRef.updateData(["membersName": [firstUserName, secondUserName]]) { error in
+            if let error = error {
+                print(error)
+            } else {
+                print("userNameのupdate成功")
+            }
+        }
+    }
+    
+    private func updateDisplayName(user: User, userNameText: String){
+        let changeRequest = user.createProfileChangeRequest()
+        changeRequest.displayName = userNameText
+        changeRequest.commitChanges { error in
+            if let error = error {
+                print("DEBUG_PRINT: " + error.localizedDescription)
+                return
+            } else {
+                print("DEBUG_PRINT: [displayName = \(user.displayName!)]の設定に成功しました。")
+            }
+        }
     }
 }
 

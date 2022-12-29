@@ -12,15 +12,11 @@ class SecondTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.setNavigationBar()
-        // Do any additional setup after loading the view.
     }
 
     func setNavigationBar() {
-        // タブアイコンの色
-        tabBar.tintColor = UIColor.systemBlue
-        // タブバーの背景色を設定
+        // settings for backGroundColor
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = UIColor.systemGray6
         tabBar.standardAppearance = appearance

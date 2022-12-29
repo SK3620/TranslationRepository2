@@ -10,68 +10,76 @@ import SVProgressHUD
 import UIKit
 
 class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var textField: UITextField!
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var label1: UILabel!
-    @IBOutlet var view1: UIView!
+    @IBOutlet private var textField: UITextField!
 
-    var reviewDate = [String]()
-    var folderName = [String]()
-    var content = [String]()
-    var memo = [String]()
-    var times = [String]()
-    var inputDate = [String]()
+    @IBOutlet private var tableView: UITableView!
 
-    let realm = try! Realm()
-    var recordArr = try! Realm().objects(Record.self).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
-    var resultsArr: Results<Record>!
+    @IBOutlet private var label1: UILabel!
 
-    var datePicker: UIDatePicker = .init()
+    @IBOutlet private var view1: UIView!
+
+    private var reviewDate = [String]()
+    private var folderName = [String]()
+    private var content = [String]()
+    private var memo = [String]()
+    private var times = [String]()
+    private var inputDate = [String]()
+
+    private let realm = try! Realm()
+    private var recordArr = try! Realm().objects(Record.self).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
+    private var resultsArr: Results<Record>!
+
+    private var datePicker: UIDatePicker = .init()
+
     var dateString: String!
+
     var tabBarController1: UITabBarController!
+
     var studyViewController: StudyViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.navigationController?.setNavigationBarHidden(false, animated: false)
 
-        self.tableView.separatorColor = .gray
+        self.settingsForTableViewAndDatePicker()
 
-        let nib = UINib(nibName: "CustomCellForReview", bundle: nil)
-        self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+        self.setDoneToolBarForTextField()
+
+        self.setPlaceHolderForTextView()
 
         self.textField.layer.borderColor = UIColor.systemGray3.cgColor
         self.textField.layer.borderWidth = 2
         self.textField.layer.cornerRadius = 6
 
+//        default settings
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: Date())
+        self.datePicker.date = formatter.date(from: dateString)!
+    }
+
+    private func settingsForTableViewAndDatePicker() {
+        self.tableView.separatorColor = .gray
         self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
         self.tableView.layer.borderWidth = 2
+
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        let nib = UINib(nibName: "CustomCellForReview", bundle: nil)
+        self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
 
         self.datePicker.datePickerMode = UIDatePicker.Mode.date
         self.datePicker.preferredDatePickerStyle = .wheels
         self.datePicker.timeZone = NSTimeZone.local
         self.datePicker.locale = Locale.current
-        self.setDoneToolBarForTextField()
-//        デフォルト設定
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let dateString = formatter.string(from: Date())
-        self.datePicker.date = formatter.date(from: dateString)!
-
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-
-        self.setPlaceHolderForTextView()
-        // Do any additional setup after loading the view.
     }
 
-    func setPlaceHolderForTextView() {
+    private func setPlaceHolderForTextView() {
         self.textField.attributedPlaceholder = NSAttributedString(string: "日付を入力してください",
                                                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
     }
 
-    func setDoneToolBarForTextField() {
+    private func setDoneToolBarForTextField() {
         // 決定バーの生成
         let toolbar4 = UIToolbar()
         toolbar4.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
@@ -86,13 +94,15 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     @objc func done4() {
         self.textField.endEditing(true)
+
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.M.d"
         let dateString = formatter.string(from: self.datePicker.date)
         self.textField.text = dateString
 
-        let predict = NSPredicate(format: "nextReviewDate == %@", dateString)
-        self.resultsArr = self.recordArr.filter(predict)
+        // retrive the data whose property 'nextReviewDate' is equal to enterd date in the textField
+        let predicate = NSPredicate(format: "nextReviewDate == %@", dateString)
+        self.resultsArr = self.recordArr.filter(predicate)
 
         self.reviewDate = []
         self.times = []
@@ -163,40 +173,52 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+        self.setStringOnTitle()
 
-        let date = Date()
-        let dateFomatter = DateFormatter()
-        dateFomatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d", options: 0, locale: Locale(identifier: "ja_JP"))
-        let dateString = dateFomatter.string(from: date)
-
-        self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        title = "今日 \(dateString)"
-        navigationController?.navigationBar.barTintColor = .systemGray5
-        navigationController?.navigationBar.backgroundColor = .systemGray5
-        let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.editButton(_:)))
-        navigationItem.rightBarButtonItems = [editBarButtonItem]
+        self.settingsForNavigtionControllerAndBar()
 
         if self.recordArr.isEmpty != true {
-            self.recordArr.forEach {
-                self.reviewDate.append($0.nextReviewDate)
-                self.times.append($0.times)
-                self.folderName.append($0.folderName)
-                self.content.append($0.number)
-                self.memo.append($0.memo)
-                self.inputDate.append($0.inputDate)
-            }
-            self.resultsArr = self.recordArr
-            self.label1.text = "全てのデータを設定した復習日の日付順に表示しています"
+            self.appendValuesToArrays()
         } else {
             self.folderName = []
             self.label1.text = "登録されたデータがありません\n「戻る」→「＋」ボタンで復習記録を追加しよう！"
         }
+
         if self.studyViewController == nil {
             self.view1.backgroundColor = .systemGray4
         } else {
             self.view1.backgroundColor = .white
         }
+    }
+
+    private func settingsForNavigtionControllerAndBar() {
+        self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.navigationBar.barTintColor = .systemGray5
+        navigationController?.navigationBar.backgroundColor = .systemGray5
+        let editBarButtonItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.editButton(_:)))
+        navigationItem.rightBarButtonItems = [editBarButtonItem]
+    }
+
+    private func setStringOnTitle() {
+        let date = Date()
+        let dateFomatter = DateFormatter()
+        dateFomatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d", options: 0, locale: Locale(identifier: "ja_JP"))
+        let dateString = dateFomatter.string(from: date)
+        title = "今日 \(dateString)"
+    }
+
+    private func appendValuesToArrays() {
+        self.recordArr.forEach {
+            self.reviewDate.append($0.nextReviewDate)
+            self.times.append($0.times)
+            self.folderName.append($0.folderName)
+            self.content.append($0.number)
+            self.memo.append($0.memo)
+            self.inputDate.append($0.inputDate)
+        }
+        self.resultsArr = self.recordArr
+        self.label1.text = "全てのデータを設定した復習日の日付順に表示しています"
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -208,10 +230,18 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForReview
-        cell.setData(self.reviewDate[indexPath.row], self.folderName[indexPath.row], self.content[indexPath.row], self.memo[indexPath.row], self.times[indexPath.row], self.inputDate[indexPath.row])
-        cell.checkMarkButton.tag = indexPath.row
-        cell.checkMarkButton.addTarget(self, action: #selector(self.tapCheckMarkButton(_:)), for: .touchUpInside)
 
+        cell.setData(self.reviewDate[indexPath.row], self.folderName[indexPath.row], self.content[indexPath.row], self.memo[indexPath.row], self.times[indexPath.row], self.inputDate[indexPath.row])
+
+        self.determineIfItIsChecked(cell: cell, indexPath: indexPath)
+
+        cell.checkMarkButton.tag = indexPath.row
+        cell.checkMarkButton.addTarget(self, action: #selector(self.tappedCheckMarkButton(_:)), for: .touchUpInside)
+
+        return cell
+    }
+
+    private func determineIfItIsChecked(cell: CustomCellForReview, indexPath: IndexPath) {
         let isChecked = self.resultsArr[indexPath.row].isChecked
         switch isChecked {
         case false:
@@ -223,10 +253,9 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             cell.checkMarkButton.setImage(image, for: .normal)
             cell.checkMarkButton.tintColor = UIColor.systemGreen
         }
-        return cell
     }
 
-    @objc func tapCheckMarkButton(_ sender: UIButton) {
+    @objc func tappedCheckMarkButton(_ sender: UIButton) {
         let result = self.resultsArr[sender.tag].isChecked
         switch result {
         case false:
@@ -252,10 +281,8 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return .delete
     }
 
-//    deleteボタンが押された時
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-//            データベースから削除する
             try! self.realm.write {
                 self.realm.delete(self.resultsArr[indexPath.row])
                 self.folderName.remove(at: indexPath.row)

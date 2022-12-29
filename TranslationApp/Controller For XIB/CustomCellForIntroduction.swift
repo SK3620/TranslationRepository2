@@ -8,25 +8,22 @@
 import UIKit
 
 class CustomCellForIntroduction: UITableViewCell {
-    @IBOutlet var introductionLabel: UILabel!
-    @IBOutlet var academicHistoryLable: UILabel!
-    @IBOutlet var hobbyLable: UILabel!
-    @IBOutlet var visitedCountryLable: UILabel!
-    @IBOutlet var wannaVisistCountryLabel: UILabel!
-    @IBOutlet var placeLabel: UILabel!
-    @IBOutlet var birthdayLabel: UILabel!
-    @IBOutlet var etcLabel: UILabel!
+    @IBOutlet  var introductionLabel: UILabel!
+    @IBOutlet  var academicHistoryLable: UILabel!
+    @IBOutlet  var hobbyLable: UILabel!
+    @IBOutlet  var visitedCountryLable: UILabel!
+    @IBOutlet  var wannaVisistCountryLabel: UILabel!
+    @IBOutlet  var placeLabel: UILabel!
+    @IBOutlet  var birthdayLabel: UILabel!
+    @IBOutlet  var etcLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         self.introductionLabel.text = "ーーー"
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     func setProfileData(profileData: [String: Any]) {

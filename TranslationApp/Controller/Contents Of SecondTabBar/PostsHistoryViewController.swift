@@ -12,70 +12,46 @@ import Parchment
 import SVProgressHUD
 import UIKit
 
-// ProfileViewController画面で、いいねと投稿、各々の合計数をlabelに表示するdelegateMethod
+// delegateMethod to display the total number of likes and posts on the likeNumberLabel and commentNumberLabel in the ProfileViewController screen.
 protocol setLikeAndPostNumberLabelDelegate: NSObject {
     func setLikeAndPostNumberLabel(likeNumber: Int, postNumber: Int)
 }
 
 class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
-    var postArray: [PostData] = []
+    private var postArray: [PostData] = []
     var listener: ListenerRegistration?
 
     var delegate: setLikeAndPostNumberLabelDelegate!
-//    表示するいいね数の合計
+    
+    //the total number of likes
     var likeNumber: Int = 0
-//    表示する投稿数の合計
+    //the total number of commetns
     var postNumber: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
-
+        
+        self.settingsForTableView()
+    }
+    
+    private func settingsForTableView(){
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
         self.tableView.allowsSelection = true
-        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
         SVProgressHUD.show(withStatus: "データ取得中...")
         if let user = Auth.auth().currentUser {
-            //            複合インデックスを作成する必要がある
-            //            クエリで指定している複数のインデックスをその順にインデックスに登録する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true)
-            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    return
-                }
-                // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                self.postArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    return postData
-                }
-
-                print("データかくにん\(self.postArray)")
-                self.tableView.reloadData()
-                SVProgressHUD.dismiss()
-
-                self.likeNumber = 0
-                self.postNumber = 0
-                querySnapshot?.documents.forEach { queryDocumentSnapshot in
-                    self.likeNumber += PostData(document: queryDocumentSnapshot).likes.count
-                }
-                self.postNumber = self.postArray.count
-                self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postNumber)
-            }
+            self.listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel(user: user)
         }
 
         if Auth.auth().currentUser == nil {
@@ -84,11 +60,40 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             SVProgressHUD.dismiss()
         }
     }
+    
+  
+    func listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel(user: User){
+        //            複合インデックスを作成する必要がある
+        //            クエリで指定している複数のインデックスをその順にインデックスに登録する
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true)
+        self.listener = postsRef.addSnapshotListener { querySnapshot, error in
+            if let error = error {
+                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                return
+            }
+            // Create PostData based on the acquired document and make it into a postArray array.
+            self.postArray = querySnapshot!.documents.map { document in
+                print("DEBUG_PRINT: document取得 \(document.documentID)")
+                let postData = PostData(document: document)
+                return postData
+            }
+            self.tableView.reloadData()
+            SVProgressHUD.dismiss()
+
+//                settings for the number of likes and posts
+            self.likeNumber = 0
+            self.postNumber = 0
+            querySnapshot?.documents.forEach { queryDocumentSnapshot in
+                self.likeNumber += PostData(document: queryDocumentSnapshot).likes.count
+            }
+            self.postNumber = self.postArray.count
+            //delegate method
+            self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postNumber)
+        }
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("DEBUG_PRINT: viewWillDisappear")
-        // listenerを削除して監視を停止する
         self.listener?.remove()
     }
 
@@ -102,17 +107,23 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
+        
         cell.setPostData(self.postArray[indexPath.row])
+        
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
         cell.commentButton.isEnabled = false
         cell.commentButton.isHidden = true
-        cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
-        cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
-        cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
-        cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
+        
+        cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
+        
+        cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
+        
+        cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
+        
+        cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
 
         return cell
     }
@@ -129,7 +140,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             alert.dismiss(animated: true, completion: nil)
         }
         let deleteAction = UIAlertAction(title: "削除", style: .destructive) { _ in
-            // 削除機能のコード
+            // precesses to delete
             let dispatchGroup = DispatchGroup()
             let dispatchQueue = DispatchQueue(label: "queue")
 
@@ -176,53 +187,36 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
-        print("DEBUG_PRINT: likeボタンがタップされました。")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
-        print("postData確認\(postData)")
 
-        // likesを更新する
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
             var updateValue: FieldValue
             if postData.isLiked {
-                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
-                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
         }
     }
 
     @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
-        print("bookMakrタップされた")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
-        // bookMarkを更新する
+        
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
-
             if postData.isBookMarked {
                 let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
-                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
                     let updateValue = FieldValue.arrayRemove([myid])
                     let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                     SVProgressHUD.showSuccess(withStatus: "登録解除")
@@ -232,9 +226,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
                 }))
                 self.present(alert, animated: true, completion: nil)
             } else {
-                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
                 let updateValue = FieldValue.arrayUnion([myid])
-                // bookMarksに更新データを書き込む
                 let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                 SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
                 SVProgressHUD.dismiss(withDelay: 1.0, completion: {
@@ -245,12 +237,12 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     @objc func tappedCopyButton(_: UIButton, forEvent event: UIEvent) {
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
-        // 配列からタップされたインデックスのデータを取り出す
+        
         let postData = self.postArray[indexPath!.row]
+        
         let contentOfPost = postData.contentOfPost
         UIPasteboard.general.string = contentOfPost
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
@@ -260,7 +252,6 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         let postData = self.postArray[indexPath.row]
-        //        タップされたcellのドキュメントを取得
         self.performSegue(withIdentifier: "ToCommentsHistory", sender: postData)
     }
 
@@ -270,13 +261,4 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             commentsHistoryViewController.postData = sender as? PostData
         }
     }
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
 }

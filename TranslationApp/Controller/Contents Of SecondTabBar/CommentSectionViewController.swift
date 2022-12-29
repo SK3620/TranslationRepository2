@@ -158,8 +158,6 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
         cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
 
-        print(self.secondPostArray[indexPath.row - 1].commentedDate)
-        print("secondPostDataの値確認\(self.secondPostArray)")
         cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
         cell2.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButtonInComment(_:forEvent:)), for: .touchUpInside)
         cell2.copyButton.addTarget(self, action: #selector(self.tappedCopyButtonInCommentSection(_:forEvent:)), for: .touchUpInside)

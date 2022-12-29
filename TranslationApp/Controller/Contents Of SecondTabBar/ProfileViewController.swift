@@ -13,21 +13,28 @@ import SVProgressHUD
 import UIKit
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLImageEditorDelegate {
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var pasingView: UIView!
-    @IBOutlet var userNameLabel: UILabel!
-    @IBOutlet var genderLabel: UILabel!
-    @IBOutlet var ageLabel: UILabel!
-    @IBOutlet var workLabel: UILabel!
-    @IBOutlet var changePhotoButton: UIButton!
-    @IBOutlet var label1: UILabel!
+    @IBOutlet private var imageView: UIImageView!
+    
+    @IBOutlet private var pasingView: UIView!
+    
+    @IBOutlet private var userNameLabel: UILabel!
+    @IBOutlet private var genderLabel: UILabel!
+    @IBOutlet private var ageLabel: UILabel!
+    @IBOutlet private var workLabel: UILabel!
+    
+    @IBOutlet private var changePhotoButton: UIButton!
+    @IBOutlet private var label1: UILabel!
 
     @IBOutlet var likeNumberLabel: UILabel!
     @IBOutlet var postNumberLabel: UILabel!
 
+    //image for storageReference
     var image: UIImage!
+    
     var tabBarController1: TabBarController?
+    
     var secondTabBarController: SecondTabBarController!
+    
     var rightBarButtonItem: UIBarButtonItem!
     var rightEdgeBarButtonItem: UIBarButtonItem!
 
@@ -37,16 +44,28 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         if Auth.auth().currentUser == nil {
-//            ログインしていない時の処理
-            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-//            loginViewController.logoutButton.isEnabled = false
-            self.present(loginViewController, animated: true, completion: nil)
+            self.screenTransitionToLoginViewController()
         }
 
+        self.settingsForPagingViewController()
+        
+        //       circle imageView
+        self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
+        //       default settings for
+        self.imageView.image = UIImage(systemName: "person")
+        self.imageView.layer.borderColor = UIColor.systemGray4.cgColor
+        self.imageView.layer.borderWidth = 2.5
+    }
+    
+    private func screenTransitionToLoginViewController(){
+        let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+        self.present(loginViewController, animated: true, completion: nil)
+    }
+    
+    private func settingsForPagingViewController(){
         let introductionViewController = storyboard?.instantiateViewController(identifier: "introduction") as! IntroductionViewController
         introductionViewController.secondTabBarController = self.secondTabBarController
 
@@ -63,7 +82,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         postedCommentsHistoryViewController.title = "コメント履歴"
         navigationController2.title = "ブックマーク"
 
-//        pagingViewControllerのインスタンス生成
+//       configure pagingViewController instance
         let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, postedCommentsHistoryViewController, navigationController2])
 
 //        Adds the specified view controller as a child of the current view controller.
@@ -86,13 +105,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         introductionViewController.pagingViewController = pagingViewController
 
         self.navigationController?.navigationBar.backgroundColor = .systemGray4
-
-        //        丸いimageView
-        self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
-        //        画像にデフォルト設定
-        self.imageView.image = UIImage(systemName: "person")
-        self.imageView.layer.borderColor = UIColor.systemGray4.cgColor
-        self.imageView.layer.borderWidth = 2.5
     }
 
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
@@ -106,36 +118,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
         self.setRightBarButtonItem()
 
-        //        currentUserがnilなら
         if Auth.auth().currentUser == nil {
-            self.changePhotoButton.isEnabled = false
-            self.likeNumberLabel.text = ""
-            self.postNumberLabel.text = ""
-
-            self.userNameLabel.text = "ー"
-            self.genderLabel.text = "ー"
-            self.ageLabel.text = "ー"
-            self.workLabel.text = "ー"
-
-            self.label1.text = "アカウントを作成/ログインしてください"
-            let image = UIImage(systemName: "person")
-            self.imageView.image = image
-
-            self.rightBarButtonItem.isEnabled = false
-            self.changePhotoButton.isEnabled = false
+            self.settingsForLabelsAndButtons()
         }
 
         SVProgressHUD.show(withStatus: "データ取得中...")
         if Auth.auth().currentUser != nil {
             self.changePhotoButton.isEnabled = true
+            
             self.label1.text = ""
-
-            self.setImageFromStorage()
+            
             if let user = Auth.auth().currentUser {
-                print("実行されたを")
                 Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument").getDocument { snap, error in
                     if let error = error {
                         print("取得失敗\(error)")
@@ -146,15 +141,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     if let profileData = snap?.data() {
                         self.profileData = profileData
                     }
+                    self.setImageFromStorage()
                     self.setProfileDataOnLabels(profileData: self.profileData)
                     SVProgressHUD.dismiss()
                 }
-                print("実行されたを２")
             }
         }
     }
 
-    func setRightBarButtonItem() {
+   private func setRightBarButtonItem() {
         self.secondTabBarController.rightBarButtonItems = []
         self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         let rightEdgeBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.tappedRightEdgeBarButtonItem(_:)))
@@ -165,6 +160,22 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.secondTabBarController.rightBarButtonItems.append(rightBarButtonItem)
         self.secondTabBarController.navigationItem.rightBarButtonItems = self.secondTabBarController.rightBarButtonItems
         self.secondTabBarController.title = "プロフィール"
+    }
+    
+    private func settingsForLabelsAndButtons(){
+        self.likeNumberLabel.text = ""
+        self.postNumberLabel.text = ""
+        self.userNameLabel.text = "ー"
+        self.genderLabel.text = "ー"
+        self.ageLabel.text = "ー"
+        self.workLabel.text = "ー"
+
+        self.label1.text = "アカウントを作成/ログインしてください"
+        let image = UIImage(systemName: "person")
+        self.imageView.image = image
+
+        self.rightBarButtonItem.isEnabled = false
+        self.changePhotoButton.isEnabled = false
     }
 
     func setProfileDataOnLabels(profileData _: [String: Any]) {
@@ -190,27 +201,26 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     func setImageFromStorage() {
         if Auth.auth().currentUser != nil {
-            //            storageから画像を取り出して、imageViewに設置
+            // retrieve images from storage and place them in imageView
             let user = Auth.auth().currentUser!
             let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
-
-            // キャッシュを更新して、画像をセット
+            // キャッシュを更新して、画像をセットしたい
             self.imageView.sd_setImage(with: imageRef)
             print("画像取り出せた？\(imageRef)")
         }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
+        //  to EditProfileViewController
         if segue.identifier == "ToEditProfile" {
             let editProfileViewController = segue.destination as! EditProfileViewController
             editProfileViewController.profileViewController = self
             editProfileViewController.secondTabBarController = self.secondTabBarController
         }
     }
-
-    //    写真ライブラリを開くボタン
+    
+    //open photo library
     @IBAction func openLibraryButton(_: Any) {
-        //        ライブラリを開く
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             let pickerController = UIImagePickerController()
             pickerController.delegate = self
@@ -219,23 +229,22 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
 
-    //    写真選択時に呼ばれる
-    // 写真を撮影/選択したときに呼ばれるメソッド
+    // method called when a photo is taken/selected
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        // UIImagePickerController画面を閉じる
+        // close UIImagePickerController
         picker.dismiss(animated: true, completion: nil)
-        // 画像加工処理
+        // Image Processing
         if info[.originalImage] != nil {
-            // 撮影/選択された画像を取得する
+            // Get the taken/selected image
             let image = info[.originalImage] as! UIImage
-            //           画像を加工する
+            //process the image
             let editor = CLImageEditor(image: image)!
             editor.delegate = self
             self.present(editor, animated: true, completion: nil)
         }
     }
 
-    // CLImageEditorで加工が終わったときに呼ばれるメソッド
+    // Method called when processing is finished in CLImageEditor
     func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
         editor.dismiss(animated: true, completion: { () in
             self.image = image
@@ -245,15 +254,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        // UIImagePickerController画面を閉じる
         picker.dismiss(animated: true, completion: nil)
     }
-
-    //    画像ファイルをstorageに保存する
+    
+    //save the image file to storage
     func saveImageToStorage() {
-        //        プロフィール画像sekf.imageをJPEG形式に変換
+        //convert the profile image into JPEG type
         let imageData = self.image.jpegData(compressionQuality: 0.75)
-        //        画像の保存場所定義
+        //location of the image file
         let user = Auth.auth().currentUser!
         let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
 //        let imageRef: StorageReference? = Storage.storage().reference(withPath: path)
@@ -263,7 +271,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         metaData.contentType = "image/jpeg"
         imageRef.putData(imageData!, metadata: metaData) { metadata, error in
             if error != nil {
-                // 画像のアップロード失敗
                 print(error!)
                 SVProgressHUD.showError(withStatus: "画像のアップロードが失敗しました")
                 return
@@ -277,7 +284,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 }
 
 extension ProfileViewController: setLikeAndPostNumberLabelDelegate {
-//    いいね数と投稿数を表示させる
+    //display the number of likes and comments
     func setLikeAndPostNumberLabel(likeNumber: Int, postNumber: Int) {
         self.likeNumberLabel.text = "いいね \(String(likeNumber))"
         self.postNumberLabel.text = "投稿 \(String(postNumber))"

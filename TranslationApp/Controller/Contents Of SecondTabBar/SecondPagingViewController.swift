@@ -11,9 +11,9 @@ import Parchment
 import UIKit
 
 class SecondPagingViewController: UIViewController {
-    @IBOutlet var pagingView: UIView!
+    @IBOutlet private var pagingView: UIView!
 
-    var searchBar: UISearchBar!
+    private var searchBar: UISearchBar!
 
     var secondTabBarController: SecondTabBarController!
     var postData: PostData!
@@ -23,9 +23,12 @@ class SecondPagingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
-
+        
+        self.setPagingViewController()
+    }
+    
+    private func setPagingViewController(){
         let navigationController3 = storyboard?.instantiateViewController(withIdentifier: "NC3") as! UINavigationController
         let timeLineViewController = navigationController3.viewControllers[0] as! TimeLineViewController
         timeLineViewController.secondPagingViewController = self
@@ -106,15 +109,13 @@ class SecondPagingViewController: UIViewController {
         pagingViewController.select(index: 1)
     }
 
-//    viewWillAppearだけでsetRightBarButton()を呼ぶと、rightBarButtonItemが表示されない
-//    viewWillAppearとviewDidAppearで呼ぶと、表示される
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.setRightBarButtonItem()
     }
 
-    func setRightBarButtonItem() {
+    private func setRightBarButtonItem() {
         self.secondTabBarController.rightBarButtonItems = []
         self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         self.secondTabBarController.tabBar.isHidden = false
@@ -140,24 +141,22 @@ class SecondPagingViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
-    // 検索アイコンが押された時
     @objc func tappedSearchBarButtonItem(_: UIBarButtonItem) {
-        print("searchBarButtonItemがタップされた")
-
         if self.navigationController!.isNavigationBarHidden {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             let appearance = UINavigationBarAppearance()
             appearance.backgroundColor = UIColor.systemGray6
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//        navigationBar上に検索バーを設置
+           
+            //place a search bar on navigation bar
             self.setupSearchBarOnNavigationBar()
         } else {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
     }
 
-    func setupSearchBarOnNavigationBar() {
+  private func setupSearchBarOnNavigationBar() {
         if let navigationBarFrame = self.navigationController?.navigationBar.bounds {
             let searchBar = UISearchBar(frame: navigationBarFrame)
             searchBar.delegate = self
@@ -172,7 +171,7 @@ class SecondPagingViewController: UIViewController {
         }
     }
 
-    func setDoneOnKeyBoard() {
+    private func setDoneOnKeyBoard() {
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -186,7 +185,6 @@ class SecondPagingViewController: UIViewController {
     }
 
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
-        print("バーボタンタップされた")
         let NCForPostViewContoller = storyboard!.instantiateViewController(withIdentifier: "Post") as! UINavigationController
         let postViewController = NCForPostViewContoller.viewControllers[0] as! PostViewController
         postViewController.secondPagingViewController = self
@@ -195,10 +193,14 @@ class SecondPagingViewController: UIViewController {
         present(NCForPostViewContoller, animated: true, completion: nil)
     }
 
+    // called in other view controllers
+    //screen transition to CommentSectionViewController
     func segue() {
         self.performSegue(withIdentifier: "ToCommentSection", sender: nil)
     }
 
+    // called in other view controllers
+    //screen transition to OthersProfileViewController
     func segueToOthersProfile() {
         self.performSegue(withIdentifier: "ToOthersProfile", sender: nil)
     }
@@ -217,12 +219,12 @@ class SecondPagingViewController: UIViewController {
 }
 
 extension SecondPagingViewController: UISearchBarDelegate {
-//    入力された文字列をsearachViewControllerへ受け渡す。
+    //pass the entered text in the search bar to SearchViewController
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.pagingViewController.select(index: 0, animated: true)
         searchBar.endEditing(true)
         if let searchBarText = self.searchBar.text {
-            self.searchViewController.notExcuteGetDocumentMethod = self
+            self.searchViewController.shouldExcuteGetDocumentMethod = true
             self.searchViewController.getDocuments(searchBarText: searchBarText)
         }
     }

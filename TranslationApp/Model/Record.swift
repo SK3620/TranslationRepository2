@@ -9,23 +9,23 @@ import Foundation
 import RealmSwift
 
 class Record: Object {
-//    フォルダー名
+//    folder name
     @objc dynamic var folderName = ""
-//    学習した文章番号・内容
+//    sentence number or sentences which you learned
     @objc dynamic var number = ""
-//    復習回数
+//    the number of times you reviewd
     @objc dynamic var times = ""
-//    cellに表示する次回復習日
+//    the next review date displayed in the cell
     @objc dynamic var nextReviewDate = ""
-//    次回復習日を日付順に表示 .sorted(by: , acsending:)メソッドの引数に指定して並べ替え
+//    Display next review date in date order by .sorted(by: , acsending:)
     @objc dynamic var nextReviewDateForSorting: Int = 0
-//    メモ
+//    jsut a memo
     @objc dynamic var memo = ""
-//    入力（記録）された日付
+//    input date, recored date
     @objc dynamic var inputDate: String = ""
 
     @objc dynamic var date1 = ""
-//    復習完了マーク
+//    if it has already been reviewed or not
     @objc dynamic var isChecked: Bool = false
 
     @objc dynamic var id = 0

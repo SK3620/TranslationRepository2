@@ -10,40 +10,43 @@ import SVProgressHUD
 import UIKit
 
 class AddViewController: UIViewController {
-    @IBOutlet var textField1: UITextField!
-    @IBOutlet var textField2: UITextField!
-    @IBOutlet var textField3: UITextField!
-    @IBOutlet var textField4: UITextField!
-    @IBOutlet var textView1: UITextView!
-    @IBOutlet var label2: UILabel!
+    @IBOutlet private var textField1: UITextField!
+    @IBOutlet private var textField2: UITextField!
+    @IBOutlet private var textField3: UITextField!
+    @IBOutlet private var textField4: UITextField!
 
-    var pickerView1: UIPickerView = .init()
-    var pickerView3: UIPickerView = .init()
-    var datePicker: UIDatePicker = .init()
+    @IBOutlet private var textView1: UITextView!
 
-    let realm = try! Realm()
-    let recordArr = try! Realm().objects(Record.self)
+    @IBOutlet private var label2: UILabel!
+
+    private var pickerView1: UIPickerView = .init()
+    private var pickerView3: UIPickerView = .init()
+    private var datePicker: UIDatePicker = .init()
+
+    private let realm = try! Realm()
+    private let recordArr = try! Realm().objects(Record.self)
 
     var recordViewController: RecordViewController!
     var translationFolderArr: Results<TranslationFolder>!
 
-    //    RecordViewControllerからの遷移時に渡される、タップされた日付を格納する変数 "yyyyMMdd"
+    //   Variable to store the tapped date, passed at transition from RecordViewController    "yyyyMMdd"
     var dateString: String!
-    //　　上と同じ　タップされた日付 "\(year).\(month).\(day)"
+    //　　the same as above one  stores the tapped date  "\(year).\(month).\(day)"
     var dateString2: String!
-    //    nextReviewDateForSorting（Int型にした日付）を格納する変数
+    //    nextReviewDateForSorting  variable to store the tapped Int type date
     var dateStringForSorting: Int!
+
     var folderNames = [String]()
+
     var numbers = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.setNavigationBar()
 
         self.textField3.delegate = self
 
-        //        復習回数を１〜３０回に設定
+        // Set the number of review sessions from 1 to 30
         for number in 1 ... 30 {
             let number = String(number)
             self.numbers.append(number)
@@ -60,7 +63,7 @@ class AddViewController: UIViewController {
         self.setDoneTooBarForTextField4()
         self.setDoneToolBarForTextView1()
 
-        //        dataPickerのデフォルト設定
+        // default settings for dataPicker
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
@@ -74,7 +77,7 @@ class AddViewController: UIViewController {
         self.textView1.layer.cornerRadius = 6
     }
 
-    func setPlaceHolderForTextField() {
+    private func setPlaceHolderForTextField() {
         self.textField1.attributedPlaceholder = NSAttributedString(string: "学習したフォルダー名",
                                                                    attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
         self.textField2.attributedPlaceholder = NSAttributedString(string: "学習した文章番号/内容(例:1〜10)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
@@ -82,7 +85,8 @@ class AddViewController: UIViewController {
         self.textField4.attributedPlaceholder = NSAttributedString(string: "次回復習日を設定しよう！", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
     }
 
-    func setNavigationBar() {
+    // settings for navigationBar
+    private func setNavigationBar() {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
@@ -92,27 +96,23 @@ class AddViewController: UIViewController {
         let leftBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(self.tappedLeftBarButtonItem(_:)))
         self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
         self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
-        //        "\(year).\(month).\(day)"をタイトルに表示
+
         self.title = self.dateString2
     }
 
-//    戻るボタン
+//    back button
     @objc func tappedLeftBarButtonItem(_: UIBarButtonItem) {
-        print("LeftBarButtonItemがタップされた")
         self.dismiss(animated: true, completion: nil)
     }
 
-//    追加ボタン
+//    add button    wrtie the added data to realm database (Record class)
     @objc func tappedRightBarButtonImte(_: UIBarButtonItem) {
-        print("rightBarButtonItemがタップされました")
-        SVProgressHUD.show()
-
         let textField_text1 = self.textField1.text
         let textField_text2 = self.textField2.text
         let textField_text3 = self.textField3.text
-        //        String型の次回復習日"yyyy.M.d"
+        //       string type next review date  "yyyy.M.d"
         let textField_text4 = self.textField4.text
-        //        Int型の次回復習日"yyyyMd'
+        //        int type next review date    "yyyyMd'
         let textField_text4ForSorting = self.dateStringForSorting
         let textView_text1 = self.textView1.text
 
@@ -127,19 +127,19 @@ class AddViewController: UIViewController {
         //        "\(year).\(month).\(day)"
         record.inputDate = self.today()
         if textField_text4 != "" {
-            //            Int型に変換したyyyyMMdd
+            //            yyyyMMdd which was changed to Int type
             record.nextReviewDateForSorting = textField_text4ForSorting!
         } else {
-            //            何も入力がなければ、12月31日以降をInt型で指定　並べ替え時に一番下に表示される
+            // If nothing is entered, Int after Dec 31st Displayed at the bottom of the list when sorting
             record.nextReviewDateForSorting = 1232
         }
 
         if self.recordArr.count != 0 {
             record.id = self.recordArr.max(ofProperty: "id")! + 1
         }
+
         do {
             let realm = try Realm()
-
             try realm.write {
                 realm.add(record)
             }
@@ -156,16 +156,15 @@ class AddViewController: UIViewController {
         }
     }
 
-//    今日の日付を返すメソッド
-    func today() -> String {
+    // return string type date
+    private func today() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd"
         let dateString: String = formatter.string(from: Date())
-        print("今日の日付を返すメソッド\(dateString)")
         return dateString
     }
 
-    func setTextField(textFieldArr: [UITextField]) {
+    private func setTextField(textFieldArr: [UITextField]) {
         textFieldArr.forEach {
             $0.layer.borderWidth = 2
             $0.layer.borderColor = UIColor.systemGray3.cgColor
@@ -173,11 +172,11 @@ class AddViewController: UIViewController {
         }
     }
 
-    func setDoneToolBarForTextField1() {
+    private func setDoneToolBarForTextField1() {
         self.pickerView1.delegate = self
         self.pickerView1.dataSource = self
         self.pickerView1.showsSelectionIndicator = true
-        // 決定バーの生成
+
         let toolbar1 = UIToolbar()
         toolbar1.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -189,11 +188,11 @@ class AddViewController: UIViewController {
         self.textField1.inputAccessoryView = toolbar1
     }
 
-    func setDoneToolBarForTextField3() {
+    private func setDoneToolBarForTextField3() {
         self.pickerView3.delegate = self
         self.pickerView3.dataSource = self
         self.pickerView3.showsSelectionIndicator = true
-        // 決定バーの生成
+
         let toolbar3 = UIToolbar()
         toolbar3.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -205,12 +204,12 @@ class AddViewController: UIViewController {
         self.textField3.inputAccessoryView = toolbar3
     }
 
-    func setDoneTooBarForTextField4() {
+    private func setDoneTooBarForTextField4() {
         self.datePicker.datePickerMode = UIDatePicker.Mode.date
         self.datePicker.preferredDatePickerStyle = .wheels
         self.datePicker.timeZone = NSTimeZone.local
         self.datePicker.locale = Locale.current
-        // 決定バーの生成
+
         let toolbar4 = UIToolbar()
         toolbar4.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -222,7 +221,7 @@ class AddViewController: UIViewController {
         self.textField4.inputAccessoryView = toolbar4
     }
 
-    func setDoneToolBarForTextView1() {
+    private func setDoneToolBarForTextView1() {
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -284,12 +283,12 @@ class AddViewController: UIViewController {
 
 extension AddViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     func numberOfComponents(in _: UIPickerView) -> Int {
-        //        ドラムロールの列数
+        //        the number of rows in the dorumroll
         return 1
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent _: Int) -> Int {
-        //        ドラムロールの行数
+        //        the number of rows in the dorumroll
         return pickerView == self.pickerView1 ? self.folderNames.count : 30
     }
 

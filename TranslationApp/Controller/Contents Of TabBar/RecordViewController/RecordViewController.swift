@@ -14,69 +14,85 @@ import UIKit
 
 class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var fscalendar: FSCalendar!
+
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var label1: UILabel!
-    @IBOutlet var addButton: UIButton!
-    @IBOutlet var reviewButton: UIButton!
 
-    let realm = try! Realm()
-    let recordArr = try! Realm().objects(Record.self)
+    @IBOutlet private var label1: UILabel!
 
-    var recordArrFilter: Results<Record>!
-    var recordArrFilter2: Record!
-    //　　　"yyyyMMdd"タップされたString型の日付を格納
+    @IBOutlet private var addButton: UIButton!
+    @IBOutlet private var reviewButton: UIButton!
+
+    private let realm = try! Realm()
+    private let recordArr = try! Realm().objects(Record.self)
+
+    private var recordArrFilter: Results<Record>!
+    private var recordArrFilter2: Record!
+
+    //　　　"yyyyMMdd"　It stores tapped string type date
     var dateString: String = ""
-    //    "\(year).\(month).\(day)"タップされたString型の日付を格納
+    //    "\(year).\(month).\(day)" It stores tapped string type date
     var dateString2: String = ""
+
     var tabBarController1: TabBarController!
+
     var studyViewController: StudyViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.settingsForNavigationBar()
 
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+        self.settingsForTableViewAndFscalendar()
 
         self.addButton.isEnabled = false
 
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+    }
+
+    private func settingsForTableViewAndFscalendar() {
         self.tableView.layer.borderColor = UIColor.systemGray4.cgColor
         self.tableView.layer.borderWidth = 2.5
-
-        self.fscalendar.delegate = self
-        self.fscalendar.dataSource = self
-
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorColor = .gray
 
+        let nib = UINib(nibName: "CustomCellForRecord", bundle: nil)
+        self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+
+        self.fscalendar.delegate = self
+        self.fscalendar.dataSource = self
+    }
+
+    private func settingsForNavigationBar() {
         let appearence = UINavigationBarAppearance()
         appearence.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearence
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
-
-        let nib = UINib(nibName: "CustomCellForRecord", bundle: nil)
-        self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
-        self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
-
-        if self.tabBarController1 != nil, studyViewController == nil {
-            self.tabBarController1.setStringToNavigationItemTitle3()
-            self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
-            let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
-            self.tabBarController1.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
-        }
+//        self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
 
         navigationController?.setNavigationBarHidden(true, animated: false)
 
+        if self.tabBarController1 != nil, studyViewController == nil {
+            self.settingsForNavigationControllerAndBar()
+        }
+
+        // performed when the screen transition from StudyViewController was performed
         if let studyViewController = studyViewController {
             studyViewController.hideNavigationControllerOfTabBarController()
             self.setItemsOnNaviationBar()
         }
         self.tableView.reloadData()
         self.fscalendar.reloadData()
+    }
+
+    private func settingsForNavigationControllerAndBar() {
+        self.tabBarController1.setStringToNavigationItemTitle3()
+        self.tabBarController1.navigationController?.setNavigationBarHidden(false, animated: false)
+        let createFolderBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(self.tappedCreateFolderBarButtonItem(_:)))
+        self.tabBarController1.navigationItem.rightBarButtonItems = [createFolderBarButtonItem]
     }
 
     @objc func tappedCreateFolderBarButtonItem(_: UIBarButtonItem) {
@@ -88,7 +104,6 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         appearence.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearence
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
-
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.title = "学習記録"
         let leftBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(self.tappedBackBarButtonItem(_:)))
@@ -101,15 +116,16 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 
     override func viewWillDisappear(_: Bool) {
         super.viewWillDisappear(true)
-
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+
+        // performed when returning to the previous viewController (StudyViewController)
         if let studyViewController = studyViewController {
             studyViewController.hideNavigationControllerOfTabBarController()
             self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
     }
 
-    // date型 -> 年月日をIntで取得
+    // date type ->  get Int type year, month, day
     func getDay(_ date: Date) -> (Int, Int, Int) {
         let tmpCalendar = Calendar(identifier: .gregorian)
         let year = tmpCalendar.component(.year, from: date)
@@ -118,27 +134,25 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         return (year, month, day)
     }
 
-    // 曜日判定(日曜日:1 〜 土曜日:7)
-    func getWeekIdx(_ date: Date) -> Int {
+    // Day of the week (Sunday:1 - Saturday:7)
+    private func getWeekIdx(_ date: Date) -> Int {
         let tmpCalendar = Calendar(identifier: .gregorian)
         return tmpCalendar.component(.weekday, from: date)
     }
 
-    // 土日や祝日の日の文字色を変える
+    // Change text color on Saturdays, Sundays, and holidays.
     func calendar(_: FSCalendar, appearance _: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-        // 祝日判定をする（祝日は赤色で表示する）
+        // Determine if it is a holiday or not (Holidays are displayed in red)
         if self.judgeHoliday(date) {
             return UIColor.red
         }
-
-        // 土日の判定を行う（土曜日は青色、日曜日は赤色で表示する）
+        // Determine Saturdays and Sundays (Saturdays are indicated in blue and Sundays in red).
         let weekday = self.getWeekIdx(date)
-        if weekday == 1 { // 日曜日
+        if weekday == 1 { // sundays
             return UIColor.red
-        } else if weekday == 7 { // 土曜日
+        } else if weekday == 7 { // saturdays
             return UIColor.blue
         }
-
         return nil
     }
 
@@ -149,30 +163,23 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         return formatter
     }()
 
-    //    祝日判定を行い結果を返すメソッド　trueなら祝日　falseなら普通の日
-    func judgeHoliday(_ date: Date) -> Bool {
-        //        祝日判定用のカレンダークラスのインスタンス　グレゴリ暦のカレンダーインスタンス
+    // method to determine if it is a holiday and return the result If true, it is a holiday If false, it is a normal day
+    private func judgeHoliday(_ date: Date) -> Bool {
         let tmpCalendar = Calendar(identifier: .gregorian)
-
-        //        祝日判定を行う日にちの年、月、日を取得(多分、とりあえず全ての年、月、日を取得してるとおもう）
+        // Get the year, month, and day of the date for which the holiday is to be determined (probably all years, months, and days for now)
         let year = tmpCalendar.component(.year, from: date)
         let month = tmpCalendar.component(.month, from: date)
         let day = tmpCalendar.component(.day, from: date)
-
-        //        祝日判定のインスタンスの生成
+        // Create an instance of the holiday determination
         let holiday = CalculateCalendarLogic()
-
         return holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
     }
 
-    //    選択された日付を取得する　日付がタップされた時の処理
-    //    選択された日付はdate変数に格納される
+    // Get the selected date Process when the date is tapped
+    // The selected date is stored in the date variable
     func calendar(_: FSCalendar, didSelect date: Date, at _: FSCalendarMonthPosition) {
         self.addButton.isEnabled = true
 
-//        self.reviewButton.setTitle("次回復習日・内容を確認する", for: .normal)
-
-        //        このdate変数をCalendarクラスを利用して、年、月、日で分解させる
         let tmpCalendar = Calendar(identifier: .gregorian)
         let year = String(tmpCalendar.component(.year, from: date))
         let month = String(tmpCalendar.component(.month, from: date))
@@ -181,14 +188,16 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let dateString: String = formatter.string(from: date)
-
         self.dateString = dateString
         self.dateString2 = "\(year).\(month).\(day)"
 
+        // when the add button in AddViewController is tapped, the tapped date is written to Record class (realm database) (it's written to property 'date1')
+        // in the processs here, get the data from Record class(realm database) whose property 'date1' is equal to the tapped date
         if self.recordArr.count != 0 {
             let predicate = NSPredicate(format: "date1 == %@", self.dateString)
             self.recordArrFilter = self.recordArr.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)
 
+            // if there are no data in the tapped date
             if self.recordArrFilter.isEmpty {
                 self.label1.text = "今日の日付をタップして\n学習した内容を画面右下の「＋」で記録しよう！"
             } else {
@@ -210,53 +219,55 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForRecord
-        print("cellForRowAtが実行された")
+
         self.label1.text = ""
 
         if self.recordArrFilter != nil {
             cell.setData(self.recordArrFilter[indexPath.row])
 
-            let result = self.recordArrFilter[indexPath.row].isChecked
-            switch result {
-            case false:
-                cell.label6.text = "(復習未完了)"
-                cell.label6.textColor = .systemRed
-                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
-                cell.checkMarkButton.tintColor = UIColor.systemGray
-            case true:
-                cell.label6.text = "(復習完了)"
-                cell.label6.textColor = .systemGreen
-                cell.checkMarkButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                cell.checkMarkButton.tintColor = UIColor.systemGreen
-            }
+            // determine if the contents of study in the tapped cell has already been reviewed or not
+            self.determineIfTheReviewIsCompleted(cell: cell, indexPath: indexPath)
         }
-
+        // tap when you've reviewed the content of study in the tapped date
         cell.checkMarkButton.tag = indexPath.row
-        cell.checkMarkButton.addTarget(self, action: #selector(self.tapCheckMarkButton2(_:)), for: .touchUpInside)
+        cell.checkMarkButton.addTarget(self, action: #selector(self.tappedCheckMarkButton2(_:)), for: .touchUpInside)
 
         return cell
     }
 
-    @objc func tapCheckMarkButton2(_ sender: UIButton) {
+    private func determineIfTheReviewIsCompleted(cell: CustomCellForRecord, indexPath: IndexPath) {
+        let result = self.recordArrFilter[indexPath.row].isChecked
+        switch result {
+        case false:
+            cell.label6.text = "(復習未完了)"
+            cell.label6.textColor = .systemRed
+            cell.checkMarkButton.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+            cell.checkMarkButton.tintColor = UIColor.systemGray
+        case true:
+            cell.label6.text = "(復習完了)"
+            cell.label6.textColor = .systemGreen
+            cell.checkMarkButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            cell.checkMarkButton.tintColor = UIColor.systemGreen
+        }
+    }
+
+    @objc func tappedCheckMarkButton2(_ sender: UIButton) {
         let result = self.recordArrFilter[sender.tag].isChecked
         switch result {
         case false:
             try! self.realm.write {
                 recordArrFilter[sender.tag].isChecked = true
                 realm.add(recordArrFilter, update: .modified)
-                SVProgressHUD.show()
                 SVProgressHUD.showSuccess(withStatus: "復習が完了しました")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
-                    SVProgressHUD.dismiss()
-                }
+                SVProgressHUD.dismiss(withDelay: 1.5)
             }
         case true:
             try! self.realm.write {
                 recordArrFilter[sender.tag].isChecked = false
                 realm.add(recordArrFilter, update: .modified)
             }
+            self.tableView.reloadData()
         }
-        self.tableView.reloadData()
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -270,7 +281,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             let editRecordViewController = segue.destination as! EditRecordViewController
 
             editRecordViewController.recordViewController = self
-            //            タップされた日付
+            //            the tapped date
             editRecordViewController.dateString = self.dateString
 
             editRecordViewController.label1_text = self.dateString2
@@ -286,8 +297,9 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             if let studyViewController = studyViewController {
                 editRecordViewController.studyViewContoller = studyViewController
             }
+        }
 
-        } else if segue.identifier == "ToReviewViewController" {
+        if segue.identifier == "ToReviewViewController" {
             let reviewViewController = segue.destination as! ReviewViewController
             reviewViewController.tabBarController1 = self.tabBarController1
             if let studyViewController = studyViewController {
@@ -296,6 +308,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         }
     }
 
+    // the screen transition to AddViewController
     @IBAction func addButton(_: Any) {
         let navigationController = storyboard?.instantiateViewController(withIdentifier: "NVCForAddVC") as! UINavigationController
         let addViewController = navigationController.viewControllers[0] as! AddViewController
@@ -312,7 +325,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         present(navigationController, animated: true, completion: nil)
     }
 
-    //    日付にドットマークをつけるメソッド　dateの数だけ呼ばれる
+    // method to add a dot mark to the date Called as many times as the number of date
     func calendar(_: FSCalendar, numberOfEventsFor date: Date) -> Int {
         var resultsArr = [String]()
         if self.recordArr.count != 0 {
@@ -337,10 +350,8 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         return .delete
     }
 
-    //    deleteボタンが押された時
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            //            データベースから削除する
             try! self.realm.write {
                 self.realm.delete(self.recordArrFilter[indexPath.row])
                 tableView.deleteRows(at: [indexPath], with: .fade)
@@ -354,7 +365,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
         performSegue(withIdentifier: "ToReviewViewController", sender: nil)
     }
 
-    //    addViewController画面が閉じた時に呼ばれる
+    // called when the addViewController screen is closed
     func filteredRecordArr(recordArrFilter1: Results<Record>!) {
         let predicate = NSPredicate(format: "date1 == %@", dateString)
         self.recordArrFilter = recordArrFilter1.filter(predicate).sorted(byKeyPath: "nextReviewDateForSorting", ascending: true)

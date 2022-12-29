@@ -5,76 +5,81 @@
 //  Created by 鈴木健太 on 2022/10/27.
 //
 
-import Alamofire
 import Firebase
 import SVProgressHUD
 import UIKit
 
 class TimeLineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var label: UILabel!
+    @IBOutlet private var tableView: UITableView!
+
+    @IBOutlet private var label: UILabel!
 
     var secondTabBarController: SecondTabBarController!
-    var secondPagingViewController: SecondPagingViewController!
-    // 投稿データを格納する配列
-    var postArray: [PostData] = []
-    // Firestoreのリスナー
-    var listener: ListenerRegistration?
-    var listener2: ListenerRegistration?
 
-    var secondPostArray: [SecondPostData] = []
+    var secondPagingViewController: SecondPagingViewController!
+
+    // variable to store the posted data
+    private var postArray: [PostData] = []
+
+    // observe updated data and etc...
+    private var listener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.settingsForTableView()
 
-        self.navigationController?.navigationBar.backgroundColor = .systemGray4
+        if Auth.auth().currentUser == nil {
+            self.screenTransitionToLoginViewController()
+        }
+    }
 
+    private func settingsForTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.layer.borderColor = UIColor.clear.cgColor
-
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+    }
 
-        if Auth.auth().currentUser == nil {
-            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-            //            loginViewController.logoutButton.isEnabled = false
-            self.present(loginViewController, animated: true, completion: nil)
-        }
+    private func screenTransitionToLoginViewController() {
+        let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+        self.present(loginViewController, animated: true, completion: nil)
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        //        ログインしていなければ、returnし、ログインまたはアカウント作成を促す
+
+        // if you are not logged in, have you log in and create an account
         guard Auth.auth().currentUser != nil else {
             self.label.text = "アカウントを作成/ログインしてください"
             self.tableView.reloadData()
             return
         }
-
         self.label.text = ""
-        SVProgressHUD.show(withStatus: "データを取得中...")
-        // ログイン済みか確認
-        if Auth.auth().currentUser != nil {
-            // listenerを登録して投稿データの更新を監視する
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
 
-            print("postRef確認\(postsRef)")
+        self.listenrAndGetDocuments()
+    }
+
+    func listenrAndGetDocuments() {
+        SVProgressHUD.show(withStatus: "データを取得中...")
+        // confirm if you are logged in
+        if Auth.auth().currentUser != nil {
+            // Register a listener to monitor updates to posted data
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
             self.listener = postsRef.addSnapshotListener { querySnapshot, error in
                 if let error = error {
                     print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                     SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
                     return
                 }
-                // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
+                // Create PostData based on the acquired document and make it into a postArray array.
                 self.postArray = querySnapshot!.documents.map { document in
                     print("DEBUG_PRINT: document取得 \(document.documentID)")
                     let postData = PostData(document: document)
                     return postData
                 }
-                print("データかくにん\(self.postArray)")
                 self.tableView.reloadData()
                 SVProgressHUD.dismiss()
             }
@@ -83,10 +88,8 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("DEBUG_PRINT: viewWillDisappear")
-        // listenerを削除して監視を停止する
+        // delete remove and stop observing (monitoring)
         self.listener?.remove()
-        print("全て")
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -120,39 +123,34 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
 
-    //    プロフィール写真上のタップジェスチャー
+    //    tap gestrue on the profile imageView
     @objc func tappedImageView1(_: UIButton, forEvent event: UIEvent) {
-        print("タップジェスチャー")
-        // タップされたセルのインデックスを求める
+        // get the index of the tapped cell
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
+        // Retrieve the data at the tapped index from the array
         let postData = self.postArray[indexPath!.row]
         self.secondPagingViewController.postData = postData
         self.secondPagingViewController.segueToOthersProfile()
     }
 
     @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
-        print("bookMarkButtonが押された")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
-        // bookMarkを更新する
-        if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
 
+        // update bookmark
+        if let myid = Auth.auth().currentUser?.uid {
+            // create updated data
             if postData.isBookMarked {
                 let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
-                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
+                    // If it has been already bookMarked, create updated data to remove myid to remove bookMark
                     let updateValue = FieldValue.arrayRemove([myid])
                     let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                     SVProgressHUD.showSuccess(withStatus: "登録解除")
@@ -162,9 +160,9 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
                 }))
                 self.present(alert, animated: true, completion: nil)
             } else {
-                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
+                // If bookmark is pressed, create updated data to add myid
                 let updateValue = FieldValue.arrayUnion([myid])
-                // bookMarksに更新データを書き込む
+                // Write updated data to bookMarks
                 let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                 SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
                 SVProgressHUD.dismiss(withDelay: 1.0, completion: {
@@ -175,59 +173,52 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
-        print("DEBUG_PRINT: likeボタンがタップされました。")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
-        print("postData確認\(postData)")
 
-        // likesを更新する
+        // update likes
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
+            // create updated data
             var updateValue: FieldValue
             if postData.isLiked {
-                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
+                // If you have already liked, create an update data to remove myid to remove liking
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
-                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
+                // Create updated data to add myid if newly liked this time
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // likesに更新データを書き込む
+            // write updated likes data to database
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
         }
     }
 
     @objc func tappedCopyButton(_: UIButton, forEvent event: UIEvent) {
-        // タップされたセルのインデックスを求める
-//        投稿内容をコピー
+//        make a copy of the posted contnet
         SVProgressHUD.show()
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
-        // 配列からタップされたインデックスのデータを取り出す
+
         let postData = self.postArray[indexPath!.row]
         UIPasteboard.general.string = postData.contentOfPost
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
-//            SVProgressHUD.dismiss()
-//        }
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         let postData = self.postArray[indexPath.row]
         self.secondPagingViewController.postData = postData
+//        screen transition to CommentSectionViewController
         self.secondPagingViewController.segue()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // performed when the screen transtion to OthersPrifileViewController was performed
         if segue.identifier == "ToOthersProfile" {
             let othersProfileViewController = segue.destination as! OthersProfileViewController
             othersProfileViewController.postData = sender as? PostData

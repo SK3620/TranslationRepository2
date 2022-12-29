@@ -8,11 +8,11 @@
 import Foundation
 import RealmSwift
 
-// StudyViewControllerで使用する。
+// used in studyViewController
 class Speak: Object {
-    //　入力した文章を音声再生 (falseで再生しない、trueで再生）
+    //    Play audio of the input text (false: do not play, true: play)
     @objc dynamic var playInputData: Bool = false
-    //　翻訳結果を音声再生
+    //    Play audio of the input text (false: do not play, true: play)
     @objc dynamic var playResultData: Bool = true
 
     @objc dynamic var id = 0

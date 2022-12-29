@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-// QuickMemoViewController（簡単メモ）画面用のModelクラス
+// memo for quickMemoViewController
 class FirstMemo: Object {
     @objc dynamic var memo = ""
 

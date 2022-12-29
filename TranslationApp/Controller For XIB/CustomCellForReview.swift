@@ -8,24 +8,21 @@
 import UIKit
 
 class CustomCellForReview: UITableViewCell {
-    @IBOutlet var reviewDate: UILabel!
-    @IBOutlet var folderName: UILabel!
-    @IBOutlet var content: UILabel!
-    @IBOutlet var memo: UILabel!
-    @IBOutlet var times: UILabel!
-    @IBOutlet var inputDate: UILabel!
+    @IBOutlet private var reviewDate: UILabel!
+    @IBOutlet private var folderName: UILabel!
+    @IBOutlet private var content: UILabel!
+    @IBOutlet private var memo: UILabel!
+    @IBOutlet private var times: UILabel!
+    @IBOutlet private var inputDate: UILabel!
 
     @IBOutlet var checkMarkButton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     func setData(_ reviewDate: String, _ folderName: String, _ content: String, _ memo: String, _ times: String, _ inputDate: String) {

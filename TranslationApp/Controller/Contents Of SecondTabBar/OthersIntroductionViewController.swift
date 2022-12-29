@@ -33,7 +33,6 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.secondPagingViewController.select(index: 0)
-        print("確認\(self.postData.uid)")
         self.getProfileDataDocument()
     }
 

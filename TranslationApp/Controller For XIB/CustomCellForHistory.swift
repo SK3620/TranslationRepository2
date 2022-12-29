@@ -5,25 +5,23 @@
 //  Created by 鈴木健太 on 2022/09/13.
 //
 
+import SVProgressHUD
 import UIKit
 
 class CustomCellForHistory: UITableViewCell {
-    @IBOutlet var label1: UILabel!
-    @IBOutlet var label2: UILabel!
-    @IBOutlet var label3: UILabel!
+    @IBOutlet private var label1: UILabel!
+    @IBOutlet private var label2: UILabel!
+    @IBOutlet private var label3: UILabel!
+
     @IBOutlet var copyButton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-
-        self.changeIcon()
+        self.configureIcon()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     func setData(_ inputData2: String, _ resultData2: String, _ date2: String, _ indexPath_row: Int) {
@@ -37,10 +35,11 @@ class CustomCellForHistory: UITableViewCell {
         let image2 = UIImage(systemName: "checkmark", withConfiguration: image1)
         self.copyButton.setImage(image2, for: .normal)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: self.changeIcon)
+        SVProgressHUD.showSuccess(withStatus: "コピーしました")
+        SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
-    func changeIcon() {
+    private func configureIcon() {
         let image1 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
         let image2 = UIImage(systemName: "doc.on.doc", withConfiguration: image1)
         self.copyButton.setImage(image2, for: .normal)

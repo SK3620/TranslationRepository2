@@ -11,67 +11,72 @@ import SVProgressHUD
 import UIKit
 
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var label: UILabel!
+    @IBOutlet private var tableView: UITableView!
+    
+    @IBOutlet private var label: UILabel!
 
     var secondTabBarController: SecondTabBarController!
+    
     var secondPagingViewController: SecondPagingViewController!
-//    投稿内容を格納させる
-    var contentOfPostArray: [String] = []
-    // 投稿データを格納する配列
-    var postArray: [PostData] = []
-    var filteredArr: [String] = []
-
-    var secondPostArray: [SecondPostData] = []
+    
+//    stores content of posts
+    private var contentOfPostArray: [String] = []
+    
+    private var postArray: [PostData] = []
+    
+    private var filteredArr: [String] = []
 
     var searchBar: UISearchBar?
     var searchBarText: String?
 
-    //  willAppearで、getDocumentsメソッドを実行させないために用意する変数
-    var notExcuteGetDocumentMethod: SecondPagingViewController?
+    //variable in order not to call getDocument method
+    //stores Bool type value jsut as  determination
+    var shouldExcuteGetDocumentMethod: Bool?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.settingsForTableView()
+       
+        if Auth.auth().currentUser == nil {
+            self.screenTransitionToLoginViewController()
+        }
+    }
+    
+    private func settingsForTableView(){
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.layer.borderColor = UIColor.clear.cgColor
-
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
-
-        if Auth.auth().currentUser == nil {
-            let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-            //            loginViewController.logoutButton.isEnabled = false
-            self.present(loginViewController, animated: true, completion: nil)
-        }
     }
-
+    
+    private func screenTransitionToLoginViewController() {
+        let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+        self.present(loginViewController, animated: true, completion: nil)
+    }
+    
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-        //        ログインしていなければ、returnし、ログインまたはアカウント作成を促す
         guard Auth.auth().currentUser != nil else {
             self.label.text = "アカウントを作成/ログインしてください"
             self.tableView.reloadData()
             return
         }
         self.label.text = ""
-
-        if self.notExcuteGetDocumentMethod == nil, self.searchBarText != nil {
-            print("guard let 実行 \(self.searchBarText!)")
+        
+        if self.shouldExcuteGetDocumentMethod == true, self.searchBarText != nil {
             self.getDocuments(searchBarText: self.searchBarText!)
             self.secondPagingViewController.navigationController?.setNavigationBarHidden(false, animated: false)
         }
     }
 
-//    一度全ての投稿データのドキュメントを取得(whereFieldメソッドには、containsがない、arrayContainsは機能が違う）
+    //filtering
+    //get all of the posted document data
     func getDocuments(searchBarText: String) {
         self.contentOfPostArray = []
         self.postArray = []
         self.searchBarText = searchBarText
-
-        print("String確認\(searchBarText)")
-
+        
         SVProgressHUD.show(withStatus: "データ取得中...")
         Firestore.firestore().collection(FireBaseRelatedPath.PostPath).getDocuments(completion: { querySnapshot, error in
             if let error = error {
@@ -89,19 +94,17 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     return
                 }
                 self.contentOfPostArray = querySnapshot.documents.map { document in
-                    //                    投稿内容を格納させる
+                    //stores contentOfPost
                     let postDataForContentOfPost = PostData(document: document).contentOfPost
                     return postDataForContentOfPost!
                 }
-                print("検索結果用のドキュメント\(self.contentOfPostArray)")
                 self.filteredArr = []
-                //    投稿内容を格納したcontentOfPostArrayから、filterで文字列検索する
+                // String search with filter from contentOfPostArray that contains the contents of the post.
                 self.filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
                 print(self.filteredArr)
                 if self.filteredArr.isEmpty {
                     SVProgressHUD.showSuccess(withStatus: "検索結果 0件")
                     SVProgressHUD.dismiss(withDelay: 1.5)
-//                    self.postArray = []
                     self.tableView.reloadData()
                     return
                 }
@@ -110,8 +113,8 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         })
     }
 
-//    filteredArrからwhereFieldで条件検索して、ドキュメントを取り出し、self.postArrayへ格納
-    func getContentOfPostDocument(filteredArr: [String]) {
+    // Conditional search from filteredArr with whereField, retrieve document, store in self.postArray
+    private func getContentOfPostDocument(filteredArr: [String]) {
         print(self.postArray)
         print(filteredArr)
         for contentOfPost in filteredArr {
@@ -129,7 +132,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         SVProgressHUD.showSuccess(withStatus: "検索結果 \(self.postArray.count)件")
                         SVProgressHUD.dismiss(withDelay: 1.5)
                         self.tableView.reloadData()
-                        self.notExcuteGetDocumentMethod = nil
+                        self.shouldExcuteGetDocumentMethod = true
 
                         self.postArray.forEach {
                             print($0.documentId)
@@ -171,51 +174,39 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
 
-    //    プロフィール写真上のタップジェスチャー
     @objc func tappedImageView1(_: UIButton, forEvent event: UIEvent) {
-        print("タップジェスチャー")
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
         self.secondPagingViewController.postData = postData
         self.secondPagingViewController.segueToOthersProfile()
     }
 
     @objc func tappedBookMarkButton(_: UIButton, forEvent event: UIEvent) {
-        print("bookMarkButtonが押された")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
-        // bookMarkを更新する
+        
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
-
             if postData.isBookMarked {
                 let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
-                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
                     let updateValue = FieldValue.arrayRemove([myid])
                     let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                     SVProgressHUD.showSuccess(withStatus: "登録解除")
                     SVProgressHUD.dismiss(withDelay: 1.0) {
                         postRef.updateData(["bookMarks": updateValue])
+                        self.getDocumentsWithoutSvProgress(searchBarText: self.searchBarText!)
                     }
                 }))
                 self.present(alert, animated: true, completion: nil)
             } else {
-                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
                 let updateValue = FieldValue.arrayUnion([myid])
-                // bookMarksに更新データを書き込む
                 let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                 SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
                 SVProgressHUD.dismiss(withDelay: 1.0, completion: {
@@ -227,34 +218,22 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
-        print("DEBUG_PRINT: likeボタンがタップされました。")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
-        print("self.postArrayの値確認\(self.postArray)")
         let postData = self.postArray[indexPath!.row]
-        print("postData確認値があるかな？\(postData.documentId)")
 
-        // likesを更新する
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
             var updateValue: FieldValue
             if postData.isLiked {
-                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
-                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue]) { error in
-                if let error = error {
-                    print("likesへのupdate失敗\(error)")
+                if error != nil {
                     return
                 }
                 self.getDocumentsWithoutSvProgress(searchBarText: self.searchBarText!)
@@ -263,20 +242,15 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     @objc func tappedCopyButton(_: UIButton, forEvent event: UIEvent) {
-        // タップされたセルのインデックスを求める
-//        投稿内容をコピー
-        SVProgressHUD.show()
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
-        // 配列からタップされたインデックスのデータを取り出す
+
         let postData = self.postArray[indexPath!.row]
+        
         UIPasteboard.general.string = postData.contentOfPost
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
-//            SVProgressHUD.dismiss()
-//        }
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -293,7 +267,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
 
-    func getDocumentsWithoutSvProgress(searchBarText: String) {
+    private func getDocumentsWithoutSvProgress(searchBarText: String) {
         self.contentOfPostArray = []
         self.postArray = []
         self.searchBarText = searchBarText
@@ -307,14 +281,12 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if let querySnapshot = querySnapshot {
                 print("検索結果用のドキュメント取得に成功しました")
                 self.contentOfPostArray = querySnapshot.documents.map { document in
-                    //                    投稿内容を格納させる
                     let postDataForContentOfPost = PostData(document: document).contentOfPost
                     return postDataForContentOfPost!
                 }
                 print("検索結果用のドキュメント\(self.contentOfPostArray)")
 
                 self.filteredArr = []
-                //    投稿内容を格納したcontentOfPostArrayから、filterで文字列検索する
                 self.filteredArr = self.contentOfPostArray.filter { $0.contains(searchBarText) }
                 if self.filteredArr.isEmpty {
                     //                    self.postArray = []
@@ -326,8 +298,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         })
     }
 
-//    filteredArrからwhereFieldで条件検索して、ドキュメントを取り出し、self.postArrayへ格納
-    func getContentOfPostDocumentWithoutSVProgress(filteredArr: [String]) {
+   private func getContentOfPostDocumentWithoutSVProgress(filteredArr: [String]) {
         for contentOfPost in filteredArr {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("contentOfPost", isEqualTo: contentOfPost).order(by: "postedDate", descending: true)
             postsRef.getDocuments(completion: { querySnapshot, error in

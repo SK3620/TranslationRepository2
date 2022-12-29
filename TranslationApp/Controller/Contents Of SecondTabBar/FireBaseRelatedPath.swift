@@ -8,11 +8,11 @@
 import Foundation
 
 struct FireBaseRelatedPath {
-//    storage内の画像ファイルの保存場所
+    // Location of the image file in storage
     static let imagePath = "images"
-//    firestore内の投稿データの保存場所
+    // Location of the posted data file in firestore
     static let PostPath = "posts"
     static let profileData = "profileData"
-//    コメントの保存場所
+//    location of the content of comment
     static let commentsPath = "comments"
 }

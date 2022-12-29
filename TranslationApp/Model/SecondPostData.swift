@@ -10,7 +10,7 @@ import UIKit
 
 class SecondPostData {
     var documentId: String?
-//    コメントしたuidを格納
+//    コメントした人のuidを格納
     var peopleCommented: [String] = []
 //    コメント内容
     var comment: String?

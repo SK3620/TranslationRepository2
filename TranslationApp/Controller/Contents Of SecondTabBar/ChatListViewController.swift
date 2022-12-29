@@ -11,26 +11,25 @@ import SVProgressHUD
 import UIKit
 
 class ChatListViewController: UIViewController {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
-    var chatListsData: [ChatList] = []
-    var documentIdArray: [String] = []
-    var secondTabBarController: SecondTabBarController!
-    var listener: ListenerRegistration?
+    private var chatListsData: [ChatList] = []
+    
+    private var documentIdArray: [String] = []
+    
+    private var secondTabBarController: SecondTabBarController!
+    
+    private var listener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.tableView.delegate = self
         self.tableView.dataSource = self
-
-//        self.fetchChatListsInfoFromFirestore()
-//        self.observeIfYouAreAboutToBeAddedAsFriend()
-        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
         self.tableView.isEditing = false
+        
         let backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
 
@@ -38,12 +37,8 @@ class ChatListViewController: UIViewController {
         self.secondTabBarController.navigationItem.rightBarButtonItems = [editBarButtonBarItem]
 
         self.fetchChatListsInfoFromFirestore()
+        
         self.observeIfYouAreAboutToBeAddedAsFriend()
-    }
-
-    override func viewWillDisappear(_: Bool) {
-        super.viewWillDisappear(true)
-//        self.secondTabBarController.navigationItem.rightBarButtonItems = []
     }
 
     @objc func tappedEditBarButtonItem(_: UIBarButtonItem) {
@@ -54,7 +49,7 @@ class ChatListViewController: UIViewController {
         }
     }
 
-    func fetchChatListsInfoFromFirestore() {
+   private func fetchChatListsInfoFromFirestore() {
         self.listener?.remove()
         self.chatListsData.removeAll()
         self.tableView.reloadData()
@@ -82,22 +77,11 @@ class ChatListViewController: UIViewController {
                 }
             }
         }
-
-//        snapshot.documentChanges.forEach{ diff in
-//                   if (diff.type == .added){
-//                       print("New Vegetables: \(diff.document.data())")
-//                   }
-//                   if (diff.type == .modified){
-//                       print("Modified Vegetables: \(diff.document.data())")
-//                   }
-//                   if (diff.type == .removed){
-//                       print("Removed Vegetables: \(diff.document.data())")
-//                   }
-//               }
     }
 
-//    相手から友達追加された時の処理
-    func observeIfYouAreAboutToBeAddedAsFriend() {
+    //a process called when you got added as a friend by the other person (by a person who added you as thier friend)
+    //when you are added, a person who added you as thier friend will automatically be displayed in the tableView
+    private func observeIfYouAreAboutToBeAddedAsFriend() {
         if let user = Auth.auth().currentUser {
             let chatRef = Firestore.firestore().collection("chatLists").whereField("partnerUid", isEqualTo: user.uid)
             chatRef.getDocuments { querySnapshot, error in
@@ -123,7 +107,7 @@ class ChatListViewController: UIViewController {
         }
     }
 
-    func setTitle(numberOfFriends: Int) {
+   private func setTitle(numberOfFriends: Int) {
         let numberOfFriendsString = String(numberOfFriends)
         self.secondTabBarController.navigationItem.title = "チャットリスト(\(numberOfFriendsString))"
     }
@@ -153,8 +137,10 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         let chatMembersNameFirstIsMyName: Bool = self.getMyName(chatListData: chatListData)
         switch chatMembersNameFirstIsMyName {
         case true:
+            //my name
             cell.nameLabel.text = chatListData.chatMembersName?[1]
         case false:
+            //partner name
             cell.nameLabel.text = chatListData.chatMembersName?.first
         }
         return cell
@@ -180,14 +166,13 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         return .delete
     }
 
-//    deleteボタンが押された時
     func tableView(_: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-//            データベースから削除する
             self.showUIAlertForDeleting(indexPath: indexPath)
         }
     }
 
+    //when you delete a friend, they will also be deleted automatically
     func showUIAlertForDeleting(indexPath: IndexPath) {
         let alert = UIAlertController(title: "削除しますか？", message: "削除した場合、あなたと相手の全てのチャット履歴が削除されます", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
@@ -255,6 +240,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
 
 class ChatListTableViewCell: UITableViewCell {
     @IBOutlet var profileImageView: UIImageView!
+    
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var latestMessageLabel: UILabel!
     @IBOutlet var latestMessagedDate: UILabel!

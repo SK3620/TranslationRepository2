@@ -12,21 +12,21 @@ import SVProgressHUD
 import UIKit
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
-    @IBOutlet var mailAddressTextField: UITextField!
-    @IBOutlet var passwordTextField: UITextField!
-    @IBOutlet var displayNameTextField: UITextField!
-    @IBOutlet var loginButton: UIButton!
-    @IBOutlet var createAccountButton: UIButton!
-    @IBOutlet var logoutButton: UIButton!
-    @IBOutlet var deleteAccountButton: UIButton!
-    @IBOutlet var view1: UIView!
-    @IBOutlet var changePasswordButton: UIButton!
+    @IBOutlet private var mailAddressTextField: UITextField!
+    @IBOutlet private var passwordTextField: UITextField!
+    @IBOutlet private var displayNameTextField: UITextField!
+    
+    @IBOutlet private var loginButton: UIButton!
+    @IBOutlet private var createAccountButton: UIButton!
+    @IBOutlet private var logoutButton: UIButton!
+    @IBOutlet private var deleteAccountButton: UIButton!
+    @IBOutlet private var view1: UIView!
+    @IBOutlet private var changePasswordButton: UIButton!
 
-    var maxPasswordLength: Int = 10
+    private var maxPasswordLength: Int = 10
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.view1.layer.cornerRadius = 10
 
         if Auth.auth().currentUser == nil {
@@ -55,7 +55,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
         if Auth.auth().currentUser == nil {
             self.changePasswordButton.isEnabled = false
         } else {
@@ -63,7 +62,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func setTextFieldsAndButtons(textFieldArr: [UITextField]!, buttonArr: [UIButton]!) {
+   private func setTextFieldsAndButtons(textFieldArr: [UITextField]!, buttonArr: [UIButton]!) {
         textFieldArr.forEach {
             $0.layer.borderColor = UIColor.gray.cgColor
             $0.layer.borderWidth = 1
@@ -76,14 +75,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func setDoneToolBar(textFieldArr: [UITextField]!) {
-        // 決定バーの生成
+    private func setDoneToolBar(textFieldArr: [UITextField]!) {
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneItem = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(self.done))
         toolbar.setItems([spaceItem, doneItem], animated: true)
-        // インプットビュー設定
         textFieldArr.forEach {
             $0.inputAccessoryView = toolbar
         }
@@ -95,15 +92,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.displayNameTextField.endEditing(true)
     }
 
+    //limits the number of entered characters
     func textFieldDidChangeSelection(_: UITextField) {
         guard let userName = displayNameTextField.text else { return }
-
         if userName.count > self.maxPasswordLength {
             self.displayNameTextField.text = String(userName.prefix(self.maxPasswordLength))
         }
     }
 
-    //    アカウント作成ボタン
+    //   a button to create an account
     @IBAction func createAccountButton(_: Any) {
         self.mailAddressTextField.endEditing(true)
         self.passwordTextField.endEditing(true)
@@ -115,34 +112,28 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 SVProgressHUD.dismiss(withDelay: 1.5)
                 return
             }
-
             SVProgressHUD.show()
-
-            //            アドレスとパスワードでユーザー作成　ユーザー作成に成功すると、自動でログインする
+            // Create user with address and password Successfully create user, automatically log in
             let trimmedAddress = address.trimmingCharacters(in: .whitespaces)
             let trimmedPassword = password.trimmingCharacters(in: .whitespaces)
             Auth.auth().createUser(withEmail: trimmedAddress, password: trimmedPassword) { _, error in
                 if let error = error {
-                    // エラーがあったら原因をprintして、returnすることで以降の処理を実行せずに処理を終了する
                     print("DEBUG_PRINT: " + error.localizedDescription)
                     SVProgressHUD.showError(withStatus: "ユーザー作成に失敗しました")
                     return
                 }
-
                 print("DEBUG_PRINT: ユーザー作成に成功しました。")
-                // 表示名を設定する
+                // set the displayName
                 let user = Auth.auth().currentUser
                 if let user = user {
                     let changeRequest = user.createProfileChangeRequest()
                     changeRequest.displayName = displayName
                     changeRequest.commitChanges { error in
                         if let error = error {
-                            // プロフィールの更新でエラーが発生
                             print("DEBUG_PRINT: " + error.localizedDescription)
                             SVProgressHUD.showError(withStatus: "表示名の設定に失敗しました")
                             return
                         }
-
                         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument")
                         let postDic = [
                             "age": "ー",
@@ -157,13 +148,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                             "birthday": "ー",
                             "etc": "ー",
                         ] as [String: Any]
-                        print(postDic)
                         postRef.setData(postDic, merge: true)
                         print("DEBUG_PRINT: [displayName = \(user.displayName!)]の設定に成功しました。")
-
                         SVProgressHUD.dismiss()
-
-                        // 画面を閉じてタブ画面に戻る
                         self.dismiss(animated: true, completion: nil)
                     }
                 }
@@ -176,14 +163,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.mailAddressTextField.endEditing(true)
         self.passwordTextField.endEditing(true)
         if let address = mailAddressTextField.text, let password = passwordTextField.text {
-            // アドレスとパスワード名のいずれかでも入力されていない時は何もしない
+            // Do nothing when either the address or password name is not entered
             if address.isEmpty || password.isEmpty {
                 SVProgressHUD.showError(withStatus: "必要項目を入力してください")
                 return
             }
-
             SVProgressHUD.show()
-
             let trimmedAddress = address.trimmingCharacters(in: .whitespaces)
             let trimmedPassword = password.trimmingCharacters(in: .whitespaces)
             Auth.auth().signIn(withEmail: trimmedAddress, password: trimmedPassword) { _, error in
@@ -195,7 +180,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 }
                 print("DEBUG_PRINT: ログインに成功しました。")
                 SVProgressHUD.dismiss()
-                // 画面を閉じてタブ画面に戻る
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -207,7 +191,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         alert.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "ログアウト", style: .default, handler: { _ in
             SVProgressHUD.show()
-//            ログアウト処理
             try! Auth.auth().signOut()
             SVProgressHUD.showSuccess(withStatus: "ログアウトが完了しました")
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
@@ -218,7 +201,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
 
-//    アカウント削除ボタン
+//    a button to delete account
     @IBAction func deleteAccountButton(_: Any) {
         let user = Auth.auth().currentUser!
         let alert = UIAlertController(title: "アカウントを削除する", message: "アカウントを削除した場合、'\(user.displayName!)'さんのすべての投稿やコメントなどが削除されます", preferredStyle: .alert)
@@ -271,7 +254,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
 
-    func excuteMultipleAsyncProcesses(user: User, completion: @escaping (Error?) -> Void) {
+    private func excuteMultipleAsyncProcesses(user: User, completion: @escaping (Error?) -> Void) {
         //        documentIdを格納する配列
         var documentIdArray: [String] = []
         //        "comments"コレクション内にある"posts"コレクション内のドキュメントIDを格納する
@@ -365,8 +348,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                     case true:
                                         dispatchGroup.leave()
                                         print("leave3")
-                                    default:
-                                        print("エラー")
                                     }
                                 }
                             }
@@ -564,7 +545,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     //   なんかわからんけど、compltionクロージャが何回（一回以上）呼ばれておる
-    func updateNumberOfComments(documentIdForPostsArr: [String], completion: @escaping () -> Void) {
+    private func updateNumberOfComments(documentIdForPostsArr: [String], completion: @escaping () -> Void) {
         var excuteProcessWhenZero = documentIdForPostsArr.count
         print("カウント数の確認\(excuteProcessWhenZero)")
         for documentIdForPosts in documentIdForPostsArr {
@@ -604,7 +585,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func updateNumberOf() {
+    private func updateNumberOf() {
 //        "comments"コレクション内にある"posts"コレクション内のドキュメントIDを格納
         var documentIdForPostsArr: [String] = []
         let user = Auth.auth().currentUser!
@@ -628,7 +609,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func getDocumentsInCommentCollection(documentIdForPostsArr: [String]) {
+    private func getDocumentsInCommentCollection(documentIdForPostsArr: [String]) {
 //        ここは削除処理後に行う処理
         for documentIdForPosts in documentIdForPostsArr {
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: documentIdForPosts)
@@ -646,7 +627,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func updateNumberOfComments(updatedNumberOfComments: String, documentIdForPosts: String) {
+    private func updateNumberOfComments(updatedNumberOfComments: String, documentIdForPosts: String) {
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentIdForPosts)
         let postDic = [
             "numberOfComments": updatedNumberOfComments,
@@ -791,7 +772,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.passwordResetting()
     }
 
-    func passwordResetting() {
+   private func passwordResetting() {
         let user = Auth.auth().currentUser!
         Auth.auth().languageCode = "ja_JP" // 日本語に変換
         guard let email = user.email else { return }
@@ -805,7 +786,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func setAlert() {
+   private func setAlert() {
         let user = Auth.auth().currentUser!
         let alert = UIAlertController(title: "パスワード変更", message: "\(user.email!)へパスワード変更用のメールを送信しました", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

@@ -10,29 +10,27 @@ import SVProgressHUD
 import UIKit
 
 class EditRecordViewController: UIViewController, UINavigationBarDelegate {
-    @IBOutlet var textField1: UITextField!
-    @IBOutlet var textField2: UITextField!
-    @IBOutlet var textField3: UITextField!
-    @IBOutlet var textField4: UITextField!
-    @IBOutlet var textView1: UITextView!
-    @IBOutlet var view1: UIView!
+    @IBOutlet private var textField1: UITextField!
+    @IBOutlet private var textField2: UITextField!
+    @IBOutlet private var textField3: UITextField!
+    @IBOutlet private var textField4: UITextField!
 
-    var datePicker: UIDatePicker = .init()
-    var pickerView1: UIPickerView = .init()
-    var pickerView3: UIPickerView = .init()
+    @IBOutlet private var textView1: UITextView!
+
+    @IBOutlet private var view1: UIView!
+
+    private var datePicker: UIDatePicker = .init()
+    private var pickerView1: UIPickerView = .init()
+    private var pickerView3: UIPickerView = .init()
 
     var translationFolderArr: Results<TranslationFolder>!
 
-    var folderNames = [String]()
+    private var folderNames = [String]()
 
-    var toolBar: UIToolbar!
+    private var numbers = [String]()
 
-//    var number: Int!
-
-    var numbers = [String]()
-
-    let realm = try! Realm()
-    let recordArr = try! Realm().objects(Record.self)
+    private let realm = try! Realm()
+    private let recordArr = try! Realm().objects(Record.self)
     var recordArrFilter2: Record!
 
     var recordViewController: RecordViewController!
@@ -41,8 +39,9 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
     var dateString1: Int!
     var studyViewContoller: StudyViewController!
 
-    //    タップされた日付をタイトルに表示
+    // display the tapped date in title
     var label1_text: String!
+
     var textField1_text: String!
     var textField2_text: String!
     var textField3_text: String!
@@ -51,7 +50,6 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.setNavigationBar()
 
         for number in 1 ... 30 {
@@ -65,7 +63,8 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
                 self.folderNames.append($0.folderName)
             }
         }
-        //        デフォルト設定
+
+        // default settings
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
@@ -91,7 +90,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         self.setDoneToolBarForTextView1()
     }
 
-    func setPlaceHolderForTextField() {
+    private func setPlaceHolderForTextField() {
         self.textField1.attributedPlaceholder = NSAttributedString(string: "学習したフォルダー名",
                                                                    attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
         self.textField2.attributedPlaceholder = NSAttributedString(string: "学習した文章番号/内容(例:1〜10)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
@@ -99,7 +98,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         self.textField4.attributedPlaceholder = NSAttributedString(string: "次回復習日を設定しよう！", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
     }
 
-    func setNavigationBar() {
+    private func setNavigationBar() {
         let appearence = UINavigationBarAppearance()
         appearence.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
@@ -108,11 +107,10 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         let rightBarButtonItem = UIBarButtonItem(title: "編集完了", style: .done, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
         self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
 
-//        日付を表示
         self.title = self.label1_text
     }
 
-    func SetTextFields(textFieldArr: [UITextField]!) {
+    private func SetTextFields(textFieldArr: [UITextField]!) {
         textFieldArr.forEach {
             $0.layer.borderWidth = 2
             $0.layer.borderColor = UIColor.systemGray3.cgColor
@@ -120,7 +118,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         }
     }
 
-    func setDoneToolBarForTextField1() {
+    private func setDoneToolBarForTextField1() {
         self.pickerView1.delegate = self
         self.pickerView1.dataSource = self
         self.pickerView1.showsSelectionIndicator = true
@@ -136,7 +134,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         self.textField1.inputAccessoryView = toolbar1
     }
 
-    func setDoneToolBarForTextField3() {
+    private func setDoneToolBarForTextField3() {
         self.pickerView3.delegate = self
         self.pickerView3.dataSource = self
         self.pickerView3.showsSelectionIndicator = true
@@ -152,7 +150,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         self.textField3.inputAccessoryView = toolbar3
     }
 
-    func setDoneToolBarForTextField4() {
+    private func setDoneToolBarForTextField4() {
         // ピッカー設定
         self.datePicker.datePickerMode = UIDatePicker.Mode.date
         self.datePicker.preferredDatePickerStyle = .wheels
@@ -170,7 +168,7 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
         self.textField4.inputAccessoryView = toolbar4
     }
 
-    func setDoneToolBarForTextView1() {
+    private func setDoneToolBarForTextView1() {
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -230,17 +228,14 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
         self.tabBarController1?.navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.barTintColor = .systemGray5
         navigationController?.navigationBar.backgroundColor = .systemGray5
     }
 
-//    保存ボタン
+//    save button
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
-        SVProgressHUD.show()
-
         self.textField1_text = self.textField1.text
         self.textField2_text = self.textField2.text
         self.textField3_text = self.textField3.text
@@ -261,7 +256,6 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
             }
             self.recordViewController.dateString = self.dateString
             self.recordViewController.filteredRecordArr(recordArrFilter1: self.recordArr)
-
             SVProgressHUD.showSuccess(withStatus: "保存しました")
         } catch {
             print("エラー発生")
@@ -274,12 +268,10 @@ class EditRecordViewController: UIViewController, UINavigationBarDelegate {
 
 extension EditRecordViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in _: UIPickerView) -> Int {
-        //        ドラムロールの列数
         return 1
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent _: Int) -> Int {
-        //        ドラムロールの行数
         return pickerView == self.pickerView1 ? self.folderNames.count : 30
     }
 

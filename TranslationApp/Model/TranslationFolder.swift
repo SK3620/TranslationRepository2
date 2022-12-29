@@ -10,7 +10,7 @@ import RealmSwift
 
 class TranslationFolder: Object {
     @objc dynamic var id = 0
-//    フォルダー名
+//    folder name
     @objc dynamic var folderName = ""
 
     @objc dynamic var date = Date()
@@ -25,15 +25,16 @@ class TranslationFolder: Object {
 }
 
 class Translation: Object {
-//    翻訳したい文章
+//    sentences which you wanna translate
     @objc dynamic var inputData = ""
-//    翻訳結果
+//    translated sentences that you entered
     @objc dynamic var resultData = ""
 
     @objc dynamic var id = 0
-//    ブックマーク（星マーク）ボタンを押すごとに3種類の星マークがあるため、0,1,2のInt型で判定
+    // since there are 3 types of checkmark, use Int type instead of Bool type
+    // change image icon by determing 1,2,3
     @objc dynamic var isChecked: Int = 0
-    //   　文章タップで表示、非表示
+    // display or non-display by tapping the cell
     @objc dynamic var isDisplayed: Bool = false
 //    inputData + resultData
     @objc dynamic var inputAndResultData = ""

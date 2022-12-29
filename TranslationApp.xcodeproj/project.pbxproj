@@ -434,6 +434,7 @@
 		8389C3F5290A6677007347AE /* Contents Of SecondTabBar */ = {
 			isa = PBXGroup;
 			children = (
+				83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */,
 				8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */,
 				83C2CC98291D13EC00A671AE /* CorrectViewController.swift */,
 				83C2CC9A291D1BF600A671AE /* HowToLearnViewController.swift */,
@@ -452,11 +453,9 @@
 				8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */,
 				83BC07EF291B84FC001FFE61 /* OthersBookMarkViewController.swift */,
 				83BC07F1291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift */,
-				83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */,
 				83D896332914190500E570AD /* InputCommentViewController.swift */,
 				83D896312913F5CD00E570AD /* CommentSectionViewController.swift */,
 				830D9FF32912DE2000F8761B /* PostViewController.swift */,
-				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
 				8389C3FD290ABDBC007347AE /* ProfileViewController.swift */,
 				83920AA3290BB2BE00F1F2D6 /* EditProfileViewController.swift */,
 				83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */,
@@ -465,6 +464,7 @@
 				8385E729291816C100DBDBAC /* BookMarkViewController.swift */,
 				83BC07ED291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift */,
 				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
+				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
 				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
 				835B38E5294FF58D00D42F50 /* ChatListViewController.swift */,
 				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,

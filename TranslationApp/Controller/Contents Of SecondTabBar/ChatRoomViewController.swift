@@ -15,13 +15,13 @@ class ChatRoomViewController: MessagesViewController {
     var chatListData: ChatList!
     var secondTabBarController: SecondTabBarController!
 
-    var listener: ListenerRegistration?
-    var chatRoomArr: [ChatRoom] = []
+    private var listener: ListenerRegistration?
+    private var chatRoomArr: [ChatRoom] = []
 
-    var currentUser: MessageSenderType?
-    var partnerUser: MessageSenderType?
+    private var currentUser: MessageSenderType?
+    private var partnerUser: MessageSenderType?
 
-    var messageList: [MessageEntity] = [] {
+   private var messageList: [MessageEntity] = [] {
         didSet {
             self.messagesCollectionView.reloadData()
             self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: false)
@@ -30,28 +30,22 @@ class ChatRoomViewController: MessagesViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.setNavigationBarAppearence()
+        
         self.setDelegateMethod()
+        
         messageInputBar.sendButton.title = nil
         messageInputBar.sendButton.image = UIImage(systemName: "paperplane")
 
+        let myName = self.getMyNameAndPartnerName().first!
         let partnerName = self.getMyNameAndPartnerName()[1]
+        self.currentUser = MessageSenderType.mymessageSenderType(mySenderId: "Me", myDisplayName: myName)
+        self.partnerUser = MessageSenderType.partnerMessageSenderType(partnerSenderId: "partner", partnerDisplayName: partnerName)
+        
         self.title = partnerName
-
-        self.currentUser = MessageSenderType.mymessageSenderType(mySenderId: "Me", myDisplayName: self.getMyNameAndPartnerName().first!)
-
-        self.partnerUser = MessageSenderType.partnerMessageSenderType(partnerSenderId: "partner", partnerDisplayName: self.getMyNameAndPartnerName()[1])
     }
 
-    func keyBoardDisappearsWhenTapped() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        self.view.addGestureRecognizer(tapGesture)
-    }
-
-    @objc func dismissKeyboard() {}
-
-    func setDelegateMethod() {
+   private func setDelegateMethod() {
         messagesCollectionView.backgroundColor = UIColor.secondarySystemBackground
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -68,7 +62,7 @@ class ChatRoomViewController: MessagesViewController {
         self.getMessagesDocument()
     }
 
-    func getMessagesDocument() {
+   private func getMessagesDocument() {
         let messagesRef = Firestore.firestore().collection("chatLists").document(self.chatListData.documentId!).collection("messages").order(by: "sentDate", descending: false)
         self.listener = messagesRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
@@ -94,7 +88,7 @@ class ChatRoomViewController: MessagesViewController {
         }
     }
 
-    func createMessage() {
+   private func createMessage() {
         guard let user = Auth.auth().currentUser else {
             return
         }
@@ -108,19 +102,19 @@ class ChatRoomViewController: MessagesViewController {
         }
     }
 
-    func setNavigationBarHidden() {
+   private func setNavigationBarHidden() {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-    func setNavigationBarAppearence() {
+   private func setNavigationBarAppearence() {
         let appearence = UINavigationBarAppearance()
         appearence.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearence
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
     }
 
-    func getMyNameAndPartnerName() -> [String] {
+   private func getMyNameAndPartnerName() -> [String] {
         let user = Auth.auth().currentUser!
         var chatMembersFirstIsMyName: Bool
         if self.chatListData.chatMembersName?.first == user.displayName {
@@ -141,7 +135,7 @@ class ChatRoomViewController: MessagesViewController {
         return [myName, partnerName]
     }
 
-    func getMyUidAndPartnerUid(chatListData: ChatList) -> [String] {
+   private func getMyUidAndPartnerUid(chatListData: ChatList) -> [String] {
         let user = Auth.auth().currentUser
         var chatMembersFirstisMyUid: Bool
         if chatListData.chatMembers?.first == user?.uid {
@@ -181,7 +175,6 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
         self.writeMessageInforInFireStore(text: text)
     }
 
-//    どうやらsenderIdはdeprecatedらしい
     func writeMessageInforInFireStore(text: String) {
         let user = Auth.auth().currentUser
         let messageDic = [
@@ -218,7 +211,6 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
         }
     }
 
-//    今日の日付を取得
     func getToday() -> String {
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -234,11 +226,6 @@ extension ChatRoomViewController: MessagesDataSource {
         print("currentSender")
         return self.currentUser!
     }
-
-//    func otherSender() -> SenderType {
-//        print("otherSender")
-//        return self.partnerUser!
-//    }
 
     func numberOfSections(in _: MessagesCollectionView) -> Int {
         print(self.messageList.count)
@@ -298,5 +285,3 @@ extension ChatRoomViewController: MessagesLayoutDelegate {
         return 24
     }
 }
-
-extension MessageCollectionViewCell {}
