@@ -29,7 +29,6 @@
 		835B38EC2950070200D42F50 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38EB2950070100D42F50 /* ChatList.swift */; };
 		836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 836D1F89290A52360075AFEE /* GoogleService-Info.plist */; };
 		836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */; };
-		83724E9529190BD40074ED1E /* ButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83724E9429190BD40074ED1E /* ButtonModel.swift */; };
 		83724E98291926EA0074ED1E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83724E97291926EA0074ED1E /* Alamofire */; };
 		8372AD902932E91500E230BF /* PagingPhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8372AD8F2932E91500E230BF /* PagingPhraseWordViewController.swift */; };
 		83734B75291E62F8007B9A72 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83734B74291E62F8007B9A72 /* Alamofire */; };
@@ -146,7 +145,6 @@
 		835B38EB2950070100D42F50 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
 		836D1F89290A52360075AFEE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsHistoryViewController.swift; sourceTree = "<group>"; };
-		83724E9429190BD40074ED1E /* ButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonModel.swift; sourceTree = "<group>"; };
 		8372AD8F2932E91500E230BF /* PagingPhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingPhraseWordViewController.swift; sourceTree = "<group>"; };
 		837BB0EA2939B02000648011 /* AllPhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPhraseWordViewController.swift; sourceTree = "<group>"; };
 		837CD1B228BE264F00823D17 /* TranslationFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFolder.swift; sourceTree = "<group>"; };
@@ -303,7 +301,6 @@
 				83C2921A29137FF000386EE9 /* PostData.swift */,
 				837D41E829150F4C00A80342 /* SecondPostData.swift */,
 				8385EA13295476110034E0F6 /* ProfileData.swift */,
-				83724E9429190BD40074ED1E /* ButtonModel.swift */,
 				835B38E1294C833500D42F50 /* MessageEntity.swift */,
 				835B38E3294C839F00D42F50 /* MessageSenderType.swift */,
 				835B38EB2950070100D42F50 /* ChatList.swift */,
@@ -694,7 +691,6 @@
 				83B9C20628D39997006138E2 /* AddViewController.swift in Sources */,
 				839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */,
 				83920AA4290BB2BE00F1F2D6 /* EditProfileViewController.swift in Sources */,
-				83724E9529190BD40074ED1E /* ButtonModel.swift in Sources */,
 				83C2CCA7291D1D4100A671AE /* CertificationViewController.swift in Sources */,
 				835B38E2294C833500D42F50 /* MessageEntity.swift in Sources */,
 				83A1D5C7290EC69D00B6F18A /* IntroductionViewController.swift in Sources */,

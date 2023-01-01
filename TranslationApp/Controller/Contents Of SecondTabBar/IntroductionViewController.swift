@@ -14,7 +14,9 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet var tableView: UITableView!
 
     var profileData: [String: Any] = [:]
+
     var secondTabBarController: SecondTabBarController!
+
     var pagingViewController: PagingViewController!
 
     override func viewDidLoad() {
@@ -36,6 +38,12 @@ class IntroductionViewController: UIViewController, UITableViewDataSource, UITab
         self.pagingViewController.select(index: 0)
 
         self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
+
+        guard Auth.auth().currentUser != nil else {
+            SVProgressHUD.dismiss()
+            self.tableView.reloadData()
+            return
+        }
         self.setProfileData()
     }
 

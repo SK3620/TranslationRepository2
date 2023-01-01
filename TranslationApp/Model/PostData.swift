@@ -11,26 +11,22 @@ import UIKit
 class PostData: NSObject {
     var documentId: String
     var userName: String?
-//    投稿内容
     var contentOfPost: String?
-//    コメント
     var comment: String?
     var postedDate: Date?
     var likes: [String] = []
     var isLiked: Bool = false
     var bookMarks: [String] = []
     var isBookMarked: Bool = false
+    // displayed next to the bubble icon
     var numberOfComments: String?
     var uid: String?
-
-//    var timeStamp: Timestamp?
-//    var commentedDate: Date?
+    // string type commented type which has already been converted from Date into String
     var stringCommentedDate: String?
     var documentIdForPosts: String?
     var commentedDate: Date?
 
     init(document: QueryDocumentSnapshot) {
-        print("postDataクラスが実行された")
         self.documentId = document.documentID
 
         let postDic = document.data()
@@ -44,48 +40,46 @@ class PostData: NSObject {
         self.postedDate = timestamp?.dateValue()
 
         if let likes = postDic["likes"] as? [String] {
-//            「いいね」したユーザのuidを保持する
+            // Keep uid of "liked" user
             self.likes = likes
         }
         if let myid = Auth.auth().currentUser?.uid {
-            // likesの配列の中にmyidが含まれているかチェックすることで、自分がいいねを押しているかを判断
+            // Check if myid is included in the likes array to determine if I am a like
             if self.likes.firstIndex(of: myid) != nil {
-                // myidがあれば、いいねを押していると認識する。
+                // If there is a myid, we recognize it as a like.
                 self.isLiked = true
             }
         }
 
         if let bookMarks = postDic["bookMarks"] as? [String] {
-//            「bookMark」したユーザのuidを保持する
+            // Keep uid of "bookMarked" user
             self.bookMarks = bookMarks
         }
         if let myid = Auth.auth().currentUser?.uid {
-            // bookMarksの配列の中にmyidが含まれているかチェックすることで、自分がbookMarkを押しているかを判断
+            // Determine if you've pushed bookMark by checking if myid is included in the bookMarks array
             if self.bookMarks.firstIndex(of: myid) != nil {
-                // myidがあれば、bookMarkを押していると認識する。
+                // If there is a myid, it recognizes that the bookMark is being pressed.
                 self.isBookMarked = true
             }
         }
 
-//        コメント数表示
+//        number of comments
         self.numberOfComments = postDic["numberOfComments"] as? String
 
-//        投稿者のuid
+//        uid of the person who posted
         self.uid = postDic["uid"] as? String
 
-//        self.timeStamp = postDic["commentedDate"] as? Timestamp
-//        self.commentedDate = self.timeStamp?.dateValue()
-
         self.stringCommentedDate = postDic["stringCommentedDate"] as? String
+
+        // Document ID of the submission for the comment
         self.documentIdForPosts = postDic["documentIdForPosts"] as? String
 
         let date = postDic["commentedDate"] as? Timestamp
         self.commentedDate = date?.dateValue()
     }
 
-//    CommentSectionViewController画面で単一のドキュメントを監視した時
+    // When a single document is retrieved on the CommentSectionViewController screen
     init(document: DocumentSnapshot) {
-        print("postDataクラスが実行された")
         self.documentId = document.documentID
 
         let postDic = document.data()!
@@ -98,32 +92,23 @@ class PostData: NSObject {
         self.postedDate = timestamp?.dateValue()
 
         if let likes = postDic["likes"] as? [String] {
-//            「いいね」したユーザのuidを保持する
             self.likes = likes
         }
         if let myid = Auth.auth().currentUser?.uid {
-            // likesの配列の中にmyidが含まれているかチェックすることで、自分がいいねを押しているかを判断
             if self.likes.firstIndex(of: myid) != nil {
-                // myidがあれば、いいねを押していると認識する。
                 self.isLiked = true
             }
         }
-
         if let bookMarks = postDic["bookMarks"] as? [String] {
-//            「bookMark」したユーザのuidを保持する
             self.bookMarks = bookMarks
         }
         if let myid = Auth.auth().currentUser?.uid {
-            // bookMarksの配列の中にmyidが含まれているかチェックすることで、自分がbookMarkを押しているかを判断
             if self.bookMarks.firstIndex(of: myid) != nil {
-                // myidがあれば、bookMarkを押していると認識する。
                 self.isBookMarked = true
             }
         }
-        //        コメント数表示
         self.numberOfComments = postDic["numberOfComments"] as? String
 
-        //    投稿者のuid
         self.uid = postDic["uid"] as? String
     }
 }

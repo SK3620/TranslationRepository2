@@ -13,8 +13,10 @@ class OthersBookMarkCommentsSectionViewController: UIViewController, UITableView
     @IBOutlet var tableView: UITableView!
 
     var postData: PostData!
+
     var listener: ListenerRegistration?
     var listener2: ListenerRegistration?
+
     var secondPostArray: [SecondPostData] = []
 
     override func viewDidLoad() {

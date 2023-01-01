@@ -29,16 +29,10 @@ class ChatRoom {
         let timeStamp = messageDic["sentDate"] as? Timestamp
         self.sentDate = timeStamp?.dateValue()
 
-        //        それはサーバーで時刻の値が決まるまで、値が空で返ってきてしまう。
-
+        // The value is returned empty until the server determines the value of the time.
         if self.sentDate == nil {
             let timeStamp = document.get("sentDate", serverTimestampBehavior: .estimate) as? Timestamp
             self.sentDate = timeStamp?.dateValue()
         }
-
-        print(self.message)
-        print(self.senderUid)
-        print(self.senderName)
-        print(self.sentDate)
     }
 }

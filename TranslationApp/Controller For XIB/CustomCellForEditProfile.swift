@@ -22,7 +22,7 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
     @IBOutlet var birthdayTextField: UITextField!
     @IBOutlet var etcTextView: UITextView!
 
-    var maxPasswordLength: Int = 10
+    private var maxPasswordLength: Int = 10
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,7 +34,7 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
         self.setTextFieldAndViewDesign(textFieldArr: textFieldArr, textViewArr: textViewArr)
     }
 
-    func textFieldDidChangeSelection(_: UITextField) {
+    internal func textFieldDidChangeSelection(_: UITextField) {
         guard let userName = userNameTextField.text else { return }
 
         if userName.count > self.maxPasswordLength {
@@ -42,7 +42,7 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
         }
     }
 
-    func setTextFieldAndViewDesign(textFieldArr: [UITextField], textViewArr: [UITextView]) {
+    private func setTextFieldAndViewDesign(textFieldArr: [UITextField], textViewArr: [UITextView]) {
         textFieldArr.forEach {
             $0.layer.borderColor = UIColor.systemGray4.cgColor
             $0.layer.borderWidth = 2
@@ -57,8 +57,6 @@ class CustomCellForEditProfile: UITableViewCell, UITextFieldDelegate {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     func setProfileData(profileData: [String: Any]) {

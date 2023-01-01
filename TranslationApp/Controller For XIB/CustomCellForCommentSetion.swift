@@ -14,7 +14,9 @@ class CustomCellForCommentSetion: UITableViewCell {
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var postedDateLabel: UILabel!
     @IBOutlet var commentLabel: UILabel!
-    @IBOutlet var viewForSeparator: UIView!
+
+    @IBOutlet private var viewForSeparator: UIView!
+
     @IBOutlet var heartButton: UIButton!
     @IBOutlet var heartLabel: UILabel!
     @IBOutlet var bookMarkButton: UIButton!
@@ -23,11 +25,9 @@ class CustomCellForCommentSetion: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-
-        //        丸いimageView
+        //        circle imageView
         self.imageView1.layer.cornerRadius = self.imageView1.frame.height / 2
-        //        画像にデフォルト設定
+        //        default setting for the image
         self.imageView1.layer.borderColor = UIColor.systemGray4.cgColor
         self.imageView1.layer.borderWidth = 2
         self.setButtonImage(button: self.copyButton, systemName: "doc.on.doc")
@@ -35,18 +35,23 @@ class CustomCellForCommentSetion: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     func setSecondPostData(secondPostData: SecondPostData) {
-//        プロフィール画像設定
         let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(secondPostData.uid!)" + ".jpg")
-        self.imageView1.sd_setImage(with: imageRef)
+        imageRef.downloadURL { url, error in
+            if let error = error {
+                print("URLの取得失敗\(error)")
+            }
+            if let url = url {
+                print("URLの取得成功: \(url)")
+                self.imageView1.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+            }
+        }
 
         self.userNameLabel.text = secondPostData.userName!
 
-        // 日時の表示
+        // display of the date
         self.postedDateLabel.text = ""
         if let date = secondPostData.commentedDate {
             let formatter = DateFormatter()
@@ -55,18 +60,17 @@ class CustomCellForCommentSetion: UITableViewCell {
             self.postedDateLabel.text = dateString
         }
 
-//        なぜかtimeStampがnilなので、いまはstringCommentedDateで妥協
         if self.postedDateLabel.text == "" || self.postedDateLabel.text == nil {
             self.postedDateLabel.text = secondPostData.stringCommentedDate
         }
 
         self.commentLabel.text = secondPostData.comment!
 
-        // いいね数の表示
+        // the number of likes
         let likeNumber = secondPostData.likes.count
         self.heartLabel.text = "\(likeNumber)"
 
-        // いいねボタンの表示
+        // display like button
         if secondPostData.isLiked {
             self.setButtonImage(button: self.heartButton, systemName: "heart.fill")
             self.heartButton.tintColor = UIColor.systemRed
@@ -75,7 +79,7 @@ class CustomCellForCommentSetion: UITableViewCell {
             self.heartButton.tintColor = UIColor.darkGray
         }
 
-//        bookMarkの表示
+//       display bookMark
         if secondPostData.isBookMarked {
             self.setButtonImage(button: self.bookMarkButton, systemName: "bookmark.fill")
             self.bookMarkButton.tintColor = UIColor.systemGreen
@@ -85,7 +89,7 @@ class CustomCellForCommentSetion: UITableViewCell {
         }
     }
 
-    func setButtonImage(button: UIButton, systemName: String) {
+    private func setButtonImage(button: UIButton, systemName: String) {
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .small)
         button.setImage(UIImage(systemName: systemName, withConfiguration: config), for: .normal)
     }

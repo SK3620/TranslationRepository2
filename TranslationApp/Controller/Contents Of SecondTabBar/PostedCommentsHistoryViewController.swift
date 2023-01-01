@@ -11,54 +11,61 @@ import Firebase
 import SVProgressHUD
 import UIKit
 
+// the screen which displays the comments you posted
 class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
-    var postArray: [PostData] = []
-    var listener: ListenerRegistration?
+    private var postArray: [PostData] = []
+
+    private var listener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.settingsForTableView()
+    }
 
+    private func settingsForTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
         self.tableView.allowsSelection = true
-
-        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
-        SVProgressHUD.show(withStatus: "データ取得中")
-        if let user = Auth.auth().currentUser {
-            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid).order(by: "commentedDate", descending: true)
-            self.listener = commentsRef.addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("querySnapshot取得失敗\(error)")
-                    SVProgressHUD.dismiss()
-                    self.tableView.reloadData()
-                    return
-                }
-                if let querySnapshot = querySnapshot {
-                    self.postArray = querySnapshot.documents.map { document in
-                        let postData = PostData(document: document)
-                        print("postArr実行")
-                        return postData
-                    }
-                    SVProgressHUD.dismiss()
-                    print("リロードした")
-                    self.tableView.reloadData()
-                }
-            }
-        }
         if Auth.auth().currentUser == nil {
             self.postArray = []
             self.tableView.reloadData()
             SVProgressHUD.dismiss()
+            return
+        }
+
+        SVProgressHUD.show(withStatus: "データ取得中")
+        if let user = Auth.auth().currentUser {
+            self.listenerAndGetPostedCommentsDocuments(user: user)
+        }
+    }
+
+    private func listenerAndGetPostedCommentsDocuments(user: User) {
+        let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid).order(by: "commentedDate", descending: true)
+        self.listener = commentsRef.addSnapshotListener { querySnapshot, error in
+            if let error = error {
+                print("querySnapshot取得失敗\(error)")
+                SVProgressHUD.dismiss()
+                self.tableView.reloadData()
+                return
+            }
+            if let querySnapshot = querySnapshot {
+                self.postArray = querySnapshot.documents.map { document in
+                    let postData = PostData(document: document)
+                    return postData
+                }
+                SVProgressHUD.dismiss()
+                self.tableView.reloadData()
+            }
         }
     }
 
@@ -90,7 +97,7 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
         cell.copyButton.isHidden = true
         cell.bubbleLabel.isHidden = true
 
-//        コメント吹き出しボタンをコピーボタンに変える。
+        //   change the bubble button to the copy button
         cell.bubbleButton.isEnabled = true
         cell.bubbleButton.isHidden = false
         cell.setButtonImage(button: cell.bubbleButton, systemName: "doc.on.doc")
@@ -105,13 +112,12 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
     }
 
     @objc func tappedCellEditButton(_: UIButton, forEvent event: UIEvent) {
-        //        投稿内容削除処理
+        // processes to delete the comments you posted
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { _ in
             alert.dismiss(animated: true, completion: nil)
         }
         let deleteAction = UIAlertAction(title: "削除", style: .destructive) { _ in
-            // 削除機能のコード
             SVProgressHUD.showSuccess(withStatus: "削除完了")
             SVProgressHUD.dismiss(withDelay: 1.0) {
                 let touch = event.allTouches?.first
@@ -119,6 +125,7 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
                 let indexPath = self.tableView.indexPathForRow(at: point)
 
                 let postData = self.postArray[indexPath!.row]
+
                 self.excuteMultipleAsyncProcesses(postData: postData) { error in
                     print("エラーでした。エラー内容：\(error)")
                 }
@@ -131,10 +138,10 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
 
     private func excuteMultipleAsyncProcesses(postData: PostData, completion: @escaping (Error) -> Void) {
         let dispatchGruop = DispatchGroup()
-        //        直列で実行 .concurrentではない
         let dispatchQueue = DispatchQueue(label: "queue")
         var updatedNumberOfComments = "0"
 
+        // delete comment data
         dispatchGruop.enter()
         dispatchQueue.async {
             Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(postData.documentId).delete { error in
@@ -156,8 +163,8 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
                 }
             }
 
+            // update the number of comments
             dispatchGruop.notify(queue: .main, execute: {
-                //            コメント数の更新
                 let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!)
                 let updatedPostDic = [
                     "numberOfComments": updatedNumberOfComments,
@@ -178,43 +185,33 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {
-        print("DEBUG_PRINT: likeボタンがタップされました。")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postArray[indexPath!.row]
-        print("postData確認\(postData)")
 
-        // likesを更新する
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
             var updateValue: FieldValue
             if postData.isLiked {
-                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
-                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
         }
     }
 
     @objc func tappedCopyButton(_: UIButton, forEvent event: UIEvent) {
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
-        // 配列からタップされたインデックスのデータを取り出す
+
         let postData = self.postArray[indexPath!.row]
         let comment = postData.comment
         UIPasteboard.general.string = comment
+
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
     }

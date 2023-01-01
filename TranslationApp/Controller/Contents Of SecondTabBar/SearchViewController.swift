@@ -5,6 +5,7 @@
 //  Created by 鈴木健太 on 2022/11/17.
 //
 
+import Alamofire
 import Firebase
 import Parchment
 import SVProgressHUD
@@ -12,49 +13,49 @@ import UIKit
 
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet private var tableView: UITableView!
-    
+
     @IBOutlet private var label: UILabel!
 
     var secondTabBarController: SecondTabBarController!
-    
+
     var secondPagingViewController: SecondPagingViewController!
-    
+
 //    stores content of posts
     private var contentOfPostArray: [String] = []
-    
+
     private var postArray: [PostData] = []
-    
+
     private var filteredArr: [String] = []
 
     var searchBar: UISearchBar?
     var searchBarText: String?
 
-    //variable in order not to call getDocument method
-    //stores Bool type value jsut as  determination
+    // variable in order not to call getDocument method
+    // stores Bool type value jsut as  determination
     var shouldExcuteGetDocumentMethod: Bool?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.settingsForTableView()
-       
+
         if Auth.auth().currentUser == nil {
             self.screenTransitionToLoginViewController()
         }
     }
-    
-    private func settingsForTableView(){
+
+    private func settingsForTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.layer.borderColor = UIColor.clear.cgColor
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
     }
-    
+
     private func screenTransitionToLoginViewController() {
         let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
         self.present(loginViewController, animated: true, completion: nil)
     }
-    
+
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         guard Auth.auth().currentUser != nil else {
@@ -63,20 +64,20 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return
         }
         self.label.text = ""
-        
-        if self.shouldExcuteGetDocumentMethod == true, self.searchBarText != nil {
+
+        if self.shouldExcuteGetDocumentMethod != true, self.searchBarText != nil {
             self.getDocuments(searchBarText: self.searchBarText!)
             self.secondPagingViewController.navigationController?.setNavigationBarHidden(false, animated: false)
         }
     }
 
-    //filtering
-    //get all of the posted document data
+    // filtering
+    // get all of the posted document data
     func getDocuments(searchBarText: String) {
         self.contentOfPostArray = []
         self.postArray = []
         self.searchBarText = searchBarText
-        
+
         SVProgressHUD.show(withStatus: "データ取得中...")
         Firestore.firestore().collection(FireBaseRelatedPath.PostPath).getDocuments(completion: { querySnapshot, error in
             if let error = error {
@@ -94,7 +95,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     return
                 }
                 self.contentOfPostArray = querySnapshot.documents.map { document in
-                    //stores contentOfPost
+                    // stores contentOfPost
                     let postDataForContentOfPost = PostData(document: document).contentOfPost
                     return postDataForContentOfPost!
                 }
@@ -190,7 +191,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let indexPath = self.tableView.indexPathForRow(at: point)
 
         let postData = self.postArray[indexPath!.row]
-        
+
         if let myid = Auth.auth().currentUser?.uid {
             if postData.isBookMarked {
                 let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
@@ -247,7 +248,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let indexPath = self.tableView.indexPathForRow(at: point)
 
         let postData = self.postArray[indexPath!.row]
-        
+
         UIPasteboard.general.string = postData.contentOfPost
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
@@ -298,7 +299,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         })
     }
 
-   private func getContentOfPostDocumentWithoutSVProgress(filteredArr: [String]) {
+    private func getContentOfPostDocumentWithoutSVProgress(filteredArr: [String]) {
         for contentOfPost in filteredArr {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("contentOfPost", isEqualTo: contentOfPost).order(by: "postedDate", descending: true)
             postsRef.getDocuments(completion: { querySnapshot, error in

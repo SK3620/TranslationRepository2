@@ -12,60 +12,66 @@ import UIKit
 
 class PostViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var textView: UITextView!
-    @IBOutlet var label1: UILabel!
 
-    @IBOutlet var correctButton: UIButton!
-    @IBOutlet var HowToLearnButton: UIButton!
-    @IBOutlet var wordButton: UIButton!
-    @IBOutlet var grammerButton: UIButton!
-    @IBOutlet var conversationButton: UIButton!
-    @IBOutlet var listeningButton: UIButton!
-    @IBOutlet var pronunciationButton: UIButton!
-    @IBOutlet var certificationButton: UIButton!
-    @IBOutlet var etcButton: UIButton!
-    @IBOutlet var postButton: UIBarButtonItem!
+    @IBOutlet private var label1: UILabel!
 
-    @IBOutlet var backBarButtonItem: UIBarButtonItem!
+    @IBOutlet private var correctButton: UIButton!
+    @IBOutlet private var HowToLearnButton: UIButton!
+    @IBOutlet private var wordButton: UIButton!
+    @IBOutlet private var grammerButton: UIButton!
+    @IBOutlet private var conversationButton: UIButton!
+    @IBOutlet private var listeningButton: UIButton!
+    @IBOutlet private var pronunciationButton: UIButton!
+    @IBOutlet private var certificationButton: UIButton!
+    @IBOutlet private var etcButton: UIButton!
+
+    @IBOutlet private var postButton: UIBarButtonItem!
+    @IBOutlet private var backBarButtonItem: UIBarButtonItem!
 
     var secondPagingViewController: SecondPagingViewController!
     var savedTextView_text: String = ""
 
-    var array: [String] = []
+    private var array: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.postButton.isEnabled = true
-        self.label1.text = "下の項目から関連のあるトピックを追加できます"
-        self.textView.text = self.savedTextView_text
 
+        self.label1.text = "下の項目から関連のあるトピックを追加できます"
+        self.title = "投稿"
+
+        self.textView.text = self.savedTextView_text
+        self.textView.delegate = self
+        self.textView.endEditing(false)
+
+        self.settingsForNavigationBarAppearence()
+
+        self.setButtonDesign(buttonArr: [self.correctButton, self.HowToLearnButton, self.wordButton, self.grammerButton, self.conversationButton, self.listeningButton, self.pronunciationButton, self.certificationButton, self.etcButton])
+
+        self.setDoneToolBar()
+    }
+
+    private func settingsForNavigationBarAppearence() {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
 
-        self.setButtonDesign(buttonArr: [self.correctButton, self.HowToLearnButton, self.wordButton, self.grammerButton, self.conversationButton, self.listeningButton, self.pronunciationButton, self.certificationButton, self.etcButton])
-
-        self.textView.delegate = self
-
-        self.title = "投稿"
-        self.textView.endEditing(false)
-        // 決定バーの生成
+    private func setDoneToolBar() {
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneItem = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(self.done))
         toolbar.setItems([spaceItem, doneItem], animated: true)
-        // インプットビュー設定
         self.textView.inputAccessoryView = toolbar
-        // Do any additional setup after loading the view.
     }
 
     @objc func done() {
         self.textView.endEditing(true)
     }
 
-    func setButtonDesign(buttonArr: [UIButton]) {
+    private func setButtonDesign(buttonArr: [UIButton]) {
         buttonArr.forEach {
             $0.backgroundColor = .white
             $0.layer.borderWidth = 1.5
@@ -82,7 +88,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         }
     }
 
-    //    投稿ボタン
+    //    post button
     @IBAction func postButton(_: Any) {
         SVProgressHUD.show()
         if self.textView.text.isEmpty {
@@ -137,38 +143,58 @@ class PostViewController: UIViewController, UITextViewDelegate {
     }
 
     @IBAction func correctButton(_: Any) {
-        ButtonModel(button: self.correctButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.correctButton)
     }
 
     @IBAction func howToLearnButton(_: Any) {
-        ButtonModel(button: self.HowToLearnButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.HowToLearnButton)
     }
 
     @IBAction func wordButton(_: Any) {
-        ButtonModel(button: self.wordButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.wordButton)
     }
 
     @IBAction func grammerButton(_: Any) {
-        ButtonModel(button: self.grammerButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.grammerButton)
     }
 
     @IBAction func conversationButton(_: Any) {
-        ButtonModel(button: self.conversationButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.conversationButton)
     }
 
     @IBAction func listeningButton(_: Any) {
-        ButtonModel(button: self.listeningButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.listeningButton)
     }
 
     @IBAction func pronunciationButton(_: Any) {
-        ButtonModel(button: self.pronunciationButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.pronunciationButton)
     }
 
     @IBAction func certificationButton(_: Any) {
-        ButtonModel(button: self.certificationButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.certificationButton)
     }
 
     @IBAction func etcButton(_: Any) {
-        ButtonModel(button: self.etcButton, postViewController: self)
+        self.determineIfButtonIsTapped(button: self.etcButton)
+    }
+
+    private func determineIfButtonIsTapped(button: UIButton) {
+        if button.backgroundColor == .white {
+            // state that the button is recognized as being pressed.
+            button.backgroundColor = .systemCyan
+            button.tintColor = .white
+            button.layer.borderWidth = 1.5
+            button.layer.cornerRadius = 6
+            button.layer.borderColor = UIColor.systemCyan.cgColor
+            self.array.append(button.titleLabel!.text!)
+        } else {
+            // state that the button is recognized as being pressed.
+            button.backgroundColor = .white
+            button.tintColor = .systemGray2
+            button.layer.borderWidth = 1.5
+            button.layer.cornerRadius = 6
+            button.layer.borderColor = UIColor.systemGray2.cgColor
+            self.array.removeAll(where: { $0 == button.titleLabel!.text! })
+        }
     }
 }

@@ -14,8 +14,7 @@ class ChatList {
     var chatMembers: [String]?
     var chatMembersName: [String]?
     var documentId: String?
-
-//    var profileImage:
+    var profileImage: URL?
 
     init(queryDocumentSnapshot: QueryDocumentSnapshot) {
         self.documentId = queryDocumentSnapshot.documentID
@@ -36,7 +35,7 @@ class ChatList {
         self.chatMembersName = chatListDic["membersName"] as? [String]
     }
 
-    func convertDateToString(date: Date) -> String {
+    private func convertDateToString(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.M.d HH:mm"
         let dateString = formatter.string(from: date)

@@ -1812,12 +1812,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="We4-0m-hfe">
                                         <rect key="frame" x="5" y="140" width="110" height="28.333333333333343"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="写真を変更">
+                                        <buttonConfiguration key="configuration" style="plain" title="写真変更/削除">
                                             <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="12"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="openLibraryButton:" destination="9UV-YT-hTx" eventType="touchUpInside" id="BuE-kt-Flu"/>
-                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Vb0-ij-jKB">
                                         <rect key="frame" x="125" y="20" width="85.333333333333314" height="110"/>
@@ -3926,6 +3923,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="zmS-X3-qM7"/>
         <segue reference="FV4-rL-Ffl"/>
         <segue reference="QyF-43-l7R"/>
     </inferredMetricsTieBreakers>

@@ -16,20 +16,6 @@ struct MessageEntity: MessageType {
     var sender: SenderType
     var kind: MessageKind
 
-//    var sender: SenderType {
-//        return isMe ? MessageSenderType.me : MessageSenderType.other
-//        }
-
-//    var kind: MessageKind {
-//        return .attributedText(NSAttributedString(
-//            string: self.message,
-//            attributes: [.font: UIFont.systemFont(ofSize: 14.0),
-//                         .foregroundColor: self.isMe
-//                             ? UIColor.white
-//                             : UIColor.label]
-//        ))
-//    }
-
     var stringSentDate: String {
         return self.convertDateToString(date: self.sentDate)
     }

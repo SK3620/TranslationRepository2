@@ -20,14 +20,4 @@ struct MessageSenderType: SenderType {
     static func partnerMessageSenderType(partnerSenderId: String, partnerDisplayName: String) -> MessageSenderType {
         return MessageSenderType(senderId: partnerSenderId, displayName: partnerDisplayName)
     }
-
-//    static var me: MessageSenderType {
-//        return MessageSenderType(senderId: "0",
-//                                 displayName: "me")
-//    }
-//
-//    static var partner: MessageSenderType {
-//        return MessageSenderType(senderId: "1",
-//                                 displayName: "other")
-//    }
 }

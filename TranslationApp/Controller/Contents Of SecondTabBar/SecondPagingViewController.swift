@@ -24,11 +24,11 @@ class SecondPagingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
-        
+
         self.setPagingViewController()
     }
-    
-    private func setPagingViewController(){
+
+    private func setPagingViewController() {
         let navigationController3 = storyboard?.instantiateViewController(withIdentifier: "NC3") as! UINavigationController
         let timeLineViewController = navigationController3.viewControllers[0] as! TimeLineViewController
         timeLineViewController.secondPagingViewController = self
@@ -148,15 +148,15 @@ class SecondPagingViewController: UIViewController {
             appearance.backgroundColor = UIColor.systemGray6
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-           
-            //place a search bar on navigation bar
+
+            // place a search bar on navigation bar
             self.setupSearchBarOnNavigationBar()
         } else {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
     }
 
-  private func setupSearchBarOnNavigationBar() {
+    private func setupSearchBarOnNavigationBar() {
         if let navigationBarFrame = self.navigationController?.navigationBar.bounds {
             let searchBar = UISearchBar(frame: navigationBarFrame)
             searchBar.delegate = self
@@ -194,13 +194,13 @@ class SecondPagingViewController: UIViewController {
     }
 
     // called in other view controllers
-    //screen transition to CommentSectionViewController
+    // screen transition to CommentSectionViewController
     func segue() {
         self.performSegue(withIdentifier: "ToCommentSection", sender: nil)
     }
 
     // called in other view controllers
-    //screen transition to OthersProfileViewController
+    // screen transition to OthersProfileViewController
     func segueToOthersProfile() {
         self.performSegue(withIdentifier: "ToOthersProfile", sender: nil)
     }
@@ -219,7 +219,7 @@ class SecondPagingViewController: UIViewController {
 }
 
 extension SecondPagingViewController: UISearchBarDelegate {
-    //pass the entered text in the search bar to SearchViewController
+    // pass the entered text in the search bar to SearchViewController
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.pagingViewController.select(index: 0, animated: true)
         searchBar.endEditing(true)

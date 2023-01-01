@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import FirebaseStorageUI
 import UIKit
 
 class CustomCellForTimeLine: UITableViewCell {
@@ -17,18 +18,21 @@ class CustomCellForTimeLine: UITableViewCell {
     @IBOutlet var bubbleButton: UIButton!
     @IBOutlet var bookMarkButton: UIButton!
     @IBOutlet var postedDateLabel: UILabel!
+
     @IBOutlet var imageView1: UIImageView!
+
     @IBOutlet var commentButton: UIButton!
     @IBOutlet var buttonOnImageView1: UIButton!
     @IBOutlet var copyButton: UIButton!
     @IBOutlet var cellEditButton: UIButton!
 
-//    プロフィール画面に表示するいいねの数
-    var likeNumber: Int = 0
+    // the number of likes displayed in the profile
+    private var likeNumber: Int = 0
+
+    var listener: ListenerRegistration?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         self.setButtonImage(button: self.bubbleButton, systemName: "bubble.left")
         self.setButtonImage(button: self.bookMarkButton, systemName: "bookMark")
         self.setButtonImage(button: self.copyButton, systemName: "doc.on.doc")
@@ -43,25 +47,31 @@ class CustomCellForTimeLine: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
-    // PostDataの内容をセルに表示
     func setPostData(_ postData: PostData) {
-//            プロフィール写真設定
         let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(postData.uid!)" + ".jpg")
-        self.imageView1.sd_setImage(with: imageRef)
 
-//            ユーザー名表示
+        imageRef.downloadURL { url, error in
+            if let error = error {
+                print("URLの取得失敗\(error)")
+            }
+            if let url = url {
+                print("URLの取得成功: \(url)")
+                self.imageView1.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+            }
+        }
+
+//            display user name
         self.userNameLabel.text = postData.userName
-        // 投稿内容表示
+
+//       display content of post
         self.contentOfPostLabel.text = postData.contentOfPost
         if let comment = postData.comment {
             self.contentOfPostLabel.text = comment
         }
 
-        // 日時の表示
+        // display the date
         self.postedDateLabel.text = ""
         if let postedDate = postData.postedDate {
             let formatter = DateFormatter()
@@ -76,19 +86,18 @@ class CustomCellForTimeLine: UITableViewCell {
             self.postedDateLabel.text = dateString
         }
 
-//        コメント数の表示
+        // the number of comments
         if let numberOfComments = postData.numberOfComments {
             self.bubbleLabel.text = numberOfComments
         } else {
             self.bubbleLabel.text = "0"
         }
 
-        // いいね数の表示
+        // display the number of likes
         let likeNumber = postData.likes.count
         self.heartLabel.text = "\(likeNumber)"
         self.likeNumber = likeNumber
 
-        // いいねボタンの表示
         if postData.isLiked {
             self.setButtonImage(button: self.heartButton, systemName: "heart.fill")
             self.heartButton.tintColor = UIColor.systemRed
@@ -97,7 +106,7 @@ class CustomCellForTimeLine: UITableViewCell {
             self.heartButton.tintColor = UIColor.darkGray
         }
 
-//        bookMarkの表示
+//       display bookMark
         if postData.isBookMarked {
             self.setButtonImage(button: self.bookMarkButton, systemName: "bookmark.fill")
             self.bookMarkButton.tintColor = UIColor.systemGreen

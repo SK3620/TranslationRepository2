@@ -7,6 +7,7 @@
 
 import Alamofire
 import Firebase
+import FirebaseStorageUI
 import SVProgressHUD
 import UIKit
 
@@ -14,22 +15,31 @@ class ChatListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
 
     private var chatListsData: [ChatList] = []
-    
+
     private var documentIdArray: [String] = []
-    
-    private var secondTabBarController: SecondTabBarController!
-    
+
+    var secondTabBarController: SecondTabBarController!
+
     private var listener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if Auth.auth().currentUser == nil {
+            self.screenTransitionToLoginViewController()
+        }
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
 
+    private func screenTransitionToLoginViewController() {
+        let loginViewController = self.storyboard!.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+        self.present(loginViewController, animated: true, completion: nil)
+    }
+
     override func viewWillAppear(_: Bool) {
         self.tableView.isEditing = false
-        
+
         let backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
 
@@ -37,7 +47,7 @@ class ChatListViewController: UIViewController {
         self.secondTabBarController.navigationItem.rightBarButtonItems = [editBarButtonBarItem]
 
         self.fetchChatListsInfoFromFirestore()
-        
+
         self.observeIfYouAreAboutToBeAddedAsFriend()
     }
 
@@ -49,7 +59,7 @@ class ChatListViewController: UIViewController {
         }
     }
 
-   private func fetchChatListsInfoFromFirestore() {
+    private func fetchChatListsInfoFromFirestore() {
         self.listener?.remove()
         self.chatListsData.removeAll()
         self.tableView.reloadData()
@@ -79,8 +89,8 @@ class ChatListViewController: UIViewController {
         }
     }
 
-    //a process called when you got added as a friend by the other person (by a person who added you as thier friend)
-    //when you are added, a person who added you as thier friend will automatically be displayed in the tableView
+    // a process called when you got added as a friend by the other person (by a person who added you as thier friend)
+    // when you are added, a person who added you as thier friend will automatically be displayed in the tableView
     private func observeIfYouAreAboutToBeAddedAsFriend() {
         if let user = Auth.auth().currentUser {
             let chatRef = Firestore.firestore().collection("chatLists").whereField("partnerUid", isEqualTo: user.uid)
@@ -107,7 +117,7 @@ class ChatListViewController: UIViewController {
         }
     }
 
-   private func setTitle(numberOfFriends: Int) {
+    private func setTitle(numberOfFriends: Int) {
         let numberOfFriendsString = String(numberOfFriends)
         self.secondTabBarController.navigationItem.title = "チャットリスト(\(numberOfFriendsString))"
     }
@@ -129,18 +139,31 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatListCell", for: indexPath) as! ChatListTableViewCell
         let chatListData = self.chatListsData[indexPath.row]
-//        プロフィール画像はとりあえずpersonで。
-        cell.profileImageView.image = UIImage(systemName: "person")
+
         cell.latestMessageLabel.text = chatListData.latestMessage
         cell.latestMessagedDate.text = chatListData.latestMessagedDate
+
+        // get a uid of the person who you text with
+        let partnerUid = self.getMyUidAndPartnerUid(chatListData: chatListData)[1]
+        let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(partnerUid)" + ".jpg")
+        imageRef.downloadURL { url, error in
+            if let error = error {
+                print("URLの取得失敗\(error)")
+            }
+            if let url = url {
+                // set the profile image on the cell.profileImageView
+                print("URLの取得成功")
+                cell.profileImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+            }
+        }
 
         let chatMembersNameFirstIsMyName: Bool = self.getMyName(chatListData: chatListData)
         switch chatMembersNameFirstIsMyName {
         case true:
-            //my name
+            // my name
             cell.nameLabel.text = chatListData.chatMembersName?[1]
         case false:
-            //partner name
+            // partner name
             cell.nameLabel.text = chatListData.chatMembersName?.first
         }
         return cell
@@ -155,6 +178,27 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
             chatMembersFirstIsMyName = false
         }
         return chatMembersFirstIsMyName
+    }
+
+    private func getMyUidAndPartnerUid(chatListData: ChatList) -> [String] {
+        let user = Auth.auth().currentUser
+        var chatMembersFirstisMyUid: Bool
+        if chatListData.chatMembers?.first == user?.uid {
+            chatMembersFirstisMyUid = true
+        } else {
+            chatMembersFirstisMyUid = false
+        }
+        var myUid = ""
+        var partnerUid = ""
+        switch chatMembersFirstisMyUid {
+        case true:
+            myUid = (chatListData.chatMembers?.first!)!
+            partnerUid = chatListData.chatMembers![1]
+        case false:
+            myUid = chatListData.chatMembers![1]
+            partnerUid = (chatListData.chatMembers?.first!)!
+        }
+        return [myUid, partnerUid]
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -172,7 +216,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-    //when you delete a friend, they will also be deleted automatically
+    // when you delete a friend, they will also be deleted automatically
     func showUIAlertForDeleting(indexPath: IndexPath) {
         let alert = UIAlertController(title: "削除しますか？", message: "削除した場合、あなたと相手の全てのチャット履歴が削除されます", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
@@ -240,7 +284,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
 
 class ChatListTableViewCell: UITableViewCell {
     @IBOutlet var profileImageView: UIImageView!
-    
+
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var latestMessageLabel: UILabel!
     @IBOutlet var latestMessagedDate: UILabel!

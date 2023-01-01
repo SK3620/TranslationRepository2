@@ -10,106 +10,103 @@ import SVProgressHUD
 import UIKit
 
 class CommentSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
     var secondTabBarController: SecondTabBarController!
+
     var postData: PostData!
     var postData2: PostData?
-
-    // Firestoreのリスナー
-    var listener: ListenerRegistration?
-    var listener2: ListenerRegistration?
     var secondPostArray: [SecondPostData] = []
 
-//    postDataのdocumentIdを格納する
+    private var listener: ListenerRegistration?
+    private var listener2: ListenerRegistration?
+
+//    stores the documentID of the postData
     var documentId: String!
 
-//    入力したコメントを保持させる
+//    stores the input comment
     var comment: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "コメント欄"
 
+        self.settingsForNavigationBarSppearence()
+
+        self.settingsForTableView()
+    }
+
+    private func settingsForNavigationBarSppearence() {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.title = "コメント欄"
+    }
 
+    private func settingsForTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
-
         let nib2 = UINib(nibName: "CustomCellForCommentSetion", bundle: nil)
         self.tableView.register(nib2, forCellReuseIdentifier: "CustomCell2")
     }
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
+        self.settingsForNavigationControllerAndBar()
 
+        if Auth.auth().currentUser != nil {
+            self.getSingleDocument()
+
+            self.getCommentsDocumentOnThePost()
+        }
+    }
+
+    private func settingsForNavigationControllerAndBar() {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.secondTabBarController.tabBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+    }
 
-        // ログイン済みか確認
-        if Auth.auth().currentUser != nil {
-            // listenerを登録して投稿データの更新を監視する
-            //            タップされたドキュメントIDを指定　いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
-            self.documentId = self.postData.documentId
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
-
-            print("postRef確認\(postsRef)")
-//            単一のドキュメントが入ってる。
-            self.listener = postsRef.addSnapshotListener { documentSnapshot, error in
-                if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    return
-                }
-
-                if let documentSnapshot = documentSnapshot {
-                    self.postData = PostData(document: documentSnapshot)
-                    print("DEBUG_PRINT: snapshotの取得が成功しました。")
-                    self.tableView.reloadData()
-                    print("tableViewがリロードされた1")
-                }
+    private func getSingleDocument() {
+        self.documentId = self.postData.documentId
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
+        self.listener = postsRef.addSnapshotListener { documentSnapshot, error in
+            if let error = error {
+                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                return
             }
-        }
-
-        // ログイン済みか確認
-        if Auth.auth().currentUser != nil {
-            // listenerを登録して投稿データの更新を監視する
-            // いいねされたり、コメントが追加されれば、（更新されれば）呼ばれる
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
-//            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").order(by: "commentedDate", descending: true)
-            print("postRef確認\(postsRef)")
-            self.listener2 = postsRef.addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    return
-                }
-                // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-                //                mapの中のクロージャ引数documentはquerySnapshotDocumentで取り出された単一のドキュメント
-                self.secondPostArray = querySnapshot!.documents.map { document in
-                    print("DEBUG_PRINT: document取得 ここでは、自動生成（追加）されたドキュメントのIDがプリントされます。\(document.documentID)")
-                    let secondPostData = SecondPostData(document: document)
-                    print("DEBUG_PRINT: snapshotの取得が成功しました。")
-
-                    return secondPostData
-                }
+            if let documentSnapshot = documentSnapshot {
+                self.postData = PostData(document: documentSnapshot)
+                print("DEBUG_PRINT: snapshotの取得が成功しました。")
                 self.tableView.reloadData()
             }
         }
     }
 
+    private func getCommentsDocumentOnThePost() {
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
+        self.listener2 = postsRef.addSnapshotListener { querySnapshot, error in
+            if let error = error {
+                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                return
+            }
+            self.secondPostArray = querySnapshot!.documents.map { document in
+                print("DEBUG_PRINT: document取得 ここでは、自動生成（追加）されたドキュメントのIDがプリントされます。\(document.documentID)")
+                let secondPostData = SecondPostData(document: document)
+                print("DEBUG_PRINT: snapshotの取得が成功しました。")
+                return secondPostData
+            }
+            self.tableView.reloadData()
+        }
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("DEBUG_PRINT: viewWillDisappear")
-        // listenerを削除して監視を停止する
         self.listener?.remove()
         self.listener2?.remove()
-//        self.timeLineViewController.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     override func viewDidDisappear(_: Bool) {
@@ -133,14 +130,12 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
 
         cell.commentButton.isEnabled = true
         cell.commentButton.isHidden = false
-//        cell.commentButton.configuration?.title = "コメントする"
-//        cell.commentButton.configuration?.subtitle = ""
-//        cell.commentButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton), for: .touchUpInside)
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
         cell.cellEditButton.isEnabled = false
         cell.cellEditButton.isHidden = true
+
+        cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton), for: .touchUpInside)
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
 
@@ -156,11 +151,15 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         }
 
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
+
         cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
 
         cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
+
         cell2.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButtonInComment(_:forEvent:)), for: .touchUpInside)
+
         cell2.copyButton.addTarget(self, action: #selector(self.tappedCopyButtonInCommentSection(_:forEvent:)), for: .touchUpInside)
+
         cell2.buttonOnImageView1.addTarget(self, action: #selector(self.tappedImageView1ForCell2(_:forEvent:)), for: .touchUpInside)
 
         cell2.bookMarkButton.isEnabled = false
@@ -182,19 +181,13 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
     }
 
     @objc func tappedBookMarkButton(_: UIButton, forEvent _: UIEvent) {
-        print("bookMarkButtonが押された")
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postData!
 
-        // bookMarkを更新する
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
-
             if postData.isBookMarked {
                 let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "解除", style: .default, handler: { _ in
-                    // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
                     let updateValue = FieldValue.arrayRemove([myid])
                     let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                     SVProgressHUD.showSuccess(withStatus: "登録解除")
@@ -204,9 +197,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
                 }))
                 self.present(alert, animated: true, completion: nil)
             } else {
-                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
                 let updateValue = FieldValue.arrayUnion([myid])
-                // bookMarksに更新データを書き込む
                 let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
                 SVProgressHUD.showSuccess(withStatus: "ブックマークに登録しました")
                 SVProgressHUD.dismiss(withDelay: 1.0, completion: {
@@ -217,137 +208,76 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent _: UIEvent) {
-        print("DEBUG_PRINT: likeボタンがタップされました。")
-        // 配列からタップされたインデックスのデータを取り出す
         let postData = self.postData!
-        print("postData確認\(postData)")
 
-        // likesを更新する
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
             var updateValue: FieldValue
             if postData.isLiked {
-                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
-                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // likesに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
             postRef.updateData(["likes": updateValue])
         }
     }
 
-//    ここのコメントのブックマーク機能は、isEnabled = falseにしてる hiddne = true
+    // bookmarking feature for comments here, isEnabled = false hiddne = true
     @objc func tappedBookMarkButtonInComment(_: UIButton, forEvent event: UIEvent) {
-        print("bookMarkButtonが押された")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let secondPostData = self.secondPostArray[indexPath!.row - 1]
-        // bookMarkを更新する
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
             var updateValue: FieldValue
             if secondPostData.isBookMarked {
-                // すでにbookMarkをしている場合は、bookMark解除のためmyidを取り除く更新データを作成
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
-                // 今回新たにbookmarkを押した場合は、myidを追加する更新データを作成
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // bookMarksに更新データを書き込む
             let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
             postRef.updateData(["bookMarks": updateValue])
         }
     }
 
     @objc func tappedHeartButtonInComment(_: UIButton, forEvent event: UIEvent) {
-        print("DEBUG_PRINT: likeボタンがタップされました。")
-
-        // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
 
-        // 配列からタップされたインデックスのデータを取り出す
         let secondPostData = self.secondPostArray[indexPath!.row - 1]
 
-        // likesを更新する
         if let myid = Auth.auth().currentUser?.uid {
-            // 更新データを作成する
             var updateValue: FieldValue
             if secondPostData.isLiked {
-                // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
-                // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
                 updateValue = FieldValue.arrayUnion([myid])
             }
-            // likesに更新データを書き込む
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(secondPostData.documentId!)
-//            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(self.postData.documentId).collection("commentDataCollection").document(secondPostData.documentId!)
             commentsRef.updateData(["likes": updateValue])
         }
     }
 
-    //        "comments"コレクション内のlikesも更新
-//            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: secondPostData.uid!).whereField("stringCommentedDate", isEqualTo: secondPostData.stringCommentedDate!)
-//            commentsRef.getDocuments { querySnapshot, error in
-//                if let error = error {
-//                    print("”comments”コレクション内のlikesを更新に失敗しました\(error)")
-//                    SVProgressHUD.dismiss()
-//                    return
-//                }
-//                if let querySnapshot = querySnapshot {
-//                    print("”comments”コレクション内のlikesの更新に成功しました\(error)")
-    //                単一のドキュメント
-//                    querySnapshot.documents.forEach { queryDocumentSnaoshot in
-//                        let documentId = PostData(document: queryDocumentSnaoshot).documentId
-//                        Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(documentId).updateData(["likes": updateValue])
-//                    }
-//                }
-//            }
-//        }
-
     @objc func tappedCopyButton(_: UIButton, forEvent _: UIEvent) {
-        // タップされたセルのインデックスを求める
-//        投稿内容をコピー
-        SVProgressHUD.show()
-        // 配列からタップされたインデックスのデータを取り出す
         UIPasteboard.general.string = self.postData.contentOfPost
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
-//            SVProgressHUD.dismiss()
-//        }
     }
 
     @objc func tappedCopyButtonInCommentSection(_: UIButton, forEvent event: UIEvent) {
-        // タップされたセルのインデックスを求める
-//        コメント内容をコピー
-        SVProgressHUD.show()
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
-        // 配列からタップされたインデックスのデータを取り出す
+
         let postData = self.secondPostArray[indexPath!.row - 1]
         UIPasteboard.general.string = postData.comment
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
-//            SVProgressHUD.dismiss()
-//        }
     }
 
-    //    プロフィール写真上のタップジェスチャー
     @objc func tappedImageView1(_: UIButton, forEvent _: UIEvent) {
-        print("タップジェスチャー")
         self.performSegue(withIdentifier: "ToOthersProfile", sender: self.postData)
     }
 
@@ -356,9 +286,9 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
-        // 配列からタップされたインデックスのデータを取り出す
+
         let secondPostData = self.secondPostArray[indexPath!.row - 1]
-//        取り出したデータのドキュメントID取得して、再度whereFieldで取り出したデータをself.postDataへ格納する
+        // Get the document ID of the retrieved data, and store the data retrieved in the whereField again in self.postData.
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(secondPostData.documentId!)
         postRef.getDocument(completion: { documentSnapshot, error in
             if let error = error {
@@ -366,14 +296,12 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
             }
             if let documentSnapshot = documentSnapshot {
                 self.postData = PostData(document: documentSnapshot)
-
                 self.performSegue(withIdentifier: "ToOthersProfile", sender: self.postData)
             }
         })
     }
 
     func getDocumentForPostData2() {
-        print("getDocumentForPostData2メソッドが実行された")
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
         postRef.getDocument(completion: { documentSnapshot, error in
             if let error = error {
@@ -392,7 +320,6 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         otheresProfileViewController.documentId = self.documentId
         otheresProfileViewController.secondTabBarController = self.secondTabBarController
         otheresProfileViewController.commentSectionViewController = self
-
         if let postData2 = self.postData2 {
             otheresProfileViewController.postData2 = postData2
         }

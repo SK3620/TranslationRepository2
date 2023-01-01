@@ -10,24 +10,28 @@ import Parchment
 import SVProgressHUD
 import UIKit
 
+// function described here is almost the same as the one in IntroductionViewController
 class OthersIntroductionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
     var profileData: [String: Any] = [:]
+
     var postData: PostData!
 
     var secondPagingViewController: PagingViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.secondPagingViewController.select(index: 1)
 
+        self.settingsForTableView()
+    }
+
+    private func settingsForTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForIntroduction", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
-        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_: Bool) {
@@ -36,8 +40,7 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
         self.getProfileDataDocument()
     }
 
-    func getProfileDataDocument() {
-        print("実行だ")
+    private func getProfileDataDocument() {
         SVProgressHUD.show(withStatus: "データ取得中...")
         Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(self.postData.uid!)'sProfileDocument").getDocument(completion: { queryDocument, error in
             if let error = error {
@@ -50,7 +53,6 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
                 self.tableView.reloadData()
             }
         })
-        // Do any additional setup after loading the view.
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -59,6 +61,7 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForIntroduction
+
         let Arr = [cell.introductionLabel, cell.etcLabel, cell.birthdayLabel, cell.placeLabel, cell.wannaVisistCountryLabel, cell.hobbyLable, cell.visitedCountryLable, cell.academicHistoryLable]
         Arr.forEach {
             $0?.text = "ー"
@@ -66,18 +69,7 @@ class OthersIntroductionViewController: UIViewController, UITableViewDelegate, U
 
         if Auth.auth().currentUser != nil {
             cell.setProfileData(profileData: self.profileData)
-            print("postDataじっこう")
         }
         return cell
     }
-
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
 }

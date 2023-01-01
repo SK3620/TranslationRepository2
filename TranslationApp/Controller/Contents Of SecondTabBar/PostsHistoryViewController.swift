@@ -21,23 +21,24 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet private var tableView: UITableView!
 
     private var postArray: [PostData] = []
+
     var listener: ListenerRegistration?
 
     var delegate: setLikeAndPostNumberLabelDelegate!
-    
-    //the total number of likes
+
+    // the total number of likes
     var likeNumber: Int = 0
-    //the total number of commetns
+    // the total number of commetns
     var postNumber: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
-        
+
         self.settingsForTableView()
     }
-    
-    private func settingsForTableView(){
+
+    private func settingsForTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForTimeLine", bundle: nil)
@@ -49,20 +50,19 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
+        if Auth.auth().currentUser == nil {
+            self.postArray = []
+            self.tableView.reloadData()
+            return
+        }
+
         SVProgressHUD.show(withStatus: "データ取得中...")
         if let user = Auth.auth().currentUser {
             self.listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel(user: user)
         }
-
-        if Auth.auth().currentUser == nil {
-            self.postArray = []
-            self.tableView.reloadData()
-            SVProgressHUD.dismiss()
-        }
     }
-    
-  
-    func listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel(user: User){
+
+    private func listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel(user: User) {
         //            複合インデックスを作成する必要がある
         //            クエリで指定している複数のインデックスをその順にインデックスに登録する
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true)
@@ -87,7 +87,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
                 self.likeNumber += PostData(document: queryDocumentSnapshot).likes.count
             }
             self.postNumber = self.postArray.count
-            //delegate method
+            // delegate method
             self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postNumber)
         }
     }
@@ -107,22 +107,22 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCellForTimeLine
-        
+
         cell.setPostData(self.postArray[indexPath.row])
-        
+
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
         cell.commentButton.isEnabled = false
         cell.commentButton.isHidden = true
         cell.cellEditButton.isEnabled = true
         cell.cellEditButton.isHidden = false
-        
+
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
-        
+
         cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
-        
+
         cell.bookMarkButton.addTarget(self, action: #selector(self.tappedBookMarkButton(_:forEvent:)), for: .touchUpInside)
-        
+
         cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
 
         return cell
@@ -211,7 +211,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         let indexPath = self.tableView.indexPathForRow(at: point)
 
         let postData = self.postArray[indexPath!.row]
-        
+
         if let myid = Auth.auth().currentUser?.uid {
             if postData.isBookMarked {
                 let alert = UIAlertController(title: "ブックマークへの登録を解除しますか？", message: nil, preferredStyle: .alert)
@@ -240,9 +240,9 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: point)
-        
+
         let postData = self.postArray[indexPath!.row]
-        
+
         let contentOfPost = postData.contentOfPost
         UIPasteboard.general.string = contentOfPost
         SVProgressHUD.showSuccess(withStatus: "コピーしました")

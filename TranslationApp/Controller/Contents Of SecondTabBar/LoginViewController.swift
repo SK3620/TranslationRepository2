@@ -15,7 +15,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet private var mailAddressTextField: UITextField!
     @IBOutlet private var passwordTextField: UITextField!
     @IBOutlet private var displayNameTextField: UITextField!
-    
+
     @IBOutlet private var loginButton: UIButton!
     @IBOutlet private var createAccountButton: UIButton!
     @IBOutlet private var logoutButton: UIButton!
@@ -62,7 +62,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-   private func setTextFieldsAndButtons(textFieldArr: [UITextField]!, buttonArr: [UIButton]!) {
+    private func setTextFieldsAndButtons(textFieldArr: [UITextField]!, buttonArr: [UIButton]!) {
         textFieldArr.forEach {
             $0.layer.borderColor = UIColor.gray.cgColor
             $0.layer.borderWidth = 1
@@ -92,7 +92,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.displayNameTextField.endEditing(true)
     }
 
-    //limits the number of entered characters
+    // limits the number of entered characters
     func textFieldDidChangeSelection(_: UITextField) {
         guard let userName = displayNameTextField.text else { return }
         if userName.count > self.maxPasswordLength {
@@ -772,7 +772,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.passwordResetting()
     }
 
-   private func passwordResetting() {
+    private func passwordResetting() {
         let user = Auth.auth().currentUser!
         Auth.auth().languageCode = "ja_JP" // 日本語に変換
         guard let email = user.email else { return }
@@ -786,7 +786,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-   private func setAlert() {
+    private func setAlert() {
         let user = Auth.auth().currentUser!
         let alert = UIAlertController(title: "パスワード変更", message: "\(user.email!)へパスワード変更用のメールを送信しました", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

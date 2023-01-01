@@ -6,24 +6,28 @@
 //
 
 import Firebase
+import FirebaseStorageUI
 import Parchment
 import SVProgressHUD
 import UIKit
 
+// function described here is almost the same as the one in ProfileViewController
 class OthersProfileViewController: UIViewController {
-    @IBOutlet var userNameLabel: UILabel!
-    @IBOutlet var genderLabel: UILabel!
-    @IBOutlet var ageLabel: UILabel!
-    @IBOutlet var workLabel: UILabel!
-    @IBOutlet var pagingView: UIView!
-    @IBOutlet var profileImageView: UIImageView!
+    @IBOutlet private var userNameLabel: UILabel!
+    @IBOutlet private var genderLabel: UILabel!
+    @IBOutlet private var ageLabel: UILabel!
+    @IBOutlet private var workLabel: UILabel!
+    @IBOutlet private var pagingView: UIView!
+    @IBOutlet private var profileImageView: UIImageView!
+
     @IBOutlet var likeNumberLabel: UILabel!
     @IBOutlet var postNumberLabel: UILabel!
 
     var postData: PostData!
-    var seocndPostData: SecondPostData!
-    var profileData: [String: Any] = [:]
     var postData2: PostData!
+
+    private var profileData: [String: Any] = [:]
+
     var documentId: String?
 
     var secondTabBarController: SecondTabBarController!
@@ -34,6 +38,15 @@ class OthersProfileViewController: UIViewController {
         super.viewDidLoad()
         self.title = "プロフィール"
 
+        // プロフィール画像設定
+        self.setImageFromStorage()
+
+        self.settingsForPagingViewController()
+
+        self.settingsForProfileImageView()
+    }
+
+    private func settingsForPagingViewController() {
         let othersIntroductionViewController = storyboard?.instantiateViewController(identifier: "OthersIntroduction") as! OthersIntroductionViewController
         othersIntroductionViewController.postData = self.postData
 
@@ -45,18 +58,10 @@ class OthersProfileViewController: UIViewController {
         let othersPostedCommentsHistoryViewController = storyboard?.instantiateViewController(withIdentifier: "OthersPostedCommentsHistory") as! OthersPostedCommentsHistoryViewController
         othersPostedCommentsHistoryViewController.postData = self.postData
 
-//        let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "OthersNC2") as! UINavigationController
-//        let othersBookMarkViewController = navigationController2.viewControllers[0] as! OthersBookMarkViewController
-//        othersBookMarkViewController.postData = self.postData
-//        プロフィール画像設定
-        self.setImageFromStorage()
-
         othersIntroductionViewController.title = "自己紹介"
         navigationController.title = "投稿履歴"
         othersPostedCommentsHistoryViewController.title = "コメント履歴"
-//        navigationController2.title = "ブックマーク"
 
-//        pagingViewControllerのインスタンス生成
         let pagingViewController = PagingViewController(viewControllers: [othersIntroductionViewController, navigationController, othersPostedCommentsHistoryViewController])
 
 //        Adds the specified view controller as a child of the current view controller.
@@ -78,10 +83,12 @@ class OthersProfileViewController: UIViewController {
 
         othersIntroductionViewController.secondPagingViewController = pagingViewController
         self.pagingViewController = pagingViewController
+    }
 
-        //        丸いimageView
+    private func settingsForProfileImageView() {
+        //        circle imageView
         self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
-        //        画像にデフォルト設定
+        //        default settings for the image
         self.profileImageView.image = UIImage(systemName: "person")
         self.profileImageView.layer.borderColor = UIColor.systemGray4.cgColor
         self.profileImageView.layer.borderWidth = 2.5
@@ -114,8 +121,7 @@ class OthersProfileViewController: UIViewController {
         }
     }
 
-    func getProfileDataDocument() {
-        print("postDataのuid確認\(self.postData.uid!)")
+    private func getProfileDataDocument() {
         Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(self.postData.uid!)'sProfileDocument").getDocument(completion: { queryDocument, error in
             if let error = error {
                 print("ドキュメント取得失敗\(error)")
@@ -126,10 +132,9 @@ class OthersProfileViewController: UIViewController {
             }
             self.setProfileDataOnLabels(profileData: self.profileData)
         })
-        // Do any additional setup after loading the view.
     }
 
-    func setProfileDataOnLabels(profileData _: [String: Any]) {
+    private func setProfileDataOnLabels(profileData _: [String: Any]) {
         self.userNameLabel.text = self.profileData["userName"] as? String
         if let genderText = self.profileData["gender"] as? String {
             self.genderLabel.text = genderText
@@ -150,15 +155,20 @@ class OthersProfileViewController: UIViewController {
         }
     }
 
-    func setImageFromStorage() {
-        //            storageから画像を取り出して、imageViewに設置
+    private func setImageFromStorage() {
         let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(self.postData.uid!)" + ".jpg")
-
-        self.profileImageView.sd_setImage(with: imageRef)
-        print("画像取り出せた？\(imageRef)")
+        imageRef.downloadURL { url, error in
+            if let error = error {
+                print("URLの取得失敗\(error)")
+            }
+            if let url = url {
+                print("URLの取得成功: \(url)")
+                self.profileImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+            }
+        }
     }
 
-//    プロフィールが自分の場合、友達追加ボタンのisenabledをfalseにする
+    // the profile is yours, disable the button to add a friend
     func makeAddFriendBarButtonItemEnabledFalse(addFriendBarButtonItem: UIBarButtonItem) {
         if let user = Auth.auth().currentUser {
             if user.uid == self.postData.uid {
@@ -181,8 +191,8 @@ class OthersProfileViewController: UIViewController {
         }
     }
 
-//    友達追加ボタン押下時に、既に友達に追加されているかどうかを判定する
-    func seeIfThePartnerIsAlreadyAdded(user: User, completion: @escaping () -> Void) {
+    // Determine if a friend has already been added when the Add Friend button is pressed.
+    private func seeIfThePartnerIsAlreadyAdded(user: User, completion: @escaping () -> Void) {
         let chatRef = Firestore.firestore().collection("chatLists").whereField("members", arrayContainsAny: [user.uid, self.postData.uid!])
         chatRef.getDocuments { querySnapshot, error in
             if let error = error {
@@ -197,13 +207,13 @@ class OthersProfileViewController: UIViewController {
                     SVProgressHUD.dismiss(withDelay: 3.0)
                     return
                 }
-//                まだ友達に追加されていない場合
+                // If you have not yet been added as a friend
                 completion()
             }
         }
     }
 
-    func showAlert() {
+    private func showAlert() {
         let user = Auth.auth().currentUser!
         let alert = UIAlertController(title: "友達に追加しますか？", message: "'\(self.postData.userName!)'がチャットリストに追加されます", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))

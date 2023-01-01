@@ -14,7 +14,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
 
     private var textFieldArr: [UITextField]! = []
     private var textViewArr: [UITextView]! = []
-    
+
     private var textFieldAndView_textArr: [String] = []
 
     var postArrayForDocId: [String] = []
@@ -40,11 +40,11 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         self.settingsForNavigationBarAppearence()
-        
+
         self.settingsForNaivigationControllerAndBar()
-        
+
         self.settingsForTableView()
-     
+
         if let user = Auth.auth().currentUser {
             Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument").getDocument { snap, error in
                 if let error = error {
@@ -59,23 +59,23 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
             }
         }
     }
-    
-    private func settingsForNavigationBarAppearence(){
+
+    private func settingsForNavigationBarAppearence() {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
-    
-    private func settingsForNaivigationControllerAndBar(){
+
+    private func settingsForNaivigationControllerAndBar() {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.profileViewController.navigationController?.setNavigationBarHidden(false, animated: false)
         let rightBarButtonItem = UIBarButtonItem(title: "保存する", style: .done, target: self, action: nil)
         self.profileViewController.navigationController?.navigationItem.rightBarButtonItems = [rightBarButtonItem]
         self.title = "プロフィール編集"
     }
-    
-    private func settingsForTableView(){
+
+    private func settingsForTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         let nib = UINib(nibName: "CustomCellForEditProfile", bundle: nil)
@@ -104,7 +104,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         return cell
     }
 
-   private func setDoneToolBar(textFieldArr: [UITextField]!, textViewArr: [UITextView]!) {
+    private func setDoneToolBar(textFieldArr: [UITextField]!, textViewArr: [UITextView]!) {
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -212,7 +212,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
             }
         })
 
-        //also update display name
+        // also update display name
         self.updateDisplayName(user: user!, userNameText: self.userNameText!)
 
         // also change the userName of the existing posted data
@@ -240,7 +240,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         })
     }
 
-   private func updateUserNameOfPostsDocuments(user: User, userName: String) {
+    private func updateUserNameOfPostsDocuments(user: User, userName: String) {
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid)
         postsRef.getDocuments { querySnapshot, error in
             if let error = error {
@@ -261,7 +261,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
 
-   private func updateUserNameOfCommentsDocuments(user: User, userName: String) {
+    private func updateUserNameOfCommentsDocuments(user: User, userName: String) {
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid)
         postsRef.getDocuments { querySnapshot, error in
             if let error = error {
@@ -282,7 +282,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
 
-   private func updateUserNameOfChatListsDocument(user: User) {
+    private func updateUserNameOfChatListsDocument(user: User) {
         let chatListsRef = Firestore.firestore().collection("chatLists").whereField("members", arrayContains: user.uid)
         chatListsRef.getDocuments { querySnapshot, error in
             if let error = error {
@@ -299,7 +299,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
 
-   private func seoncdUpdateUserName(firstMemberUid: String, seoncdMemberUid: String, docId: String) {
+    private func seoncdUpdateUserName(firstMemberUid: String, seoncdMemberUid: String, docId: String) {
         let firstProfileDataRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(firstMemberUid)'sProfileDocument")
         firstProfileDataRef.getDocument { documentSnapshot, error in
             if let error = error {
@@ -322,7 +322,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
 
-   private func thirdUpdateUserName(firstUserName: String, secondUserName: String, docId: String) {
+    private func thirdUpdateUserName(firstUserName: String, secondUserName: String, docId: String) {
         let chatListsRef = Firestore.firestore().collection("chatLists").document(docId)
         chatListsRef.updateData(["membersName": [firstUserName, secondUserName]]) { error in
             if let error = error {
@@ -332,8 +332,8 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
             }
         }
     }
-    
-    private func updateDisplayName(user: User, userNameText: String){
+
+    private func updateDisplayName(user: User, userNameText: String) {
         let changeRequest = user.createProfileChangeRequest()
         changeRequest.displayName = userNameText
         changeRequest.commitChanges { error in

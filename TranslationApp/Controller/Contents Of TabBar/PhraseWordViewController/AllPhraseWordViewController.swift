@@ -173,7 +173,6 @@ class AllPhraseWordViewController: UIViewController, UITableViewDataSource, UITa
     //    文章タップで表示、非表示切り替えボタンタップ時
     @objc func tappedDisplayButton(_ sender: UIButton) {
         let isDisplayed = self.phraseWordArr[sender.tag].isDisplayed
-//        self.editButton.setTitle("編集", for: .normal)
 
         switch isDisplayed {
         case false:

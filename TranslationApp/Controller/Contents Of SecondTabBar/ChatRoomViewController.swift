@@ -21,7 +21,7 @@ class ChatRoomViewController: MessagesViewController {
     private var currentUser: MessageSenderType?
     private var partnerUser: MessageSenderType?
 
-   private var messageList: [MessageEntity] = [] {
+    private var messageList: [MessageEntity] = [] {
         didSet {
             self.messagesCollectionView.reloadData()
             self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: false)
@@ -31,9 +31,9 @@ class ChatRoomViewController: MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarAppearence()
-        
+
         self.setDelegateMethod()
-        
+
         messageInputBar.sendButton.title = nil
         messageInputBar.sendButton.image = UIImage(systemName: "paperplane")
 
@@ -41,11 +41,11 @@ class ChatRoomViewController: MessagesViewController {
         let partnerName = self.getMyNameAndPartnerName()[1]
         self.currentUser = MessageSenderType.mymessageSenderType(mySenderId: "Me", myDisplayName: myName)
         self.partnerUser = MessageSenderType.partnerMessageSenderType(partnerSenderId: "partner", partnerDisplayName: partnerName)
-        
+
         self.title = partnerName
     }
 
-   private func setDelegateMethod() {
+    private func setDelegateMethod() {
         messagesCollectionView.backgroundColor = UIColor.secondarySystemBackground
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -62,7 +62,7 @@ class ChatRoomViewController: MessagesViewController {
         self.getMessagesDocument()
     }
 
-   private func getMessagesDocument() {
+    private func getMessagesDocument() {
         let messagesRef = Firestore.firestore().collection("chatLists").document(self.chatListData.documentId!).collection("messages").order(by: "sentDate", descending: false)
         self.listener = messagesRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
@@ -88,7 +88,7 @@ class ChatRoomViewController: MessagesViewController {
         }
     }
 
-   private func createMessage() {
+    private func createMessage() {
         guard let user = Auth.auth().currentUser else {
             return
         }
@@ -102,19 +102,19 @@ class ChatRoomViewController: MessagesViewController {
         }
     }
 
-   private func setNavigationBarHidden() {
+    private func setNavigationBarHidden() {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-   private func setNavigationBarAppearence() {
+    private func setNavigationBarAppearence() {
         let appearence = UINavigationBarAppearance()
         appearence.backgroundColor = .systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearence
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearence
     }
 
-   private func getMyNameAndPartnerName() -> [String] {
+    private func getMyNameAndPartnerName() -> [String] {
         let user = Auth.auth().currentUser!
         var chatMembersFirstIsMyName: Bool
         if self.chatListData.chatMembersName?.first == user.displayName {
@@ -135,7 +135,7 @@ class ChatRoomViewController: MessagesViewController {
         return [myName, partnerName]
     }
 
-   private func getMyUidAndPartnerUid(chatListData: ChatList) -> [String] {
+    private func getMyUidAndPartnerUid(chatListData: ChatList) -> [String] {
         let user = Auth.auth().currentUser
         var chatMembersFirstisMyUid: Bool
         if chatListData.chatMembers?.first == user?.uid {
