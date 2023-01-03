@@ -34,12 +34,11 @@ class OthersProfileViewController: UIViewController {
     var commentSectionViewController: CommentSectionViewController!
     var pagingViewController: PagingViewController!
 
+    var listener: ListenerRegistration?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "プロフィール"
-
-        // プロフィール画像設定
-        self.setImageFromStorage()
 
         self.settingsForPagingViewController()
 
@@ -99,26 +98,30 @@ class OthersProfileViewController: UIViewController {
 
         self.pagingViewController.select(index: 0)
 
+        self.settingsForNavigationControllerAndBar()
+
+        self.settingsForNavigationBarAppearence()
+
+        self.getProfileDataDocument()
+
+        self.monitorAndGetProfileImageDocument()
+    }
+
+    private func settingsForNavigationBarAppearence() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+
+    private func settingsForNavigationControllerAndBar() {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.secondTabBarController.tabBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         let addFriendBarButtonItem = UIBarButtonItem(title: "友達追加", style: .plain, target: self, action: #selector(self.tappedAddFriendBarButtonItem))
         self.navigationItem.rightBarButtonItem = addFriendBarButtonItem
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor.systemGray6
-        self.navigationController?.navigationBar.standardAppearance = appearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.secondTabBarController.tabBar.isHidden = true
-
         self.makeAddFriendBarButtonItemEnabledFalse(addFriendBarButtonItem: addFriendBarButtonItem)
-        self.getProfileDataDocument()
-    }
-
-    override func viewWillDisappear(_: Bool) {
-        super.viewWillDisappear(true)
-        if let postData2 = self.postData2 {
-            self.commentSectionViewController.postData = postData2
-        }
     }
 
     private func getProfileDataDocument() {
@@ -152,6 +155,25 @@ class OthersProfileViewController: UIViewController {
             self.workLabel.text = workText
         } else {
             self.workLabel.text = "ー"
+        }
+    }
+
+    private func monitorAndGetProfileImageDocument() {
+        let imageRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(self.postData.uid!)'sProfileImage")
+        self.listener = imageRef.addSnapshotListener { documentSnapshot, error in
+            if let error = error {
+                print("プロフィール画像の取得失敗\(error)")
+            }
+            if let documentSnapshot = documentSnapshot, let data = documentSnapshot.data() {
+                let profileImageInfo = data["isProfileImageExisted"] as! String?
+                if profileImageInfo != "nil" {
+                    self.setImageFromStorage()
+                } else {
+                    self.profileImageView.image = UIImage(systemName: "person")
+                }
+            } else {
+                self.profileImageView.image = UIImage(systemName: "person")
+            }
         }
     }
 
@@ -238,6 +260,15 @@ class OthersProfileViewController: UIViewController {
             }
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+
+    override func viewWillDisappear(_: Bool) {
+        super.viewWillDisappear(true)
+        self.listener?.remove()
+
+        if let postData2 = self.postData2 {
+            self.commentSectionViewController.postData = postData2
+        }
     }
 }
 

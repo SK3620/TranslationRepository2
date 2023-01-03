@@ -1296,7 +1296,6 @@
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8H7-O1-aDF">
                                         <rect key="frame" x="5" y="21.666666666666664" width="110" height="107.33333333333334"/>
-                                        <color key="tintColor" systemColor="systemGrayColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="110" id="6MH-jx-ars"/>
                                             <constraint firstAttribute="width" constant="110" id="lFZ-NA-nWB"/>
@@ -1803,7 +1802,6 @@
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="39p-ng-Kzx">
                                         <rect key="frame" x="5" y="21.666666666666664" width="110" height="107.33333333333334"/>
-                                        <color key="tintColor" systemColor="systemGrayColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="OCb-1s-P6g"/>
                                             <constraint firstAttribute="height" constant="110" id="XBm-Rb-67I"/>
@@ -1812,7 +1810,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="We4-0m-hfe">
                                         <rect key="frame" x="5" y="140" width="110" height="28.333333333333343"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="写真変更/削除">
+                                        <buttonConfiguration key="configuration" style="plain" title="写真編集">
                                             <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="12"/>
                                         </buttonConfiguration>
                                     </button>
@@ -3923,7 +3921,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="zmS-X3-qM7"/>
         <segue reference="FV4-rL-Ffl"/>
         <segue reference="QyF-43-l7R"/>
     </inferredMetricsTieBreakers>

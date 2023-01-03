@@ -143,6 +143,24 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.latestMessageLabel.text = chatListData.latestMessage
         cell.latestMessagedDate.text = chatListData.latestMessagedDate
 
+        self.determinationOfIsProfileImageExisted(chatListData: chatListData, completion: { value in
+            if value != "nil" {
+                let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child(value)
+                imageRef.downloadURL { url, error in
+                    if let error = error {
+                        print("URLの取得失敗\(error)")
+                    }
+                    if let url = url {
+                        // set the profile image on the cell.profileImageView
+                        print("URLの取得成功")
+                        cell.profileImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+                    }
+                }
+            } else {
+                cell.profileImageView.image = UIImage(systemName: "person")
+            }
+        })
+
         // get a uid of the person who you text with
         let partnerUid = self.getMyUidAndPartnerUid(chatListData: chatListData)[1]
         let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(partnerUid)" + ".jpg")
@@ -167,6 +185,25 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.text = chatListData.chatMembersName?.first
         }
         return cell
+    }
+
+    private func determinationOfIsProfileImageExisted(chatListData: ChatList, completion: @escaping (String) -> Void) {
+        let imageRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document(self.getMyUidAndPartnerUid(chatListData: chatListData)[1] + "'sProfileImage")
+        imageRef.getDocument { documentSnapshot, error in
+            if let error = error {
+                print("エラーだ \(error)")
+            }
+            if let documentSnapshot = documentSnapshot, let data = documentSnapshot.data() {
+                let isProfileImageExisted = data["isProfileImageExisted"] as? String
+                if isProfileImageExisted != "nil" {
+                    completion(isProfileImageExisted!)
+                } else {
+                    completion("nil")
+                }
+            } else {
+                completion("nil")
+            }
+        }
     }
 
     func getMyName(chatListData: ChatList) -> Bool {

@@ -25,6 +25,7 @@ class SecondPostData {
     var isBookMarked: Bool = false
     var uid: String?
     var stringCommentedDate: String?
+    var profileImageUrl: String?
 
     init(document: QueryDocumentSnapshot) {
         self.documentId = document.documentID
@@ -64,5 +65,13 @@ class SecondPostData {
         self.uid = postDic["uid"] as? String
 
         self.stringCommentedDate = postDic["stringCommentedDate"] as? String
+
+        // string type "nil" or "user.uid.jpg" is going to be stored
+        let isProfileImageExisted = postDic["isProfileImageExisted"] as? String
+        if isProfileImageExisted != "nil" {
+            self.profileImageUrl = isProfileImageExisted
+        } else {
+            self.profileImageUrl = nil
+        }
     }
 }

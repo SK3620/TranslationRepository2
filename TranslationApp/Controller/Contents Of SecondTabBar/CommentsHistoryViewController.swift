@@ -11,13 +11,15 @@ import UIKit
 
 // the screen which displays the comments on the post which you tapped
 class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet private var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
 
     var postData: PostData!
     var secondPostArray: [SecondPostData] = []
 
     private var listener: ListenerRegistration?
     private var listener2: ListenerRegistration?
+
+    var profileViewController: ProfileViewController?
 
     var comment: String = ""
 
@@ -49,6 +51,10 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
+
+        if let profileViewController = self.profileViewController {
+            profileViewController.commentsHistoryViewController = self
+        }
 
         if Auth.auth().currentUser == nil {
             self.secondPostArray = []

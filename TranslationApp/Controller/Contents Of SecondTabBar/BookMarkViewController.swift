@@ -11,11 +11,13 @@ import UIKit
 
 // the screen which dispalys data which you bookMarked
 class BookMarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet private var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
 
     private var postArray: [PostData] = []
 
     private var listener: ListenerRegistration?
+
+    var profileViewController: ProfileViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +37,10 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.tableView.allowsSelection = true
+
+        if let profileViewController = self.profileViewController {
+            profileViewController.bookMarkViewController = self
+        }
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
@@ -176,6 +182,7 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
         if segue.identifier == "ToBookMarkCommentsSection" {
             let bookMarkCommentsSection = segue.destination as! BookMarkCommentsSectionViewController
             bookMarkCommentsSection.postData = sender as? PostData
+            bookMarkCommentsSection.profileViewController = self.profileViewController
         }
     }
 

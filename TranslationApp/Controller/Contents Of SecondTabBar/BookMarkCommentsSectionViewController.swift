@@ -12,7 +12,7 @@ import UIKit
 
 // the screen which displays the comments of the data which you bookmarked
 class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet private var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
 
     var postData: PostData!
 
@@ -20,6 +20,8 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
     private var listener2: ListenerRegistration?
 
     var secondPostArray: [SecondPostData] = []
+
+    var profileViewController: ProfileViewController?
 
     var comment: String = ""
 
@@ -49,6 +51,10 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+
+        if let profileViewController = self.profileViewController {
+            profileViewController.bookMarkCommentsSectionViewController = self
+        }
 
         if Auth.auth().currentUser == nil {
             self.secondPostArray = []

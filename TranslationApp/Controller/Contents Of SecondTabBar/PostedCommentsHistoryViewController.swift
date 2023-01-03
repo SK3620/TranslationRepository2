@@ -13,11 +13,13 @@ import UIKit
 
 // the screen which displays the comments you posted
 class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet private var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
 
     private var postArray: [PostData] = []
 
     private var listener: ListenerRegistration?
+
+    var profileViewController: ProfileViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +37,10 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+
+        if let profileViewController = self.profileViewController {
+            profileViewController.postedCommentsHistoryViewController = self
+        }
 
         if Auth.auth().currentUser == nil {
             self.postArray = []

@@ -8,6 +8,7 @@
 import Alamofire
 import CoreMIDI
 import Firebase
+import FirebaseStorageUI
 import Parchment
 import SVProgressHUD
 import UIKit
@@ -18,13 +19,15 @@ protocol setLikeAndPostNumberLabelDelegate: NSObject {
 }
 
 class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet private var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
 
     private var postArray: [PostData] = []
 
     var listener: ListenerRegistration?
 
     var delegate: setLikeAndPostNumberLabelDelegate!
+
+    var profileViewController: ProfileViewController?
 
     // the total number of likes
     var likeNumber: Int = 0
@@ -50,6 +53,10 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
+        if let profileViewController = self.profileViewController {
+            profileViewController.postsHistoryViewController = self
+        }
+
         if Auth.auth().currentUser == nil {
             self.postArray = []
             self.tableView.reloadData()
@@ -67,6 +74,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         //            クエリで指定している複数のインデックスをその順にインデックスに登録する
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true)
         self.listener = postsRef.addSnapshotListener { querySnapshot, error in
+            print("りすなー")
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                 return
@@ -92,12 +100,58 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
 
+    // こっから
+    // monitor the update of user's profile image
+//    private func monitorTheUpdateOfProfileImage() {
+//        guard let user = Auth.auth().currentUser else {
+//            return
+//        }
+//        let imageRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
+//        self.listener2 = imageRef.addSnapshotListener { documentSnapshot, error in
+//            if let error = error {
+//                print("プロフィール画像の取得失敗\(error)")
+//            }
+//            if let documentSnapshot = documentSnapshot, let data = documentSnapshot.data() {
+//                let profileImageInfo = data["isprofileImageExisted"] as! String?
+//                if profileImageInfo != "nil" {
+//                    self.setImageFromStorage()
+//                } else {
+//                    self.urlForProfileImage = nil
+//                    self.tableView.reloadData()
+//                }
+//            } else {
+//                self.urlForProfileImage = nil
+//                self.tableView.reloadData()
+//            }
+//        }
+//    }
+//
+//    private func setImageFromStorage() {
+//        // retrieve images from storage and place them in imageView
+//        let user = Auth.auth().currentUser!
+//        let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
+//        imageRef.downloadURL { url, error in
+//            if let error = error {
+//                print("URLの取得失敗\(error)")
+//            }
+//            if let url = url {
+//                print("URLの取得成功: \(url)")
+//                self.urlForProfileImage = url
+//                self.tableView.reloadData()
+//            }
+//            // update the cash with SDWebImageOptions.refreshedCashed
+//        }
+//    }
+
+    // ここまで
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.listener?.remove()
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        print("リロードー")
         if self.postArray.isEmpty {
             return 0
         } else {
@@ -259,6 +313,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
         if segue.identifier == "ToCommentsHistory" {
             let commentsHistoryViewController = segue.destination as! CommentsHistoryViewController
             commentsHistoryViewController.postData = sender as? PostData
+            commentsHistoryViewController.profileViewController = self.profileViewController
         }
     }
 }

@@ -52,7 +52,7 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
 
     private func listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel() {
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: self.postData.uid!).order(by: "postedDate", descending: true)
-        postsRef.addSnapshotListener { querySnapshot, error in
+        self.listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                 return

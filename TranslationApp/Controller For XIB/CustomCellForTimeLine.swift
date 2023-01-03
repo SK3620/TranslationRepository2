@@ -50,15 +50,18 @@ class CustomCellForTimeLine: UITableViewCell {
     }
 
     func setPostData(_ postData: PostData) {
-        let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(postData.uid!)" + ".jpg")
-
-        imageRef.downloadURL { url, error in
-            if let error = error {
-                print("URLの取得失敗\(error)")
-            }
-            if let url = url {
-                print("URLの取得成功: \(url)")
-                self.imageView1.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+        if postData.profileImageUrl == nil {
+            self.imageView1.image = UIImage(systemName: "person")
+        } else {
+            let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(postData.profileImageUrl!)")
+            imageRef.downloadURL { url, error in
+                if let error = error {
+                    print("URLの取得失敗\(error)")
+                }
+                if let url = url {
+                    print("URLの取得成功: \(url)")
+                    self.imageView1.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+                }
             }
         }
 

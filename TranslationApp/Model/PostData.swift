@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import FirebaseStorage
 import UIKit
 
 class PostData: NSObject {
@@ -25,6 +26,7 @@ class PostData: NSObject {
     var stringCommentedDate: String?
     var documentIdForPosts: String?
     var commentedDate: Date?
+    var profileImageUrl: String?
 
     init(document: QueryDocumentSnapshot) {
         self.documentId = document.documentID
@@ -76,6 +78,14 @@ class PostData: NSObject {
 
         let date = postDic["commentedDate"] as? Timestamp
         self.commentedDate = date?.dateValue()
+
+        // string type "nil" or "user.uid.jpg" is going to be stored
+        let isProfileImageExisted = postDic["isProfileImageExisted"] as? String
+        if isProfileImageExisted != "nil" {
+            self.profileImageUrl = isProfileImageExisted
+        } else {
+            self.profileImageUrl = nil
+        }
     }
 
     // When a single document is retrieved on the CommentSectionViewController screen
@@ -110,5 +120,13 @@ class PostData: NSObject {
         self.numberOfComments = postDic["numberOfComments"] as? String
 
         self.uid = postDic["uid"] as? String
+
+        // string type "nil" or "user.uid.jpg" is going to be stored
+        let isProfileImageExisted = postDic["isProfileImageExisted"] as? String
+        if isProfileImageExisted != "nil" {
+            self.profileImageUrl = isProfileImageExisted
+        } else {
+            self.profileImageUrl = nil
+        }
     }
 }

@@ -264,6 +264,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         // 直列実行する.concurrentではない
         let dispatchQueue = DispatchQueue(label: "queue")
 
+        // delete profileImage in in database
+        dispatchGroup.enter()
+        dispatchQueue.async {
+            Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document(user.uid + "'sProfileImage").delete { error in
+                if let error = error {
+                    print("profileImageForDBの削除失敗\(error)")
+                    dispatchGroup.leave()
+                } else {
+                    print("profileImageForDBの削除成功")
+                    dispatchGroup.leave()
+                }
+            }
+        }
+
         //        一つ目の処理はprofileDataの削除
         dispatchGroup.enter()
         dispatchQueue.async {

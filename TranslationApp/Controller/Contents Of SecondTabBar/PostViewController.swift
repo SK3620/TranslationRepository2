@@ -31,6 +31,8 @@ class PostViewController: UIViewController, UITextViewDelegate {
     var secondPagingViewController: SecondPagingViewController!
     var savedTextView_text: String = ""
 
+    var valueForIsProfileImageExisted: String = ""
+
     private var array: [String] = []
 
     override func viewDidLoad() {
@@ -49,6 +51,8 @@ class PostViewController: UIViewController, UITextViewDelegate {
         self.setButtonDesign(buttonArr: [self.correctButton, self.HowToLearnButton, self.wordButton, self.grammerButton, self.conversationButton, self.listeningButton, self.pronunciationButton, self.certificationButton, self.etcButton])
 
         self.setDoneToolBar()
+
+        self.determinationOfIsProfileImageExisted()
     }
 
     private func settingsForNavigationBarAppearence() {
@@ -77,6 +81,26 @@ class PostViewController: UIViewController, UITextViewDelegate {
             $0.layer.borderWidth = 1.5
             $0.layer.cornerRadius = 6
             $0.layer.borderColor = UIColor.systemGray2.cgColor
+        }
+    }
+
+    private func determinationOfIsProfileImageExisted() {
+        let user = Auth.auth().currentUser!
+        let profileImagesRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
+        profileImagesRef.getDocument { documentSnapshot, error in
+            if let error = error {
+                print("エラー　\(error)")
+            }
+            if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
+                let isProfileImageExisted = imagesDic["isProfileImageExisted"] as? String
+                if isProfileImageExisted != "nil" {
+                    self.valueForIsProfileImageExisted = user.uid + ".jpg"
+                } else {
+                    self.valueForIsProfileImageExisted = "nil"
+                }
+            } else {
+                self.valueForIsProfileImageExisted = "nil"
+            }
         }
     }
 
@@ -109,6 +133,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
             "userName": user.displayName!,
             "uid": user.uid,
             "numberOfComments": "0",
+            "isProfileImageExisted": self.valueForIsProfileImageExisted,
         ] as [String: Any]
         SVProgressHUD.showSuccess(withStatus: "投稿しました")
         SVProgressHUD.dismiss(withDelay: 1.5) {

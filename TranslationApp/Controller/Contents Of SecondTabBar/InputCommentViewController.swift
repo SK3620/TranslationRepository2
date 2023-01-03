@@ -26,6 +26,8 @@ class InputCommentViewController: UIViewController {
     var bookMarkCommentsSectionViewController: BookMarkCommentsSectionViewController?
     var othersCommentsHistoryViewController: OthersCommentsHistoryViewController?
 
+    var valueForIsProfileImageExisted: String = ""
+
     var textView_text: String = ""
 
     override func viewDidLoad() {
@@ -33,6 +35,8 @@ class InputCommentViewController: UIViewController {
         self.settingsForNavigationBarAppearence()
 
         self.setDoneToolBar()
+
+        self.determinationOfIsProfileImageExisted()
 
         self.postCommentButton.isEnabled = true
 
@@ -58,6 +62,26 @@ class InputCommentViewController: UIViewController {
         appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+
+    private func determinationOfIsProfileImageExisted() {
+        let user = Auth.auth().currentUser!
+        let profileImagesRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
+        profileImagesRef.getDocument { documentSnapshot, error in
+            if let error = error {
+                print("エラー　\(error)")
+            }
+            if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
+                let isProfileImageExisted = imagesDic["isProfileImageExisted"] as? String
+                if isProfileImageExisted != "nil" {
+                    self.valueForIsProfileImageExisted = user.uid + ".jpg"
+                } else {
+                    self.valueForIsProfileImageExisted = "nil"
+                }
+            } else {
+                self.valueForIsProfileImageExisted = "nil"
+            }
+        }
     }
 
     override func viewWillDisappear(_: Bool) {
@@ -117,6 +141,7 @@ class InputCommentViewController: UIViewController {
                 "commentedDate": FieldValue.serverTimestamp(),
                 "stringCommentedDate": today,
                 "documentIdForPosts": self.postData.documentId,
+                "isProfileImageExisted": self.valueForIsProfileImageExisted,
             ] as [String: Any]
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
             commentsRef.setData(commentsDic, merge: false) { error in

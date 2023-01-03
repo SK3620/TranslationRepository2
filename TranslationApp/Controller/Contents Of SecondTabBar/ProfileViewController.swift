@@ -42,6 +42,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
     var pagingViewController: PagingViewController!
 
+    var postsHistoryViewController: PostsHistoryViewController?
+    var postedCommentsHistoryViewController: PostedCommentsHistoryViewController?
+    var bookMarkViewController: BookMarkViewController?
+    var bookMarkCommentsSectionViewController: BookMarkCommentsSectionViewController?
+    var commentsHistoryViewController: CommentsHistoryViewController?
+
     var listener: ListenerRegistration?
 
     override func viewDidLoad() {
@@ -76,10 +82,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let navigationController = storyboard?.instantiateViewController(withIdentifier: "NC") as! UINavigationController
         let postsHistoryViewController = navigationController.viewControllers[0] as! PostsHistoryViewController
         postsHistoryViewController.delegate = self
+        postsHistoryViewController.profileViewController = self
 
         let postedCommentsHistoryViewController = storyboard?.instantiateViewController(withIdentifier: "postedCommentsHistory") as! PostedCommentsHistoryViewController
+        postedCommentsHistoryViewController.profileViewController = self
 
         let navigationController2 = storyboard?.instantiateViewController(withIdentifier: "NC2") as! UINavigationController
+        let bookMarkViewController = navigationController2.viewControllers[0] as! BookMarkViewController
+        bookMarkViewController.profileViewController = self
 
         introductionViewController.title = "自己紹介"
         navigationController.title = "投稿履歴"
@@ -166,7 +176,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 print("プロフィール画像の取得失敗\(error)")
             }
             if let documentSnapshot = documentSnapshot, let data = documentSnapshot.data() {
-                let profileImageInfo = data["isprofileImageExisted"] as! String?
+                let profileImageInfo = data["isProfileImageExisted"] as! String?
                 if profileImageInfo != "nil" {
                     self.setImageFromStorage()
                 } else {
@@ -178,7 +188,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
 
-    func setImageFromStorage() {
+    private func setImageFromStorage() {
         // retrieve images from storage and place them in imageView
         let user = Auth.auth().currentUser!
         let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
@@ -261,10 +271,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 self.openLibrary()
             }),
             UIAction(title: "削除する", image: nil, handler: { _ in
-                self.writeTheInforForProfileImageToDatabase(isprofileImageExisted: false)
+                self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: false)
             }),
         ])
-        self.changePhotoButton.menu = UIMenu(title: "プロフィール画像の編集", children: [items])
+        self.changePhotoButton.menu = UIMenu(title: "", subtitle: "", children: [items])
         self.changePhotoButton.showsMenuAsPrimaryAction = true
     }
 
@@ -328,41 +338,42 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
             if metadata != nil {
                 print("画像のアップロードに成功しました")
-                //if the user changed thier profile image and updated thier image that has already exsisted, specify "true" as a parameter
-                //if the user delete thier image that has already exsited, the defult image (UIImage(sysyteName: "person")) will be set in the imageView automatically, in that case, "false" will be specified as a parameter
-                self.writeTheInforForProfileImageToDatabase(isprofileImageExisted: true)
+                // if the user changed thier profile image and updated thier image that has already exsisted, specify "true" as a parameter
+                // if the user delete thier image that has already exsited, the defult image (UIImage(sysyteName: "person")) will be set in the imageView automatically, in that case, "false" will be specified as a parameter
+                self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: true)
             }
             SVProgressHUD.dismiss()
         }
     }
 
     // this process is for setting a image in the imageView in ProfileViewController
-    private func writeTheInforForProfileImageToDatabase(isprofileImageExisted: Bool) {
+    private func writeTheInforForProfileImageToDatabase(isProfileImageExisted: Bool) {
         guard let user = Auth.auth().currentUser else {
             return
         }
         let imageRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
         //        if "profileImageIsSet" has uid, it means that you set your own  profileImage, if it doesn't, it means that you are not setting your own profileImage, and in that case, default profile image UIImage(systemName: "person") will be displayed in the imageView
         var imageDic: [String: Any] = [:]
-        if isprofileImageExisted {
+        if isProfileImageExisted {
             imageDic = [
-                "isprofileImageExisted": user.uid + ".jpg"]
+                "isProfileImageExisted": user.uid + ".jpg",
+            ]
         }
-        if isprofileImageExisted == false {
-            imageDic = ["isprofileImageExisted": "nil"]
+        if isProfileImageExisted == false {
+            imageDic = ["isProfileImageExisted": "nil"]
         }
-        imageRef.updateData(imageDic) { error in
+        imageRef.setData(imageDic) { error in
             if let error = error {
                 print("databaseへのプロフィール画像の書き込み失敗\(error)")
             } else {
                 print("databaseへのプロフィール画像の書き込み成功")
-                self.updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isprofileImageExisted: isprofileImageExisted)
+                self.updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isProfileImageExisted: isProfileImageExisted)
             }
         }
     }
 
 //    excute async processes
-    private func updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isprofileImageExisted: Bool) {
+    private func updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isProfileImageExisted: Bool) {
         guard let user = Auth.auth().currentUser else {
             return
         }
@@ -378,30 +389,32 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         // update my document in "posts" collection
         dispatchGroup.enter()
         dispatchQueue.async {
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("profileImage", isEqualTo: user.uid)
+            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid)
             postsRef.getDocuments { querySnapshot, error in
                 if let error = error {
                     print("postsコレクション内のドキュメントの取得に失敗しました　エラー内容：\(error)")
                 }
+
                 if let querySnapshot = querySnapshot {
+                    var excuteLeaveWhen0: Int = querySnapshot.documents.count
                     print("postsコレクション内のドキュメントの取得に成功しました")
-                    if querySnapshot.isEmpty {
-                        print("postsコレクション内のドキュメントが空でした returnします")
+                    if excuteLeaveWhen0 == 0 {
+                        print("postsコレクション内のドキュメントの取得に成功しましたが、ドキュメントが空だったため、returnして、leave()を実行します。")
                         dispatchGroup.leave()
                         return
                     }
-                    var excuteLeaveWhen0: Int = querySnapshot.documents.count
+
                     querySnapshot.documents.forEach { queryDocumentSnapshot in
                         docIdArrForPosts.append(queryDocumentSnapshot.documentID)
                         excuteLeaveWhen0 = excuteLeaveWhen0 - 1
                         if excuteLeaveWhen0 == 0 {
                             switch docIdArrForPosts.isEmpty {
                             case true:
-                                print("postsコレクション内のprofileImageの更新開始 leaveを実行")
-                                self.updateProfileImageInEachDocumentsInPostsCollection(user: user, docIdArrForPosts: docIdArrForPosts, isprofileImageExisted: isprofileImageExisted)
+                                print("空だったため、postsコレクション内のprofileImageの更新不要 leave実行")
                                 dispatchGroup.leave()
                             case false:
-                                print("空だったため、postsコレクション内のprofileImageの更新不要 leave実行")
+                                print("postsコレクション内のprofileImageの更新開始 leaveを実行")
+                                self.updateProfileImageInEachDocumentsInPostsCollection(user: user, docIdArrForPosts: docIdArrForPosts, isProfileImageExisted: isProfileImageExisted)
                                 dispatchGroup.leave()
                             }
                         }
@@ -413,30 +426,30 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         // update my document in "comments" collection
         dispatchGroup.enter()
         dispatchQueue.async {
-            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("profileImage", isEqualTo: user.uid)
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid)
             commentsRef.getDocuments { querySnapshot, error in
                 if let error = error {
                     print("commentsコレクション内のドキュメントの取得に失敗しました \(error)")
                 }
                 if let querySnapshot = querySnapshot {
-                    if querySnapshot.isEmpty {
-                        print("commentsコレクション内のドキュメントが空でした leave実行")
+                    var excuteLeaveWhenZero: Int = querySnapshot.documents.count
+                    print("commentsコレクション内のドキュメントの取得に成功しました")
+                    if excuteLeaveWhenZero == 0 {
+                        print("commentsコレクション内のドキュメントの取得に成功しましたが、ドキュメントが空だったため、returnして、leave()を実行します。")
                         dispatchGroup.leave()
                         return
                     }
-                    print("commentsコレクション内のドキュメントの取得に成功しました")
-                    var excuteLeaveWhenZero: Int = querySnapshot.documents.count
                     querySnapshot.documents.forEach { queryDocumentSnapshot in
                         docIdArrForComments.append(queryDocumentSnapshot.documentID)
                         excuteLeaveWhenZero = excuteLeaveWhenZero - 1
                         if excuteLeaveWhenZero == 0 {
                             switch docIdArrForComments.isEmpty {
                             case true:
-                                print("commentsコレクション内のprofileImageの更新開始 leaveを実行")
-                                self.updateProfileImageInEachDocumentsInCommentsCollection(user: user, docIdArrForComments: docIdArrForComments, isprofileImageExisted: isprofileImageExisted)
+                                print("空だったため、commentsコレクション内のprofileImageの更新不要 leave実行")
                                 dispatchGroup.leave()
                             case false:
-                                print("空だったため、commentsコレクション内のprofileImageの更新不要 leave実行")
+                                print("commentsコレクション内のprofileImageの更新開始 leaveを実行")
+                                self.updateProfileImageInEachDocumentsInCommentsCollection(user: user, docIdArrForComments: docIdArrForComments, isProfileImageExisted: isProfileImageExisted)
                                 dispatchGroup.leave()
                             }
                         }
@@ -450,48 +463,72 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
 
     // update the "profileImage" of each of the documentId in the docIdArrForPosts
-    private func updateProfileImageInEachDocumentsInPostsCollection(user: User, docIdArrForPosts: [String], isprofileImageExisted: Bool) {
+    private func updateProfileImageInEachDocumentsInPostsCollection(user: User, docIdArrForPosts: [String], isProfileImageExisted: Bool) {
         for documentId in docIdArrForPosts {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentId)
             var postDic: [String: Any] = [:]
-            if isprofileImageExisted {
+            if isProfileImageExisted {
                 postDic = [
-                    "isprofileImageExisted": user.uid + ".jpg"
-                ]}
-            if isprofileImageExisted == false {
+                    "isProfileImageExisted": user.uid + ".jpg",
+                ]
+            }
+            if isProfileImageExisted == false {
                 postDic = [
-                    "isprofileImageExisted": "nil"
-                ]}
+                    "isProfileImageExisted": "nil",
+                ]
+            }
             postsRef.updateData(postDic) { error in
                 if let error = error {
                     print("postsコレクション内のprofileImageの更新に失敗しました エラー内容：\(error)")
                 } else {
                     print("postsコレクション内のprofileImageの更新に成功しました")
+                    self.reloadTableView()
                 }
             }
         }
     }
 
     // update the "profileImage" of each of the documentId in the docIdArrForComments
-    private func updateProfileImageInEachDocumentsInCommentsCollection(user: User, docIdArrForComments: [String], isprofileImageExisted: Bool) {
+    private func updateProfileImageInEachDocumentsInCommentsCollection(user: User, docIdArrForComments: [String], isProfileImageExisted: Bool) {
         for documentId in docIdArrForComments {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(documentId)
             var commentDic: [String: Any] = [:]
-            if isprofileImageExisted {
+            if isProfileImageExisted {
                 commentDic = [
-                    "isprofileImageExisted": user.uid + ".jpg"
-                ]}
-            if isprofileImageExisted == false {
+                    "isProfileImageExisted": user.uid + ".jpg",
+                ]
+            }
+            if isProfileImageExisted == false {
                 commentDic = [
-                    "isprofileImageExisted": "nil"
-                ]}
+                    "isProfileImageExisted": "nil",
+                ]
+            }
             postsRef.updateData(commentDic) { error in
                 if let error = error {
                     print("commentsコレクション内のprofileImageの更新に失敗しました エラー内容：\(error)")
                 } else {
                     print("commentsコレクション内のprofileImageの更新に成功しました")
+                    self.reloadTableView()
                 }
             }
+        }
+    }
+
+    private func reloadTableView() {
+        if let postsHistoryViewController = postsHistoryViewController {
+            postsHistoryViewController.tableView.reloadData()
+        }
+        if let postedCommentsHistoryViewController = postedCommentsHistoryViewController {
+            postedCommentsHistoryViewController.tableView.reloadData()
+        }
+        if let bookMarkViewController = bookMarkViewController {
+            bookMarkViewController.tableView.reloadData()
+        }
+        if let commentsHistoryViewController = commentsHistoryViewController {
+            commentsHistoryViewController.tableView.reloadData()
+        }
+        if let bookMarkCommentsSectionViewController = bookMarkCommentsSectionViewController {
+            bookMarkCommentsSectionViewController.tableView.reloadData()
         }
     }
 
@@ -501,6 +538,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d HH:mm", options: 0, locale: Locale(identifier: "ja_JP"))
         let dateString = dateFormatter.string(from: date)
         return dateString
+    }
+
+    override func viewWillDisappear(_: Bool) {
+        super.viewWillDisappear(true)
+        self.listener?.remove()
     }
 }
 
