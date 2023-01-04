@@ -18,8 +18,13 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
 
     var secondPagingViewController: SecondPagingViewController!
 
-    // variable to store the posted data
-    private var postArray: [PostData] = []
+    // an array to store the posted data
+    private var postArray: [PostData] = [] {
+        didSet {
+            self.tableView.reloadData()
+            print("didset")
+        }
+    }
 
     // observe updated data and etc...
     private var listener: ListenerRegistration?

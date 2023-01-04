@@ -26,7 +26,7 @@ class PostData: NSObject {
     var stringCommentedDate: String?
     var documentIdForPosts: String?
     var commentedDate: Date?
-    var profileImageUrl: String?
+    var profileImageUrl: URL?
 
     init(document: QueryDocumentSnapshot) {
         self.documentId = document.documentID
@@ -80,11 +80,12 @@ class PostData: NSObject {
         self.commentedDate = date?.dateValue()
 
         // string type "nil" or "user.uid.jpg" is going to be stored
-        let isProfileImageExisted = postDic["isProfileImageExisted"] as? String
-        if isProfileImageExisted != "nil" {
-            self.profileImageUrl = isProfileImageExisted
-        } else {
-            self.profileImageUrl = nil
+        if let isProfileImageExisted = postDic["isProfileImageExisted"] as? String {
+            if isProfileImageExisted != "nil" {
+                self.profileImageUrl = URL(string: isProfileImageExisted)
+            } else {
+                self.profileImageUrl = nil
+            }
         }
     }
 
@@ -122,11 +123,12 @@ class PostData: NSObject {
         self.uid = postDic["uid"] as? String
 
         // string type "nil" or "user.uid.jpg" is going to be stored
-        let isProfileImageExisted = postDic["isProfileImageExisted"] as? String
-        if isProfileImageExisted != "nil" {
-            self.profileImageUrl = isProfileImageExisted
-        } else {
-            self.profileImageUrl = nil
+        if let isProfileImageExisted = postDic["isProfileImageExisted"] as? String {
+            if isProfileImageExisted != "nil" {
+                self.profileImageUrl = URL(string: isProfileImageExisted)
+            } else {
+                self.profileImageUrl = nil
+            }
         }
     }
 }

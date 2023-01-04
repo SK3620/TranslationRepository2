@@ -31,10 +31,6 @@ class CustomCellForHistory: UITableViewCell {
     }
 
     @IBAction func copyButtonAction(_: Any) {
-        let image1 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
-        let image2 = UIImage(systemName: "checkmark", withConfiguration: image1)
-        self.copyButton.setImage(image2, for: .normal)
-
         SVProgressHUD.showSuccess(withStatus: "コピーしました")
         SVProgressHUD.dismiss(withDelay: 1.5)
     }
@@ -43,6 +39,5 @@ class CustomCellForHistory: UITableViewCell {
         let image1 = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular, scale: .small)
         let image2 = UIImage(systemName: "doc.on.doc", withConfiguration: image1)
         self.copyButton.setImage(image2, for: .normal)
-        self.copyButton.setTitle("copy", for: .normal)
     }
 }

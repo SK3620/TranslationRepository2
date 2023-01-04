@@ -208,7 +208,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.secondTabBarController.rightBarButtonItems = []
         self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         let rightEdgeBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.tappedRightEdgeBarButtonItem(_:)))
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.tip.crop.circle.badge.plus"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.circle"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
         self.rightBarButtonItem = rightBarButtonItem
         self.rightEdgeBarButtonItem = rightEdgeBarButtonItem
         self.secondTabBarController.rightBarButtonItems.append(rightEdgeBarButtonItem)
@@ -271,10 +271,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 self.openLibrary()
             }),
             UIAction(title: "削除する", image: nil, handler: { _ in
-                self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: false)
+                self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: false, imageUrlString: "nil")
             }),
         ])
-        self.changePhotoButton.menu = UIMenu(title: "", subtitle: "", children: [items])
+        self.changePhotoButton.menu = UIMenu(title: "", options: .displayInline, children: [items])
         self.changePhotoButton.showsMenuAsPrimaryAction = true
     }
 
@@ -340,14 +340,22 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 print("画像のアップロードに成功しました")
                 // if the user changed thier profile image and updated thier image that has already exsisted, specify "true" as a parameter
                 // if the user delete thier image that has already exsited, the defult image (UIImage(sysyteName: "person")) will be set in the imageView automatically, in that case, "false" will be specified as a parameter
-                self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: true)
+                imageRef.downloadURL { url, error in
+                    if let error = error {
+                        print("画像変更時のurl取得失敗\(error)")
+                    }
+                    if let imageUrl = url {
+                        print("画像変更時のurl取得成功")
+                        self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: true, imageUrlString: imageUrl.absoluteString)
+                        SVProgressHUD.dismiss()
+                    }
+                }
             }
-            SVProgressHUD.dismiss()
         }
     }
 
     // this process is for setting a image in the imageView in ProfileViewController
-    private func writeTheInforForProfileImageToDatabase(isProfileImageExisted: Bool) {
+    private func writeTheInforForProfileImageToDatabase(isProfileImageExisted: Bool, imageUrlString: String) {
         guard let user = Auth.auth().currentUser else {
             return
         }
@@ -356,7 +364,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         var imageDic: [String: Any] = [:]
         if isProfileImageExisted {
             imageDic = [
-                "isProfileImageExisted": user.uid + ".jpg",
+                "isProfileImageExisted": imageUrlString,
             ]
         }
         if isProfileImageExisted == false {
@@ -367,13 +375,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 print("databaseへのプロフィール画像の書き込み失敗\(error)")
             } else {
                 print("databaseへのプロフィール画像の書き込み成功")
-                self.updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isProfileImageExisted: isProfileImageExisted)
+                self.updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isProfileImageExisted: isProfileImageExisted, imageUrlString: imageUrlString)
             }
         }
     }
 
 //    excute async processes
-    private func updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isProfileImageExisted: Bool) {
+    private func updateMyDocumentsInPostsAndCommentsAndChatListsCollection(isProfileImageExisted: Bool, imageUrlString: String) {
         guard let user = Auth.auth().currentUser else {
             return
         }
@@ -414,7 +422,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                                 dispatchGroup.leave()
                             case false:
                                 print("postsコレクション内のprofileImageの更新開始 leaveを実行")
-                                self.updateProfileImageInEachDocumentsInPostsCollection(user: user, docIdArrForPosts: docIdArrForPosts, isProfileImageExisted: isProfileImageExisted)
+                                self.updateProfileImageInEachDocumentsInPostsCollection(user: user, docIdArrForPosts: docIdArrForPosts, isProfileImageExisted: isProfileImageExisted, imageUrlString: imageUrlString)
                                 dispatchGroup.leave()
                             }
                         }
@@ -449,7 +457,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                                 dispatchGroup.leave()
                             case false:
                                 print("commentsコレクション内のprofileImageの更新開始 leaveを実行")
-                                self.updateProfileImageInEachDocumentsInCommentsCollection(user: user, docIdArrForComments: docIdArrForComments, isProfileImageExisted: isProfileImageExisted)
+                                self.updateProfileImageInEachDocumentsInCommentsCollection(user: user, docIdArrForComments: docIdArrForComments, isProfileImageExisted: isProfileImageExisted, imageUrlString: imageUrlString)
                                 dispatchGroup.leave()
                             }
                         }
@@ -463,13 +471,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
 
     // update the "profileImage" of each of the documentId in the docIdArrForPosts
-    private func updateProfileImageInEachDocumentsInPostsCollection(user: User, docIdArrForPosts: [String], isProfileImageExisted: Bool) {
+    private func updateProfileImageInEachDocumentsInPostsCollection(user _: User, docIdArrForPosts: [String], isProfileImageExisted: Bool, imageUrlString: String) {
         for documentId in docIdArrForPosts {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(documentId)
             var postDic: [String: Any] = [:]
             if isProfileImageExisted {
                 postDic = [
-                    "isProfileImageExisted": user.uid + ".jpg",
+                    "isProfileImageExisted": imageUrlString,
                 ]
             }
             if isProfileImageExisted == false {
@@ -489,13 +497,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
 
     // update the "profileImage" of each of the documentId in the docIdArrForComments
-    private func updateProfileImageInEachDocumentsInCommentsCollection(user: User, docIdArrForComments: [String], isProfileImageExisted: Bool) {
+    private func updateProfileImageInEachDocumentsInCommentsCollection(user _: User, docIdArrForComments: [String], isProfileImageExisted: Bool, imageUrlString: String) {
         for documentId in docIdArrForComments {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(documentId)
             var commentDic: [String: Any] = [:]
             if isProfileImageExisted {
                 commentDic = [
-                    "isProfileImageExisted": user.uid + ".jpg",
+                    "isProfileImageExisted": imageUrlString,
                 ]
             }
             if isProfileImageExisted == false {

@@ -50,19 +50,27 @@ class CustomCellForTimeLine: UITableViewCell {
     }
 
     func setPostData(_ postData: PostData) {
-        if postData.profileImageUrl == nil {
-            self.imageView1.image = UIImage(systemName: "person")
+//        if postData.profileImageUrl == nil {
+//            self.imageView1.image = UIImage(systemName: "person")
+//            print("２回実行？person")
+//        } else {
+//            let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(postData.profileImageUrl!)")
+//            imageRef.downloadURL { url, error in
+//                if let error = error {
+//                    print("URLの取得失敗\(error)")
+//                }
+//                if let url = url {
+//                    print("URLの取得成功: \(url)")
+//                    self.imageView1.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+//                    print("2回実行だー")
+//                }
+//            }
+//        }
+
+        if let imageUrl = postData.profileImageUrl {
+            self.imageView1.sd_setImage(with: imageUrl, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
         } else {
-            let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(postData.profileImageUrl!)")
-            imageRef.downloadURL { url, error in
-                if let error = error {
-                    print("URLの取得失敗\(error)")
-                }
-                if let url = url {
-                    print("URLの取得成功: \(url)")
-                    self.imageView1.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
-                }
-            }
+            self.imageView1.image = UIImage(systemName: "person")
         }
 
 //            display user name

@@ -31,7 +31,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
     var secondPagingViewController: SecondPagingViewController!
     var savedTextView_text: String = ""
 
-    var valueForIsProfileImageExisted: String = ""
+    var valueForIsProfileImageExisted: String?
 
     private var array: [String] = []
 
@@ -94,7 +94,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
             if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
                 let isProfileImageExisted = imagesDic["isProfileImageExisted"] as? String
                 if isProfileImageExisted != "nil" {
-                    self.valueForIsProfileImageExisted = user.uid + ".jpg"
+                    self.valueForIsProfileImageExisted = isProfileImageExisted!
                 } else {
                     self.valueForIsProfileImageExisted = "nil"
                 }
@@ -133,7 +133,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
             "userName": user.displayName!,
             "uid": user.uid,
             "numberOfComments": "0",
-            "isProfileImageExisted": self.valueForIsProfileImageExisted,
+            "isProfileImageExisted": self.valueForIsProfileImageExisted!,
         ] as [String: Any]
         SVProgressHUD.showSuccess(withStatus: "投稿しました")
         SVProgressHUD.dismiss(withDelay: 1.5) {

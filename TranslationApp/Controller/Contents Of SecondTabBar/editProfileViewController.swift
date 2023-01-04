@@ -283,7 +283,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }
 
     private func updateUserNameOfChatListsDocument(user: User) {
-        let chatListsRef = Firestore.firestore().collection("chatLists").whereField("members", arrayContains: user.uid)
+        let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContains: user.uid)
         chatListsRef.getDocuments { querySnapshot, error in
             if let error = error {
                 print(error)
@@ -323,7 +323,7 @@ class EditProfileViewController: UIViewController, UITableViewDelegate, UITableV
     }
 
     private func thirdUpdateUserName(firstUserName: String, secondUserName: String, docId: String) {
-        let chatListsRef = Firestore.firestore().collection("chatLists").document(docId)
+        let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(docId)
         chatListsRef.updateData(["membersName": [firstUserName, secondUserName]]) { error in
             if let error = error {
                 print(error)

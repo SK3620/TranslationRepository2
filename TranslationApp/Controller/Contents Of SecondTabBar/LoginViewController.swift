@@ -255,13 +255,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func excuteMultipleAsyncProcesses(user: User, completion: @escaping (Error?) -> Void) {
-        //        documentIdを格納する配列
+        //       an array which stores documentId
         var documentIdArray: [String] = []
-        //        "comments"コレクション内にある"posts"コレクション内のドキュメントIDを格納する
+        // Store document IDs in the "posts" collection in the "comments" collection
         var documentIdForPostsArr: [String] = []
-        // 非同期のグループ作成
         let dispatchGroup = DispatchGroup()
-        // 直列実行する.concurrentではない
         let dispatchQueue = DispatchQueue(label: "queue")
 
         // delete chatlist in database
@@ -310,7 +308,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         dispatchQueue.async {
             Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument").delete { error in
                 guard error == nil else { completion(error)
-                    //                    ここでクロージャを呼んでいる。
                     print("ProfileDataの削除失敗 leave()\(error!)")
                     dispatchGroup.leave()
                     return
@@ -346,7 +343,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
 
-        //        "comments"内のコメントデータドキュメントの削除
+        // Delete comment data document in "comments
         dispatchGroup.enter()
         dispatchQueue.async {
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid)
@@ -388,8 +385,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
-        
-        //        投稿データの削除
+
+        // Delete Submission Data
         dispatchGroup.enter()
         dispatchQueue.async {
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid)
@@ -517,8 +514,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    private func updateNumberOf() {
-//        "comments"コレクション内にある"posts"コレクション内のドキュメントIDを格納
+    private func updateNumberOfComments() {
+        // Stores document IDs in the "posts" collection in the "comments" collection
         var documentIdForPostsArr: [String] = []
         let user = Auth.auth().currentUser!
 
@@ -533,8 +530,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 querySnapshot.documents.forEach { queryDocumentSnapshot in
                     documentIdForPostsArr.append(PostData(document: queryDocumentSnapshot).documentIdForPosts!)
                     excuteProcessWhenZero = excuteProcessWhenZero - 1
-                    if excuteProcessWhenZero == 0 {
-                    }
+                    if excuteProcessWhenZero == 0 {}
                 }
             }
         }
@@ -595,7 +591,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
 
-//    戻るボタンで翻訳画面へ戻る
+    // back button
     @IBAction func backButton(_: Any) {
         self.dismiss(animated: true, completion: nil)
     }

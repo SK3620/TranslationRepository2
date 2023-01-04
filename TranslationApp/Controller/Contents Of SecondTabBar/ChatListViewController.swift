@@ -64,7 +64,7 @@ class ChatListViewController: UIViewController {
         self.chatListsData.removeAll()
         self.tableView.reloadData()
 
-        self.listener = Firestore.firestore().collection("chatLists").order(by: "latestSentDate", descending: true).addSnapshotListener { snapshots, error in
+        self.listener = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).order(by: "latestSentDate", descending: true).addSnapshotListener { snapshots, error in
             if let error = error {
                 print("ChatLists情報の取得に失敗しました。\(error)")
                 return
@@ -93,7 +93,7 @@ class ChatListViewController: UIViewController {
     // when you are added, a person who added you as thier friend will automatically be displayed in the tableView
     private func observeIfYouAreAboutToBeAddedAsFriend() {
         if let user = Auth.auth().currentUser {
-            let chatRef = Firestore.firestore().collection("chatLists").whereField("partnerUid", isEqualTo: user.uid)
+            let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("partnerUid", isEqualTo: user.uid)
             chatRef.getDocuments { querySnapshot, error in
                 if let error = error {
                     print("友達追加した時の処理にて、getDocumenメソッドが失敗しました エラー内容：\(error)")
@@ -153,27 +153,15 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
                     if let url = url {
                         // set the profile image on the cell.profileImageView
                         print("URLの取得成功")
+                        print("画像にpersonを設定してない")
                         cell.profileImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
                     }
                 }
             } else {
                 cell.profileImageView.image = UIImage(systemName: "person")
+                print("画像にpersonを設定")
             }
         })
-
-        // get a uid of the person who you text with
-        let partnerUid = self.getMyUidAndPartnerUid(chatListData: chatListData)[1]
-        let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(partnerUid)" + ".jpg")
-        imageRef.downloadURL { url, error in
-            if let error = error {
-                print("URLの取得失敗\(error)")
-            }
-            if let url = url {
-                // set the profile image on the cell.profileImageView
-                print("URLの取得成功")
-                cell.profileImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
-            }
-        }
 
         let chatMembersNameFirstIsMyName: Bool = self.getMyName(chatListData: chatListData)
         switch chatMembersNameFirstIsMyName {
@@ -197,8 +185,10 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
                 let isProfileImageExisted = data["isProfileImageExisted"] as? String
                 if isProfileImageExisted != "nil" {
                     completion(isProfileImageExisted!)
+                    print("nilじゃない")
                 } else {
                     completion("nil")
+                    print("nilだよ")
                 }
             } else {
                 completion("nil")
@@ -259,7 +249,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "削除する", style: .destructive, handler: { _ in
             SVProgressHUD.show()
-            let messageRef = Firestore.firestore().collection("chatLists").document(self.documentIdArray[indexPath.row]).collection("messages")
+            let messageRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.documentIdArray[indexPath.row]).collection("messages")
             messageRef.getDocuments { querySnapshot, error in
                 if let error = error {
                     print("エラー\(error)")
@@ -292,7 +282,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func deleteDocumentInChatListsCollection(indexPath: IndexPath) {
-        let chatListsRef = Firestore.firestore().collection("chatLists").document(self.documentIdArray[indexPath.row])
+        let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.documentIdArray[indexPath.row])
         chatListsRef.delete { error in
             if let error = error {
                 print("エラー\(error)")

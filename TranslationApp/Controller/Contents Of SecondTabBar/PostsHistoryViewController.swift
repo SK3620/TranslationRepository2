@@ -21,7 +21,11 @@ protocol setLikeAndPostNumberLabelDelegate: NSObject {
 class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
 
-    private var postArray: [PostData] = []
+    private var postArray: [PostData] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
 
     var listener: ListenerRegistration?
 
@@ -99,51 +103,6 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             self.delegate.setLikeAndPostNumberLabel(likeNumber: self.likeNumber, postNumber: self.postNumber)
         }
     }
-
-    // こっから
-    // monitor the update of user's profile image
-//    private func monitorTheUpdateOfProfileImage() {
-//        guard let user = Auth.auth().currentUser else {
-//            return
-//        }
-//        let imageRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
-//        self.listener2 = imageRef.addSnapshotListener { documentSnapshot, error in
-//            if let error = error {
-//                print("プロフィール画像の取得失敗\(error)")
-//            }
-//            if let documentSnapshot = documentSnapshot, let data = documentSnapshot.data() {
-//                let profileImageInfo = data["isprofileImageExisted"] as! String?
-//                if profileImageInfo != "nil" {
-//                    self.setImageFromStorage()
-//                } else {
-//                    self.urlForProfileImage = nil
-//                    self.tableView.reloadData()
-//                }
-//            } else {
-//                self.urlForProfileImage = nil
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
-//
-//    private func setImageFromStorage() {
-//        // retrieve images from storage and place them in imageView
-//        let user = Auth.auth().currentUser!
-//        let imageRef: StorageReference = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child("\(user.uid)" + ".jpg")
-//        imageRef.downloadURL { url, error in
-//            if let error = error {
-//                print("URLの取得失敗\(error)")
-//            }
-//            if let url = url {
-//                print("URLの取得成功: \(url)")
-//                self.urlForProfileImage = url
-//                self.tableView.reloadData()
-//            }
-//            // update the cash with SDWebImageOptions.refreshedCashed
-//        }
-//    }
-
-    // ここまで
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)

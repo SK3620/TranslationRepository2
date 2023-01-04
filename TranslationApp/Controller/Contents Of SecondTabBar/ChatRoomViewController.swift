@@ -53,10 +53,12 @@ class ChatRoomViewController: MessagesViewController {
                         // set the profile image on the cell.profileImageView
                         print("URLの取得成功")
                         self.myProfileImageUrl = url
+                        self.messagesCollectionView.reloadData()
                     }
                 }
             } else {
                 self.myProfileImageUrl = nil
+                self.messagesCollectionView.reloadData()
             }
         })
 
@@ -127,7 +129,7 @@ class ChatRoomViewController: MessagesViewController {
     }
 
     private func getMessagesDocument() {
-        let messagesRef = Firestore.firestore().collection("chatLists").document(self.chatListData.documentId!).collection("messages").order(by: "sentDate", descending: false)
+        let messagesRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.chatListData.documentId!).collection("messages").order(by: "sentDate", descending: false)
         self.listener = messagesRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error)")
@@ -247,7 +249,7 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
             "senderName": user!.displayName!,
             "sentDate": FieldValue.serverTimestamp(),
         ] as [String: Any]
-        Firestore.firestore().collection("chatLists").document(self.chatListData.documentId!).collection("messages").document().setData(messageDic) { error in
+        Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.chatListData.documentId!).collection("messages").document().setData(messageDic) { error in
             if let error = error {
                 print("messagesコレクション内への書き込みに失敗しました エラー内容：\(error)")
             } else {
@@ -258,7 +260,7 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
     }
 
     func updateLatestMessageAndLatestSentDate(message: String) {
-        let chatListsRef = Firestore.firestore().collection("chatLists").document(self.chatListData.documentId!)
+        let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.chatListData.documentId!)
         chatListsRef.updateData(["latestMessage": message]) { error in
             if let error = error {
                 print(error)

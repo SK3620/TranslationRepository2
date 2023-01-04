@@ -266,8 +266,9 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
                 recordArrFilter[sender.tag].isChecked = false
                 realm.add(recordArrFilter, update: .modified)
             }
-            self.tableView.reloadData()
         }
+        self.tableView.reloadData()
+        print("りりりり")
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {

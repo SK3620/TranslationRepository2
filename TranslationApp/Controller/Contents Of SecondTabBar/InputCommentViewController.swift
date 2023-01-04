@@ -26,7 +26,7 @@ class InputCommentViewController: UIViewController {
     var bookMarkCommentsSectionViewController: BookMarkCommentsSectionViewController?
     var othersCommentsHistoryViewController: OthersCommentsHistoryViewController?
 
-    var valueForIsProfileImageExisted: String = ""
+    var valueForIsProfileImageExisted: String?
 
     var textView_text: String = ""
 
@@ -74,7 +74,7 @@ class InputCommentViewController: UIViewController {
             if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
                 let isProfileImageExisted = imagesDic["isProfileImageExisted"] as? String
                 if isProfileImageExisted != "nil" {
-                    self.valueForIsProfileImageExisted = user.uid + ".jpg"
+                    self.valueForIsProfileImageExisted = isProfileImageExisted!
                 } else {
                     self.valueForIsProfileImageExisted = "nil"
                 }
@@ -141,7 +141,7 @@ class InputCommentViewController: UIViewController {
                 "commentedDate": FieldValue.serverTimestamp(),
                 "stringCommentedDate": today,
                 "documentIdForPosts": self.postData.documentId,
-                "isProfileImageExisted": self.valueForIsProfileImageExisted,
+                "isProfileImageExisted": self.valueForIsProfileImageExisted!,
             ] as [String: Any]
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
             commentsRef.setData(commentsDic, merge: false) { error in

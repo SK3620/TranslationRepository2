@@ -95,9 +95,6 @@ class OthersProfileViewController: UIViewController {
 
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
-
-        self.pagingViewController.select(index: 0)
-
         self.settingsForNavigationControllerAndBar()
 
         self.settingsForNavigationBarAppearence()
@@ -215,7 +212,7 @@ class OthersProfileViewController: UIViewController {
 
     // Determine if a friend has already been added when the Add Friend button is pressed.
     private func seeIfThePartnerIsAlreadyAdded(user: User, completion: @escaping () -> Void) {
-        let chatRef = Firestore.firestore().collection("chatLists").whereField("members", arrayContainsAny: [user.uid, self.postData.uid!])
+        let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContainsAny: [user.uid, self.postData.uid!])
         chatRef.getDocuments { querySnapshot, error in
             if let error = error {
                 print("既に友達追加されているかどうか判定するためのメソッド内で、ドキュメントの取得に失敗しました ：エラー内容\(error)")
@@ -248,7 +245,7 @@ class OthersProfileViewController: UIViewController {
                 "membersName": [user.displayName, self.postData.userName],
                 "partnerUid": self.postData.uid!,
             ] as [String: Any]
-            Firestore.firestore().collection("chatLists").addDocument(data: chatDic) { error in
+            Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).addDocument(data: chatDic) { error in
                 if let error = error {
                     print("ChatRoomsの作成、追加に失敗しました\(error)")
                     SVProgressHUD.dismiss()
