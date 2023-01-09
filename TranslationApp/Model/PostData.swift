@@ -83,8 +83,10 @@ class PostData: NSObject {
         if let isProfileImageExisted = postDic["isProfileImageExisted"] as? String {
             if isProfileImageExisted != "nil" {
                 self.profileImageUrl = URL(string: isProfileImageExisted)
+                print("urlあり")
             } else {
                 self.profileImageUrl = nil
+                print("urlなし")
             }
         }
     }

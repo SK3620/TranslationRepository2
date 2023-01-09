@@ -143,25 +143,11 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.latestMessageLabel.text = chatListData.latestMessage
         cell.latestMessagedDate.text = chatListData.latestMessagedDate
 
-        self.determinationOfIsProfileImageExisted(chatListData: chatListData, completion: { value in
-            if value != "nil" {
-                let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child(value)
-                imageRef.downloadURL { url, error in
-                    if let error = error {
-                        print("URLの取得失敗\(error)")
-                    }
-                    if let url = url {
-                        // set the profile image on the cell.profileImageView
-                        print("URLの取得成功")
-                        print("画像にpersonを設定してない")
-                        cell.profileImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
-                    }
-                }
-            } else {
-                cell.profileImageView.image = UIImage(systemName: "person")
-                print("画像にpersonを設定")
-            }
-        })
+        if let partnerImageUrl = chatListData.partnerProfileImageUrl {
+            cell.profileImageView.sd_setImage(with: partnerImageUrl, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+        } else {
+            cell.profileImageView.image = UIImage(systemName: "person")
+        }
 
         let chatMembersNameFirstIsMyName: Bool = self.getMyName(chatListData: chatListData)
         switch chatMembersNameFirstIsMyName {
@@ -173,27 +159,6 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.text = chatListData.chatMembersName?.first
         }
         return cell
-    }
-
-    private func determinationOfIsProfileImageExisted(chatListData: ChatList, completion: @escaping (String) -> Void) {
-        let imageRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document(self.getMyUidAndPartnerUid(chatListData: chatListData)[1] + "'sProfileImage")
-        imageRef.getDocument { documentSnapshot, error in
-            if let error = error {
-                print("エラーだ \(error)")
-            }
-            if let documentSnapshot = documentSnapshot, let data = documentSnapshot.data() {
-                let isProfileImageExisted = data["isProfileImageExisted"] as? String
-                if isProfileImageExisted != "nil" {
-                    completion(isProfileImageExisted!)
-                    print("nilじゃない")
-                } else {
-                    completion("nil")
-                    print("nilだよ")
-                }
-            } else {
-                completion("nil")
-            }
-        }
     }
 
     func getMyName(chatListData: ChatList) -> Bool {

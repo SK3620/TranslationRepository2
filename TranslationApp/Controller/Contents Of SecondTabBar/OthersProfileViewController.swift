@@ -187,7 +187,7 @@ class OthersProfileViewController: UIViewController {
         }
     }
 
-    // the profile is yours, disable the button to add a friend
+    // if the profile is yours, disable the button to add a friend
     func makeAddFriendBarButtonItemEnabledFalse(addFriendBarButtonItem: UIBarButtonItem) {
         if let user = Auth.auth().currentUser {
             if user.uid == self.postData.uid {
@@ -204,9 +204,61 @@ class OthersProfileViewController: UIViewController {
         guard let user = Auth.auth().currentUser else {
             return
         }
-//        completionで処理
+        //        completionで処理
         self.seeIfThePartnerIsAlreadyAdded(user: user) {
-            self.showAlert()
+            let dispatchGroup = DispatchGroup()
+            let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)
+
+            var partnerImageUrlString = ""
+            var myImageUrlString = ""
+
+            dispatchGroup.enter()
+            dispatchQueue.async {
+                let imagesRefInDB = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(self.postData.uid!)'sProfileImage")
+                imagesRefInDB.getDocument { documentSnapshot, error in
+                    if let error = error {
+                        print("imagePathForDBでdocumentSnapshotの取得失敗\(error)")
+                    }
+                    if let documentSnapshot = documentSnapshot, let imageDic = documentSnapshot.data(), let value = imageDic["isProfileImageExisted"] as? String {
+                        if value != "nil" {
+                            partnerImageUrlString = value
+                            dispatchGroup.leave()
+                        } else {
+                            partnerImageUrlString = "nil"
+                            dispatchGroup.leave()
+                        }
+                    } else {
+                        partnerImageUrlString = "nil"
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+
+            dispatchGroup.enter()
+            dispatchQueue.async {
+                let imagesRefInDB = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
+                imagesRefInDB.getDocument { documentSnapshot, error in
+                    if let error = error {
+                        print("imagePathForDBでdocumentSnapshotの取得失敗\(error)")
+                    }
+                    if let documentSnapshot = documentSnapshot, let imageDic = documentSnapshot.data(), let value = imageDic["isProfileImageExisted"] as? String {
+                        if value != "nil" {
+                            myImageUrlString = value
+                            dispatchGroup.leave()
+                        } else {
+                            myImageUrlString = "nil"
+                            dispatchGroup.leave()
+                        }
+                    } else {
+                        myImageUrlString = "nil"
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+
+            dispatchGroup.notify(queue: .main) {
+                self.showAlert(partnerImageUrl: partnerImageUrlString, myImageUrlString: myImageUrlString)
+            }
         }
     }
 
@@ -232,7 +284,7 @@ class OthersProfileViewController: UIViewController {
         }
     }
 
-    private func showAlert() {
+    private func showAlert(partnerImageUrl: String, myImageUrlString: String) {
         let user = Auth.auth().currentUser!
         let alert = UIAlertController(title: "友達に追加しますか？", message: "'\(self.postData.userName!)'がチャットリストに追加されます", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
@@ -244,6 +296,8 @@ class OthersProfileViewController: UIViewController {
                 "members": [user.uid, self.postData.uid],
                 "membersName": [user.displayName, self.postData.userName],
                 "partnerUid": self.postData.uid!,
+                self.postData.uid!: partnerImageUrl,
+                user.uid: myImageUrlString,
             ] as [String: Any]
             Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).addDocument(data: chatDic) { error in
                 if let error = error {

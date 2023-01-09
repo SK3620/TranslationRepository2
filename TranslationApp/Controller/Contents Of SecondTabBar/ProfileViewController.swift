@@ -271,7 +271,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 self.openLibrary()
             }),
             UIAction(title: "削除する", image: nil, handler: { _ in
-                self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: false, imageUrlString: "nil")
+                SVProgressHUD.showSuccess(withStatus: "削除完了")
+                SVProgressHUD.dismiss(withDelay: 1.5) {
+                    self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: false, imageUrlString: "nil")
+                }
             }),
         ])
         self.changePhotoButton.menu = UIMenu(title: "", options: .displayInline, children: [items])
@@ -393,6 +396,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         var docIdArrForPosts: [String] = []
         // an array which contains documentId in comments collection
         var docIdArrForComments: [String] = []
+        // an array which contains documentId in images collection
+        var docIdArrForImages: [String] = []
 
         // update my document in "posts" collection
         dispatchGroup.enter()
@@ -465,6 +470,40 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 }
             }
         }
+
+        dispatchGroup.enter()
+        dispatchQueue.async {
+            let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContains: user.uid)
+            chatListsRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("membersの取得失敗\(error)")
+                }
+                if let querySnapshot = querySnapshot {
+                    var excuteLeaveWhen0: Int = querySnapshot.documents.count
+                    if excuteLeaveWhen0 == 0 {
+                        print("membersのquerySnapshotが空でしたreturnしてleave")
+                        dispatchGroup.leave()
+                        return
+                    }
+                    print("membersの取得成功")
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        docIdArrForImages.append(queryDocumentSnapshot.documentID)
+                        excuteLeaveWhen0 = excuteLeaveWhen0 - 1
+                        if excuteLeaveWhen0 == 0 {
+                            switch docIdArrForImages.isEmpty {
+                            case true:
+                                print("空だったため、imagesコレクション内のprofileImageの更新不要 leave実行")
+                                dispatchGroup.leave()
+                            case false:
+                                self.updateProfileImageInEachDocumentsInImagesCollectionte(user: user, docIdArrForImages: docIdArrForImages, isProfileImageExisted: isProfileImageExisted, imageUrlString: imageUrlString)
+                                dispatchGroup.leave()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         dispatchGroup.notify(queue: .main) {
             print("複数の非同期処理完了")
         }
@@ -517,6 +556,30 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 } else {
                     print("commentsコレクション内のprofileImageの更新に成功しました")
                     self.reloadTableView()
+                }
+            }
+        }
+    }
+
+    private func updateProfileImageInEachDocumentsInImagesCollectionte(user: User, docIdArrForImages: [String], isProfileImageExisted: Bool, imageUrlString: String) {
+        for documentId in docIdArrForImages {
+            let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(documentId)
+            var imageDic: [String: Any] = [:]
+            if isProfileImageExisted {
+                imageDic = [
+                    user.uid: imageUrlString,
+                ]
+            }
+            if isProfileImageExisted == false {
+                imageDic = [
+                    user.uid: "nil",
+                ]
+            }
+            chatListsRef.updateData(imageDic) { error in
+                if let error = error {
+                    print("imagesコレクション内のprofileImageの更新に失敗しました エラー内容：\(error)")
+                } else {
+                    print("imagesコレクション内のprofileImageの更新に成功しました")
                 }
             }
         }

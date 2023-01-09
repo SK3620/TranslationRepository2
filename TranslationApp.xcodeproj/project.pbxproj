@@ -13,7 +13,6 @@
 		83071D0228B91AC90003734C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0128B91AC90003734C /* Assets.xcassets */; };
 		83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83071D0328B91AC90003734C /* LaunchScreen.storyboard */; };
 		830D9FF42912DE2000F8761B /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830D9FF32912DE2000F8761B /* PostViewController.swift */; };
-		831398C2293A1395005B7B5D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 831398C1293A1395005B7B5D /* Alamofire */; };
 		832D4CB028D848B5004C4D7C /* QuickMemoViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */; };
 		8342F77728FD760E005C8FD5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8342F77628FD760E005C8FD5 /* Alamofire */; };
 		8356E9552905574500FD9236 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E9542905574500FD9236 /* History.swift */; };
@@ -84,6 +83,7 @@
 		83A2E1B029019CA100F1117A /* SelectFolderForStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */; };
 		83A564C928D7630300C3A9B9 /* PhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A564C828D7630300C3A9B9 /* PhraseWordViewController.swift */; };
 		83A7917828F6654300BF7C2D /* SettingsForStudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */; };
+		83AA2A782966AC3700D95D6E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83AA2A772966AC3600D95D6E /* MessageUI.framework */; };
 		83AC1DC828E4427D00576CF4 /* CustomCellForPhraseWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */; };
 		83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83AC1DC728E4427D00576CF4 /* CustomCellForPhraseWord.xib */; };
 		83AD2C1B290A48AB009B0C84 /* SecondTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AD2C1A290A48AB009B0C84 /* SecondTabBarController.swift */; };
@@ -127,7 +127,7 @@
 /* Begin PBXFileReference section */
 		5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TranslationApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76A5CC4D0934ACC4BB7691D9 /* Pods-TranslationApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.release.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.release.xcconfig"; sourceTree = "<group>"; };
-		83071CF528B91AC70003734C /* TranslationApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TranslationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		83071CF528B91AC70003734C /* DeepL翻訳＋瞬間英作文.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DeepL翻訳＋瞬間英作文.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83071CF828B91AC70003734C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83071CFA28B91AC70003734C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		83071CFF28B91AC70003734C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -186,6 +186,7 @@
 		83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderForStudyViewContoller.swift; sourceTree = "<group>"; };
 		83A564C828D7630300C3A9B9 /* PhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseWordViewController.swift; sourceTree = "<group>"; };
 		83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsForStudyViewController.swift; sourceTree = "<group>"; };
+		83AA2A772966AC3600D95D6E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForPhraseWord.swift; sourceTree = "<group>"; };
 		83AC1DC728E4427D00576CF4 /* CustomCellForPhraseWord.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForPhraseWord.xib; sourceTree = "<group>"; };
 		83AD2C1A290A48AB009B0C84 /* SecondTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTabBarController.swift; sourceTree = "<group>"; };
@@ -232,7 +233,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				831398C2293A1395005B7B5D /* Alamofire in Frameworks */,
+				83AA2A782966AC3700D95D6E /* MessageUI.framework in Frameworks */,
 				8389C405290AC6AF007347AE /* Alamofire in Frameworks */,
 				839238032930D0C0005B0741 /* Alamofire in Frameworks */,
 				83A051F929647858006BCB39 /* Alamofire in Frameworks */,
@@ -261,6 +262,7 @@
 		26C17DCEBE26960103506E4A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83AA2A772966AC3600D95D6E /* MessageUI.framework */,
 				5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */,
 			);
 			name = Frameworks;
@@ -279,7 +281,7 @@
 		83071CF628B91AC70003734C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				83071CF528B91AC70003734C /* TranslationApp.app */,
+				83071CF528B91AC70003734C /* DeepL翻訳＋瞬間英作文.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -287,9 +289,9 @@
 		83071CF728B91AC70003734C /* TranslationApp */ = {
 			isa = PBXGroup;
 			children = (
-				83071D0628B91AC90003734C /* Info.plist */,
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
+				83071D0628B91AC90003734C /* Info.plist */,
 				836D1F89290A52360075AFEE /* GoogleService-Info.plist */,
 				839FBA3828BA5C8900BB64A5 /* APIKey.plist */,
 				8356E94F29046E4100FD9236 /* Model */,
@@ -467,10 +469,10 @@
 				8385E729291816C100DBDBAC /* BookMarkViewController.swift */,
 				83BC07ED291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift */,
 				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
-				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
-				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
 				835B38E5294FF58D00D42F50 /* ChatListViewController.swift */,
 				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,
+				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
+				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
 			);
 			path = "Contents Of SecondTabBar";
 			sourceTree = "<group>";
@@ -517,7 +519,6 @@
 				839EBCEB2924C540003E8393 /* Alamofire */,
 				838085F62926728C00574D2D /* Alamofire */,
 				839238022930D0C0005B0741 /* Alamofire */,
-				831398C1293A1395005B7B5D /* Alamofire */,
 				835B38DD294B5DDA00D42F50 /* Alamofire */,
 				8379101B29504682000790AB /* Alamofire */,
 				83887BA1296312F800CA644D /* Alamofire */,
@@ -525,7 +526,7 @@
 				8378EB3F29652137007655C9 /* Alamofire */,
 			);
 			productName = TranslationApp;
-			productReference = 83071CF528B91AC70003734C /* TranslationApp.app */;
+			productReference = 83071CF528B91AC70003734C /* DeepL翻訳＋瞬間英作文.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -925,7 +926,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "DeepL翻訳＋瞬間英作文";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -958,7 +959,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "DeepL翻訳＋瞬間英作文";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1184,11 +1185,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		831398C1293A1395005B7B5D /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
 		8342F77628FD760E005C8FD5 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;

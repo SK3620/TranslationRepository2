@@ -27,5 +27,9 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>CFBundleDisplayName</key>
+	<string>DeepL翻訳＋瞬間英作文</string>
+	<key>CFBundleName</key>
+	<string>DeepL翻訳＋瞬間英作文</string>
 </dict>
 </plist>

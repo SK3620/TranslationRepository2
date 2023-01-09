@@ -14,7 +14,8 @@ class ChatList {
     var chatMembers: [String]?
     var chatMembersName: [String]?
     var documentId: String?
-    var profileImage: URL?
+    var partnerProfileImageUrl: URL?
+    var myProfileImageUrl: URL?
 
     init(queryDocumentSnapshot: QueryDocumentSnapshot) {
         self.documentId = queryDocumentSnapshot.documentID
@@ -33,6 +34,37 @@ class ChatList {
         self.chatMembers = chatListDic["members"] as? [String]
 
         self.chatMembersName = chatListDic["membersName"] as? [String]
+
+        var myUid = ""
+        var partnerUid = ""
+        let user = Auth.auth().currentUser!
+        if self.chatMembers?.first == user.uid {
+            myUid = (self.chatMembers?.first)!
+            partnerUid = self.chatMembers![1]
+        } else {
+            myUid = self.chatMembers![1]
+            partnerUid = self.chatMembers!.first!
+        }
+
+        if let imageUrlString = chatListDic[partnerUid] as? String {
+            if imageUrlString != "nil" {
+                self.partnerProfileImageUrl = URL(string: imageUrlString)
+            } else {
+                self.partnerProfileImageUrl = nil
+            }
+        } else {
+            self.partnerProfileImageUrl = nil
+        }
+
+        if let imageUrlString = chatListDic[myUid] as? String {
+            if imageUrlString != "nil" {
+                self.myProfileImageUrl = URL(string: imageUrlString)
+            } else {
+                self.myProfileImageUrl = nil
+            }
+        } else {
+            self.myProfileImageUrl = nil
+        }
     }
 
     private func convertDateToString(date: Date) -> String {

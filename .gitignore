@@ -1,4 +1,4 @@
 Pods/*
 *.xcworkspace
-
-APIKey .gitignore
+APIKey.plist
+GoogleService-Info.plist

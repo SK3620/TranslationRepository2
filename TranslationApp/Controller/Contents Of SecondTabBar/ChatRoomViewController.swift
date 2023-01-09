@@ -22,9 +22,6 @@ class ChatRoomViewController: MessagesViewController {
     private var currentUser: MessageSenderType?
     private var partnerUser: MessageSenderType?
 
-    private var myProfileImageUrl: URL?
-    private var partnerProfileImageUrl: URL?
-
     private var messageList: [MessageEntity] = [] {
         didSet {
             self.messagesCollectionView.reloadData()
@@ -40,46 +37,6 @@ class ChatRoomViewController: MessagesViewController {
 
         let myUid = self.getMyUidAndPartnerUid(chatListData: self.chatListData).first
         let partnerUid = self.getMyUidAndPartnerUid(chatListData: self.chatListData)[1]
-
-        // get the my profileImage url
-        self.determinationOfIsProfileImageExisted(uid: myUid!, completion: { value in
-            if value != "nil" {
-                let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child(value)
-                imageRef.downloadURL { url, error in
-                    if let error = error {
-                        print("URLの取得失敗\(error)")
-                    }
-                    if let url = url {
-                        // set the profile image on the cell.profileImageView
-                        print("URLの取得成功")
-                        self.myProfileImageUrl = url
-                        self.messagesCollectionView.reloadData()
-                    }
-                }
-            } else {
-                self.myProfileImageUrl = nil
-                self.messagesCollectionView.reloadData()
-            }
-        })
-
-        // get the partner's profileImage url
-        self.determinationOfIsProfileImageExisted(uid: partnerUid, completion: { value in
-            if value != "nil" {
-                let imageRef = Storage.storage().reference(forURL: "gs://translationapp-72dd8.appspot.com").child(FireBaseRelatedPath.imagePath).child(value)
-                imageRef.downloadURL { url, error in
-                    if let error = error {
-                        print("URLの取得失敗\(error)")
-                    }
-                    if let url = url {
-                        // set the profile image on the cell.profileImageView
-                        print("URLの取得成功")
-                        self.partnerProfileImageUrl = url
-                    }
-                }
-            } else {
-                self.partnerProfileImageUrl = nil
-            }
-        })
 
         messageInputBar.sendButton.title = nil
         messageInputBar.sendButton.image = UIImage(systemName: "paperplane")
@@ -101,25 +58,6 @@ class ChatRoomViewController: MessagesViewController {
         messageInputBar.delegate = self
         messageInputBar.sendButton.title = nil
         messageInputBar.sendButton.image = UIImage(systemName: "paperplane")
-    }
-
-    private func determinationOfIsProfileImageExisted(uid: String, completion: @escaping (String) -> Void) {
-        let imageRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document(uid + "'sProfileImage")
-        imageRef.getDocument { documentSnapshot, error in
-            if let error = error {
-                print("エラーだ \(error)")
-            }
-            if let documentSnapshot = documentSnapshot, let data = documentSnapshot.data() {
-                let isProfileImageExisted = data["isProfileImageExisted"] as? String
-                if isProfileImageExisted != "nil" {
-                    completion(isProfileImageExisted!)
-                } else {
-                    completion("nil")
-                }
-            } else {
-                completion("nil")
-            }
-        }
     }
 
     override func viewWillAppear(_: Bool) {
@@ -335,14 +273,14 @@ extension ChatRoomViewController: MessagesDisplayDelegate {
         let user = Auth.auth().currentUser!
         let senderUid = self.chatRoomArr[indexPath.section].senderUid
         if user.uid == senderUid {
-            if self.myProfileImageUrl != nil {
-                avatarView.sd_setImage(with: self.myProfileImageUrl, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+            if let myPartnerImageUrl = self.chatListData.myProfileImageUrl {
+                avatarView.sd_setImage(with: myPartnerImageUrl, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
             } else {
                 avatarView.image = UIImage(systemName: "person")
             }
         } else {
-            if self.partnerProfileImageUrl != nil {
-                avatarView.sd_setImage(with: self.partnerProfileImageUrl, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
+            if let partnerImageUrl = self.chatListData.partnerProfileImageUrl {
+                avatarView.sd_setImage(with: partnerImageUrl, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
             } else {
                 avatarView.image = UIImage(systemName: "person")
             }

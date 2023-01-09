@@ -22,7 +22,6 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     private var postArray: [PostData] = [] {
         didSet {
             self.tableView.reloadData()
-            print("didset")
         }
     }
 
@@ -85,7 +84,6 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
                     let postData = PostData(document: document)
                     return postData
                 }
-                self.tableView.reloadData()
                 SVProgressHUD.dismiss()
             }
         }
