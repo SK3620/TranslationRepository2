@@ -14,7 +14,7 @@
         <!--Navigation Controller0-->
         <scene sceneID="uD2-cf-Hu3">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Bau-TZ-BdI" customClass="NavigationController0" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Bau-TZ-BdI" customClass="NavigationController0" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="VHc-eF-MAX"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7yi-oI-5Bk">
@@ -52,7 +52,7 @@
         <!--Translate View Controller-->
         <scene sceneID="rRg-oI-gNI">
             <objects>
-                <viewController storyboardIdentifier="Translate" modalPresentationStyle="fullScreen" id="C0a-Tf-uRW" customClass="TranslateViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Translate" modalPresentationStyle="fullScreen" id="C0a-Tf-uRW" customClass="TranslateViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NMm-6y-bwK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -297,7 +297,7 @@
         <!--History View Controller-->
         <scene sceneID="odw-7w-d1I">
             <objects>
-                <viewController id="8Ml-yP-2r3" customClass="HistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="8Ml-yP-2r3" customClass="HistoryViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T90-Ad-FVl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -359,7 +359,7 @@
         <!--Select Folder For Translate View Contoller-->
         <scene sceneID="aol-ex-WKO">
             <objects>
-                <viewController storyboardIdentifier="FolderList" id="fqW-ZX-gzV" customClass="SelectFolderForTranslateViewContoller" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FolderList" id="fqW-ZX-gzV" customClass="SelectFolderForTranslateViewContoller" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XfY-ey-zmB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -488,7 +488,7 @@
         <!--保存先を選択-->
         <scene sceneID="KWI-ra-tpb">
             <objects>
-                <viewController storyboardIdentifier="SelectFolderForStudy" id="jh3-gI-SRu" customClass="SelectFolderForStudyViewContoller" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SelectFolderForStudy" id="jh3-gI-SRu" customClass="SelectFolderForStudyViewContoller" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GRI-aA-8M5" customClass="Folder">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -567,7 +567,7 @@
         <!--Settings For Study View Controller-->
         <scene sceneID="WMc-T6-U4m">
             <objects>
-                <viewController storyboardIdentifier="Menu" id="Ji4-No-HGh" customClass="SettingsForStudyViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Menu" id="Ji4-No-HGh" customClass="SettingsForStudyViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EhH-oM-PgZ" customClass="Sett">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -619,7 +619,7 @@
         <!--編集-->
         <scene sceneID="MPw-Jn-Tk0">
             <objects>
-                <viewController storyboardIdentifier="Edit1" modalPresentationStyle="fullScreen" id="Ebu-HV-NPv" customClass="EditStudyViewContoller" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Edit1" modalPresentationStyle="fullScreen" id="Ebu-HV-NPv" customClass="EditStudyViewContoller" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rjl-gW-PPk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -685,7 +685,7 @@
         <!--Title-->
         <scene sceneID="AJh-qU-Tdh">
             <objects>
-                <viewController storyboardIdentifier="StudyViewController" wantsFullScreenLayout="YES" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="kJL-ST-fzW" customClass="StudyViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StudyViewController" wantsFullScreenLayout="YES" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="kJL-ST-fzW" customClass="StudyViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kdq-uH-agg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -876,7 +876,7 @@
         <!--Memo For Study View Controller-->
         <scene sceneID="H9g-jT-t4K">
             <objects>
-                <viewController storyboardIdentifier="MemoView" id="mVa-h6-fH2" customClass="MemoForStudyViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MemoView" id="mVa-h6-fH2" customClass="MemoForStudyViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1Gv-Os-1pd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -931,7 +931,7 @@
         <!--Folder View Controller-->
         <scene sceneID="bfb-mk-1n5">
             <objects>
-                <viewController id="0MD-Yd-B4I" customClass="FolderViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="0MD-Yd-B4I" customClass="FolderViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="24L-sP-daX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1033,7 +1033,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="SuT-eQ-m5l">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="EU4-Z9-LJ5" customClass="TabBarController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="EU4-Z9-LJ5" customClass="TabBarController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="a8S-Q2-eQz">
                         <leftBarButtonItems>
@@ -1073,7 +1073,7 @@
         <!--Post View Controller-->
         <scene sceneID="Wk9-PR-lNe">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="4ML-cq-n35" customClass="PostViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="4ML-cq-n35" customClass="PostViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rbg-i0-jGX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1287,7 +1287,7 @@
         <!--Others Profile View Controller-->
         <scene sceneID="rvM-j9-JZC">
             <objects>
-                <viewController id="OhN-y2-WIc" customClass="OthersProfileViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="OhN-y2-WIc" customClass="OthersProfileViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ctR-Cw-Uew">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1430,7 +1430,7 @@
         <!--Others Introduction View Controller-->
         <scene sceneID="TN0-de-m26">
             <objects>
-                <viewController storyboardIdentifier="OthersIntroduction" id="LGJ-Er-0jn" customClass="OthersIntroductionViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OthersIntroduction" id="LGJ-Er-0jn" customClass="OthersIntroductionViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qwA-92-dKI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1460,7 +1460,7 @@
         <!--Others Posts History View Controller-->
         <scene sceneID="qHx-vy-LMC">
             <objects>
-                <viewController id="Tf3-i5-Mvs" customClass="OthersPostsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Tf3-i5-Mvs" customClass="OthersPostsHistoryViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vuc-GB-AYF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1492,7 +1492,7 @@
         <!--Others Comments History View Controller-->
         <scene sceneID="qUT-23-MhN">
             <objects>
-                <viewController id="04I-E1-Zsj" customClass="OthersCommentsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="04I-E1-Zsj" customClass="OthersCommentsHistoryViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Ba-My-aK1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1523,7 +1523,7 @@
         <!--Others Book Mark View Controller-->
         <scene sceneID="zYQ-gl-hqN">
             <objects>
-                <viewController id="VCM-Zs-Mbp" customClass="OthersBookMarkViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VCM-Zs-Mbp" customClass="OthersBookMarkViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="R4v-pO-Epu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1555,7 +1555,7 @@
         <!--Others Book Mark Comments Section View Controller-->
         <scene sceneID="PkE-dC-lXs">
             <objects>
-                <viewController id="58u-lG-2ft" customClass="OthersBookMarkCommentsSectionViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="58u-lG-2ft" customClass="OthersBookMarkCommentsSectionViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fAx-rK-t2e">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1586,7 +1586,7 @@
         <!--Correct View Controller-->
         <scene sceneID="YsI-su-jLh">
             <objects>
-                <viewController id="cLb-e6-JOX" customClass="CorrectViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cLb-e6-JOX" customClass="CorrectViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tf2-2g-KxH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1626,7 +1626,7 @@
         <!--Time Line View Controller-->
         <scene sceneID="f8a-uj-Url">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="fOJ-Vf-G5u" customClass="TimeLineViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="fOJ-Vf-G5u" customClass="TimeLineViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="chd-OH-2Sg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1678,7 +1678,7 @@
         <!--Second Paging View Controller-->
         <scene sceneID="M2T-qN-FVZ">
             <objects>
-                <viewController id="jbg-6V-zvJ" customClass="SecondPagingViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="jbg-6V-zvJ" customClass="SecondPagingViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n33-SF-XL1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1713,7 +1713,7 @@
         <!--Comment Section View Controller-->
         <scene sceneID="efR-bN-Mkx">
             <objects>
-                <viewController id="eA5-4n-RLE" customClass="CommentSectionViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="eA5-4n-RLE" customClass="CommentSectionViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wzh-Vy-87F">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1745,7 +1745,7 @@
         <!--コメントする-->
         <scene sceneID="QQc-Wk-zDp">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="kgq-QF-C9g" customClass="InputCommentViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="kgq-QF-C9g" customClass="InputCommentViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eDG-z6-bmu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1793,7 +1793,7 @@
         <!--Profile View Controller-->
         <scene sceneID="Atj-P9-Iwg">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="9UV-YT-hTx" customClass="ProfileViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="9UV-YT-hTx" customClass="ProfileViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ray-Lq-BXJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1964,7 +1964,7 @@
         <!--Introduction View Controller-->
         <scene sceneID="Mxa-GL-KIo">
             <objects>
-                <viewController storyboardIdentifier="introduction" id="dPI-nI-3Mc" customClass="IntroductionViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="introduction" id="dPI-nI-3Mc" customClass="IntroductionViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lz2-q8-db6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1994,7 +1994,7 @@
         <!--Posts History View Controller-->
         <scene sceneID="N0n-H1-sLi">
             <objects>
-                <viewController storyboardIdentifier="postsHistory" id="wqk-D6-CCH" customClass="PostsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="postsHistory" id="wqk-D6-CCH" customClass="PostsHistoryViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ftu-Jm-NrU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2026,7 +2026,7 @@
         <!--Comments History View Controller-->
         <scene sceneID="rY4-bB-M6r">
             <objects>
-                <viewController id="eRX-a4-ouv" customClass="CommentsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="eRX-a4-ouv" customClass="CommentsHistoryViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HbE-QY-b7v">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2059,7 +2059,7 @@
         <!--Book Mark View Controller-->
         <scene sceneID="SNn-gF-Hc6">
             <objects>
-                <viewController storyboardIdentifier="BookMark" id="swt-0E-bGp" customClass="BookMarkViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BookMark" id="swt-0E-bGp" customClass="BookMarkViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CLi-LM-Cxf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2091,7 +2091,7 @@
         <!--Book Mark Comments Section View Controller-->
         <scene sceneID="YR7-LG-Ocg">
             <objects>
-                <viewController id="zVe-2Y-Qfa" customClass="BookMarkCommentsSectionViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="zVe-2Y-Qfa" customClass="BookMarkCommentsSectionViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pUL-YI-w8q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2122,7 +2122,7 @@
         <!--Edit Profile View Controller-->
         <scene sceneID="9bc-sF-N2J">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="yPs-hs-xHV" customClass="EditProfileViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="yPs-hs-xHV" customClass="EditProfileViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ym4-QA-5Fe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2175,12 +2175,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7pT-32-iuR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="15476" y="-217.24137931034483"/>
+            <point key="canvasLocation" x="15124" y="-217"/>
         </scene>
         <!--Quick Memo-->
         <scene sceneID="FNz-sk-Dzq">
             <objects>
-                <viewController id="JDV-Vh-fvC" customClass="QuickMemoViewContoller" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="JDV-Vh-fvC" customClass="QuickMemoViewContoller" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5pG-uG-vep">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2244,7 +2244,7 @@
         <!--Review View Controller-->
         <scene sceneID="ZEr-ZJ-swB">
             <objects>
-                <viewController storyboardIdentifier="ReviewViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="Ulw-fo-3EE" customClass="ReviewViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ReviewViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="Ulw-fo-3EE" customClass="ReviewViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JbP-rz-gRM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2306,7 +2306,7 @@
         <!--Add View Controller-->
         <scene sceneID="XDk-33-Sgu">
             <objects>
-                <viewController storyboardIdentifier="add" modalPresentationStyle="fullScreen" id="IOr-ab-HyR" customClass="AddViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="add" modalPresentationStyle="fullScreen" id="IOr-ab-HyR" customClass="AddViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1bJ-wc-tR5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2397,7 +2397,7 @@
         <!--Edit Record View Controller-->
         <scene sceneID="pSV-4G-Vdr">
             <objects>
-                <viewController storyboardIdentifier="edit" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="7DY-Nw-ZCM" customClass="EditRecordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="edit" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="7DY-Nw-ZCM" customClass="EditRecordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="I8a-Tz-u6y">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2496,7 +2496,7 @@
         <!--Record View Controller-->
         <scene sceneID="5fg-qQ-5mS">
             <objects>
-                <viewController storyboardIdentifier="Record" id="gwo-Vv-iTh" customClass="RecordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Record" id="gwo-Vv-iTh" customClass="RecordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fSV-0y-yz9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2627,7 +2627,7 @@
         <!--All Phrase Word View Controller-->
         <scene sceneID="HxA-HR-1Qn">
             <objects>
-                <viewController storyboardIdentifier="allPhraseWord" id="v40-nH-T4i" customClass="AllPhraseWordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="allPhraseWord" id="v40-nH-T4i" customClass="AllPhraseWordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jvz-Rq-2er">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2666,7 +2666,7 @@
         <!--Third Phrase Word View Controller-->
         <scene sceneID="10F-3W-Hp3">
             <objects>
-                <viewController storyboardIdentifier="thirdPhraseWord" id="OKm-iF-bQb" customClass="ThirdPhraseWordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="thirdPhraseWord" id="OKm-iF-bQb" customClass="ThirdPhraseWordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PSd-LA-j2r">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2705,7 +2705,7 @@
         <!--Paging Phrase Word View Controller-->
         <scene sceneID="ets-cu-u0r">
             <objects>
-                <viewController id="6ov-nD-mWm" customClass="PagingPhraseWordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6ov-nD-mWm" customClass="PagingPhraseWordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KeA-0D-Z91">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2736,7 +2736,7 @@
         <!--Second Phrase Word View Controller-->
         <scene sceneID="LrW-13-yFO">
             <objects>
-                <viewController storyboardIdentifier="secondPhraseWord" id="lON-UO-Ga4" customClass="SecondPhraseWordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="secondPhraseWord" id="lON-UO-Ga4" customClass="SecondPhraseWordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kYZ-N5-TvN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2775,7 +2775,7 @@
         <!--Phrase Word View Controller-->
         <scene sceneID="5M8-Fx-Brw">
             <objects>
-                <viewController storyboardIdentifier="phraseWord" id="FxY-nc-WLr" customClass="PhraseWordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="phraseWord" id="FxY-nc-WLr" customClass="PhraseWordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zD2-Wp-IzX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2828,7 +2828,7 @@
         <!--Second Tab Bar Controller-->
         <scene sceneID="0Uc-hx-NaJ">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="uys-M0-qhA" customClass="SecondTabBarController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="uys-M0-qhA" customClass="SecondTabBarController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="wwn-yb-6rT"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rN5-Ok-66n">
@@ -2849,7 +2849,7 @@
         <!--Login View Controller-->
         <scene sceneID="mIX-hm-ld6">
             <objects>
-                <viewController storyboardIdentifier="Login" modalPresentationStyle="fullScreen" id="45X-F0-JbU" customClass="LoginViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Login" modalPresentationStyle="fullScreen" id="45X-F0-JbU" customClass="LoginViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VrW-NY-m0b">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3018,7 +3018,7 @@
         <!--How To Learn View Controller-->
         <scene sceneID="jrL-Jk-KYh">
             <objects>
-                <viewController id="lg7-1u-xd6" customClass="HowToLearnViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="lg7-1u-xd6" customClass="HowToLearnViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wXN-ZQ-D8P">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3058,7 +3058,7 @@
         <!--Etc View Controller-->
         <scene sceneID="uav-f0-wpU">
             <objects>
-                <viewController id="40Z-a2-Ljq" customClass="EtcViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="40Z-a2-Ljq" customClass="EtcViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2fW-eQ-hYa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3098,7 +3098,7 @@
         <!--Conversation View Controller-->
         <scene sceneID="qZW-GQ-idD">
             <objects>
-                <viewController id="U82-IB-9N9" customClass="ConversationViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="U82-IB-9N9" customClass="ConversationViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5AJ-sA-pGl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3138,7 +3138,7 @@
         <!--Listening View Controller-->
         <scene sceneID="FTx-1c-JYk">
             <objects>
-                <viewController id="q7Q-pf-mpP" customClass="ListeningViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="q7Q-pf-mpP" customClass="ListeningViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fVW-FI-yEh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3178,7 +3178,7 @@
         <!--Grammer View Controller-->
         <scene sceneID="DYa-JS-QaG">
             <objects>
-                <viewController id="VGA-1T-ksK" customClass="GrammerViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VGA-1T-ksK" customClass="GrammerViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wpy-im-DCi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3218,7 +3218,7 @@
         <!--Pronunciation View Controller-->
         <scene sceneID="fzP-SN-uTp">
             <objects>
-                <viewController id="D19-Y0-wcs" customClass="PronunciationViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="D19-Y0-wcs" customClass="PronunciationViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n2h-3L-pAn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -3258,7 +3258,7 @@
         <!--Word View Controller-->
         <scene sceneID="m3y-TC-XJ8">
             <objects>
-                <viewController id="BNa-Jx-CiV" customClass="WordViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BNa-Jx-CiV" customClass="WordViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uQX-zT-kBy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3298,7 +3298,7 @@
         <!--Certification View Controller-->
         <scene sceneID="bQo-XZ-Y6L">
             <objects>
-                <viewController id="I8f-Ii-OLO" customClass="CertificationViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="I8f-Ii-OLO" customClass="CertificationViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hbr-Po-aap">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3360,7 +3360,7 @@
         <!--Chat Room View Controller-->
         <scene sceneID="S7x-uL-ueb">
             <objects>
-                <viewController id="ffb-lP-T6y" customClass="ChatRoomViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ffb-lP-T6y" customClass="ChatRoomViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0wc-VV-f7B">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3376,7 +3376,7 @@
         <!--Chat List View Controller-->
         <scene sceneID="rih-aV-GUe">
             <objects>
-                <viewController id="vkF-Ff-HcT" customClass="ChatListViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vkF-Ff-HcT" customClass="ChatListViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PTu-54-xc8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3385,7 +3385,7 @@
                                 <rect key="frame" x="0.0" y="47" width="375" height="682"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatListCell" rowHeight="80" id="Mqp-k9-BS9" customClass="ChatListTableViewCell" customModule="TranslationApp" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatListCell" rowHeight="80" id="Mqp-k9-BS9" customClass="ChatListTableViewCell" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Mqp-k9-BS9" id="7FV-o6-ugv">
@@ -3551,7 +3551,7 @@
         <!--Posted Comments History View Controller-->
         <scene sceneID="1hT-sU-OhA">
             <objects>
-                <viewController storyboardIdentifier="postedCommentsHistory" id="qaF-0I-vnA" customClass="PostedCommentsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="postedCommentsHistory" id="qaF-0I-vnA" customClass="PostedCommentsHistoryViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nQM-FP-sPQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3601,7 +3601,7 @@
         <!--Others Posted Comments History View Controller-->
         <scene sceneID="ciM-MH-3wF">
             <objects>
-                <viewController storyboardIdentifier="OthersPostedCommentsHistory" id="zaR-WJ-dm6" customClass="OthersPostedCommentsHistoryViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OthersPostedCommentsHistory" id="zaR-WJ-dm6" customClass="OthersPostedCommentsHistoryViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="To0-Cf-Qb4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3626,7 +3626,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8nz-a7-hwD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="12925.6" y="-907.38916256157643"/>
+            <point key="canvasLocation" x="13308" y="-910"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WSH-uE-k8K">
@@ -3739,7 +3739,7 @@
         <!--Search View Controller-->
         <scene sceneID="ctm-kV-i66">
             <objects>
-                <viewController id="qFm-Jp-ObK" customClass="SearchViewController" customModule="TranslationApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="qFm-Jp-ObK" customClass="SearchViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vh5-1c-rl5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

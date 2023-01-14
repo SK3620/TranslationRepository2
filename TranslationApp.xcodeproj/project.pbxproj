@@ -26,7 +26,6 @@
 		835B38E4294C839F00D42F50 /* MessageSenderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38E3294C839F00D42F50 /* MessageSenderType.swift */; };
 		835B38E6294FF58D00D42F50 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38E5294FF58D00D42F50 /* ChatListViewController.swift */; };
 		835B38EC2950070200D42F50 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B38EB2950070100D42F50 /* ChatList.swift */; };
-		836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 836D1F89290A52360075AFEE /* GoogleService-Info.plist */; };
 		836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */; };
 		83724E98291926EA0074ED1E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83724E97291926EA0074ED1E /* Alamofire */; };
 		8372AD902932E91500E230BF /* PagingPhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8372AD8F2932E91500E230BF /* PagingPhraseWordViewController.swift */; };
@@ -74,7 +73,6 @@
 		839EBCEC2924C540003E8393 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 839EBCEB2924C540003E8393 /* Alamofire */; };
 		839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */; };
 		839FBA3328BA101200BB64A5 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3228BA101200BB64A5 /* FolderViewController.swift */; };
-		839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = 839FBA3828BA5C8900BB64A5 /* APIKey.plist */; };
 		839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3A28BA602700BB64A5 /* KeyManager.swift */; };
 		83A051F929647858006BCB39 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83A051F829647858006BCB39 /* Alamofire */; };
 		83A1D5C7290EC69D00B6F18A /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */; };
@@ -102,6 +100,8 @@
 		83BC07EE291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BC07ED291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift */; };
 		83BC07F0291B84FC001FFE61 /* OthersBookMarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BC07EF291B84FC001FFE61 /* OthersBookMarkViewController.swift */; };
 		83BC07F2291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BC07F1291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift */; };
+		83BD2B8A29730D960090B02E /* APIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83BD2B8929730D960090B02E /* APIKey.plist */; };
+		83BD2B8E2973127E0090B02E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83BD2B8D2973127E0090B02E /* GoogleService-Info.plist */; };
 		83C15AFA28BF451F00280694 /* SelectFolderForTranslateViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C15AF928BF451F00280694 /* SelectFolderForTranslateViewContoller.swift */; };
 		83C292182912E92D00386EE9 /* CustomCellForTimeLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C292162912E92D00386EE9 /* CustomCellForTimeLine.swift */; };
 		83C292192912E92D00386EE9 /* CustomCellForTimeLine.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83C292172912E92D00386EE9 /* CustomCellForTimeLine.xib */; };
@@ -146,7 +146,6 @@
 		835B38E3294C839F00D42F50 /* MessageSenderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSenderType.swift; sourceTree = "<group>"; };
 		835B38E5294FF58D00D42F50 /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
 		835B38EB2950070100D42F50 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
-		836D1F89290A52360075AFEE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsHistoryViewController.swift; sourceTree = "<group>"; };
 		8372AD8F2932E91500E230BF /* PagingPhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingPhraseWordViewController.swift; sourceTree = "<group>"; };
 		837BB0EA2939B02000648011 /* AllPhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPhraseWordViewController.swift; sourceTree = "<group>"; };
@@ -180,7 +179,6 @@
 		83975FE42941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersPostedCommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
 		839FBA3228BA101200BB64A5 /* FolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
-		839FBA3828BA5C8900BB64A5 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
 		83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
 		83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderForStudyViewContoller.swift; sourceTree = "<group>"; };
@@ -205,6 +203,8 @@
 		83BC07ED291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkCommentsSectionViewController.swift; sourceTree = "<group>"; };
 		83BC07EF291B84FC001FFE61 /* OthersBookMarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersBookMarkViewController.swift; sourceTree = "<group>"; };
 		83BC07F1291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersBookMarkCommentsSectionViewController.swift; sourceTree = "<group>"; };
+		83BD2B8929730D960090B02E /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
+		83BD2B8D2973127E0090B02E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		83C15AF928BF451F00280694 /* SelectFolderForTranslateViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderForTranslateViewContoller.swift; sourceTree = "<group>"; };
 		83C292162912E92D00386EE9 /* CustomCellForTimeLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForTimeLine.swift; sourceTree = "<group>"; };
 		83C292172912E92D00386EE9 /* CustomCellForTimeLine.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForTimeLine.xib; sourceTree = "<group>"; };
@@ -292,8 +292,8 @@
 				83071CF828B91AC70003734C /* AppDelegate.swift */,
 				83071CFA28B91AC70003734C /* SceneDelegate.swift */,
 				83071D0628B91AC90003734C /* Info.plist */,
-				836D1F89290A52360075AFEE /* GoogleService-Info.plist */,
-				839FBA3828BA5C8900BB64A5 /* APIKey.plist */,
+				83BD2B8929730D960090B02E /* APIKey.plist */,
+				83BD2B8D2973127E0090B02E /* GoogleService-Info.plist */,
 				8356E94F29046E4100FD9236 /* Model */,
 				8356E95029046E7000FD9236 /* View */,
 				8356E953290496F900FD9236 /* Controller For XIB */,
@@ -593,10 +593,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83BD2B8A29730D960090B02E /* APIKey.plist in Resources */,
 				83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */,
+				83BD2B8E2973127E0090B02E /* GoogleService-Info.plist in Resources */,
 				83833546290F60CF00C374F9 /* CustomCellForEditProfile.xib in Resources */,
 				83B6AF2028E7254000700DBF /* CustomCellForReview.xib in Resources */,
-				839FBA3928BA5C8900BB64A5 /* APIKey.plist in Resources */,
 				83071D0228B91AC90003734C /* Assets.xcassets in Resources */,
 				83B9C1FC28CFF10B006138E2 /* CustomCellForHistory.xib in Resources */,
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
@@ -605,7 +606,6 @@
 				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
 				83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */,
 				83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */,
-				836D1F8A290A52360075AFEE /* GoogleService-Info.plist in Resources */,
 				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
 			);
@@ -834,6 +834,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -890,6 +891,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

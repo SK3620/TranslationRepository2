@@ -69,10 +69,10 @@ class SecondPagingViewController: UIViewController {
         let etcViewController = navigationController12.viewControllers[0] as! EtcViewController
         etcViewController.secondPagingViewController = self
 
-        let navigationController13 = storyboard?.instantiateViewController(withIdentifier: "NC13") as! UINavigationController
-        let searchViewController = navigationController13.viewControllers[0] as! SearchViewController
-        searchViewController.secondPagingViewController = self
-        self.searchViewController = searchViewController
+//        let navigationController13 = storyboard?.instantiateViewController(withIdentifier: "NC13") as! UINavigationController
+//        let searchViewController = navigationController13.viewControllers[0] as! SearchViewController
+//        searchViewController.secondPagingViewController = self
+//        self.searchViewController = searchViewController
 
         navigationController3.title = "全て"
         navigationController4.title = "修正/教えて"
@@ -84,10 +84,10 @@ class SecondPagingViewController: UIViewController {
         navigationController10.title = "発音"
         navigationController11.title = "資格試験"
         navigationController12.title = "その他"
-        navigationController13.title = "検索"
+//        navigationController13.title = "検索"
 
 //        pagingViewControllerのインスタンス生成
-        let pagingViewController = PagingViewController(viewControllers: [navigationController13, navigationController3, navigationController4, navigationController5, navigationController6, navigationController7, navigationController8, navigationController9, navigationController10, navigationController11, navigationController12])
+        let pagingViewController = PagingViewController(viewControllers: [navigationController3, navigationController4, navigationController5, navigationController6, navigationController7, navigationController8, navigationController9, navigationController10, navigationController11, navigationController12])
 
 //        Adds the specified view controller as a child of the current view controller.
         addChild(pagingViewController)
@@ -225,7 +225,7 @@ extension SecondPagingViewController: UISearchBarDelegate {
         searchBar.endEditing(true)
         if let searchBarText = self.searchBar.text {
             self.searchViewController.shouldExcuteGetDocumentMethod = true
-            self.searchViewController.getDocuments(searchBarText: searchBarText)
+            self.searchViewController.getDocument(serachBarText: searchBarText)
         }
     }
 }

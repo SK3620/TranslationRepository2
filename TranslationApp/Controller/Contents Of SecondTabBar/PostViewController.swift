@@ -126,6 +126,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         self.backBarButtonItem.isEnabled = false
 
         let user = Auth.auth().currentUser!
+        let nGram = self.nGram(input: self.textView.text, n: 2)
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document()
         let postDic = [
             "contentOfPost": self.textView.text!,
@@ -134,6 +135,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
             "uid": user.uid,
             "numberOfComments": "0",
             "isProfileImageExisted": self.valueForIsProfileImageExisted!,
+            "nGram": nGram,
         ] as [String: Any]
         SVProgressHUD.showSuccess(withStatus: "投稿しました")
         SVProgressHUD.dismiss(withDelay: 1.5) {
@@ -148,6 +150,35 @@ class PostViewController: UIViewController, UITextViewDelegate {
                 self.dismiss(animated: true, completion: nil)
             }
         }
+    }
+
+    private func nGram(input: String, n: Int) -> [String] {
+        // nの数が文字列の文字数より多くなってしまうとエラーになるためreturnさせる
+        guard input.count >= n else {
+            print("nにはinputの文字数以下の整数値を入れてください")
+            return []
+        }
+        // 取り出した文字を格納する配列を宣言
+        var sentence: [String] = []
+        // inputの0番目のindexを宣言しておく
+        let zero = input.startIndex
+
+        // inputの文字数-n回ループする
+        for i in 0 ... (input.count - n) {
+            // 取り出す文字の先頭の文字のindexを定義
+            let start = input.index(zero, offsetBy: i)
+            // 取り出す文字の末尾の文字+1のindexを定義
+            let end = input.index(start, offsetBy: n)
+            // 指定した範囲で文字列を取り出す
+            // endを含むと範囲からはみ出るためend未満の範囲を指定する
+            // input[start..<end]の返り値はSubstring型のためString型にキャストする
+            let addChar = String(input[start ..< end])
+            // 取り出した文字列を配列に追加する
+            sentence.append(addChar)
+        }
+        // 分割した文字列を出力する
+        print(sentence)
+        return sentence
     }
 
     @IBAction func backButton(_: Any) {

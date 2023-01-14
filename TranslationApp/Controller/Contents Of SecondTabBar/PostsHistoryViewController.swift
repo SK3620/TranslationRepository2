@@ -110,7 +110,6 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        print("リロードー")
         if self.postArray.isEmpty {
             return 0
         } else {
