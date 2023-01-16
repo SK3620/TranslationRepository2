@@ -606,6 +606,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    @IBAction func privacyPolicyButton(_: Any) {
+        let url = NSURL(string: "https://instant-english-composition-training-with-deepl-application.studio.site")
+        // 外部ブラウザ（Safari）で開く
+        if UIApplication.shared.canOpenURL(url! as URL) {
+            UIApplication.shared.open(url! as URL, options: [:]) { bool in
+                if bool {
+                    print("URLにアクセス成功")
+                } else {
+                    print("URLにアクセス失敗")
+                }
+            }
+        }
+    }
+
     // back button
     @IBAction func backButton(_: Any) {
         self.dismiss(animated: true, completion: nil)
