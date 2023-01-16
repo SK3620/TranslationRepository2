@@ -106,7 +106,7 @@ class SecondPagingViewController: UIViewController {
         pagingViewController.menuItemLabelSpacing = 0
         self.pagingViewController = pagingViewController
 
-        pagingViewController.select(index: 1)
+        pagingViewController.select(index: 0)
     }
 
     override func viewWillAppear(_: Bool) {
@@ -120,19 +120,19 @@ class SecondPagingViewController: UIViewController {
         self.secondTabBarController.navigationController?.setNavigationBarHidden(false, animated: false)
         self.secondTabBarController.tabBar.isHidden = false
         let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil.tip.crop.circle.badge.plus"), style: .plain, target: self, action: #selector(self.tappedRightBarButtonItem(_:)))
-        let searchBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(self.tappedSearchBarButtonItem(_:)))
+//        let searchBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(self.tappedSearchBarButtonItem(_:)))
         self.secondTabBarController.rightBarButtonItems.append(rightBarButtonItem)
-        self.secondTabBarController.rightBarButtonItems.append(searchBarButtonItem)
+//        self.secondTabBarController.rightBarButtonItems.append(searchBarButtonItem)
         self.secondTabBarController.title = "タイムライン"
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.secondTabBarController.navigationItem.rightBarButtonItems = self.secondTabBarController.rightBarButtonItems
 
         if Auth.auth().currentUser == nil {
             rightBarButtonItem.isEnabled = false
-            searchBarButtonItem.isEnabled = false
+//            searchBarButtonItem.isEnabled = false
         } else {
             rightBarButtonItem.isEnabled = true
-            searchBarButtonItem.isEnabled = true
+//            searchBarButtonItem.isEnabled = true
         }
     }
 
@@ -141,35 +141,35 @@ class SecondPagingViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
-    @objc func tappedSearchBarButtonItem(_: UIBarButtonItem) {
-        if self.navigationController!.isNavigationBarHidden {
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = UIColor.systemGray6
-            self.navigationController?.navigationBar.standardAppearance = appearance
-            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+//    @objc func tappedSearchBarButtonItem(_: UIBarButtonItem) {
+//        if self.navigationController!.isNavigationBarHidden {
+//            self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            let appearance = UINavigationBarAppearance()
+//            appearance.backgroundColor = UIColor.systemGray6
+//            self.navigationController?.navigationBar.standardAppearance = appearance
+//            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+//
+//            // place a search bar on navigation bar
+//            self.setupSearchBarOnNavigationBar()
+//        } else {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//        }
+//    }
 
-            // place a search bar on navigation bar
-            self.setupSearchBarOnNavigationBar()
-        } else {
-            self.navigationController?.setNavigationBarHidden(true, animated: true)
-        }
-    }
-
-    private func setupSearchBarOnNavigationBar() {
-        if let navigationBarFrame = self.navigationController?.navigationBar.bounds {
-            let searchBar = UISearchBar(frame: navigationBarFrame)
-            searchBar.delegate = self
-            searchBar.placeholder = "検索する"
-            searchBar.tintColor = UIColor.gray
-            searchBar.keyboardType = UIKeyboardType.default
-            navigationItem.titleView = searchBar
-            navigationItem.titleView?.frame = searchBar.frame
-            self.searchBar = searchBar
-            self.searchBar.enablesReturnKeyAutomatically = true
-            self.setDoneOnKeyBoard()
-        }
-    }
+//    private func setupSearchBarOnNavigationBar() {
+//        if let navigationBarFrame = self.navigationController?.navigationBar.bounds {
+//            let searchBar = UISearchBar(frame: navigationBarFrame)
+//            searchBar.delegate = self
+//            searchBar.placeholder = "検索する"
+//            searchBar.tintColor = UIColor.gray
+//            searchBar.keyboardType = UIKeyboardType.default
+//            navigationItem.titleView = searchBar
+//            navigationItem.titleView?.frame = searchBar.frame
+//            self.searchBar = searchBar
+//            self.searchBar.enablesReturnKeyAutomatically = true
+//            self.setDoneOnKeyBoard()
+//        }
+//    }
 
     private func setDoneOnKeyBoard() {
         let doneToolbar = UIToolbar()
@@ -218,14 +218,14 @@ class SecondPagingViewController: UIViewController {
     }
 }
 
-extension SecondPagingViewController: UISearchBarDelegate {
-    // pass the entered text in the search bar to SearchViewController
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.pagingViewController.select(index: 0, animated: true)
-        searchBar.endEditing(true)
-        if let searchBarText = self.searchBar.text {
-            self.searchViewController.shouldExcuteGetDocumentMethod = true
-            self.searchViewController.getDocument(serachBarText: searchBarText)
-        }
-    }
-}
+// extension SecondPagingViewController: UISearchBarDelegate {
+// pass the entered text in the search bar to SearchViewController
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        self.pagingViewController.select(index: 0, animated: true)
+//        searchBar.endEditing(true)
+//        if let searchBarText = self.searchBar.text {
+//            self.searchViewController.shouldExcuteGetDocumentMethod = true
+//            self.searchViewController.getDocument(serachBarText: searchBarText)
+//        }
+//    }
+// }

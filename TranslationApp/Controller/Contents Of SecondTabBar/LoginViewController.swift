@@ -591,6 +591,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
 
+//    inquiry button
+    @IBAction func inquiryButton(_: Any) {
+        let url = NSURL(string: "https://tayori.com/form/7c23974951b748bcda08896854f1e7884439eb5c/")
+        // 外部ブラウザ（Safari）で開く
+        if UIApplication.shared.canOpenURL(url! as URL) {
+            UIApplication.shared.open(url! as URL, options: [:]) { bool in
+                if bool {
+                    print("URLにアクセス成功")
+                } else {
+                    print("URLにアクセス失敗")
+                }
+            }
+        }
+    }
+
     // back button
     @IBAction func backButton(_: Any) {
         self.dismiss(animated: true, completion: nil)
