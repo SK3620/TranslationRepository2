@@ -105,6 +105,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.mailAddressTextField.endEditing(true)
         self.passwordTextField.endEditing(true)
         self.displayNameTextField.endEditing(true)
+
         if let address = self.mailAddressTextField.text, let password = self.passwordTextField.text, let displayName = displayNameTextField.text {
             if address.isEmpty || password.isEmpty || displayName.isEmpty {
                 print("何かが入力されていません")
@@ -112,7 +113,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 SVProgressHUD.dismiss(withDelay: 1.5)
                 return
             }
-            SVProgressHUD.show()
+            let navigationController = storyboard?.instantiateViewController(withIdentifier: "NVCForTermsOfServiceVC") as! UINavigationController
+            let termsOfServiceViewController = navigationController.viewControllers[0] as! TermsOfServiceViewController
+            termsOfServiceViewController.loginViewController = self
+            self.present(navigationController, animated: true)
+        }
+    }
+
+    internal func createAccount() {
+        if let address = self.mailAddressTextField.text, let password = self.passwordTextField.text, let displayName = displayNameTextField.text {
+            SVProgressHUD.show(withStatus: "アカウント作成中...")
             // Create user with address and password Successfully create user, automatically log in
             let trimmedAddress = address.trimmingCharacters(in: .whitespaces)
             let trimmedPassword = password.trimmingCharacters(in: .whitespaces)
@@ -150,7 +160,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         ] as [String: Any]
                         postRef.setData(postDic, merge: true)
                         print("DEBUG_PRINT: [displayName = \(user.displayName!)]の設定に成功しました。")
-                        SVProgressHUD.dismiss()
+                        SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました")
+                        SVProgressHUD.dismiss(withDelay: 2.5)
                         self.dismiss(animated: true, completion: nil)
                     }
                 }

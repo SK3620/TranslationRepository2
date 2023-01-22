@@ -2989,6 +2989,75 @@
             </objects>
             <point key="canvasLocation" x="10061.6" y="-910.34482758620697"/>
         </scene>
+        <!--Terms Of Service View Controller-->
+        <scene sceneID="SuR-xR-nX1">
+            <objects>
+                <viewController id="iHW-5G-oal" customClass="TermsOfServiceViewController" customModule="DeepL翻訳_瞬間英作文" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="VcB-Od-bEs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9oJ-Sz-XqN">
+                                <rect key="frame" x="0.0" y="34" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </navigationBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jYc-UI-4st">
+                                <rect key="frame" x="0.0" y="91" width="375" height="562"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fhi-Hd-lTb">
+                                <rect key="frame" x="20" y="663" width="335" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="vxK-Bk-Xlh"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="同意する">
+                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="17"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="agreeButton:" destination="iHW-5G-oal" eventType="touchUpInside" id="42h-hh-xhD"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Ir-8Y-Qbh">
+                                <rect key="frame" x="20" y="728" width="335" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="0fQ-0G-bgs"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="同意しない">
+                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="17"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="disagreeButton:" destination="iHW-5G-oal" eventType="touchUpInside" id="kaY-fF-qGV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="XY7-h4-OIy"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="9Ir-8Y-Qbh" firstAttribute="bottom" secondItem="XY7-h4-OIy" secondAttribute="bottom" id="3TJ-MZ-6SY"/>
+                            <constraint firstItem="XY7-h4-OIy" firstAttribute="trailing" secondItem="Fhi-Hd-lTb" secondAttribute="trailing" constant="20" id="Dze-r6-qqv"/>
+                            <constraint firstItem="XY7-h4-OIy" firstAttribute="trailing" secondItem="jYc-UI-4st" secondAttribute="trailing" id="ENW-b2-y5E"/>
+                            <constraint firstItem="9Ir-8Y-Qbh" firstAttribute="leading" secondItem="XY7-h4-OIy" secondAttribute="leading" constant="20" id="HtG-06-ffP"/>
+                            <constraint firstItem="jYc-UI-4st" firstAttribute="leading" secondItem="XY7-h4-OIy" secondAttribute="leading" id="gfY-RR-fhE"/>
+                            <constraint firstItem="Fhi-Hd-lTb" firstAttribute="leading" secondItem="XY7-h4-OIy" secondAttribute="leading" constant="20" id="iCf-tP-Fhd"/>
+                            <constraint firstItem="Fhi-Hd-lTb" firstAttribute="top" secondItem="jYc-UI-4st" secondAttribute="bottom" constant="10" id="kLl-7P-4TO"/>
+                            <constraint firstItem="jYc-UI-4st" firstAttribute="top" secondItem="XY7-h4-OIy" secondAttribute="top" id="liC-QA-h60"/>
+                            <constraint firstItem="9Ir-8Y-Qbh" firstAttribute="top" secondItem="Fhi-Hd-lTb" secondAttribute="bottom" constant="15" id="v6r-6E-TzA"/>
+                            <constraint firstItem="XY7-h4-OIy" firstAttribute="trailing" secondItem="9Ir-8Y-Qbh" secondAttribute="trailing" constant="20" id="zGg-VV-fZX"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="wsa-ga-Das"/>
+                    <connections>
+                        <outlet property="agreeButton" destination="Fhi-Hd-lTb" id="uaJ-rZ-bPI"/>
+                        <outlet property="disagreeButton" destination="9Ir-8Y-Qbh" id="hg9-Rc-PCM"/>
+                        <outlet property="tableView" destination="jYc-UI-4st" id="5l7-zM-tV1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QF5-nv-y9s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="11844" y="-918.4729064039409"/>
+        </scene>
         <!--タイムライン-->
         <scene sceneID="RH4-YW-4Xm">
             <objects>
@@ -3642,7 +3711,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8nz-a7-hwD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="13308" y="-910"/>
+            <point key="canvasLocation" x="14250.4" y="-910.34482758620697"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WSH-uE-k8K">
@@ -3935,6 +4004,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RD3-gY-Ho9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1783" y="-1610"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Lr6-wb-2fT">
+            <objects>
+                <navigationController storyboardIdentifier="NVCForTermsOfServiceVC" automaticallyAdjustsScrollViewInsets="NO" id="Qjx-qz-BUQ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="egU-BS-isv">
+                        <rect key="frame" x="0.0" y="47" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="iHW-5G-oal" kind="relationship" relationship="rootViewController" id="oPb-0J-CEO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZZM-3L-lez" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="10901.6" y="-918.4729064039409"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

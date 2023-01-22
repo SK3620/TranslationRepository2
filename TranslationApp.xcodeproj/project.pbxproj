@@ -49,8 +49,10 @@
 		8385E7322918D16100DBDBAC /* OthersCommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */; };
 		8385EA0E2951858B0034E0F6 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385EA0D2951858A0034E0F6 /* ChatRoom.swift */; };
 		8385EA14295476110034E0F6 /* ProfileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8385EA13295476110034E0F6 /* ProfileData.swift */; };
+		83862E37297D183F0032E05B /* CustomCellForTermsOfService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */; };
+		83862E38297D183F0032E05B /* CustomCellForTermsOfService.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83862E36297D183F0032E05B /* CustomCellForTermsOfService.xib */; };
+		83862E3A297D22580032E05B /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83862E39297D22580032E05B /* TermsOfServiceViewController.swift */; };
 		83887BA2296312F800CA644D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83887BA1296312F800CA644D /* Alamofire */; };
-		8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8388DA5528C9C237008DE6FF /* TranslationImage.png */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */; };
 		8389C3F8290A7993007347AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8389C3F7290A7993007347AE /* Alamofire */; };
@@ -162,7 +164,9 @@
 		8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersCommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		8385EA0D2951858A0034E0F6 /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		8385EA13295476110034E0F6 /* ProfileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileData.swift; sourceTree = "<group>"; };
-		8388DA5528C9C237008DE6FF /* TranslationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TranslationImage.png; sourceTree = "<group>"; };
+		83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForTermsOfService.swift; sourceTree = "<group>"; };
+		83862E36297D183F0032E05B /* CustomCellForTermsOfService.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForTermsOfService.xib; sourceTree = "<group>"; };
+		83862E39297D22580032E05B /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStudyViewContoller.swift; sourceTree = "<group>"; };
 		8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
@@ -326,7 +330,6 @@
 		8356E95029046E7000FD9236 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8388DA5528C9C237008DE6FF /* TranslationImage.png */,
 				83071CFE28B91AC70003734C /* Main.storyboard */,
 				83071D0328B91AC90003734C /* LaunchScreen.storyboard */,
 				83920A9E290B946100F1F2D6 /* CustomCellForIntroduction.xib */,
@@ -338,6 +341,7 @@
 				83B9C1FA28CFF10B006138E2 /* CustomCellForHistory.xib */,
 				83B9C20028D3050E006138E2 /* CustomCellForRecord.xib */,
 				83B6AF1E28E7254000700DBF /* CustomCellForReview.xib */,
+				83862E36297D183F0032E05B /* CustomCellForTermsOfService.xib */,
 				83071D0128B91AC90003734C /* Assets.xcassets */,
 			);
 			path = View;
@@ -366,6 +370,7 @@
 				83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */,
 				83B9C1FF28D3050E006138E2 /* CustomCellForRecord.swift */,
 				83B6AF1D28E7254000700DBF /* CustomCellForReview.swift */,
+				83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */,
 			);
 			path = "Controller For XIB";
 			sourceTree = "<group>";
@@ -472,6 +477,7 @@
 				835B38E5294FF58D00D42F50 /* ChatListViewController.swift */,
 				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,
 				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
+				83862E39297D22580032E05B /* TermsOfServiceViewController.swift */,
 				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
 			);
 			path = "Contents Of SecondTabBar";
@@ -603,10 +609,10 @@
 				83071D0028B91AC70003734C /* Main.storyboard in Resources */,
 				83C292192912E92D00386EE9 /* CustomCellForTimeLine.xib in Resources */,
 				83D8963829141D9500E570AD /* CustomCellForCommentSetion.xib in Resources */,
-				8388DA5628C9C238008DE6FF /* TranslationImage.png in Resources */,
 				83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */,
 				83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */,
 				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
+				83862E38297D183F0032E05B /* CustomCellForTermsOfService.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -708,6 +714,7 @@
 				835B38E2294C833500D42F50 /* MessageEntity.swift in Sources */,
 				83A1D5C7290EC69D00B6F18A /* IntroductionViewController.swift in Sources */,
 				8372AD902932E91500E230BF /* PagingPhraseWordViewController.swift in Sources */,
+				83862E37297D183F0032E05B /* CustomCellForTermsOfService.swift in Sources */,
 				835B38E0294C82B000D42F50 /* ChatRoomViewController.swift in Sources */,
 				83A564C928D7630300C3A9B9 /* PhraseWordViewController.swift in Sources */,
 				83AC1DC828E4427D00576CF4 /* CustomCellForPhraseWord.swift in Sources */,
@@ -751,6 +758,7 @@
 				83C2CC9F291D1CA400A671AE /* GrammerViewController.swift in Sources */,
 				83C2CC9B291D1BF600A671AE /* HowToLearnViewController.swift in Sources */,
 				8385EA14295476110034E0F6 /* ProfileData.swift in Sources */,
+				83862E3A297D22580032E05B /* TermsOfServiceViewController.swift in Sources */,
 				83B9C1FB28CFF10B006138E2 /* CustomCellForHistory.swift in Sources */,
 				8389C3FE290ABDBC007347AE /* ProfileViewController.swift in Sources */,
 				8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */,
@@ -913,7 +921,7 @@
 				DEVELOPMENT_TEAM = L35MVZ453P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TranslationApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TranslationApp;
+				INFOPLIST_KEY_CFBundleDisplayName = "DeepL翻訳保存";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -927,7 +935,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp3";
 				PRODUCT_NAME = "DeepL翻訳＋瞬間英作文";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -949,7 +957,7 @@
 				DEVELOPMENT_TEAM = L35MVZ453P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TranslationApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TranslationApp;
+				INFOPLIST_KEY_CFBundleDisplayName = "DeepL翻訳保存";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -963,7 +971,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp3";
 				PRODUCT_NAME = "DeepL翻訳＋瞬間英作文";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
