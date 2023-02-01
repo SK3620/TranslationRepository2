@@ -47,6 +47,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var bookMarkViewController: BookMarkViewController?
     var bookMarkCommentsSectionViewController: BookMarkCommentsSectionViewController?
     var commentsHistoryViewController: CommentsHistoryViewController?
+    var blockListViewController: BlockListViewController?
 
     var listener: ListenerRegistration?
 
@@ -91,13 +92,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let bookMarkViewController = navigationController2.viewControllers[0] as! BookMarkViewController
         bookMarkViewController.profileViewController = self
 
+        let blockListViewController = storyboard?.instantiateViewController(withIdentifier: "blockList") as! BlockListViewController
+        blockListViewController.profileViewController = self
+
         introductionViewController.title = "自己紹介"
         navigationController.title = "投稿履歴"
         postedCommentsHistoryViewController.title = "コメント履歴"
         navigationController2.title = "ブックマーク"
+        blockListViewController.title = "ブロック"
 
 //       configure pagingViewController instance
-        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, postedCommentsHistoryViewController, navigationController2])
+        let pagingViewController = PagingViewController(viewControllers: [introductionViewController, navigationController, postedCommentsHistoryViewController, navigationController2, blockListViewController])
 
 //        Adds the specified view controller as a child of the current view controller.
         addChild(pagingViewController)
@@ -265,19 +270,20 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 
 //    called when change / delete photo button was tapped
     private func configureMenuButton() {
-        let items = UIMenu(title: "", children: [
-            UIAction(title: "変更する", image: nil, handler: { _ in
-                // open photo library
-                self.openLibrary()
-            }),
-            UIAction(title: "削除する", image: nil, handler: { _ in
-                SVProgressHUD.showSuccess(withStatus: "削除完了")
-                SVProgressHUD.dismiss(withDelay: 1.5) {
-                    self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: false, imageUrlString: "nil")
-                }
-            }),
-        ])
-        self.changePhotoButton.menu = UIMenu(title: "", options: .displayInline, children: [items])
+        var actions: [UIMenuElement] = []
+
+        actions.append(UIAction(title: "変更する", image: nil, handler: { _ in
+            // open photo library
+            self.openLibrary()
+        }))
+        actions.append(UIAction(title: "削除する", image: nil, handler: { _ in
+            SVProgressHUD.showSuccess(withStatus: "削除完了")
+            SVProgressHUD.dismiss(withDelay: 1.5) {
+                self.writeTheInforForProfileImageToDatabase(isProfileImageExisted: false, imageUrlString: "nil")
+            }
+        }))
+
+        self.changePhotoButton.menu = UIMenu(title: "", options: .displayInline, children: actions)
         self.changePhotoButton.showsMenuAsPrimaryAction = true
     }
 
@@ -600,6 +606,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         if let bookMarkCommentsSectionViewController = bookMarkCommentsSectionViewController {
             bookMarkCommentsSectionViewController.tableView.reloadData()
+        }
+
+        if let blockListViewController = blockListViewController {
+            blockListViewController.blockListcollectionView.reloadData()
         }
     }
 

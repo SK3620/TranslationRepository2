@@ -62,6 +62,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     //    APIから取得したデータをJSONで受け取って、swiftで使えれるようにCodableで構造体に変換します。
     struct DeepLResult: Codable {
         let translations: [Translation]
+
         struct Translation: Codable {
             var detected_source_language: String
             var text: String
@@ -317,7 +318,17 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
         // DeepL APIリクエストを実行　Almofireはapi情報を取得するための便利なライブラリ　通常はswift側で用意されているURLSessionを使う。
         //        requestメソッドでAPIを呼ぶ
+        // リクエスト成功か判定　encoder: URLEncodedFormParameterEncoder.default
+        print("APIリスクエスト前実行")
         AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
+//            print("エラー？")
+//            print("Reponse: \(response)")
+//            switch response.result {
+//            case let .success(data):
+//                print("url:\(data)")
+//            case let .failure(error):
+//                print("error:\(error)")
+//            }
             if case .success = response.result {
                 do {
                     // 結果をデコード
@@ -326,7 +337,6 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     // 結果のテキストを取得&画面に反映
                     let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
                     self.translateTextView2.text = text
-
                 } catch {
                     debugPrint("デコード失敗")
                 }
@@ -358,18 +368,18 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         ]
         // DeepL APIを実行
         AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
-            //                         リクエスト成功か判定
-            //                    print("Reponse: \(response)")
-            //                    switch(response.result){
-            //                    case .success(let data):
-            //                        print("url:\(data)")
-            //                    case .failure(let error):
-            //                        print("error:\(error)")
-            //                    }
-            //                }
-            //        }
-            //    }
-            // }
+//                                     リクエスト成功か判定
+//                                print("Reponse: \(response)")
+//                                switch(response.result){
+//                                case .success(let data):
+//                                    print("url:\(data)")
+//                                case .failure(let error):
+//                                    print("error:\(error)")
+//                                }
+//                            }
+//                    }
+//                }
+//             }
             if case .success = response.result {
                 do {
                     // 結果をデコード
@@ -424,7 +434,6 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             try! self.realm.write {
                 translationFolderArr.first!.results.append(translation)
             }
-
             //                    HistoryViewContoller(翻訳履歴画面）用にHistoryクラスへ保存
             let history = Histroy()
             let historyArr = self.realm.objects(Histroy.self)

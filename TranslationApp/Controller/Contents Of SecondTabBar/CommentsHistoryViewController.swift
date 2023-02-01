@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import MessageUI
 import SVProgressHUD
 import UIKit
 
@@ -14,6 +15,7 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
     @IBOutlet var tableView: UITableView!
 
     var postData: PostData!
+    var postArray: [PostData] = []
     var secondPostArray: [SecondPostData] = []
 
     private var listener: ListenerRegistration?
@@ -79,10 +81,18 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             if let documentSnapshot = documentSnapshot {
-                self.postData = PostData(document: documentSnapshot)
+                self.postArray = []
+                let user = Auth.auth().currentUser!
+                let postData = PostData(document: documentSnapshot)
+                self.postData = postData
+                self.postArray.append(postData)
+                if postData.blockedBy.contains(user.uid) {
+                    self.postArray = []
+                }
                 print("DEBUG_PRINT: snapshotの取得が成功しました。")
+                SVProgressHUD.dismiss()
+                self.tableView.reloadData()
             }
-            self.tableView.reloadData()
         }
     }
 
@@ -93,14 +103,18 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                 return
             }
-            self.secondPostArray = querySnapshot!.documents.map { document in
-                print("DEBUG_PRINT: document取得 ここでは、自動生成（追加）されたドキュメントのIDがプリントされます。\(document.documentID)")
-                let secondPostData = SecondPostData(document: document)
-                print("DEBUG_PRINT: snapshotの取得が成功しました。")
-                return secondPostData
+            self.secondPostArray = []
+            querySnapshot!.documents.forEach { queryDocumentSnapshot in
+                let secondPostData = SecondPostData(document: queryDocumentSnapshot)
+                let user = Auth.auth().currentUser!
+                if secondPostData.blockedBy.contains(user.uid) {
+                    print("ブロックしたユーザーのドキュメントを除外")
+                } else {
+                    self.secondPostArray.append(secondPostData)
+                }
+                SVProgressHUD.dismiss()
+                self.tableView.reloadData()
             }
-            SVProgressHUD.dismiss()
-            self.tableView.reloadData()
         }
     }
 
@@ -115,8 +129,11 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        if self.postArray.isEmpty {
+            self.secondPostArray = []
+        }
         if Auth.auth().currentUser != nil {
-            return self.secondPostArray.count + 1
+            return self.secondPostArray.count + self.postArray.count
         } else {
             return 0
         }
@@ -129,8 +146,13 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         cell.commentButton.isHidden = false
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
-        cell.cellEditButton.isEnabled = false
-        cell.cellEditButton.isHidden = true
+        cell.cellEditButton.isEnabled = true
+        cell.cellEditButton.isHidden = false
+
+        if indexPath.row == 0 {
+            cell.cellEditButton.isEnabled = false
+            cell.cellEditButton.isHidden = true
+        }
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
 
@@ -139,6 +161,8 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
 
         cell.commentButton.addTarget(self, action: #selector(self.tappedCommentButton(_:forEvent:)), for: .touchUpInside)
+
+        cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
 
         // display the content of the post in the top cell
         // in the other cells, display the content of the comments on the post
@@ -149,14 +173,25 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
 
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "CustomCell2", for: indexPath) as! CustomCellForCommentSetion
 
-        cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
-
+        cell2.cellEditButton.isEnabled = true
+        cell2.cellEditButton.isHidden = false
         cell2.bookMarkButton.isEnabled = false
         cell2.bookMarkButton.isHidden = true
+
+        let seoncdPostData = self.secondPostArray[indexPath.row - 1]
+        let user = Auth.auth().currentUser!
+        if indexPath.row > 0, seoncdPostData.uid == user.uid {
+            cell2.cellEditButton.isEnabled = false
+            cell2.cellEditButton.isHidden = true
+        }
+
+        cell2.setSecondPostData(secondPostData: self.secondPostArray[indexPath.row - 1])
 
         cell2.heartButton.addTarget(self, action: #selector(self.tappedHeartButtonInComment(_:forEvent:)), for: .touchUpInside)
 
         cell2.copyButton.addTarget(self, action: #selector(self.tappedCopyButtonInComment(_:forEvent:)), for: .touchUpInside)
+
+        cell2.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
 
         return cell2
     }
@@ -244,7 +279,7 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
 
     @objc func tappedCommentButton(_: UIButton, forEvent _: UIEvent) {
         let postData = self.postData
-        let navigationController = storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
+        let navigationController = self.storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
         if let sheet = navigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
         }
@@ -252,15 +287,160 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
         inputCommentViewContoller.postData = postData
         inputCommentViewContoller.commentsHistoryViewController = self
         inputCommentViewContoller.textView_text = self.comment
-        present(navigationController, animated: true, completion: nil)
+        self.present(navigationController, animated: true, completion: nil)
     }
-    /*
-     // MARK: - Navigation
 
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
+    @objc func tappedCellEditButton(_: UIButton, forEvent event: UIEvent) {
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        let reportAction = UIAlertAction(title: "通報", style: .default) { _ in
+            if indexPath?.row == 0 {
+                self.tappedReportButton(postData: self.postData)
+            } else {
+                let secondPostData = self.secondPostArray[indexPath!.row - 1]
+                self.tappedReportButtonInCommentSection(secondPostData: secondPostData)
+            }
+        }
+        let blockAction = UIAlertAction(title: "ブロック", style: .default) { _ in
+            if indexPath?.row == 0 {
+                self.setUIAlert(postData: self.postData, secondPostData: nil)
+            } else {
+                let secondPostData = self.secondPostArray[indexPath!.row - 1]
+                self.setUIAlert(postData: nil, secondPostData: secondPostData)
+            }
+        }
+        alert.addAction(reportAction)
+        let user = Auth.auth().currentUser!
+        if indexPath?.row == 0, self.postData.uid != user.uid {
+            alert.addAction(blockAction)
+        }
+        if indexPath?.row != 0, self.secondPostArray[indexPath!.row - 1].uid != user.uid {
+            alert.addAction(blockAction)
+        }
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    private func setUIAlert(postData: PostData?, secondPostData: SecondPostData?) {
+        var userName = ""
+        var uid = ""
+        if let postData = postData {
+            userName = postData.userName!
+            uid = postData.uid!
+        }
+        if let secondPostData = secondPostData {
+            userName = secondPostData.userName!
+            uid = secondPostData.uid!
+        }
+
+        let alert = UIAlertController(title: "'\(userName)'さんをブロックしますか？", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "はい", style: .destructive, handler: { _ in
+            SVProgressHUD.showSuccess(withStatus: "'\(userName)'さんをブロックしました")
+            SVProgressHUD.dismiss(withDelay: 1.5) {
+                let user = Auth.auth().currentUser!
+                BlockUnblock.blockUserInCommentsCollection(uid: uid, user: user)
+                BlockUnblock.blockUserInPostsCollection(uid: uid, user: user)
+                BlockUnblock.writeBlokedUserInFirestore(postData: postData, secondPostData: secondPostData)
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
+
+extension CommentsHistoryViewController: MFMailComposeViewControllerDelegate {
+    private func tappedReportButton(postData: PostData) {
+        //       check if the mail can be sent
+        if MFMailComposeViewController.canSendMail() == false {
+            print("Email Send Failed")
+            return
+        }
+
+        guard let userEmail = Auth.auth().currentUser?.email else {
+            print("メールアドレスの取得失敗")
+            return
+        }
+
+        let mailViewController = MFMailComposeViewController()
+        let toRecipients = ["k-n-t1119@ezweb.ne.jp"]
+        let CcRecipients = [userEmail]
+        let BccRecipients = [userEmail]
+
+        mailViewController.mailComposeDelegate = self
+        mailViewController.setSubject("【通報】投稿内容：\(postData.contentOfPost!)" + "\n" + "\n" + "documentId:\(postData.documentId)\nuid:\(postData.uid!)")
+        mailViewController.setToRecipients(toRecipients) // 宛先メールアドレスの表示
+        mailViewController.setCcRecipients(CcRecipients)
+        mailViewController.setBccRecipients(BccRecipients)
+        mailViewController.setMessageBody("内容：(ex.投稿内容が不適切。○○さんの追加コメントが不適切）", isHTML: false)
+        mailViewController.title = "【通報】"
+
+        self.present(mailViewController, animated: true, completion: nil)
+    }
+
+    private func tappedReportButtonInCommentSection(secondPostData: SecondPostData) {
+        //       check if the mail can be sent
+        if MFMailComposeViewController.canSendMail() == false {
+            print("Email Send Failed")
+            return
+        }
+
+        guard let userEmail = Auth.auth().currentUser?.email else {
+            print("メールアドレスの取得失敗")
+            return
+        }
+
+        let mailViewController = MFMailComposeViewController()
+        let toRecipients = ["k-n-t1119@ezweb.ne.jp"]
+        let CcRecipients = [userEmail]
+        let BccRecipients = [userEmail]
+
+        mailViewController.mailComposeDelegate = self
+        let text = "【通報】投稿内容：\(secondPostData.comment!)" + "\n" + "\n" + "documentId:\(secondPostData.documentId!)\nuid:\(secondPostData.uid!)"
+        mailViewController.setToRecipients(toRecipients) // 宛先メールアドレスの表示
+        mailViewController.setCcRecipients(CcRecipients)
+        mailViewController.setBccRecipients(BccRecipients)
+        mailViewController.setMessageBody(text + "\n" + "内容：(ex.投稿内容が不適切。○○さんの追加コメントが不適切）", isHTML: false)
+        mailViewController.title = "【通報】"
+
+        self.present(mailViewController, animated: true, completion: nil)
+    }
+
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        switch result {
+        case .cancelled:
+            print("Email Send Cancelled")
+        case .saved:
+            print("Email Saved as a Draft")
+        case .sent:
+            print("Email Sent Successfully")
+            SVProgressHUD.showSuccess(withStatus: "メールの送信に成功しました")
+            SVProgressHUD.dismiss(withDelay: 1.5)
+        case .failed:
+            print("Email Send Failed")
+            SVProgressHUD.showError(withStatus: "メールの送信に失敗しました")
+            SVProgressHUD.dismiss(withDelay: 1.5)
+            if let error = error {
+                print("エラー内容:\(error)")
+            }
+        default:
+            break
+        }
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+
+/*
+ // MARK: - Navigation
+
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+ }
+ */

@@ -146,6 +146,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         }
                         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.profileData).document("\(user.uid)'sProfileDocument")
                         let postDic = [
+                            "userName": displayName,
                             "age": "ー",
                             "work": "ー",
                             "gender": "ー",
@@ -161,8 +162,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         postRef.setData(postDic, merge: true)
                         print("DEBUG_PRINT: [displayName = \(user.displayName!)]の設定に成功しました。")
                         SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました")
-                        SVProgressHUD.dismiss(withDelay: 2.5)
-                        self.dismiss(animated: true, completion: nil)
+                        SVProgressHUD.dismiss(withDelay: 1.5) {
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
                 }
             }
@@ -190,8 +192,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
                 print("DEBUG_PRINT: ログインに成功しました。")
-                SVProgressHUD.dismiss()
-                self.dismiss(animated: true, completion: nil)
+                SVProgressHUD.showSuccess(withStatus: "ログインしました")
+                SVProgressHUD.dismiss(withDelay: 1.5) {
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
         }
     }
@@ -272,6 +276,37 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         var documentIdForPostsArr: [String] = []
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: "queue")
+
+        dispatchGroup.enter()
+        dispatchQueue.async {
+            let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedBy", isEqualTo: user.uid)
+            blockRef.getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("エラー\(error)")
+                    dispatchGroup.leave()
+                }
+                if let querySnapshot = querySnapshot {
+                    var excuteLeaveWhenZero: Int = querySnapshot.documents.count
+                    if querySnapshot.documents.isEmpty {
+                        dispatchGroup.leave()
+                        return
+                    }
+                    querySnapshot.documents.forEach { queryDocumentSnapshot in
+                        excuteLeaveWhenZero = excuteLeaveWhenZero - 1
+                        queryDocumentSnapshot.reference.delete { error in
+                            if let error = error {
+                                print("blocking削除失敗エラー\(error)")
+                                dispatchGroup.leave()
+                            } else {
+                                if excuteLeaveWhenZero == 0 {
+                                    dispatchGroup.leave()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // delete chatlist in database
         dispatchGroup.enter()

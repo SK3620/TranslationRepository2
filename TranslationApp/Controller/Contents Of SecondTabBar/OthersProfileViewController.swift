@@ -134,21 +134,21 @@ class OthersProfileViewController: UIViewController {
         })
     }
 
-    private func setProfileDataOnLabels(profileData _: [String: Any]) {
-        self.userNameLabel.text = self.profileData["userName"] as? String
-        if let genderText = self.profileData["gender"] as? String {
+    private func setProfileDataOnLabels(profileData: [String: Any]) {
+        self.userNameLabel.text = profileData["userName"] as? String
+        if let genderText = profileData["gender"] as? String {
             self.genderLabel.text = genderText
         } else {
             self.genderLabel.text = "ー"
         }
 
-        if let ageText = self.profileData["age"] as? String {
+        if let ageText = profileData["age"] as? String {
             self.ageLabel.text = ageText
         } else {
             self.ageLabel.text = "ー"
         }
 
-        if let workText = self.profileData["work"] as? String {
+        if let workText = profileData["work"] as? String {
             self.workLabel.text = workText
         } else {
             self.workLabel.text = "ー"
@@ -204,67 +204,72 @@ class OthersProfileViewController: UIViewController {
         guard let user = Auth.auth().currentUser else {
             return
         }
-        //        completionで処理
-        self.seeIfThePartnerIsAlreadyAdded(user: user) {
-            let dispatchGroup = DispatchGroup()
-            let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)
 
-            var partnerImageUrlString = ""
-            var myImageUrlString = ""
+        let userName = self.postData.userName
+        let uid = self.postData.uid
+        BlockUnblock.determineIfYouCanAddFriend(uid: uid!, userName: userName!) {
+            //        completionで処理
+            self.seeIfThePartnerIsAlreadyAdded(user: user) {
+                let dispatchGroup = DispatchGroup()
+                let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)
 
-            dispatchGroup.enter()
-            dispatchQueue.async {
-                let imagesRefInDB = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(self.postData.uid!)'sProfileImage")
-                imagesRefInDB.getDocument { documentSnapshot, error in
-                    if let error = error {
-                        print("imagePathForDBでdocumentSnapshotの取得失敗\(error)")
-                    }
-                    if let documentSnapshot = documentSnapshot, let imageDic = documentSnapshot.data(), let value = imageDic["isProfileImageExisted"] as? String {
-                        if value != "nil" {
-                            partnerImageUrlString = value
-                            dispatchGroup.leave()
+                var partnerImageUrlString = ""
+                var myImageUrlString = ""
+
+                dispatchGroup.enter()
+                dispatchQueue.async {
+                    let imagesRefInDB = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(self.postData.uid!)'sProfileImage")
+                    imagesRefInDB.getDocument { documentSnapshot, error in
+                        if let error = error {
+                            print("imagePathForDBでdocumentSnapshotの取得失敗\(error)")
+                        }
+                        if let documentSnapshot = documentSnapshot, let imageDic = documentSnapshot.data(), let value = imageDic["isProfileImageExisted"] as? String {
+                            if value != "nil" {
+                                partnerImageUrlString = value
+                                dispatchGroup.leave()
+                            } else {
+                                partnerImageUrlString = "nil"
+                                dispatchGroup.leave()
+                            }
                         } else {
                             partnerImageUrlString = "nil"
                             dispatchGroup.leave()
                         }
-                    } else {
-                        partnerImageUrlString = "nil"
-                        dispatchGroup.leave()
                     }
                 }
-            }
 
-            dispatchGroup.enter()
-            dispatchQueue.async {
-                let imagesRefInDB = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
-                imagesRefInDB.getDocument { documentSnapshot, error in
-                    if let error = error {
-                        print("imagePathForDBでdocumentSnapshotの取得失敗\(error)")
-                    }
-                    if let documentSnapshot = documentSnapshot, let imageDic = documentSnapshot.data(), let value = imageDic["isProfileImageExisted"] as? String {
-                        if value != "nil" {
-                            myImageUrlString = value
-                            dispatchGroup.leave()
+                dispatchGroup.enter()
+                dispatchQueue.async {
+                    let imagesRefInDB = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
+                    imagesRefInDB.getDocument { documentSnapshot, error in
+                        if let error = error {
+                            print("imagePathForDBでdocumentSnapshotの取得失敗\(error)")
+                        }
+                        if let documentSnapshot = documentSnapshot, let imageDic = documentSnapshot.data(), let value = imageDic["isProfileImageExisted"] as? String {
+                            if value != "nil" {
+                                myImageUrlString = value
+                                dispatchGroup.leave()
+                            } else {
+                                myImageUrlString = "nil"
+                                dispatchGroup.leave()
+                            }
                         } else {
                             myImageUrlString = "nil"
                             dispatchGroup.leave()
                         }
-                    } else {
-                        myImageUrlString = "nil"
-                        dispatchGroup.leave()
                     }
                 }
-            }
 
-            dispatchGroup.notify(queue: .main) {
-                self.showAlert(partnerImageUrl: partnerImageUrlString, myImageUrlString: myImageUrlString)
+                dispatchGroup.notify(queue: .main) {
+                    self.showAlert(partnerImageUrl: partnerImageUrlString, myImageUrlString: myImageUrlString)
+                }
             }
         }
     }
 
     // Determine if a friend has already been added when the Add Friend button is pressed.
     private func seeIfThePartnerIsAlreadyAdded(user: User, completion: @escaping () -> Void) {
-        let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContainsAny: [user.uid, self.postData.uid!])
+        let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", isEqualTo: [user.uid, self.postData.uid])
         chatRef.getDocuments { querySnapshot, error in
             if let error = error {
                 print("既に友達追加されているかどうか判定するためのメソッド内で、ドキュメントの取得に失敗しました ：エラー内容\(error)")

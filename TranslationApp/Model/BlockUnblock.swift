@@ -1,0 +1,183 @@
+//
+//  BlockUnblock.swift
+//  TranslationApp
+//
+//  Created by 鈴木健太 on 2023/01/26.
+//
+
+import Firebase
+import Foundation
+import SVProgressHUD
+import UIKit
+
+struct BlockUnblock {
+    static func ifYouCanCommentOnThePost(postData: PostData, user: User, completion: @escaping (Bool) -> Void) {
+        let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedUser", isEqualTo: user.uid).whereField("blockedBy", isEqualTo: postData.uid!)
+        blockRef.getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("エラーです\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    print("あなたはブロックされていないため、コメントできます")
+                    completion(true)
+                } else {
+                    print("あなたはブロックされているため、コメントできません")
+                    SVProgressHUD.showError(withStatus: "あなたは'\(postData.userName!)'さんによってブロックされているため、コメントできません")
+                    SVProgressHUD.dismiss(withDelay: 2.5) {
+                        completion(false)
+                    }
+                }
+            }
+        })
+    }
+
+//    check if you are being blocked by other users when they press the post button
+//    if the "blockedUser" in "blocking" collection is your uid, retrive the documents whose key ("blockedUser") is your uid
+    static func determineIfYouAreBeingBlocked(completion: @escaping ([String]) -> Void) {
+        let user = Auth.auth().currentUser!
+        let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedUser", isEqualTo: user.uid)
+        blockRef.getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                var excuteClosureWhenZero: Int = querySnapshot.documents.count
+                if querySnapshot.documents.isEmpty {
+                    print("誰からもブロックされていない")
+                    completion([])
+                    return
+                }
+                var blockedBy: [String] = []
+                querySnapshot.documents.forEach {
+                    queryDocumentSnapshot in
+                    excuteClosureWhenZero = excuteClosureWhenZero - 1
+                    let blockData = BlockData(document: queryDocumentSnapshot)
+                    blockedBy.append(blockData.blockedBy!)
+                    if excuteClosureWhenZero == 0 {
+                        completion(blockedBy)
+                    }
+                }
+            }
+        })
+    }
+
+    static func determineIfYouCanAddFriend(uid: String, userName: String, completion: @escaping () -> Void) {
+        let user = Auth.auth().currentUser!
+        let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedUser", isEqualTo: user.uid).whereField("blockedBy", isEqualTo: uid)
+        blockRef.getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    print("あなたはまだブロックされていません")
+                    completion()
+                } else {
+                    print("すでにあなたはブロックされている")
+                    SVProgressHUD.showError(withStatus: "あなたは'\(userName)'さんによってブロックされているため友達追加できません")
+                    SVProgressHUD.dismiss(withDelay: 2.5)
+                }
+            }
+        })
+    }
+
+    static func determineIfHasAlreadyBeenBlocked(uid: String, completion: @escaping () -> Void) {
+        let user = Auth.auth().currentUser!
+        let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedBy", isEqualTo: user.uid).whereField("blockedUser", isEqualTo: uid)
+        blockRef.getDocuments(completion: { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    completion()
+                } else {
+                    print("からなので、すでにブロック済み")
+                    SVProgressHUD.showError(withStatus: "すでにブロックされています")
+                    SVProgressHUD.dismiss(withDelay: 1.5)
+                }
+            }
+        })
+    }
+
+    static func blockUserInCommentsCollection(uid: String, user: User) {
+        let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: uid)
+        commentsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    print("からでした")
+                    return
+                }
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(queryDocumentSnapshot.documentID)
+                    let updateValue = FieldValue.arrayUnion([user.uid])
+                    commentsRef.updateData(["blockedBy": updateValue])
+                }
+            }
+        }
+    }
+
+    static func blockUserInPostsCollection(uid: String, user: User) {
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: uid)
+        postsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    print("からでした")
+                    return
+                }
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(queryDocumentSnapshot.documentID)
+                    let updateValue = FieldValue.arrayUnion([user.uid])
+                    postsRef.updateData(["blockedBy": updateValue])
+                }
+            }
+        }
+    }
+
+    static func writeBlokedUserInFirestore(postData: PostData?, secondPostData: SecondPostData?) {
+        let user = Auth.auth().currentUser!
+        let blockingRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).document()
+
+        var userName = ""
+        var blockedUser = ""
+        var profileImageUrlString = "nil"
+        if let postData = postData {
+            userName = postData.userName!
+            blockedUser = postData.uid!
+            if let url = postData.profileImageUrl {
+                profileImageUrlString = url.absoluteString
+            }
+        }
+
+        if let secondPostData = secondPostData {
+            userName = secondPostData.userName!
+            blockedUser = secondPostData.uid!
+            if let url = secondPostData.profileImageUrl {
+                profileImageUrlString = url.absoluteString
+            }
+        }
+
+        let blockingDic = [
+            "userName": userName,
+            "blockedBy": user.uid,
+            "blockedUser": blockedUser,
+            "blockedDate": FieldValue.serverTimestamp(),
+            "profileImageUrlString": profileImageUrlString,
+        ] as [String: Any]
+
+        blockingRef.setData(blockingDic) { error in
+            if let error = error {
+                print("エラー\(error)")
+            } else {
+                print("書き込み成功しました")
+            }
+        }
+    }
+}

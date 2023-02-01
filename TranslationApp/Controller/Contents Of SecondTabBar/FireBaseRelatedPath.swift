@@ -19,4 +19,5 @@ struct FireBaseRelatedPath {
     static let commentsPath = "comments"
     // location of the chatlist in database
     static let chatListsPath = "chatLists"
+    static let blocking = "blocking"
 }

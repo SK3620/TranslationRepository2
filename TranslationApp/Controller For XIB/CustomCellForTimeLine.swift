@@ -70,11 +70,9 @@ class CustomCellForTimeLine: UITableViewCell {
         if let imageUrl = postData.profileImageUrl {
             self.imageView1.sd_setImage(with: imageUrl, placeholderImage: nil, options: SDWebImageOptions.refreshCached, context: nil)
             print("画像あり")
-            print(postData.contentOfPost)
         } else {
             self.imageView1.image = UIImage(systemName: "person")
             print("画像なし")
-            print(postData.contentOfPost)
         }
 
 //            display user name

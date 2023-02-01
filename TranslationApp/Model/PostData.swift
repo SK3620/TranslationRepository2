@@ -27,6 +27,7 @@ class PostData: NSObject {
     var documentIdForPosts: String?
     var commentedDate: Date?
     var profileImageUrl: URL?
+    var blockedBy: [String] = []
 
     init(document: QueryDocumentSnapshot) {
         self.documentId = document.documentID
@@ -89,6 +90,10 @@ class PostData: NSObject {
                 print("urlなし")
             }
         }
+
+        if let blockedBy = postDic["blockedBy"] as? [String] {
+            self.blockedBy = blockedBy
+        }
     }
 
     // When a single document is retrieved on the CommentSectionViewController screen
@@ -131,6 +136,10 @@ class PostData: NSObject {
             } else {
                 self.profileImageUrl = nil
             }
+        }
+
+        if let blockedBy = postDic["blockedBy"] as? [String] {
+            self.blockedBy = blockedBy
         }
     }
 }

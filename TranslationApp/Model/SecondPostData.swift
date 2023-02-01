@@ -17,7 +17,6 @@ class SecondPostData {
     // Commenter's name
     var userName: String?
 //    profile image of commenter's uid
-//    var profileImage: StorageReference?
     var numberOfComments: Int?
     var likes: [String] = []
     var isLiked: Bool = false
@@ -26,6 +25,7 @@ class SecondPostData {
     var uid: String?
     var stringCommentedDate: String?
     var profileImageUrl: URL?
+    var blockedBy: [String] = []
 
     init(document: QueryDocumentSnapshot) {
         self.documentId = document.documentID
@@ -73,6 +73,10 @@ class SecondPostData {
             } else {
                 self.profileImageUrl = nil
             }
+        }
+
+        if let blockedBy = postDic["blockedBy"] as? [String] {
+            self.blockedBy = blockedBy
         }
     }
 }

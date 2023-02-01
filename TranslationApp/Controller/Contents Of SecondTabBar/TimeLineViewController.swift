@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import MessageUI
 import SVProgressHUD
 import UIKit
 
@@ -69,9 +70,10 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     func listenrAndGetDocuments() {
         SVProgressHUD.show(withStatus: "データを取得中...")
         // confirm if you are logged in
-        if Auth.auth().currentUser != nil {
+        if let user = Auth.auth().currentUser {
             // Register a listener to monitor updates to posted data
             let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
+
             self.listener = postsRef.addSnapshotListener { querySnapshot, error in
                 if let error = error {
                     print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -79,10 +81,16 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
                     return
                 }
                 // Create PostData based on the acquired document and make it into a postArray array.
-                self.postArray = querySnapshot!.documents.map { document in
+                self.postArray = []
+                querySnapshot!.documents.forEach { document in
                     print("DEBUG_PRINT: document取得 \(document.documentID)")
                     let postData = PostData(document: document)
-                    return postData
+                    if postData.blockedBy.contains(user.uid) {
+                        print("ブロックしたユーザーが含まれています")
+                        return
+                    } else {
+                        self.postArray.append(postData)
+                    }
                 }
                 SVProgressHUD.dismiss()
             }
@@ -110,10 +118,16 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         cell.commentButton.isHidden = true
 
         cell.setPostData(self.postArray[indexPath.row])
+
         cell.bookMarkButton.isEnabled = true
         cell.bookMarkButton.isHidden = false
-        cell.cellEditButton.isEnabled = false
-        cell.cellEditButton.isHidden = true
+        cell.cellEditButton.isEnabled = true
+        cell.cellEditButton.isHidden = false
+
+        if self.postArray[indexPath.row].uid == Auth.auth().currentUser?.uid {
+            cell.cellEditButton.isEnabled = false
+            cell.cellEditButton.isHidden = true
+        }
 
         cell.heartButton.addTarget(self, action: #selector(self.tappedHeartButton(_:forEvent:)), for: .touchUpInside)
 
@@ -122,6 +136,8 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         cell.buttonOnImageView1.addTarget(self, action: #selector(self.tappedImageView1(_:forEvent:)), for: .touchUpInside)
 
         cell.copyButton.addTarget(self, action: #selector(self.tappedCopyButton(_:forEvent:)), for: .touchUpInside)
+
+        cell.cellEditButton.addTarget(self, action: #selector(self.tappedCellEditButton(_:forEvent:)), for: .touchUpInside)
 
         return cell
     }
@@ -212,6 +228,48 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         SVProgressHUD.dismiss(withDelay: 1.5)
     }
 
+    @objc func tappedCellEditButton(_: UIButton, forEvent event: UIEvent) {
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        let postData = self.postArray[indexPath!.row]
+
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        let reportAction = UIAlertAction(title: "通報", style: .default) { _ in
+            self.tappedReportButton(postData: postData)
+        }
+        let blockAction = UIAlertAction(title: "ブロック", style: .default) { _ in
+            self.setUIAlert(postData: postData)
+        }
+        alert.addAction(reportAction)
+        let user = Auth.auth().currentUser!
+        if postData.uid != user.uid {
+            alert.addAction(blockAction)
+        }
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    private func setUIAlert(postData: PostData) {
+        let alert = UIAlertController(title: "'\(postData.userName!)'さんをブロックしますか？", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "はい", style: .destructive, handler: { _ in
+            SVProgressHUD.showSuccess(withStatus: "'\(postData.userName!)'さんをブロックしました")
+            SVProgressHUD.dismiss(withDelay: 1.5) {
+                let user = Auth.auth().currentUser!
+                let uid = postData.uid
+                BlockUnblock.blockUserInCommentsCollection(uid: uid!, user: user)
+                BlockUnblock.blockUserInPostsCollection(uid: uid!, user: user)
+                BlockUnblock.writeBlokedUserInFirestore(postData: postData, secondPostData: nil)
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         let postData = self.postArray[indexPath.row]
@@ -226,6 +284,59 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
             let othersProfileViewController = segue.destination as! OthersProfileViewController
             othersProfileViewController.postData = sender as? PostData
         }
+    }
+}
+
+extension TimeLineViewController: MFMailComposeViewControllerDelegate {
+    private func tappedReportButton(postData: PostData) {
+        //       check if the mail can be sent
+        if MFMailComposeViewController.canSendMail() == false {
+            print("Email Send Failed")
+            return
+        }
+
+        guard let userEmail = Auth.auth().currentUser?.email else {
+            print("メールアドレスの取得失敗")
+            return
+        }
+
+        let mailViewController = MFMailComposeViewController()
+        let toRecipients = ["k-n-t1119@ezweb.ne.jp"]
+        let CcRecipients = [userEmail]
+        let BccRecipients = [userEmail]
+
+        mailViewController.mailComposeDelegate = self
+        let text = "【通報】投稿内容：\(postData.contentOfPost!)" + "\n" + "\n" + "documentId:\(postData.documentId)\nuid:\(postData.uid!)"
+        mailViewController.setToRecipients(toRecipients) // 宛先メールアドレスの表示
+        mailViewController.setCcRecipients(CcRecipients)
+        mailViewController.setBccRecipients(BccRecipients)
+        mailViewController.setMessageBody(text + "\n" + "内容：(ex.投稿内容が不適切。○○さんの追加コメントが不適切）", isHTML: false)
+        mailViewController.title = "【通報】"
+
+        self.present(mailViewController, animated: true, completion: nil)
+    }
+
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        switch result {
+        case .cancelled:
+            print("Email Send Cancelled")
+        case .saved:
+            print("Email Saved as a Draft")
+        case .sent:
+            print("Email Sent Successfully")
+            SVProgressHUD.showSuccess(withStatus: "メールの送信に成功しました")
+            SVProgressHUD.dismiss(withDelay: 1.5)
+        case .failed:
+            print("Email Send Failed")
+            SVProgressHUD.showError(withStatus: "メールの送信に失敗しました")
+            SVProgressHUD.dismiss(withDelay: 1.5)
+            if let error = error {
+                print("エラー内容:\(error)")
+            }
+        default:
+            break
+        }
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 

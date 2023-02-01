@@ -22,6 +22,7 @@ class CustomCellForCommentSetion: UITableViewCell {
     @IBOutlet var bookMarkButton: UIButton!
     @IBOutlet var copyButton: UIButton!
     @IBOutlet var buttonOnImageView1: UIButton!
+    @IBOutlet var cellEditButton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -31,6 +32,7 @@ class CustomCellForCommentSetion: UITableViewCell {
         self.imageView1.layer.borderColor = UIColor.systemGray4.cgColor
         self.imageView1.layer.borderWidth = 2
         self.setButtonImage(button: self.copyButton, systemName: "doc.on.doc")
+        self.setButtonImage(button: self.cellEditButton, systemName: "ellipsis")
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

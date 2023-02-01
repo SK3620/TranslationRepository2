@@ -46,9 +46,18 @@ class ChatListViewController: UIViewController {
         let editBarButtonBarItem = UIBarButtonItem(title: "編集", style: .plain, target: self, action: #selector(self.tappedEditBarButtonItem(_:)))
         self.secondTabBarController.navigationItem.rightBarButtonItems = [editBarButtonBarItem]
 
+        guard Auth.auth().currentUser != nil else {
+            self.chatListsData = []
+            self.documentIdArray = []
+            editBarButtonBarItem.isEnabled = false
+            self.tableView.reloadData()
+            return
+        }
         self.fetchChatListsInfoFromFirestore()
 
         self.observeIfYouAreAboutToBeAddedAsFriend()
+
+        editBarButtonBarItem.isEnabled = true
     }
 
     @objc func tappedEditBarButtonItem(_: UIBarButtonItem) {
@@ -60,11 +69,12 @@ class ChatListViewController: UIViewController {
     }
 
     private func fetchChatListsInfoFromFirestore() {
+        let user = Auth.auth().currentUser!
         self.listener?.remove()
         self.chatListsData.removeAll()
         self.tableView.reloadData()
 
-        self.listener = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).order(by: "latestSentDate", descending: true).addSnapshotListener { snapshots, error in
+        self.listener = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContains: user.uid).order(by: "latestSentDate", descending: true).addSnapshotListener { snapshots, error in
             if let error = error {
                 print("ChatLists情報の取得に失敗しました。\(error)")
                 return

@@ -32,16 +32,21 @@ class InputCommentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard Auth.auth().currentUser != nil else {
+            self.dismiss(animated: true)
+            return
+        }
         self.settingsForNavigationBarAppearence()
 
         self.setDoneToolBar()
 
+        self.textView.endEditing(false)
+
         self.determinationOfIsProfileImageExisted()
 
-        self.postCommentButton.isEnabled = true
-
-        self.textView.endEditing(false)
         self.textView.text = self.textView_text
+
+        self.postCommentButton.isEnabled = true
     }
 
     private func setDoneToolBar() {
@@ -116,6 +121,7 @@ class InputCommentViewController: UIViewController {
 
     // post comment button
     @IBAction func postCommentButton(_: Any) {
+        SVProgressHUD.show()
         let user = Auth.auth().currentUser
         let textView_text = self.textView.text
 
@@ -130,26 +136,29 @@ class InputCommentViewController: UIViewController {
             return
         }
 
-//        get the current date
-        let today: String = self.getToday()
+        BlockUnblock.determineIfYouAreBeingBlocked { blockedBy in
+            //        get the current date
+            let today: String = self.getToday()
 
-        if let user = Auth.auth().currentUser {
-            let commentsDic = [
-                "uid": user.uid,
-                "userName": user.displayName!,
-                "comment": textView_text!,
-                "commentedDate": FieldValue.serverTimestamp(),
-                "stringCommentedDate": today,
-                "documentIdForPosts": self.postData.documentId,
-                "isProfileImageExisted": self.valueForIsProfileImageExisted!,
-            ] as [String: Any]
-            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
-            commentsRef.setData(commentsDic, merge: false) { error in
-                if let error = error {
-                    print("”comments”にへの書き込み失敗\(error)")
-                } else {
-                    print("”comments”への書き込み成功")
-                    self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
+            if let user = Auth.auth().currentUser {
+                let commentsDic = [
+                    "uid": user.uid,
+                    "userName": user.displayName!,
+                    "comment": textView_text!,
+                    "commentedDate": FieldValue.serverTimestamp(),
+                    "stringCommentedDate": today,
+                    "documentIdForPosts": self.postData.documentId,
+                    "isProfileImageExisted": self.valueForIsProfileImageExisted!,
+                    "blockedBy": blockedBy,
+                ] as [String: Any]
+                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
+                commentsRef.setData(commentsDic, merge: false) { error in
+                    if let error = error {
+                        print("”comments”にへの書き込み失敗\(error)")
+                    } else {
+                        print("”comments”への書き込み成功")
+                        self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
+                    }
                 }
             }
         }
