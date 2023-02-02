@@ -154,7 +154,7 @@
 		838085F32926073900574D2D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		8380CEEB29346006003B159E /* SecondPhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPhraseWordViewController.swift; sourceTree = "<group>"; };
 		83812C5B297FE6FD0023FEA0 /* CollectionViewCellForBlockList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellForBlockList.swift; sourceTree = "<group>"; };
-		83812C5C297FE6FD0023FEA0 /* CollectionViewCellForBlockList.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CollectionViewCellForBlockList.xib; path = "../Controller For XIB/CollectionViewCellForBlockList.xib"; sourceTree = "<group>"; };
+		83812C5C297FE6FD0023FEA0 /* CollectionViewCellForBlockList.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCellForBlockList.xib; sourceTree = "<group>"; };
 		83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForEditProfile.swift; sourceTree = "<group>"; };
 		83833544290F60CF00C374F9 /* CustomCellForEditProfile.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForEditProfile.xib; sourceTree = "<group>"; };
 		8385E729291816C100DBDBAC /* BookMarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkViewController.swift; sourceTree = "<group>"; };
@@ -284,7 +284,6 @@
 				83BD2B8D2973127E0090B02E /* GoogleService-Info.plist */,
 				8356E94F29046E4100FD9236 /* Model */,
 				8356E95029046E7000FD9236 /* View */,
-				8356E953290496F900FD9236 /* Controller For XIB */,
 				8356E9522904708C00FD9236 /* Controller */,
 			);
 			path = TranslationApp;
@@ -334,6 +333,7 @@
 				83B6AF1E28E7254000700DBF /* CustomCellForReview.xib */,
 				83862E36297D183F0032E05B /* CustomCellForTermsOfService.xib */,
 				83071D0128B91AC90003734C /* Assets.xcassets */,
+				837A82FF298C2652001049D4 /* CustomClass */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -347,24 +347,6 @@
 				8356E95F2906467C00FD9236 /* Contents Of TabBar */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		8356E953290496F900FD9236 /* Controller For XIB */ = {
-			isa = PBXGroup;
-			children = (
-				83920A9D290B946100F1F2D6 /* CustomCellForIntroduction.swift */,
-				83C292162912E92D00386EE9 /* CustomCellForTimeLine.swift */,
-				83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */,
-				83812C5B297FE6FD0023FEA0 /* CollectionViewCellForBlockList.swift */,
-				83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */,
-				83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */,
-				83966BF528E8C1060098A39E /* CustomCellForStudy.swift */,
-				83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */,
-				83B9C1FF28D3050E006138E2 /* CustomCellForRecord.swift */,
-				83B6AF1D28E7254000700DBF /* CustomCellForReview.swift */,
-				83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */,
-			);
-			path = "Controller For XIB";
 			sourceTree = "<group>";
 		};
 		8356E95F2906467C00FD9236 /* Contents Of TabBar */ = {
@@ -431,6 +413,24 @@
 				83B9C20328D3132D006138E2 /* EditRecordViewController.swift */,
 			);
 			path = RecordViewController;
+			sourceTree = "<group>";
+		};
+		837A82FF298C2652001049D4 /* CustomClass */ = {
+			isa = PBXGroup;
+			children = (
+				83920A9D290B946100F1F2D6 /* CustomCellForIntroduction.swift */,
+				83C292162912E92D00386EE9 /* CustomCellForTimeLine.swift */,
+				83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */,
+				83812C5B297FE6FD0023FEA0 /* CollectionViewCellForBlockList.swift */,
+				83833543290F60CF00C374F9 /* CustomCellForEditProfile.swift */,
+				83AC1DC628E4427D00576CF4 /* CustomCellForPhraseWord.swift */,
+				83966BF528E8C1060098A39E /* CustomCellForStudy.swift */,
+				83B9C1F928CFF10B006138E2 /* CustomCellForHistory.swift */,
+				83B9C1FF28D3050E006138E2 /* CustomCellForRecord.swift */,
+				83B6AF1D28E7254000700DBF /* CustomCellForReview.swift */,
+				83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */,
+			);
+			path = CustomClass;
 			sourceTree = "<group>";
 		};
 		8389C3F5290A6677007347AE /* Contents Of SecondTabBar */ = {
