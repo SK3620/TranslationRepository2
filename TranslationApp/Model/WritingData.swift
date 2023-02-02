@@ -11,6 +11,61 @@ import SVProgressHUD
 import UIKit
 
 struct WritingData {
+//    in PostVC
+    static func determinationOfIsProfileImageExisted(completion: @escaping (String) -> Void) {
+        let user = Auth.auth().currentUser!
+        let profileImagesRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
+        profileImagesRef.getDocument { documentSnapshot, error in
+            if let error = error {
+                print("エラー　\(error)")
+            }
+            var valueForIsProfileImageExisted: String
+            if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
+                let isProfileImageExisted = imagesDic["isProfileImageExisted"] as? String
+                if isProfileImageExisted != "nil" {
+                    valueForIsProfileImageExisted = isProfileImageExisted!
+                } else {
+                    valueForIsProfileImageExisted = "nil"
+                }
+            } else {
+                valueForIsProfileImageExisted = "nil"
+            }
+            completion(valueForIsProfileImageExisted)
+        }
+    }
+
+//    in PostVC
+    static func writePostData(blockedBy: [String], text: String, valueForIsProfileImageExisted: String, array: [String], completion: @escaping () -> Void) {
+        let user = Auth.auth().currentUser!
+        let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document()
+        let postDic = [
+            "contentOfPost": text,
+            "postedDate": FieldValue.serverTimestamp(),
+            "userName": user.displayName!,
+            "uid": user.uid,
+            "numberOfComments": "0",
+            "isProfileImageExisted": valueForIsProfileImageExisted,
+            "blockedBy": blockedBy,
+        ] as [String: Any]
+        SVProgressHUD.showSuccess(withStatus: "投稿しました")
+        SVProgressHUD.dismiss(withDelay: 1.5) {
+            postRef.setData(postDic) { error in
+                if let error = error {
+                    print("エラーでした\(error)")
+                    return
+                }
+                let value = FieldValue.arrayUnion(array)
+                postRef.updateData(["topic": value]) { error in
+                    if let error = error {
+                        print(error)
+                    } else {
+                        completion()
+                    }
+                }
+            }
+        }
+    }
+
 //    in ChatRoomVC
     static func writeMessageData(text: String, chatListData: ChatList) {
         let user = Auth.auth().currentUser

@@ -52,7 +52,9 @@ class PostViewController: UIViewController, UITextViewDelegate {
 
         self.setDoneToolBar()
 
-        self.determinationOfIsProfileImageExisted()
+        WritingData.determinationOfIsProfileImageExisted { valueForIsProfileImageExisted in
+            self.valueForIsProfileImageExisted = valueForIsProfileImageExisted
+        }
     }
 
     private func settingsForNavigationBarAppearence() {
@@ -84,26 +86,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
         }
     }
 
-    private func determinationOfIsProfileImageExisted() {
-        let user = Auth.auth().currentUser!
-        let profileImagesRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
-        profileImagesRef.getDocument { documentSnapshot, error in
-            if let error = error {
-                print("エラー　\(error)")
-            }
-            if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
-                let isProfileImageExisted = imagesDic["isProfileImageExisted"] as? String
-                if isProfileImageExisted != "nil" {
-                    self.valueForIsProfileImageExisted = isProfileImageExisted!
-                } else {
-                    self.valueForIsProfileImageExisted = "nil"
-                }
-            } else {
-                self.valueForIsProfileImageExisted = "nil"
-            }
-        }
-    }
-
     func textViewDidChange(_: UITextView) {
         if self.textView.text == "" {
             self.label1.text = "下の項目から関連のあるトピックを追加できます"
@@ -126,29 +108,9 @@ class PostViewController: UIViewController, UITextViewDelegate {
         self.backBarButtonItem.isEnabled = false
 
         BlockUnblock.determineIfYouAreBeingBlocked { blockedBy in
-            let user = Auth.auth().currentUser!
-            let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document()
-            let postDic = [
-                "contentOfPost": self.textView.text!,
-                "postedDate": FieldValue.serverTimestamp(),
-                "userName": user.displayName!,
-                "uid": user.uid,
-                "numberOfComments": "0",
-                "isProfileImageExisted": self.valueForIsProfileImageExisted!,
-                "blockedBy": blockedBy,
-            ] as [String: Any]
-            SVProgressHUD.showSuccess(withStatus: "投稿しました")
-            SVProgressHUD.dismiss(withDelay: 1.5) {
-                postRef.setData(postDic) { error in
-                    if let error = error {
-                        print("エラーでした\(error)")
-                        return
-                    }
-                    let value = FieldValue.arrayUnion(self.array)
-                    postRef.updateData(["topic": value])
-                    self.secondPagingViewController.savedTextView_text = ""
-                    self.dismiss(animated: true, completion: nil)
-                }
+            WritingData.writePostData(blockedBy: blockedBy, text: self.textView.text!, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!, array: self.array) {
+                self.secondPagingViewController.savedTextView_text = ""
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }
