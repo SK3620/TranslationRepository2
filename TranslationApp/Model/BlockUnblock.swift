@@ -180,4 +180,85 @@ struct BlockUnblock {
             }
         }
     }
+
+//    in BlockListVC
+    static func getDocumentOfBlockedUser(user: User, listener: ListenerRegistration?, completion: @escaping ([BlockData]) -> Void) {
+        SVProgressHUD.show(withStatus: "データを取得中...")
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedBy", isEqualTo: user.uid).order(by: "blockedDate", descending: true)
+        var listener = listener
+        listener = postsRef.addSnapshotListener { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+                SVProgressHUD.dismiss()
+            }
+            if let querySnapshot = querySnapshot {
+                var blockArray: [BlockData] = []
+                if querySnapshot.documents.isEmpty {
+                    completion(blockArray)
+                    return
+                }
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    blockArray.append(BlockData(document: queryDocumentSnapshot))
+                    completion(blockArray)
+                }
+            }
+        }
+    }
+
+//    in BlockListVC
+    static func unblockUser(blockData: BlockData) {
+        guard let user = Auth.auth().currentUser else {
+            return
+        }
+        let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).document(blockData.documentId)
+        blockRef.delete { error in
+            if let error = error {
+                print("エラー\(error)")
+            } else {
+                print("削除成功")
+                self.unblockUser2(blockData: blockData, user: user)
+                self.unblockUser3(blockData: blockData, user: user)
+            }
+        }
+    }
+    
+    //    in BlockListVC
+    static func unblockUser2(blockData: BlockData, user: User) {
+        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: blockData.blockedUser!).whereField("blockedBy", arrayContains: user.uid)
+        postsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    return
+                }
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(queryDocumentSnapshot.documentID)
+                    let updatedValue = FieldValue.arrayRemove([user.uid])
+                    postsRef.updateData(["blockedBy": updatedValue])
+                }
+            }
+        }
+    }
+
+    //    in BlockListVC
+    static func unblockUser3(blockData: BlockData, user: User) {
+        let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: blockData.blockedUser!).whereField("blockedBy", arrayContains: user.uid)
+        commentsRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("エラー\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    return
+                }
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(queryDocumentSnapshot.documentID)
+                    let updatedValue = FieldValue.arrayRemove([user.uid])
+                    commentsRef.updateData(["blockedBy": updatedValue])
+                }
+            }
+        }
+    }
 }

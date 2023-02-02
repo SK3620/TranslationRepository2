@@ -113,62 +113,12 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
 
                 let postData = self.postArray[indexPath!.row]
 
-                self.excuteMultipleAsyncProcesses(postData: postData) { error in
-                    print("エラーでした。エラー内容：\(error)")
-                }
+                DeleteData.deleteCommentsData(postData: postData)
             }
         }
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
-    }
-
-    private func excuteMultipleAsyncProcesses(postData: PostData, completion: @escaping (Error) -> Void) {
-        let dispatchGruop = DispatchGroup()
-        let dispatchQueue = DispatchQueue(label: "queue")
-        var updatedNumberOfComments = "0"
-
-        // delete comment data
-        dispatchGruop.enter()
-        dispatchQueue.async {
-            Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document(postData.documentId).delete { error in
-                if let error = error {
-                    print("コメントデータの削除失敗")
-                    completion(error)
-                } else {
-                    print("コメントデータの削除成功")
-                    let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: postData.documentIdForPosts!)
-                    commentsRef.getDocuments { querySnapshot, error in
-                        if let error = error {
-                            print("エラーでした：エラー内容\(error)")
-                        }
-                        if let querySnapshot = querySnapshot {
-                            updatedNumberOfComments = String(querySnapshot.documents.count)
-                            dispatchGruop.leave()
-                        }
-                    }
-                }
-            }
-
-            // update the number of comments
-            dispatchGruop.notify(queue: .main, execute: {
-                let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentIdForPosts!)
-                let updatedPostDic = [
-                    "numberOfComments": updatedNumberOfComments,
-                ]
-                postsRef.setData(updatedPostDic, merge: true) { error in
-                    if let error = error {
-                        print("updatedNumberOfCommentsの更新失敗")
-                        completion(error)
-                        return
-                    } else {
-                        print("updatedNumberOfCommentsの更新成功")
-                        self.tableView.reloadData()
-                    }
-                }
-
-            })
-        }
     }
 
     @objc func tappedHeartButton(_: UIButton, forEvent event: UIEvent) {

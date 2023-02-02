@@ -131,46 +131,7 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             alert.dismiss(animated: true, completion: nil)
         }
         let deleteAction = UIAlertAction(title: "削除", style: .destructive) { _ in
-            // precesses to delete
-            let dispatchGroup = DispatchGroup()
-            let dispatchQueue = DispatchQueue(label: "queue")
-
-            SVProgressHUD.showSuccess(withStatus: "削除完了")
-            SVProgressHUD.dismiss(withDelay: 1.0) {
-                dispatchGroup.enter()
-                dispatchQueue.async {
-                    Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId).delete { error in
-                        if let error = error {
-                            print("投稿データの削除失敗\(error)")
-                        } else {
-                            print("投稿データの削除成功")
-                            dispatchGroup.leave()
-                        }
-                    }
-                }
-
-                dispatchGroup.notify(queue: .main) {
-                    let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: postData.documentId)
-
-                    commentsRef.getDocuments { querySnapshot, error in
-                        if let error = error {
-                            print("コメントの取得失敗/またはコメントがありません\(error)")
-                        }
-                        if let querySnapshot = querySnapshot {
-                            print("コメントを取得しました\(querySnapshot)")
-                            querySnapshot.documents.forEach {
-                                $0.reference.delete(completion: { error in
-                                    if let error = error {
-                                        print("コメント削除失敗\(error)")
-                                    } else {
-                                        print("コメント削除成功")
-                                    }
-                                })
-                            }
-                        }
-                    }
-                }
-            }
+            DeleteData.deletePostsData(postData: postData)
         }
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
