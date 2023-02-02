@@ -42,7 +42,9 @@ class InputCommentViewController: UIViewController {
 
         self.textView.endEditing(false)
 
-        self.determinationOfIsProfileImageExisted()
+        WritingData.determinationOfIsProfileImageExisted { valueForIsProfileImageExisted in
+            self.valueForIsProfileImageExisted = valueForIsProfileImageExisted
+        }
 
         self.textView.text = self.textView_text
 
@@ -67,26 +69,6 @@ class InputCommentViewController: UIViewController {
         appearance.backgroundColor = UIColor.systemGray6
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-
-    private func determinationOfIsProfileImageExisted() {
-        let user = Auth.auth().currentUser!
-        let profileImagesRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
-        profileImagesRef.getDocument { documentSnapshot, error in
-            if let error = error {
-                print("エラー　\(error)")
-            }
-            if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
-                let isProfileImageExisted = imagesDic["isProfileImageExisted"] as? String
-                if isProfileImageExisted != "nil" {
-                    self.valueForIsProfileImageExisted = isProfileImageExisted!
-                } else {
-                    self.valueForIsProfileImageExisted = "nil"
-                }
-            } else {
-                self.valueForIsProfileImageExisted = "nil"
-            }
-        }
     }
 
     override func viewWillDisappear(_: Bool) {
@@ -139,27 +121,8 @@ class InputCommentViewController: UIViewController {
         BlockUnblock.determineIfYouAreBeingBlocked { blockedBy in
             //        get the current date
             let today: String = self.getToday()
-
-            if let user = Auth.auth().currentUser {
-                let commentsDic = [
-                    "uid": user.uid,
-                    "userName": user.displayName!,
-                    "comment": textView_text!,
-                    "commentedDate": FieldValue.serverTimestamp(),
-                    "stringCommentedDate": today,
-                    "documentIdForPosts": self.postData.documentId,
-                    "isProfileImageExisted": self.valueForIsProfileImageExisted!,
-                    "blockedBy": blockedBy,
-                ] as [String: Any]
-                let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
-                commentsRef.setData(commentsDic, merge: false) { error in
-                    if let error = error {
-                        print("”comments”にへの書き込み失敗\(error)")
-                    } else {
-                        print("”comments”への書き込み成功")
-                        self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
-                    }
-                }
+            WritingData.writeCommentData(postData: self.postData, blockedBy: blockedBy, text: textView_text!, today: today, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!) {
+                self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
             }
         }
     }

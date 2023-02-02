@@ -66,6 +66,31 @@ struct WritingData {
         }
     }
 
+//    in InputCommentVC
+    static func writeCommentData(postData: PostData, blockedBy: [String], text: String, today: String, valueForIsProfileImageExisted: String, completion: @escaping () -> Void) {
+        if let user = Auth.auth().currentUser {
+            let commentsDic = [
+                "uid": user.uid,
+                "userName": user.displayName!,
+                "comment": text,
+                "commentedDate": FieldValue.serverTimestamp(),
+                "stringCommentedDate": today,
+                "documentIdForPosts": postData.documentId,
+                "isProfileImageExisted": valueForIsProfileImageExisted,
+                "blockedBy": blockedBy,
+            ] as [String: Any]
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
+            commentsRef.setData(commentsDic, merge: false) { error in
+                if let error = error {
+                    print("”comments”にへの書き込み失敗\(error)")
+                } else {
+                    print("”comments”への書き込み成功")
+                    completion()
+                }
+            }
+        }
+    }
+
 //    in ChatRoomVC
     static func writeMessageData(text: String, chatListData: ChatList) {
         let user = Auth.auth().currentUser
