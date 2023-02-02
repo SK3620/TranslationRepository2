@@ -221,7 +221,7 @@ struct BlockUnblock {
             }
         }
     }
-    
+
     //    in BlockListVC
     static func unblockUser2(blockData: BlockData, user: User) {
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: blockData.blockedUser!).whereField("blockedBy", arrayContains: user.uid)

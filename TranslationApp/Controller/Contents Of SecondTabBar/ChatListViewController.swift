@@ -223,56 +223,16 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         let alert = UIAlertController(title: "削除しますか？", message: "削除した場合、あなたと相手の全てのチャット履歴が削除されます", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "削除する", style: .destructive, handler: { _ in
-            SVProgressHUD.show()
-            let messageRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.documentIdArray[indexPath.row]).collection("messages")
-            messageRef.getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("エラー\(error)")
-                }
-                if let querySnapshot = querySnapshot {
-                    if querySnapshot.isEmpty {
-                        print("空でした")
-                        self.deleteDocumentInChatListsCollection(indexPath: indexPath)
-                        return
-                    }
-                    var countedQuerySnapshot: Int = querySnapshot.documents.count
-                    querySnapshot.documents.forEach { queryDocumentSnapshot in
-                        queryDocumentSnapshot.reference.delete { error in
-                            if let error = error {
-                                print("エラー\(error)")
-                                SVProgressHUD.showError(withStatus: "削除に失敗しました")
-                            } else {
-                                countedQuerySnapshot -= 1
-                                if countedQuerySnapshot == 0 {
-                                    print("messagesコレクション内の全てのドキュメントの削除に成功しました")
-                                    self.deleteDocumentInChatListsCollection(indexPath: indexPath)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-
-    func deleteDocumentInChatListsCollection(indexPath: IndexPath) {
-        let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.documentIdArray[indexPath.row])
-        chatListsRef.delete { error in
-            if let error = error {
-                print("エラー\(error)")
-                SVProgressHUD.showError(withStatus: "削除に失敗しました")
-            } else {
-                print("chatListsコレクション内のドキュメントの削除に成功しました")
-                SVProgressHUD.showSuccess(withStatus: "削除完了")
-                SVProgressHUD.dismiss(withDelay: 1.5) {
+            DeleteData.deleteMessages(indexPath: indexPath, documentIdArray: self.documentIdArray) {
+                DeleteData.deleteDocumentInChatListsCollection(documentIdArray: self.documentIdArray, indexPath: indexPath) {
                     self.documentIdArray.remove(at: indexPath.row)
                     self.chatListsData.remove(at: indexPath.row)
                     self.setTitle(numberOfFriends: self.chatListsData.count)
                     self.tableView.reloadData()
                 }
             }
-        }
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
