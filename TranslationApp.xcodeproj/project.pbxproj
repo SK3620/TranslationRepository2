@@ -30,6 +30,8 @@
 		836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */; };
 		8372AD902932E91500E230BF /* PagingPhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8372AD8F2932E91500E230BF /* PagingPhraseWordViewController.swift */; };
 		837A82FA298BAA6C001049D4 /* DeleteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A82F9298BAA6C001049D4 /* DeleteData.swift */; };
+		837A82FC298C0644001049D4 /* WritingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A82FB298C0644001049D4 /* WritingData.swift */; };
+		837A82FE298C0C18001049D4 /* UpdateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A82FD298C0C18001049D4 /* UpdateData.swift */; };
 		837BB0EB2939B02100648011 /* AllPhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BB0EA2939B02000648011 /* AllPhraseWordViewController.swift */; };
 		837CD1B328BE264F00823D17 /* TranslationFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837CD1B228BE264F00823D17 /* TranslationFolder.swift */; };
 		837D41E929150F4C00A80342 /* SecondPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837D41E829150F4C00A80342 /* SecondPostData.swift */; };
@@ -144,6 +146,8 @@
 		836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsHistoryViewController.swift; sourceTree = "<group>"; };
 		8372AD8F2932E91500E230BF /* PagingPhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingPhraseWordViewController.swift; sourceTree = "<group>"; };
 		837A82F9298BAA6C001049D4 /* DeleteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteData.swift; sourceTree = "<group>"; };
+		837A82FB298C0644001049D4 /* WritingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingData.swift; sourceTree = "<group>"; };
+		837A82FD298C0C18001049D4 /* UpdateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateData.swift; sourceTree = "<group>"; };
 		837BB0EA2939B02000648011 /* AllPhraseWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPhraseWordViewController.swift; sourceTree = "<group>"; };
 		837CD1B228BE264F00823D17 /* TranslationFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFolder.swift; sourceTree = "<group>"; };
 		837D41E829150F4C00A80342 /* SecondPostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPostData.swift; sourceTree = "<group>"; };
@@ -295,6 +299,8 @@
 				8385EA13295476110034E0F6 /* ProfileData.swift */,
 				836226802981632200AB98A3 /* BlockData.swift */,
 				83CCFFA6298A0C6A0030BC9C /* GetDocuments.swift */,
+				837A82FB298C0644001049D4 /* WritingData.swift */,
+				837A82FD298C0C18001049D4 /* UpdateData.swift */,
 				837A82F9298BAA6C001049D4 /* DeleteData.swift */,
 				836226822981960100AB98A3 /* BlockUnblock.swift */,
 				835B38E1294C833500D42F50 /* MessageEntity.swift */,
@@ -694,6 +700,7 @@
 				83812C5D297FE6FD0023FEA0 /* CollectionViewCellForBlockList.swift in Sources */,
 				83B9C1FE28D2F31B006138E2 /* RecordViewController.swift in Sources */,
 				8380CEEC29346006003B159E /* SecondPhraseWordViewController.swift in Sources */,
+				837A82FE298C0C18001049D4 /* UpdateData.swift in Sources */,
 				836226832981960100AB98A3 /* BlockUnblock.swift in Sources */,
 				8356E95929055BCC00FD9236 /* PhraseWord.swift in Sources */,
 				8389C3FA290A7C5C007347AE /* TimeLineViewController.swift in Sources */,
@@ -710,6 +717,7 @@
 				83C2CC99291D13EC00A671AE /* CorrectViewController.swift in Sources */,
 				839FBA3328BA101200BB64A5 /* FolderViewController.swift in Sources */,
 				8385E72E2918D12800DBDBAC /* OthersIntroductionViewController.swift in Sources */,
+				837A82FC298C0644001049D4 /* WritingData.swift in Sources */,
 				837A82FA298BAA6C001049D4 /* DeleteData.swift in Sources */,
 				83C2CCA1291D1CD000A671AE /* ConversationViewController.swift in Sources */,
 				835B38E4294C839F00D42F50 /* MessageSenderType.swift in Sources */,

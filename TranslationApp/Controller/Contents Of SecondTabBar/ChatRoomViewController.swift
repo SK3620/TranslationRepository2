@@ -155,43 +155,7 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
             return
         }
         messageInputBar.inputTextView.text = String()
-        self.writeMessageInforInFireStore(text: text)
-    }
-
-    func writeMessageInforInFireStore(text: String) {
-        let user = Auth.auth().currentUser
-        let messageDic = [
-            "senderUid": user!.uid,
-            "message": text,
-            "senderName": user!.displayName!,
-            "sentDate": FieldValue.serverTimestamp(),
-        ] as [String: Any]
-        Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.chatListData.documentId!).collection("messages").document().setData(messageDic) { error in
-            if let error = error {
-                print("messagesコレクション内への書き込みに失敗しました エラー内容：\(error)")
-            } else {
-                print("メッセージ送信とmessagesコレクション内への書き込みに成功しました")
-                self.updateLatestMessageAndLatestSentDate(message: text)
-            }
-        }
-    }
-
-    func updateLatestMessageAndLatestSentDate(message: String) {
-        let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.chatListData.documentId!)
-        chatListsRef.updateData(["latestMessage": message]) { error in
-            if let error = error {
-                print(error)
-            } else {
-                print("latestMessageのupdate成功")
-            }
-            chatListsRef.updateData(["latestSentDate": FieldValue.serverTimestamp()]) { error in
-                if let error = error {
-                    print(error)
-                } else {
-                    print("latestSentDateのupdateに成功")
-                }
-            }
-        }
+        WritingData.writeMessageData(text: text, chatListData: self.chatListData)
     }
 
     func getToday() -> String {

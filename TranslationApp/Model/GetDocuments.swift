@@ -259,7 +259,7 @@ struct GetDocument {
                 print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error)")
             }
             if let querySnapshot = querySnapshot {
-                var messageList: [MessageEntity] = []
+                let messageList: [MessageEntity] = []
                 var chatRoomArr: [ChatRoom] = []
                 var countedQuerySnaopshot: Int = querySnapshot.documents.count
                 if querySnapshot.isEmpty {
