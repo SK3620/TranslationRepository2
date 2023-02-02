@@ -52,40 +52,17 @@ class EtcViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
-        guard Auth.auth().currentUser != nil else {
+        guard let user = Auth.auth().currentUser else {
             self.label.text = "アカウントを作成/ログインしてください"
             self.tableView.reloadData()
             return
         }
         self.label.text = ""
 
-        self.listenerAndGetDocuments()
-    }
-
-    private func listenerAndGetDocuments() {
-        SVProgressHUD.show(withStatus: "データを取得中...")
-        if let user = Auth.auth().currentUser {
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true).whereField("topic", arrayContains: "その他")
-            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
-                    return
-                }
-                self.postArray = []
-                querySnapshot!.documents.forEach { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    if postData.blockedBy.contains(user.uid) {
-                        print("ブロックしたユーザーが含まれています")
-                        return
-                    } else {
-                        self.postArray.append(postData)
-                    }
-                }
-                self.tableView.reloadData()
-                SVProgressHUD.dismiss()
-            }
+        GetDocument.getDocumentsForTimeline(user: user, topic: "その他", listener: self.listener) { postArray in
+            self.postArray = postArray
+            SVProgressHUD.dismiss()
+            self.tableView.reloadData()
         }
     }
 

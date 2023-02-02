@@ -20,11 +20,7 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
     var secondPagingViewController: SecondPagingViewController!
 
     // an array to store the posted data
-    private var postArray: [PostData] = [] {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    private var postArray: [PostData] = []
 
     // observe updated data and etc...
     private var listener: ListenerRegistration?
@@ -57,43 +53,17 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
         // if you are not logged in, have you log in and create an account
-        guard Auth.auth().currentUser != nil else {
+        guard let user = Auth.auth().currentUser else {
             self.label.text = "アカウントを作成/ログインしてください"
             self.tableView.reloadData()
             return
         }
         self.label.text = ""
 
-        self.listenrAndGetDocuments()
-    }
-
-    func listenrAndGetDocuments() {
-        SVProgressHUD.show(withStatus: "データを取得中...")
-        // confirm if you are logged in
-        if let user = Auth.auth().currentUser {
-            // Register a listener to monitor updates to posted data
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
-
-            self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                    SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
-                    return
-                }
-                // Create PostData based on the acquired document and make it into a postArray array.
-                self.postArray = []
-                querySnapshot!.documents.forEach { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    if postData.blockedBy.contains(user.uid) {
-                        print("ブロックしたユーザーが含まれています")
-                        return
-                    } else {
-                        self.postArray.append(postData)
-                    }
-                }
-                SVProgressHUD.dismiss()
-            }
+        GetDocument.getDocumentsForTimeline(user: user, topic: nil, listener: self.listener) { postArray in
+            self.postArray = postArray
+            SVProgressHUD.dismiss()
+            self.tableView.reloadData()
         }
     }
 

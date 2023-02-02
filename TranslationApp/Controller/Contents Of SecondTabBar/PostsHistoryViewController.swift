@@ -61,42 +61,21 @@ class PostsHistoryViewController: UIViewController, UITableViewDelegate, UITable
             profileViewController.postsHistoryViewController = self
         }
 
-        if Auth.auth().currentUser == nil {
+        guard let user = Auth.auth().currentUser else {
             self.postArray = []
             self.tableView.reloadData()
             return
         }
 
-        SVProgressHUD.show(withStatus: "データ取得中...")
-        if let user = Auth.auth().currentUser {
-            self.listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel(user: user)
-        }
-    }
-
-    private func listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel(user: User) {
-        //            複合インデックスを作成する必要がある
-        //            クエリで指定している複数のインデックスをその順にインデックスに登録する
-        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: user.uid).order(by: "postedDate", descending: true)
-        self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-            print("りすなー")
-            if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                return
-            }
-            // Create PostData based on the acquired document and make it into a postArray array.
-            self.postArray = querySnapshot!.documents.map { document in
-                print("DEBUG_PRINT: document取得 \(document.documentID)")
-                let postData = PostData(document: document)
-                return postData
-            }
-            self.tableView.reloadData()
+        GetDocument.getMyDocuments(uid: user.uid, listener: self.listener) { postArray in
             SVProgressHUD.dismiss()
+            self.postArray = postArray
+            self.tableView.reloadData()
 
-//                settings for the number of likes and posts
             self.likeNumber = 0
             self.postNumber = 0
-            querySnapshot?.documents.forEach { queryDocumentSnapshot in
-                self.likeNumber += PostData(document: queryDocumentSnapshot).likes.count
+            for postData in postArray {
+                self.likeNumber += postData.likes.count
             }
             self.postNumber = self.postArray.count
             // delegate method

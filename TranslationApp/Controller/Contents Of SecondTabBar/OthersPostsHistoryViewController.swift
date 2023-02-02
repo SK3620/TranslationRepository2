@@ -47,31 +47,25 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        SVProgressHUD.show(withStatus: "データ取得中...")
-        self.listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel()
-    }
 
-    private func listenerAndGetDocumentsAndSettingsForTheNumberOflikesPostsLabel() {
-        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: self.postData.uid!).order(by: "postedDate", descending: true)
-        self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-            if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                return
-            }
-            self.postArray = querySnapshot!.documents.map { document in
-                print("DEBUG_PRINT: document取得 \(document.documentID)")
-                let postData = PostData(document: document)
-                return postData
-            }
+        guard Auth.auth().currentUser != nil else {
+            self.postArray = []
             self.tableView.reloadData()
+            return
+        }
+
+        GetDocument.getMyDocuments(uid: self.postData.uid!, listener: self.listener) { postArray in
             SVProgressHUD.dismiss()
+            self.postArray = postArray
+            self.tableView.reloadData()
 
             self.likeNumber = 0
             self.postNumber = 0
-            querySnapshot?.documents.forEach { queryDocumentSnapshot in
-                self.likeNumber += PostData(document: queryDocumentSnapshot).likes.count
+            for postData in postArray {
+                self.likeNumber += postData.likes.count
             }
             self.postNumber = self.postArray.count
+            // delegate method
             self.delegate.setLikeAndPostNumberLabelForOthers(likeNumber: self.likeNumber, postNumber: self.postNumber)
         }
     }

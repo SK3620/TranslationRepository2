@@ -54,56 +54,26 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
         self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         if Auth.auth().currentUser != nil {
-            self.getSingleDocument()
+            GetDocument.getSingleDocument(postData: self.postData, listener: self.listener) { postData in
+                self.postArray = []
+                self.postData = postData
+                self.postArray.append(postData)
+                SVProgressHUD.dismiss()
+                self.tableView.reloadData()
+            }
 
-            self.getCommentsDocumentOnThePost()
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
+            GetDocument.getOthersCommentsDocuments(query: commentsRef, listener: self.listener2, postData: self.postData) { secondPostArray in
+                self.secondPostArray = secondPostArray
+                self.tableView.reloadData()
+                SVProgressHUD.dismiss()
+            }
         }
 
         if Auth.auth().currentUser == nil {
             self.secondPostArray = []
             SVProgressHUD.dismiss()
             self.tableView.reloadData()
-        }
-    }
-
-    private func getSingleDocument() {
-        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(self.postData.documentId)
-        self.listener = postsRef.addSnapshotListener { documentSnapshot, error in
-            if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                return
-            }
-            if let documentSnapshot = documentSnapshot {
-                self.postArray = []
-                let postData = PostData(document: documentSnapshot)
-                self.postData = postData
-                self.postArray.append(postData)
-                print("DEBUG_PRINT: snapshotの取得が成功しました。")
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
-            }
-        }
-    }
-
-    private func getCommentsDocumentOnThePost() {
-        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
-        self.listener2 = postsRef.addSnapshotListener { querySnapshot, error in
-            if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                return
-            }
-            self.secondPostArray = []
-            querySnapshot!.documents.forEach { queryDocumentSnapshot in
-                let secondPostData = SecondPostData(document: queryDocumentSnapshot)
-                let user = Auth.auth().currentUser!
-                if secondPostData.blockedBy.contains(user.uid), self.postData.uid != secondPostData.uid {
-                    print("ブロックしたユーザーのドキュメントを除外")
-                } else {
-                    self.secondPostArray.append(secondPostData)
-                }
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
-            }
         }
     }
 

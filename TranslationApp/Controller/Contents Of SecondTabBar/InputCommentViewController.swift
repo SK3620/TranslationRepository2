@@ -236,23 +236,23 @@ class InputCommentViewController: UIViewController {
         dispatchGroup.notify(queue: .main) {
             print("非同期処理完了")
 
-            if let commentSectionViewController = self.commentSectionViewController { commentSectionViewController.secondPostArray = self.secondPostArray
-                commentSectionViewController.reloadTableView()
-            }
-            if let commentsHistroyViewController = self.commentsHistoryViewController {
-                commentsHistroyViewController.secondPostArray = self.secondPostArray
-                commentsHistroyViewController.reloadTableView()
-            }
+//            if let commentSectionViewController = self.commentSectionViewController { commentSectionViewController.secondPostArray = self.secondPostArray
+//                commentSectionViewController.reloadTableView()
+//            }
+//            if let commentsHistroyViewController = self.commentsHistoryViewController {
+//                commentsHistroyViewController.secondPostArray = self.secondPostArray
+//                commentsHistroyViewController.reloadTableView()
+//            }
 
-            if let bookMarkCommentsSectionViewController = self.bookMarkCommentsSectionViewController {
-                bookMarkCommentsSectionViewController.secondPostArray = self.secondPostArray
-                bookMarkCommentsSectionViewController.reloadTableView()
-            }
+//            if let bookMarkCommentsSectionViewController = self.bookMarkCommentsSectionViewController {
+//                bookMarkCommentsSectionViewController.secondPostArray = self.secondPostArray
+//                bookMarkCommentsSectionViewController.reloadTableView()
+//            }
 
-            if let othersCommentsHistoryViewController = self.othersCommentsHistoryViewController {
-                othersCommentsHistoryViewController.secondPostArray = self.secondPostArray
-                othersCommentsHistoryViewController.reloadTableView()
-            }
+//            if let othersCommentsHistoryViewController = self.othersCommentsHistoryViewController {
+//                othersCommentsHistoryViewController.secondPostArray = self.secondPostArray
+//                othersCommentsHistoryViewController.reloadTableView()
+//            }
             SVProgressHUD.showSuccess(withStatus: "コメントしました")
             SVProgressHUD.dismiss(withDelay: 1.5) {
                 self.textView.text = ""

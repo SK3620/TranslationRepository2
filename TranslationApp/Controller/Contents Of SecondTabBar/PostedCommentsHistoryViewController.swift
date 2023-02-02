@@ -17,9 +17,9 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
 
     private var postArray: [PostData] = []
 
-    private var listener: ListenerRegistration?
-
     var profileViewController: ProfileViewController?
+
+    var listener: ListenerRegistration?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,36 +42,17 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
             profileViewController.postedCommentsHistoryViewController = self
         }
 
-        if Auth.auth().currentUser == nil {
+        guard let user = Auth.auth().currentUser else {
             self.postArray = []
             self.tableView.reloadData()
             SVProgressHUD.dismiss()
             return
         }
 
-        SVProgressHUD.show(withStatus: "データ取得中")
-        if let user = Auth.auth().currentUser {
-            self.listenerAndGetPostedCommentsDocuments(user: user)
-        }
-    }
-
-    private func listenerAndGetPostedCommentsDocuments(user: User) {
-        let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: user.uid).order(by: "commentedDate", descending: true)
-        self.listener = commentsRef.addSnapshotListener { querySnapshot, error in
-            if let error = error {
-                print("querySnapshot取得失敗\(error)")
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
-                return
-            }
-            if let querySnapshot = querySnapshot {
-                self.postArray = querySnapshot.documents.map { document in
-                    let postData = PostData(document: document)
-                    return postData
-                }
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
-            }
+        GetDocument.getMyCommentsDocuments(uid: user.uid, listener: self.listener) { postArray in
+            SVProgressHUD.dismiss()
+            self.postArray = postArray
+            self.tableView.reloadData()
         }
     }
 

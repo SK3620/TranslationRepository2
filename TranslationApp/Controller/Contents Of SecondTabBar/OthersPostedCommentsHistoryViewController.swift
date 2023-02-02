@@ -37,31 +37,15 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
 
-        SVProgressHUD.show(withStatus: "データ取得中...")
-        if Auth.auth().currentUser != nil {
-            self.listenerAndGetPostedCommentsDocuments()
-        }
-        if Auth.auth().currentUser == nil {
+        guard Auth.auth().currentUser != nil else {
             self.postArray = []
             self.tableView.reloadData()
             SVProgressHUD.dismiss()
+            return
         }
-    }
-
-    private func listenerAndGetPostedCommentsDocuments() {
-        let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: self.postData.uid!).order(by: "commentedDate", descending: true)
-        self.listener = commentsRef.addSnapshotListener { querySnapshot, error in
-            if let error = error {
-                print("querySnapshot取得失敗\(error)")
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
-                return
-            }
-            if let querySnapshot = querySnapshot {
-                self.postArray = querySnapshot.documents.map { document in
-                    let postData = PostData(document: document)
-                    return postData
-                }
+        if Auth.auth().currentUser != nil {
+            GetDocument.getMyCommentsDocuments(uid: self.postData.uid!, listener: self.listener) { postArray in
+                self.postArray = postArray
                 SVProgressHUD.dismiss()
                 self.tableView.reloadData()
             }
@@ -86,8 +70,6 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
 
         cell.setPostData(self.postArray[indexPath.row])
 
-        cell.cellEditButton.isEnabled = true
-        cell.cellEditButton.isHidden = false
         cell.bookMarkButton.isEnabled = false
         cell.bookMarkButton.isHidden = true
         cell.copyButton.isEnabled = false
@@ -97,6 +79,14 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
         cell.bubbleLabel.isHidden = true
         cell.bubbleButton.isEnabled = true
         cell.bubbleButton.isHidden = false
+
+        if self.postData.uid == Auth.auth().currentUser?.uid {
+            cell.cellEditButton.isEnabled = false
+            cell.cellEditButton.isHidden = true
+        } else {
+            cell.cellEditButton.isEnabled = true
+            cell.cellEditButton.isHidden = false
+        }
 
         cell.setButtonImage(button: cell.bubbleButton, systemName: "doc.on.doc")
         cell.bubbleButton.tintColor = .systemBlue

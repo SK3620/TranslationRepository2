@@ -52,35 +52,14 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
             return
         }
 
-        SVProgressHUD.show(withStatus: "データ取得中...")
         if let user = Auth.auth().currentUser {
             // get the documents filtered with bookMarks
-            // the key 'bookMarks' has the array value which stores the uid of the person who tapped bookmark button
-            self.listenerAndGetBookMarkedDocuments(user: user)
-        }
-    }
-
-    private func listenerAndGetBookMarkedDocuments(user: User) {
-        let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("bookMarks", arrayContains: user.uid).order(by: "postedDate", descending: true)
-        self.listener = postsRef.addSnapshotListener { querySnapshot, error in
-            if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+            // the key 'bookMarks' has the array value which stores the uid of the person who
+            GetDocument.getBookMarkedDocuments(uid: user.uid, listener: self.listener) { postArray in
+                SVProgressHUD.dismiss()
+                self.postArray = postArray
+                self.tableView.reloadData()
             }
-            if let querySnapshot = querySnapshot {
-                self.postArray = []
-                querySnapshot.documents.forEach { document in
-                    print("DEBUG_PRINT: document取得 \(document.documentID)")
-                    let postData = PostData(document: document)
-                    if postData.blockedBy.contains(user.uid) {
-                        print("ブロックしたユーザーが含まれています")
-                        return
-                    } else {
-                        self.postArray.append(postData)
-                    }
-                }
-            }
-            SVProgressHUD.dismiss()
-            self.tableView.reloadData()
         }
     }
 

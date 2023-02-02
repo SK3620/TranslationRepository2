@@ -100,7 +100,9 @@ class PostData: NSObject {
     init(document: DocumentSnapshot) {
         self.documentId = document.documentID
 
-        let postDic = document.data()!
+        guard let postDic = document.data() else {
+            return
+        }
 
         self.userName = postDic["userName"] as? String
 
