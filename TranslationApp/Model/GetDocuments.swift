@@ -199,4 +199,54 @@ struct GetDocument {
             }
         }
     }
+
+//    in ChatListVC
+    static func getChatListDocument(user: User, listener: ListenerRegistration?, completion: @escaping ([ChatList], [String]) -> Void) {
+        let chatListRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContains: user.uid).order(by: "latestSentDate", descending: true)
+        var listener = listener
+        listener = chatListRef.addSnapshotListener { querySnapshot, error in
+            if let error = error {
+                print("ChatLists情報の取得に失敗しました。\(error)")
+                return
+            }
+            print("ChatListsの情報の取得に成功しました")
+            var chatListData: [ChatList] = []
+            var documentIdArray: [String] = []
+            if let querySnapshot = querySnapshot {
+                if querySnapshot.documents.isEmpty {
+                    print("ChatListsのsnapshotsは空でした")
+                    completion(chatListData, documentIdArray)
+                    return
+                }
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    documentIdArray.append(queryDocumentSnapshot.documentID)
+                    chatListData.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot))
+                    completion(chatListData, documentIdArray)
+                }
+            }
+        }
+    }
+
+//    in chatListVC
+    // a process called when you got added as a friend by the other person (by a person who added you as thier friend)
+    // when you are added, a person who added you as thier friend will automatically be displayed in the tableView
+    static func observeIfYouAreAboutToBeAddedAsFriend(completion: @escaping (QueryDocumentSnapshot) -> Void) {
+        let user = Auth.auth().currentUser!
+        let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("partnerUid", isEqualTo: user.uid)
+        chatRef.getDocuments { querySnapshot, error in
+            if let error = error {
+                print("友達追加した時の処理にて、getDocumenメソッドが失敗しました エラー内容：\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                print("友達追加した時の処理にて、getDocumentメソッドが成功しました")
+                if querySnapshot.isEmpty {
+                    print("友達追加時の処理にて、getDocumentメソッドで取得したquerySnapshotは空でしたので、returnを実行します")
+                    return
+                }
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    completion(queryDocumentSnapshot)
+                }
+            }
+        }
+    }
 }

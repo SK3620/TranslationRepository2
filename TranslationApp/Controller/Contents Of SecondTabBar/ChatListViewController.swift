@@ -53,9 +53,16 @@ class ChatListViewController: UIViewController {
             self.tableView.reloadData()
             return
         }
-        self.fetchChatListsInfoFromFirestore()
+        self.getChatListDocument()
 
-        self.observeIfYouAreAboutToBeAddedAsFriend()
+        GetDocument.observeIfYouAreAboutToBeAddedAsFriend { queryDocumentSnapshot in
+            if self.documentIdArray.contains(queryDocumentSnapshot.documentID) {
+                self.tableView.reloadData()
+                return
+            }
+            self.chatListsData.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot))
+            self.tableView.reloadData()
+        }
 
         editBarButtonBarItem.isEnabled = true
     }
@@ -68,62 +75,18 @@ class ChatListViewController: UIViewController {
         }
     }
 
-    private func fetchChatListsInfoFromFirestore() {
+    private func getChatListDocument() {
         let user = Auth.auth().currentUser!
         self.listener?.remove()
         self.chatListsData.removeAll()
         self.tableView.reloadData()
 
-        self.listener = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContains: user.uid).order(by: "latestSentDate", descending: true).addSnapshotListener { snapshots, error in
-            if let error = error {
-                print("ChatLists情報の取得に失敗しました。\(error)")
-                return
-            }
-            print("ChatListsの情報の取得に成功しました")
-            if let snapshots = snapshots {
-                if snapshots.isEmpty {
-                    print("ChatListsのsnapshotsは空でした")
-                    self.setTitle(numberOfFriends: self.chatListsData.count)
-                    self.tableView.reloadData()
-                    return
-                }
-                self.documentIdArray = []
-                self.chatListsData = []
-                snapshots.documents.forEach { queryDocumentSnapshot in
-                    self.chatListsData.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot))
-                    self.documentIdArray.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot).documentId!)
-                    self.setTitle(numberOfFriends: self.chatListsData.count)
-                    self.tableView.reloadData()
-                }
-            }
-        }
-    }
-
-    // a process called when you got added as a friend by the other person (by a person who added you as thier friend)
-    // when you are added, a person who added you as thier friend will automatically be displayed in the tableView
-    private func observeIfYouAreAboutToBeAddedAsFriend() {
-        if let user = Auth.auth().currentUser {
-            let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("partnerUid", isEqualTo: user.uid)
-            chatRef.getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("友達追加した時の処理にて、getDocumenメソッドが失敗しました エラー内容：\(error)")
-                }
-                if let querySnapshot = querySnapshot {
-                    print("友達追加した時の処理にて、getDocumentメソッドが成功しました")
-                    if querySnapshot.isEmpty {
-                        print("友達追加時の処理にて、getDocumentメソッドで取得したquerySnapshotは空でしたので、returnを実行します")
-                        return
-                    }
-                    querySnapshot.documents.forEach { queryDocumentSnapshot in
-                        if self.documentIdArray.contains(queryDocumentSnapshot.documentID) {
-                            self.tableView.reloadData()
-                            return
-                        }
-                        self.chatListsData.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot))
-                        self.tableView.reloadData()
-                    }
-                }
-            }
+        GetDocument.getChatListDocument(user: user, listener: self.listener) { chatListData, documentIdArray in
+            SVProgressHUD.dismiss()
+            self.chatListsData = chatListData
+            self.documentIdArray = documentIdArray
+            self.setTitle(numberOfFriends: chatListData.count)
+            self.tableView.reloadData()
         }
     }
 
