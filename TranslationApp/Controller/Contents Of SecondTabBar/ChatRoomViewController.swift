@@ -63,32 +63,11 @@ class ChatRoomViewController: MessagesViewController {
     override func viewWillAppear(_: Bool) {
         super.viewWillAppear(true)
         self.setNavigationBarHidden()
-        self.getMessagesDocument()
-    }
+        GetDocument.getMessagesDocument(chatListData: self.chatListData, listener: self.listener) { messageList, chatRoomArr in
+            self.messageList = messageList
+            self.chatRoomArr = chatRoomArr
 
-    private func getMessagesDocument() {
-        let messagesRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(self.chatListData.documentId!).collection("messages").order(by: "sentDate", descending: false)
-        self.listener = messagesRef.addSnapshotListener { querySnapshot, error in
-            if let error = error {
-                print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error)")
-            }
-            if let querySnapshot = querySnapshot {
-                var countedQuerySnaopshot: Int = querySnapshot.documents.count
-                if querySnapshot.isEmpty {
-                    return
-                }
-                print("リスナーでmessagesコレクション内のドキュメント取得成功")
-                self.messageList = []
-                self.chatRoomArr = []
-                querySnapshot.documents.forEach { queryDocumentSnapshot in
-                    self.chatRoomArr.append(ChatRoom(document: queryDocumentSnapshot))
-                    countedQuerySnaopshot = countedQuerySnaopshot - 1
-                    if countedQuerySnaopshot == 0 {
-                        print("createMessageメソッドが実行されました")
-                        self.createMessage()
-                    }
-                }
-            }
+            self.createMessage()
         }
     }
 

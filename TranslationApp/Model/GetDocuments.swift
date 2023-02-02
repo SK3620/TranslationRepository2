@@ -249,4 +249,31 @@ struct GetDocument {
             }
         }
     }
+
+//    in ChatRoomVC
+    static func getMessagesDocument(chatListData: ChatList, listener: ListenerRegistration?, completion: @escaping ([MessageEntity], [ChatRoom]) -> Void) {
+        let messagesRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(chatListData.documentId!).collection("messages").order(by: "sentDate", descending: false)
+        var listener = listener
+        listener = messagesRef.addSnapshotListener { querySnapshot, error in
+            if let error = error {
+                print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error)")
+            }
+            if let querySnapshot = querySnapshot {
+                var messageList: [MessageEntity] = []
+                var chatRoomArr: [ChatRoom] = []
+                var countedQuerySnaopshot: Int = querySnapshot.documents.count
+                if querySnapshot.isEmpty {
+                    return
+                }
+                print("リスナーでmessagesコレクション内のドキュメント取得成功")
+                querySnapshot.documents.forEach { queryDocumentSnapshot in
+                    chatRoomArr.append(ChatRoom(document: queryDocumentSnapshot))
+                    countedQuerySnaopshot = countedQuerySnaopshot - 1
+                    if countedQuerySnaopshot == 0 {
+                        completion(messageList, chatRoomArr)
+                    }
+                }
+            }
+        }
+    }
 }
