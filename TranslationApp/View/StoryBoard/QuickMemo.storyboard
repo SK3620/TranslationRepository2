@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sSz-t5-jlD">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Quick Memo-->
+        <scene sceneID="zWW-5s-sV3">
+            <objects>
+                <viewController id="sSz-t5-jlD" customClass="QuickMemoViewContoller" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N2V-07-pkV">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ewJ-Cs-fwe">
+                                <rect key="frame" x="0.0" y="59" width="393" height="793"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ufh-oO-y0Z">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ufh-oO-y0Z" secondAttribute="trailing" id="ViE-3a-ziW"/>
+                                    <constraint firstItem="ufh-oO-y0Z" firstAttribute="leading" secondItem="ewJ-Cs-fwe" secondAttribute="leading" id="bS3-a0-NXH"/>
+                                    <constraint firstAttribute="bottom" secondItem="ufh-oO-y0Z" secondAttribute="bottom" id="nJe-Oq-Mbi"/>
+                                    <constraint firstItem="ufh-oO-y0Z" firstAttribute="top" secondItem="ewJ-Cs-fwe" secondAttribute="top" id="vWJ-ol-uyc"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WPe-Pf-oqX"/>
+                        <color key="backgroundColor" systemColor="systemGray5Color"/>
+                        <constraints>
+                            <constraint firstItem="WPe-Pf-oqX" firstAttribute="trailing" secondItem="ewJ-Cs-fwe" secondAttribute="trailing" id="XuI-Lb-YUr"/>
+                            <constraint firstItem="ewJ-Cs-fwe" firstAttribute="leading" secondItem="WPe-Pf-oqX" secondAttribute="leading" id="YMN-Hl-yNm"/>
+                            <constraint firstAttribute="bottom" secondItem="ewJ-Cs-fwe" secondAttribute="bottom" id="bk8-kT-EXc"/>
+                            <constraint firstItem="ewJ-Cs-fwe" firstAttribute="top" secondItem="WPe-Pf-oqX" secondAttribute="top" id="xEh-WV-K6Z"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Quick Memo" id="cDa-7e-BQp"/>
+                    <connections>
+                        <outlet property="textView" destination="ufh-oO-y0Z" id="sgs-LI-Q1a"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8xn-ra-LA0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3084" y="-217"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
