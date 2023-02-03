@@ -68,6 +68,7 @@
 		8396C0B32916ABF40034EDE7 /* CommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */; };
 		83975FE52941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83975FE42941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift */; };
 		839F18CB298CD6D20024DF51 /* QuickMemo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839F18CA298CD6D20024DF51 /* QuickMemo.storyboard */; };
+		839F18CD298CDB440024DF51 /* PhraseWord.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839F18CC298CDB440024DF51 /* PhraseWord.storyboard */; };
 		839FBA3128BA0F7000BB64A5 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */; };
 		839FBA3328BA101200BB64A5 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3228BA101200BB64A5 /* FolderViewController.swift */; };
 		839FBA3B28BA602700BB64A5 /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839FBA3A28BA602700BB64A5 /* KeyManager.swift */; };
@@ -183,6 +184,7 @@
 		8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		83975FE42941DFEE00852A58 /* OthersPostedCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersPostedCommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		839F18CA298CD6D20024DF51 /* QuickMemo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = QuickMemo.storyboard; sourceTree = "<group>"; };
+		839F18CC298CDB440024DF51 /* PhraseWord.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PhraseWord.storyboard; sourceTree = "<group>"; };
 		839FBA3028BA0F7000BB64A5 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
 		839FBA3228BA101200BB64A5 /* FolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
 		839FBA3A28BA602700BB64A5 /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
@@ -483,6 +485,7 @@
 			children = (
 				83071CFE28B91AC70003734C /* Main.storyboard */,
 				839F18CA298CD6D20024DF51 /* QuickMemo.storyboard */,
+				839F18CC298CDB440024DF51 /* PhraseWord.storyboard */,
 			);
 			path = StoryBoard;
 			sourceTree = "<group>";
@@ -601,6 +604,7 @@
 				83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */,
 				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
 				839F18CB298CD6D20024DF51 /* QuickMemo.storyboard in Resources */,
+				839F18CD298CDB440024DF51 /* PhraseWord.storyboard in Resources */,
 				83862E38297D183F0032E05B /* CustomCellForTermsOfService.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
 			);

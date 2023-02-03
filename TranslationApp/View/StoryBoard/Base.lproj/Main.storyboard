@@ -12,6 +12,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--PhraseWord-->
+        <scene sceneID="DQz-Ab-kmE">
+            <objects>
+                <viewControllerPlaceholder storyboardName="PhraseWord" id="O3p-SL-5xv" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="mfe-21-AZi"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NCU-4Q-vS0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="415" y="225"/>
+        </scene>
         <!--Navigation Controller0-->
         <scene sceneID="uD2-cf-Hu3">
             <objects>
@@ -1063,7 +1073,7 @@
                         <segue destination="uit-rf-4S9" kind="relationship" relationship="viewControllers" id="35y-Vp-7Bl"/>
                         <segue destination="gca-Zk-cvt" kind="relationship" relationship="viewControllers" id="kgA-kR-59v"/>
                         <segue destination="7uA-87-4es" kind="relationship" relationship="viewControllers" id="Eq8-af-UFW"/>
-                        <segue destination="XR1-cZ-F34" kind="relationship" relationship="viewControllers" id="OjY-rY-YuI"/>
+                        <segue destination="O3p-SL-5xv" kind="relationship" relationship="viewControllers" id="hgc-sn-53H"/>
                         <segue destination="Jep-s8-Yev" kind="relationship" relationship="viewControllers" id="4l5-PD-uTE"/>
                     </connections>
                 </tabBarController>
@@ -2445,6 +2455,7 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
+                    <navigationItem key="navigationItem" id="D8K-l3-K4n"/>
                     <connections>
                         <outlet property="textField1" destination="DEK-hS-E8u" id="CsU-cH-mbk"/>
                         <outlet property="textField2" destination="4Xh-MD-9JZ" id="AJv-qt-PcF"/>
@@ -2566,229 +2577,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y0v-4A-5Yl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6127" y="754"/>
-        </scene>
-        <!--お気に入り-->
-        <scene sceneID="3M7-Xv-9Ee">
-            <objects>
-                <navigationController storyboardIdentifier="NVCForPhraseWord" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="XR1-cZ-F34" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="お気に入り" image="doc.text" catalog="system" id="bKT-mY-Xy8"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ljs-rn-f9J">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5XB-SU-Vkg">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="6ov-nD-mWm" kind="relationship" relationship="rootViewController" id="1TJ-bF-g6T"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F3l-cm-xN3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-353" y="753"/>
-        </scene>
-        <!--All Phrase Word View Controller-->
-        <scene sceneID="HxA-HR-1Qn">
-            <objects>
-                <viewController storyboardIdentifier="allPhraseWord" id="v40-nH-T4i" customClass="AllPhraseWordViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="jvz-Rq-2er">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hCA-cB-OyD">
-                                <rect key="frame" x="0.0" y="47" width="375" height="731"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q28-3b-PXQ">
-                                <rect key="frame" x="166.33333333333334" y="396" width="42.666666666666657" height="20.333333333333314"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                <color key="textColor" systemColor="systemOrangeColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="4sb-oX-OhS"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="Q28-3b-PXQ" firstAttribute="centerY" secondItem="jvz-Rq-2er" secondAttribute="centerY" id="16o-4A-bBM"/>
-                            <constraint firstItem="hCA-cB-OyD" firstAttribute="leading" secondItem="4sb-oX-OhS" secondAttribute="leading" id="2o8-UL-Dsk"/>
-                            <constraint firstItem="Q28-3b-PXQ" firstAttribute="centerX" secondItem="jvz-Rq-2er" secondAttribute="centerX" id="8WT-B1-QAB"/>
-                            <constraint firstItem="4sb-oX-OhS" firstAttribute="trailing" secondItem="hCA-cB-OyD" secondAttribute="trailing" id="Sl7-cE-9Kd"/>
-                            <constraint firstItem="hCA-cB-OyD" firstAttribute="top" secondItem="4sb-oX-OhS" secondAttribute="top" id="pq1-Zm-REe"/>
-                            <constraint firstItem="4sb-oX-OhS" firstAttribute="bottom" secondItem="hCA-cB-OyD" secondAttribute="bottom" id="zpj-1C-D7J"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="label1" destination="Q28-3b-PXQ" id="pqX-mz-Sti"/>
-                        <outlet property="tableView" destination="hCA-cB-OyD" id="QeP-Ni-4oT"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dDr-g5-BQA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3854" y="1455"/>
-        </scene>
-        <!--Third Phrase Word View Controller-->
-        <scene sceneID="10F-3W-Hp3">
-            <objects>
-                <viewController storyboardIdentifier="thirdPhraseWord" id="OKm-iF-bQb" customClass="ThirdPhraseWordViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="PSd-LA-j2r">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lpY-BL-vbA">
-                                <rect key="frame" x="0.0" y="47" width="375" height="731"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ld-Cy-p3L">
-                                <rect key="frame" x="166" y="395.66666666666669" width="43" height="21"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                <color key="textColor" systemColor="systemOrangeColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="ILj-gF-1X7"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="lpY-BL-vbA" firstAttribute="bottom" secondItem="ILj-gF-1X7" secondAttribute="bottom" id="LpA-oT-Ewh"/>
-                            <constraint firstItem="3ld-Cy-p3L" firstAttribute="centerY" secondItem="PSd-LA-j2r" secondAttribute="centerY" id="Zhe-DR-QvQ"/>
-                            <constraint firstItem="3ld-Cy-p3L" firstAttribute="centerX" secondItem="PSd-LA-j2r" secondAttribute="centerX" id="aYK-s0-Ixd"/>
-                            <constraint firstItem="ILj-gF-1X7" firstAttribute="trailing" secondItem="lpY-BL-vbA" secondAttribute="trailing" id="fOq-wK-fxZ"/>
-                            <constraint firstItem="lpY-BL-vbA" firstAttribute="top" secondItem="ILj-gF-1X7" secondAttribute="top" id="jGo-zM-SgS"/>
-                            <constraint firstItem="lpY-BL-vbA" firstAttribute="leading" secondItem="ILj-gF-1X7" secondAttribute="leading" id="zgT-2T-ve2"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="label1" destination="3ld-Cy-p3L" id="TF1-7n-ZDc"/>
-                        <outlet property="tableView" destination="lpY-BL-vbA" id="Kko-sI-kyW"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kaJ-r5-1Vo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2999.1999999999998" y="1454.9261083743843"/>
-        </scene>
-        <!--Paging Phrase Word View Controller-->
-        <scene sceneID="ets-cu-u0r">
-            <objects>
-                <viewController id="6ov-nD-mWm" customClass="PagingPhraseWordViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="KeA-0D-Z91">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hla-UO-pcc">
-                                <rect key="frame" x="0.0" y="47" width="375" height="682"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="Ts3-Ub-ov8"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="Hla-UO-pcc" firstAttribute="leading" secondItem="Ts3-Ub-ov8" secondAttribute="leading" id="DJi-od-5Iu"/>
-                            <constraint firstItem="Hla-UO-pcc" firstAttribute="bottom" secondItem="Ts3-Ub-ov8" secondAttribute="bottom" id="Evi-O1-u3U"/>
-                            <constraint firstItem="Ts3-Ub-ov8" firstAttribute="trailing" secondItem="Hla-UO-pcc" secondAttribute="trailing" id="Ob9-tm-RGi"/>
-                            <constraint firstItem="Hla-UO-pcc" firstAttribute="top" secondItem="Ts3-Ub-ov8" secondAttribute="top" id="apk-DA-lEt"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="QKp-aq-Scv"/>
-                    <connections>
-                        <outlet property="pagingView" destination="Hla-UO-pcc" id="nKe-io-dL1"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="m8s-5Q-3vR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1346.4000000000001" y="752.95566502463055"/>
-        </scene>
-        <!--Second Phrase Word View Controller-->
-        <scene sceneID="LrW-13-yFO">
-            <objects>
-                <viewController storyboardIdentifier="secondPhraseWord" id="lON-UO-Ga4" customClass="SecondPhraseWordViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="kYZ-N5-TvN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="FnS-Hp-w7R">
-                                <rect key="frame" x="0.0" y="47" width="375" height="731"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bOL-OD-bsR">
-                                <rect key="frame" x="166.33333333333334" y="396" width="42.666666666666657" height="20.333333333333314"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                <color key="textColor" systemColor="systemOrangeColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="wDp-Lx-8fh"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="wDp-Lx-8fh" firstAttribute="trailing" secondItem="FnS-Hp-w7R" secondAttribute="trailing" id="5LD-ry-VZl"/>
-                            <constraint firstItem="FnS-Hp-w7R" firstAttribute="leading" secondItem="wDp-Lx-8fh" secondAttribute="leading" id="Mms-wg-ICy"/>
-                            <constraint firstItem="wDp-Lx-8fh" firstAttribute="bottom" secondItem="FnS-Hp-w7R" secondAttribute="bottom" id="Nb1-W9-TES"/>
-                            <constraint firstItem="bOL-OD-bsR" firstAttribute="centerY" secondItem="kYZ-N5-TvN" secondAttribute="centerY" id="Ous-TE-LPK"/>
-                            <constraint firstItem="FnS-Hp-w7R" firstAttribute="top" secondItem="wDp-Lx-8fh" secondAttribute="top" id="TUV-F9-Gol"/>
-                            <constraint firstItem="bOL-OD-bsR" firstAttribute="centerX" secondItem="kYZ-N5-TvN" secondAttribute="centerX" id="jQh-D4-wzT"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="label1" destination="bOL-OD-bsR" id="NZz-Cg-pOw"/>
-                        <outlet property="tableView" destination="FnS-Hp-w7R" id="uiL-MD-7ku"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ai0-Q7-Dgg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2204" y="1455"/>
-        </scene>
-        <!--Phrase Word View Controller-->
-        <scene sceneID="5M8-Fx-Brw">
-            <objects>
-                <viewController storyboardIdentifier="phraseWord" id="FxY-nc-WLr" customClass="PhraseWordViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="zD2-Wp-IzX">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l1d-qL-naD">
-                                <rect key="frame" x="0.0" y="47" width="375" height="731"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="i1o-6T-Njz">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="731"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    </tableView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7MA-bd-7m2">
-                                        <rect key="frame" x="166.33333333333334" y="355" width="42.666666666666657" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                        <color key="textColor" systemColor="systemOrangeColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="7MA-bd-7m2" firstAttribute="centerX" secondItem="l1d-qL-naD" secondAttribute="centerX" id="1Sp-8T-wOm"/>
-                                    <constraint firstAttribute="bottom" secondItem="i1o-6T-Njz" secondAttribute="bottom" id="4bB-3q-HGy"/>
-                                    <constraint firstItem="7MA-bd-7m2" firstAttribute="centerY" secondItem="l1d-qL-naD" secondAttribute="centerY" id="5HY-b0-rtd"/>
-                                    <constraint firstItem="i1o-6T-Njz" firstAttribute="top" secondItem="l1d-qL-naD" secondAttribute="top" id="BLS-0g-yNX"/>
-                                    <constraint firstItem="i1o-6T-Njz" firstAttribute="leading" secondItem="l1d-qL-naD" secondAttribute="leading" id="CaH-pt-RUb"/>
-                                    <constraint firstAttribute="trailing" secondItem="i1o-6T-Njz" secondAttribute="trailing" id="oB2-mr-MRd"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="4Ck-oT-QTi"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="4Ck-oT-QTi" firstAttribute="trailing" secondItem="l1d-qL-naD" secondAttribute="trailing" id="0ev-w1-M8P"/>
-                            <constraint firstItem="l1d-qL-naD" firstAttribute="bottom" secondItem="4Ck-oT-QTi" secondAttribute="bottom" id="2TC-04-kmc"/>
-                            <constraint firstItem="l1d-qL-naD" firstAttribute="top" secondItem="4Ck-oT-QTi" secondAttribute="top" id="MK1-hG-ZVx"/>
-                            <constraint firstItem="l1d-qL-naD" firstAttribute="leading" secondItem="4Ck-oT-QTi" secondAttribute="leading" id="qVC-Ix-9xh"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="E18-1X-i4f"/>
-                    <connections>
-                        <outlet property="label1" destination="7MA-bd-7m2" id="e9o-0a-OP4"/>
-                        <outlet property="tableView" destination="i1o-6T-Njz" id="Thk-qs-MHz"/>
-                        <outlet property="view1" destination="l1d-qL-naD" id="VEh-G2-2hr"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cwf-HG-Oml" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1346" y="1455"/>
         </scene>
         <!--Second Tab Bar Controller-->
         <scene sceneID="0Uc-hx-NaJ">
@@ -2963,7 +2751,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9oJ-Sz-XqN">
-                                <rect key="frame" x="-1" y="34" width="374" height="44"/>
+                                <rect key="frame" x="0.0" y="34" width="374" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jYc-UI-4st">
@@ -4049,7 +3837,6 @@
         <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="delete.left" catalog="system" width="128" height="102"/>
         <image name="doc.on.doc" catalog="system" width="116" height="128"/>
-        <image name="doc.text" catalog="system" width="115" height="128"/>
         <image name="folder" catalog="system" width="128" height="96"/>
         <image name="folder.badge.plus" catalog="system" width="128" height="92"/>
         <image name="list.bullet" catalog="system" width="128" height="87"/>
