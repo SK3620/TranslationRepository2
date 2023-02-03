@@ -5,7 +5,7 @@ It is a App for instant English compositon training, which includes a listening 
 # URL  
 https://apps.apple.com/jp/app/deepl%E7%BF%BB%E8%A8%B3%E4%BF%9D%E5%AD%98/id6443462724  
 # Demo Video  
-#### The first demo video includes the feature to save the sentences to be translated and the translation results, the listening feature and other features. ####  
+#### The first demo video includes the feature to save the sentences to be translated and the translation results, the listening feature and other features.↓ ####  
 https://user-images.githubusercontent.com/108386527/216686295-47ff6f71-2e1e-4737-a244-7cdbf178ae4f.mp4　　
 
 https://user-images.githubusercontent.com/108386527/216684549-b7db42b4-60ab-450d-acd3-16b9f31f0367.mp4　　
