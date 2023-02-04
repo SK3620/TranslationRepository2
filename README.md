@@ -5,6 +5,9 @@ It is a App for instant English compositon training, which includes a listening 
 # URL / Install
 https://apps.apple.com/jp/app/deepl%E7%BF%BB%E8%A8%B3%E4%BF%9D%E5%AD%98/id6443462724  
 (You can download the application from this URL.)  
+# Development Environment  
+MacOS Monterey version 12.6 MacBook Pro (13-inch, 2019, Two Thunderbolt 3 ports)  
+Xcode Version 14.1 (14B47b)  
 # Author  
 Name: Kenta Suzuki  
 Email: (k-n-t1119@ezweb.ne.jp)  
