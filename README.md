@@ -32,6 +32,9 @@ Xcode Version 14.1 (14B47b)
 Name: Kenta Suzuki  
 Email: (k-n-t1119@ezweb.ne.jp)  
 Contact Information: https://tayori.com/form/7c23974951b748bcda08896854f1e7884439eb5c/  
+# License  
+There is no license for this program.  
+(This program is published in a public repository, so GitHub users can view and fork it.)  
 # Demo Video  
 The first demo video includes the feature to save the sentences to be translated and the translation results, the listening feature and other features.↓  
 
