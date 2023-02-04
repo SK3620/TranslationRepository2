@@ -3,8 +3,26 @@ Using the world's most powerful translation tool DeepL, it enables you to save t
 # Description  
 It is a App for instant English compositon training, which includes a listening feature, a learning record feature, a translation history viewing feature, a favorite registration feature, and a simple SNS feature that allows users to connect with each other.  
 # URL / Install
+Compatible with IPhone only (iOS15.0 or later)  
 https://apps.apple.com/jp/app/deepl%E7%BF%BB%E8%A8%B3%E4%BF%9D%E5%AD%98/id6443462724  
 (You can download the application from this URL.)  
+# Requirement  
+Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)  
+RealmSwift 10.20.0  
+SVProgressHUD  
+FSCalendar  
+CalculateCalendarLogic  
+ContextMenuSwift  
+SideMenu ~> 6.0  
+Firebase 8.9.1  
+Firebase/Analytics   
+Firebase/Auth  
+Firebase/Firestore  
+Firebase/Storage  
+FirebaseUI/Storage  
+CLImageEditor/AllTools 0.2.4  
+SwiftFormat/CLI  
+Parchment ~> 3.0  
 # Development Environment  
 MacOS Monterey version 12.6 MacBook Pro (13-inch, 2019, Two Thunderbolt 3 ports)  
 Xcode Version 14.1 (14B47b)  
