@@ -2,7 +2,7 @@
 Using the world's most powerful translation tool DeepL, it enables you to save the text to be translated and the translation results in the created folder.  
 # Description  
 It is a App for instant English compositon training, which includes a listening feature, a learning record feature, a translation history viewing feature, a favorite registration feature, and a simple SNS feature that allows users to connect with each other.  
-# URL / Install
+# URL / Installation
 Compatible with IPhone only (iOS15.0 or later)  
 https://apps.apple.com/jp/app/deepl%E7%BF%BB%E8%A8%B3%E4%BF%9D%E5%AD%98/id6443462724  
 (You can download the application from this URL.)  
@@ -23,6 +23,8 @@ FirebaseUI/Storage
 CLImageEditor/AllTools 0.2.4  
 SwiftFormat/CLI  
 Parchment ~> 3.0  
+  
+Installed in a terminal using CocoaPods
 # Development Environment  
 MacOS Monterey version 12.6 MacBook Pro (13-inch, 2019, Two Thunderbolt 3 ports)  
 Xcode Version 14.1 (14B47b)  
