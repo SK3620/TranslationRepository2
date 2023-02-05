@@ -120,6 +120,7 @@
 		83D3D058298FA70600C1781C /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D057298FA70600C1781C /* Profile.storyboard */; };
 		83D3D05A298FAA2E00C1781C /* EditProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D059298FAA2E00C1781C /* EditProfile.storyboard */; };
 		83D3D05C298FAD9B00C1781C /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D05B298FAD9B00C1781C /* Login.storyboard */; };
+		83D3D05E298FB0DB00C1781C /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D05D298FB0DB00C1781C /* Chat.storyboard */; };
 		83D896322913F5CD00E570AD /* CommentSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896312913F5CD00E570AD /* CommentSectionViewController.swift */; };
 		83D896342914190500E570AD /* InputCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896332914190500E570AD /* InputCommentViewController.swift */; };
 		83D8963729141D9500E570AD /* CustomCellForCommentSetion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */; };
@@ -243,6 +244,7 @@
 		83D3D057298FA70600C1781C /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		83D3D059298FAA2E00C1781C /* EditProfile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditProfile.storyboard; sourceTree = "<group>"; };
 		83D3D05B298FAD9B00C1781C /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
+		83D3D05D298FB0DB00C1781C /* Chat.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
 		83D896312913F5CD00E570AD /* CommentSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionViewController.swift; sourceTree = "<group>"; };
 		83D896332914190500E570AD /* InputCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommentViewController.swift; sourceTree = "<group>"; };
 		83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForCommentSetion.swift; sourceTree = "<group>"; };
@@ -507,6 +509,7 @@
 				83D3D057298FA70600C1781C /* Profile.storyboard */,
 				83D3D059298FAA2E00C1781C /* EditProfile.storyboard */,
 				83D3D05B298FAD9B00C1781C /* Login.storyboard */,
+				83D3D05D298FB0DB00C1781C /* Chat.storyboard */,
 			);
 			path = StoryBoard;
 			sourceTree = "<group>";
@@ -614,6 +617,7 @@
 				83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */,
 				83D3D054298FA0CB00C1781C /* History.storyboard in Resources */,
 				83BD2B8E2973127E0090B02E /* GoogleService-Info.plist in Resources */,
+				83D3D05E298FB0DB00C1781C /* Chat.storyboard in Resources */,
 				83833546290F60CF00C374F9 /* CustomCellForEditProfile.xib in Resources */,
 				83B6AF2028E7254000700DBF /* CustomCellForReview.xib in Resources */,
 				83071D0228B91AC90003734C /* Assets.xcassets in Resources */,
