@@ -113,6 +113,10 @@
 		83CCFFA7298A0C6A0030BC9C /* GetDocuments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CCFFA6298A0C6A0030BC9C /* GetDocuments.swift */; };
 		83CE5511293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CE5510293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift */; };
 		83D29A6B291BDC6000DFF928 /* SecondPagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */; };
+		83D3D050298F9E7900C1781C /* Study.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D04F298F9E7900C1781C /* Study.storyboard */; };
+		83D3D052298F9FF600C1781C /* Translate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D051298F9FF600C1781C /* Translate.storyboard */; };
+		83D3D054298FA0CB00C1781C /* History.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D053298FA0CB00C1781C /* History.storyboard */; };
+		83D3D056298FA1E200C1781C /* Record.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D055298FA1E200C1781C /* Record.storyboard */; };
 		83D896322913F5CD00E570AD /* CommentSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896312913F5CD00E570AD /* CommentSectionViewController.swift */; };
 		83D896342914190500E570AD /* InputCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896332914190500E570AD /* InputCommentViewController.swift */; };
 		83D8963729141D9500E570AD /* CustomCellForCommentSetion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */; };
@@ -229,6 +233,10 @@
 		83CCFFA6298A0C6A0030BC9C /* GetDocuments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDocuments.swift; sourceTree = "<group>"; };
 		83CE5510293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostedCommentsHistoryViewController.swift; sourceTree = "<group>"; };
 		83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPagingViewController.swift; sourceTree = "<group>"; };
+		83D3D04F298F9E7900C1781C /* Study.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Study.storyboard; sourceTree = "<group>"; };
+		83D3D051298F9FF600C1781C /* Translate.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Translate.storyboard; sourceTree = "<group>"; };
+		83D3D053298FA0CB00C1781C /* History.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = History.storyboard; sourceTree = "<group>"; };
+		83D3D055298FA1E200C1781C /* Record.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Record.storyboard; sourceTree = "<group>"; };
 		83D896312913F5CD00E570AD /* CommentSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionViewController.swift; sourceTree = "<group>"; };
 		83D896332914190500E570AD /* InputCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommentViewController.swift; sourceTree = "<group>"; };
 		83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForCommentSetion.swift; sourceTree = "<group>"; };
@@ -486,6 +494,10 @@
 				83071CFE28B91AC70003734C /* Main.storyboard */,
 				839F18CA298CD6D20024DF51 /* QuickMemo.storyboard */,
 				839F18CC298CDB440024DF51 /* PhraseWord.storyboard */,
+				83D3D04F298F9E7900C1781C /* Study.storyboard */,
+				83D3D051298F9FF600C1781C /* Translate.storyboard */,
+				83D3D053298FA0CB00C1781C /* History.storyboard */,
+				83D3D055298FA1E200C1781C /* Record.storyboard */,
 			);
 			path = StoryBoard;
 			sourceTree = "<group>";
@@ -591,6 +603,7 @@
 			files = (
 				83BD2B8A29730D960090B02E /* APIKey.plist in Resources */,
 				83071D0528B91AC90003734C /* LaunchScreen.storyboard in Resources */,
+				83D3D054298FA0CB00C1781C /* History.storyboard in Resources */,
 				83BD2B8E2973127E0090B02E /* GoogleService-Info.plist in Resources */,
 				83833546290F60CF00C374F9 /* CustomCellForEditProfile.xib in Resources */,
 				83B6AF2028E7254000700DBF /* CustomCellForReview.xib in Resources */,
@@ -601,12 +614,15 @@
 				83C292192912E92D00386EE9 /* CustomCellForTimeLine.xib in Resources */,
 				83D8963829141D9500E570AD /* CustomCellForCommentSetion.xib in Resources */,
 				83AC1DC928E4427D00576CF4 /* CustomCellForPhraseWord.xib in Resources */,
+				83D3D050298F9E7900C1781C /* Study.storyboard in Resources */,
 				83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */,
 				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
 				839F18CB298CD6D20024DF51 /* QuickMemo.storyboard in Resources */,
 				839F18CD298CDB440024DF51 /* PhraseWord.storyboard in Resources */,
+				83D3D052298F9FF600C1781C /* Translate.storyboard in Resources */,
 				83862E38297D183F0032E05B /* CustomCellForTermsOfService.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
+				83D3D056298FA1E200C1781C /* Record.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
