@@ -465,6 +465,14 @@
             </objects>
             <point key="canvasLocation" x="6336" y="156"/>
         </scene>
+        <!--InputComment-->
+        <scene sceneID="ZV9-gv-Xo4">
+            <objects>
+                <viewControllerPlaceholder storyboardName="InputComment" id="Jpx-ya-j04" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FyV-cY-ube" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5719" y="-380"/>
+        </scene>
         <!--Book Mark Comments Section View Controller-->
         <scene sceneID="kUB-Eg-jxH">
             <objects>

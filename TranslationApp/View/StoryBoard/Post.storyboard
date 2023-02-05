@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="LDe-tb-hZS">
+            <objects>
+                <navigationController storyboardIdentifier="Post" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="JK9-IT-fPd" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="OmE-qH-rjn">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" systemColor="systemGray4Color"/>
+                        <navigationBarAppearance key="scrollEdgeAppearance">
+                            <color key="backgroundColor" systemColor="systemGray5Color"/>
+                        </navigationBarAppearance>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="XGS-Zt-apD" kind="relationship" relationship="rootViewController" id="kcn-fc-DB7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wzz-7T-qNk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="10903.200000000001" y="-3353.2019704433501"/>
+        </scene>
+        <!--Post View Controller-->
+        <scene sceneID="pCh-Jr-wZN">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="XGS-Zt-apD" customClass="PostViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ohS-Tn-RPU">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="97t-tb-1mi">
+                                <rect key="frame" x="10" y="113" width="373" height="515"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ibj-xy-Xf0">
+                                <rect key="frame" x="20" y="658" width="353" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJM-Nd-rnn">
+                                        <rect key="frame" x="0.0" y="0.0" width="114.33333333333333" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="dbx-qO-t4N"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="修正/教えて">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="correctButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="r2A-dZ-igv"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TKT-m9-X5e">
+                                        <rect key="frame" x="119.33333333333334" y="0.0" width="114.33333333333334" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="sZ0-ad-5wm"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="学習法">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="howToLearnButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="ztc-g5-B6C"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rxB-eV-PZV">
+                                        <rect key="frame" x="238.66666666666671" y="0.0" width="114.33333333333334" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="7Ds-Ax-0El"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="単語">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="wordButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="NmE-DV-RY0"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ke2-oR-WU2">
+                                <rect key="frame" x="20" y="748" width="353" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZJ-zk-pOh">
+                                        <rect key="frame" x="0.0" y="0.0" width="114.33333333333333" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="発音">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="pronunciationButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="PAu-XX-rPA"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lzx-fb-k5j">
+                                        <rect key="frame" x="119.33333333333334" y="0.0" width="114.33333333333334" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="資格試験">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="certificationButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="njM-n6-mNE"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hf5-j4-rzI">
+                                        <rect key="frame" x="238.66666666666671" y="0.0" width="114.33333333333334" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="その他">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="etcButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="4zf-u9-Bhu"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="4KE-Fa-FIQ"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="d1f-qW-WM0">
+                                <rect key="frame" x="20" y="703" width="353" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ufd-gJ-8eH">
+                                        <rect key="frame" x="0.0" y="0.0" width="114.33333333333333" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="文法">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="grammerButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="tJm-Gx-9k6"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0me-vI-maU">
+                                        <rect key="frame" x="119.33333333333334" y="0.0" width="114.33333333333334" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="英会話">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="conversationButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="3We-xB-Xda"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KLo-Jo-Qd6">
+                                        <rect key="frame" x="238.66666666666671" y="0.0" width="114.33333333333334" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" systemColor="systemGray2Color"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="リスニング">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="listeningButton:" destination="XGS-Zt-apD" eventType="touchUpInside" id="ydX-kQ-gIR"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="gx8-ai-KfU"/>
+                                </constraints>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U55-dY-g4m">
+                                <rect key="frame" x="10" y="153" width="373" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="seo-pz-0s7"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ke2-oR-WU2" firstAttribute="trailing" secondItem="d1f-qW-WM0" secondAttribute="trailing" id="0po-B2-0iO"/>
+                            <constraint firstItem="d1f-qW-WM0" firstAttribute="top" secondItem="ibj-xy-Xf0" secondAttribute="bottom" constant="5" id="1PE-af-4qb"/>
+                            <constraint firstItem="seo-pz-0s7" firstAttribute="bottom" secondItem="ke2-oR-WU2" secondAttribute="bottom" constant="30" id="5RS-Wx-8cf"/>
+                            <constraint firstItem="97t-tb-1mi" firstAttribute="leading" secondItem="seo-pz-0s7" secondAttribute="leading" constant="10" id="CpG-sE-6sK"/>
+                            <constraint firstItem="U55-dY-g4m" firstAttribute="top" secondItem="ohS-Tn-RPU" secondAttribute="topMargin" constant="50" id="FqR-UP-CdA"/>
+                            <constraint firstItem="97t-tb-1mi" firstAttribute="top" secondItem="seo-pz-0s7" secondAttribute="top" constant="10" id="Kjy-yp-Uzc"/>
+                            <constraint firstItem="d1f-qW-WM0" firstAttribute="trailing" secondItem="ibj-xy-Xf0" secondAttribute="trailing" id="MFJ-rg-E0Q"/>
+                            <constraint firstItem="ibj-xy-Xf0" firstAttribute="top" secondItem="97t-tb-1mi" secondAttribute="bottom" constant="30" id="PeC-YX-jNV"/>
+                            <constraint firstItem="d1f-qW-WM0" firstAttribute="leading" secondItem="ibj-xy-Xf0" secondAttribute="leading" id="To8-vg-bzS"/>
+                            <constraint firstItem="ke2-oR-WU2" firstAttribute="top" secondItem="d1f-qW-WM0" secondAttribute="bottom" constant="5" id="WWT-sv-nN1"/>
+                            <constraint firstItem="U55-dY-g4m" firstAttribute="centerX" secondItem="ohS-Tn-RPU" secondAttribute="centerX" id="aJF-y3-BdW"/>
+                            <constraint firstItem="U55-dY-g4m" firstAttribute="leading" secondItem="seo-pz-0s7" secondAttribute="leading" constant="10" id="d0T-Sr-tIm"/>
+                            <constraint firstItem="97t-tb-1mi" firstAttribute="trailing" secondItem="seo-pz-0s7" secondAttribute="trailing" constant="-10" id="edM-Gs-blh"/>
+                            <constraint firstItem="seo-pz-0s7" firstAttribute="trailing" secondItem="ke2-oR-WU2" secondAttribute="trailing" constant="20" id="iUT-x3-DhF"/>
+                            <constraint firstItem="ke2-oR-WU2" firstAttribute="leading" secondItem="seo-pz-0s7" secondAttribute="leading" constant="20" id="lwh-0V-1bi"/>
+                            <constraint firstItem="seo-pz-0s7" firstAttribute="trailing" secondItem="U55-dY-g4m" secondAttribute="trailing" constant="10" id="oHS-Cw-Z0d"/>
+                            <constraint firstItem="ke2-oR-WU2" firstAttribute="leading" secondItem="d1f-qW-WM0" secondAttribute="leading" id="rEo-Gp-Skp"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="2g0-rc-Hey">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="xmark" catalog="system" id="3UM-fy-o51">
+                            <connections>
+                                <action selector="backButton:" destination="XGS-Zt-apD" id="S4G-Me-FHB"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="arrowshape.turn.up.forward.circle" catalog="system" style="plain" id="Qxj-E2-71B">
+                            <connections>
+                                <action selector="postButton:" destination="XGS-Zt-apD" id="esy-df-pLb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="HowToLearnButton" destination="TKT-m9-X5e" id="T6T-Hf-pSf"/>
+                        <outlet property="backBarButtonItem" destination="3UM-fy-o51" id="iXV-tp-TAQ"/>
+                        <outlet property="certificationButton" destination="Lzx-fb-k5j" id="BFN-Uf-faj"/>
+                        <outlet property="conversationButton" destination="0me-vI-maU" id="he6-l4-qTY"/>
+                        <outlet property="correctButton" destination="hJM-Nd-rnn" id="aL5-Kv-mpv"/>
+                        <outlet property="etcButton" destination="hf5-j4-rzI" id="j5g-hH-Ca6"/>
+                        <outlet property="grammerButton" destination="ufd-gJ-8eH" id="wT6-cV-5KW"/>
+                        <outlet property="label1" destination="U55-dY-g4m" id="Vdc-8N-9ir"/>
+                        <outlet property="listeningButton" destination="KLo-Jo-Qd6" id="d7W-om-yHB"/>
+                        <outlet property="postButton" destination="Qxj-E2-71B" id="ueM-A7-3uk"/>
+                        <outlet property="pronunciationButton" destination="bZJ-zk-pOh" id="ha2-GZ-Log"/>
+                        <outlet property="textView" destination="97t-tb-1mi" id="Dsy-cD-hcq"/>
+                        <outlet property="wordButton" destination="rxB-eV-PZV" id="toO-ai-7gh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xcQ-Gd-Bg3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="11901.6" y="-3353.2019704433501"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="arrowshape.turn.up.forward.circle" catalog="system" width="128" height="123"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

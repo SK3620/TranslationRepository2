@@ -85,6 +85,14 @@
             </objects>
             <point key="canvasLocation" x="4976.8000000000002" y="-5028.3251231527092"/>
         </scene>
+        <!--Post-->
+        <scene sceneID="Ntl-HG-DfF">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Post" id="Sb0-s2-4bM" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dgj-sX-Ida" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2006" y="-2789"/>
+        </scene>
         <!--Second Paging View Controller-->
         <scene sceneID="ETU-VC-ttj">
             <objects>

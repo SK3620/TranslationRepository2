@@ -124,6 +124,8 @@
 		83D3D060298FB31800C1781C /* TimeLine.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D05F298FB31800C1781C /* TimeLine.storyboard */; };
 		83D3D062298FB55800C1781C /* OthersProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D061298FB55800C1781C /* OthersProfile.storyboard */; };
 		83D3D064298FB91500C1781C /* CommentSection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D063298FB91500C1781C /* CommentSection.storyboard */; };
+		83D3D066298FC33E00C1781C /* Post.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D065298FC33D00C1781C /* Post.storyboard */; };
+		83D3D068298FC3D400C1781C /* InputComment.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83D3D067298FC3D400C1781C /* InputComment.storyboard */; };
 		83D896322913F5CD00E570AD /* CommentSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896312913F5CD00E570AD /* CommentSectionViewController.swift */; };
 		83D896342914190500E570AD /* InputCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D896332914190500E570AD /* InputCommentViewController.swift */; };
 		83D8963729141D9500E570AD /* CustomCellForCommentSetion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */; };
@@ -251,6 +253,8 @@
 		83D3D05F298FB31800C1781C /* TimeLine.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TimeLine.storyboard; sourceTree = "<group>"; };
 		83D3D061298FB55800C1781C /* OthersProfile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OthersProfile.storyboard; sourceTree = "<group>"; };
 		83D3D063298FB91500C1781C /* CommentSection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CommentSection.storyboard; sourceTree = "<group>"; };
+		83D3D065298FC33D00C1781C /* Post.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Post.storyboard; sourceTree = "<group>"; };
+		83D3D067298FC3D400C1781C /* InputComment.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InputComment.storyboard; sourceTree = "<group>"; };
 		83D896312913F5CD00E570AD /* CommentSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionViewController.swift; sourceTree = "<group>"; };
 		83D896332914190500E570AD /* InputCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommentViewController.swift; sourceTree = "<group>"; };
 		83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForCommentSetion.swift; sourceTree = "<group>"; };
@@ -519,6 +523,8 @@
 				83D3D05F298FB31800C1781C /* TimeLine.storyboard */,
 				83D3D063298FB91500C1781C /* CommentSection.storyboard */,
 				83D3D061298FB55800C1781C /* OthersProfile.storyboard */,
+				83D3D065298FC33D00C1781C /* Post.storyboard */,
+				83D3D067298FC3D400C1781C /* InputComment.storyboard */,
 			);
 			path = StoryBoard;
 			sourceTree = "<group>";
@@ -627,6 +633,7 @@
 				83D3D054298FA0CB00C1781C /* History.storyboard in Resources */,
 				83BD2B8E2973127E0090B02E /* GoogleService-Info.plist in Resources */,
 				83D3D05E298FB0DB00C1781C /* Chat.storyboard in Resources */,
+				83D3D068298FC3D400C1781C /* InputComment.storyboard in Resources */,
 				83833546290F60CF00C374F9 /* CustomCellForEditProfile.xib in Resources */,
 				83B6AF2028E7254000700DBF /* CustomCellForReview.xib in Resources */,
 				83071D0228B91AC90003734C /* Assets.xcassets in Resources */,
@@ -650,6 +657,7 @@
 				83D3D052298F9FF600C1781C /* Translate.storyboard in Resources */,
 				83862E38297D183F0032E05B /* CustomCellForTermsOfService.xib in Resources */,
 				83B9C20228D3050E006138E2 /* CustomCellForRecord.xib in Resources */,
+				83D3D066298FC33E00C1781C /* Post.storyboard in Resources */,
 				83D3D056298FA1E200C1781C /* Record.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

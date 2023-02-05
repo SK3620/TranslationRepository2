@@ -276,6 +276,14 @@
             </objects>
             <point key="canvasLocation" x="9906" y="-866"/>
         </scene>
+        <!--InputComment-->
+        <scene sceneID="aUA-Ie-Zrd">
+            <objects>
+                <viewControllerPlaceholder storyboardName="InputComment" id="pXM-qT-18B" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PkM-eG-iqr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="9904" y="-2115"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="bUF-wU-npI">
             <objects>
