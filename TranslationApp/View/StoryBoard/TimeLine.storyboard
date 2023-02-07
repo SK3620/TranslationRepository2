@@ -88,7 +88,7 @@
         <!--Post-->
         <scene sceneID="Ntl-HG-DfF">
             <objects>
-                <viewControllerPlaceholder storyboardName="Post" id="Sb0-s2-4bM" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardIdentifier="Post" storyboardName="Post" id="Sb0-s2-4bM" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dgj-sX-Ida" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2006" y="-2789"/>
@@ -120,9 +120,9 @@
                     </navigationItem>
                     <connections>
                         <outlet property="pagingView" destination="IiE-xq-QQH" id="O85-g8-d4f"/>
-                        <segue destination="p5Q-yM-kqa" kind="show" identifier="ToCommentSection" id="fsc-3R-z5v"/>
                         <segue destination="ktN-kH-qaZ" kind="show" identifier="ToOthersProfile" id="fim-Cd-Iqp"/>
-                        <segue destination="zFC-ri-CKZ" kind="show" identifier="ToCommentSectio" id="d1q-i5-rH9"/>
+                        <segue destination="zFC-ri-CKZ" kind="show" identifier="ToCommentSection" id="d1q-i5-rH9"/>
+                        <segue destination="IyX-14-Gbh" kind="show" identifier="ToCommentSection" id="FBp-1m-AoJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Vi-TM-jJD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -541,36 +541,15 @@
             </objects>
             <point key="canvasLocation" x="7143" y="-2300"/>
         </scene>
-        <!--Comment Section View Controller-->
-        <scene sceneID="EGJ-37-wG4">
+        <!--CommentSection-->
+        <scene sceneID="aSm-p4-5Kl">
             <objects>
-                <viewController id="p5Q-yM-kqa" customClass="CommentSectionViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="aIV-Wa-BOc">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aSv-WP-64Y">
-                                <rect key="frame" x="0.0" y="59" width="393" height="793"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="BwD-MX-Oj9"/>
-                        <color key="backgroundColor" systemColor="systemGray5Color"/>
-                        <constraints>
-                            <constraint firstItem="aSv-WP-64Y" firstAttribute="leading" secondItem="BwD-MX-Oj9" secondAttribute="leading" id="Qnc-kg-jOG"/>
-                            <constraint firstItem="aSv-WP-64Y" firstAttribute="top" secondItem="BwD-MX-Oj9" secondAttribute="top" id="dnI-gC-G2z"/>
-                            <constraint firstItem="BwD-MX-Oj9" firstAttribute="trailing" secondItem="aSv-WP-64Y" secondAttribute="trailing" id="ecH-nU-0gk"/>
-                            <constraint firstAttribute="bottom" secondItem="aSv-WP-64Y" secondAttribute="bottom" id="fEL-U1-eaz"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="KUa-e3-xgH"/>
-                    <connections>
-                        <outlet property="tableView" destination="aSv-WP-64Y" id="hGJ-Nl-DIN"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="b6v-64-fpf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="CommentSection" id="IyX-14-Gbh" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="COP-X6-tXx"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Dn-Ia-xfK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3256" y="-1713"/>
+            <point key="canvasLocation" x="3256" y="-2025"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2CV-yH-psQ">

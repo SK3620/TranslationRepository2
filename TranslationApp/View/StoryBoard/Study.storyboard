@@ -336,6 +336,22 @@
             </objects>
             <point key="canvasLocation" x="1380" y="2879"/>
         </scene>
+        <!--PhraseWord-->
+        <scene sceneID="Sjf-Ye-keD">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="NVCForPhraseWord" storyboardName="PhraseWord" id="NAa-ik-lxG" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bO9-bt-YgU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1379" y="3310"/>
+        </scene>
+        <!--Record-->
+        <scene sceneID="r0y-BO-2Wy">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="NVCForRecordView" storyboardName="Record" id="oEz-3B-m3n" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mzl-SQ-W0S" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1934" y="3310"/>
+        </scene>
         <!--Folder View Controller-->
         <scene sceneID="ikD-JA-im8">
             <objects>

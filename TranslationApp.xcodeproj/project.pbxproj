@@ -56,8 +56,6 @@
 		8389C3FA290A7C5C007347AE /* TimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */; };
 		8389C3FC290A7C6A007347AE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8389C3FB290A7C6A007347AE /* LoginViewController.swift */; };
 		8389C3FE290ABDBC007347AE /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8389C3FD290ABDBC007347AE /* ProfileViewController.swift */; };
-		8389C401290AC663007347AE /* Pods_TranslationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */; };
-		8389C405290AC6AF007347AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8389C404290AC6AF007347AE /* Alamofire */; };
 		838F3FA0293A207B004A0FDF /* ThirdPhraseWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F3F9F293A207B004A0FDF /* ThirdPhraseWordViewController.swift */; };
 		83920A9F290B946100F1F2D6 /* CustomCellForIntroduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83920A9D290B946100F1F2D6 /* CustomCellForIntroduction.swift */; };
 		83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83920A9E290B946100F1F2D6 /* CustomCellForIntroduction.xib */; };
@@ -131,11 +129,14 @@
 		83D8963729141D9500E570AD /* CustomCellForCommentSetion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */; };
 		83D8963829141D9500E570AD /* CustomCellForCommentSetion.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83D8963629141D9500E570AD /* CustomCellForCommentSetion.xib */; };
 		83F021B128C0CC56009FFDD2 /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F021B028C0CC56009FFDD2 /* StudyViewController.swift */; };
+		83FAE2672992B2B100C946B4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 83FAE2662992B2B100C946B4 /* Alamofire */; };
+		9AF48952BA317E64709534FE /* Pods_TranslationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E7040A0BCD012F1676EB60F /* Pods_TranslationApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TranslationApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		76A5CC4D0934ACC4BB7691D9 /* Pods-TranslationApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.release.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.release.xcconfig"; sourceTree = "<group>"; };
+		282441842AA744F6B7B3C505 /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
+		2E7040A0BCD012F1676EB60F /* Pods_TranslationApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TranslationApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE8B02B1D6E922B353079B6 /* Pods-TranslationApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.release.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.release.xcconfig"; sourceTree = "<group>"; };
 		83071CF528B91AC70003734C /* DeepL保存翻訳.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DeepL保存翻訳.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83071CF828B91AC70003734C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83071CFA28B91AC70003734C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -260,7 +261,6 @@
 		83D8963529141D9500E570AD /* CustomCellForCommentSetion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForCommentSetion.swift; sourceTree = "<group>"; };
 		83D8963629141D9500E570AD /* CustomCellForCommentSetion.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForCommentSetion.xib; sourceTree = "<group>"; };
 		83F021B028C0CC56009FFDD2 /* StudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewController.swift; sourceTree = "<group>"; };
-		C116E1FDCFAEA5860B3B5F33 /* Pods-TranslationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TranslationApp.debug.xcconfig"; path = "Target Support Files/Pods-TranslationApp/Pods-TranslationApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,8 +269,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				83AA2A782966AC3700D95D6E /* MessageUI.framework in Frameworks */,
-				8389C405290AC6AF007347AE /* Alamofire in Frameworks */,
-				8389C401290AC663007347AE /* Pods_TranslationApp.framework in Frameworks */,
+				83FAE2672992B2B100C946B4 /* Alamofire in Frameworks */,
+				9AF48952BA317E64709534FE /* Pods_TranslationApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				83AA2A772966AC3600D95D6E /* MessageUI.framework */,
-				5AE466AC2454DC7D2D0C0F52 /* Pods_TranslationApp.framework */,
+				2E7040A0BCD012F1676EB60F /* Pods_TranslationApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -532,8 +532,8 @@
 		C1EE7F81A77D0C5F9E5E2A03 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C116E1FDCFAEA5860B3B5F33 /* Pods-TranslationApp.debug.xcconfig */,
-				76A5CC4D0934ACC4BB7691D9 /* Pods-TranslationApp.release.xcconfig */,
+				282441842AA744F6B7B3C505 /* Pods-TranslationApp.debug.xcconfig */,
+				7EE8B02B1D6E922B353079B6 /* Pods-TranslationApp.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -545,12 +545,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83071D0928B91AC90003734C /* Build configuration list for PBXNativeTarget "TranslationApp" */;
 			buildPhases = (
-				04B5B7BCA5BB9CCAD2CCCB20 /* [CP] Check Pods Manifest.lock */,
+				213D4C65981076AA7A4F6BA8 /* [CP] Check Pods Manifest.lock */,
 				83071CF128B91AC70003734C /* Sources */,
 				83071CF228B91AC70003734C /* Frameworks */,
 				83071CF328B91AC70003734C /* Resources */,
 				836F9AAA2908D01C00EB9C70 /* ShellScript */,
-				A7AB4DDB0951B51817300D76 /* [CP] Embed Pods Frameworks */,
+				418D1A89825D5F27154E03F3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -558,7 +558,7 @@
 			);
 			name = TranslationApp;
 			packageProductDependencies = (
-				8389C404290AC6AF007347AE /* Alamofire */,
+				83FAE2662992B2B100C946B4 /* Alamofire */,
 			);
 			productName = TranslationApp;
 			productReference = 83071CF528B91AC70003734C /* DeepL保存翻訳.app */;
@@ -665,7 +665,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		04B5B7BCA5BB9CCAD2CCCB20 /* [CP] Check Pods Manifest.lock */ = {
+		213D4C65981076AA7A4F6BA8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -687,6 +687,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		418D1A89825D5F27154E03F3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		836F9AAA2908D01C00EB9C70 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -703,23 +720,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "$ Pods/SwiftFormat/CommandLineTool/swiftformat .\n$ Pods/SwiftFormat/CommandLineTool/swiftformat . --self insert\n\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" . --self insert\n";
-		};
-		A7AB4DDB0951B51817300D76 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TranslationApp/Pods-TranslationApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -965,7 +965,7 @@
 		};
 		83071D0A28B91AC90003734C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C116E1FDCFAEA5860B3B5F33 /* Pods-TranslationApp.debug.xcconfig */;
+			baseConfigurationReference = 282441842AA744F6B7B3C505 /* Pods-TranslationApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1001,7 +1001,7 @@
 		};
 		83071D0B28B91AC90003734C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 76A5CC4D0934ACC4BB7691D9 /* Pods-TranslationApp.release.xcconfig */;
+			baseConfigurationReference = 7EE8B02B1D6E922B353079B6 /* Pods-TranslationApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1254,9 +1254,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8389C404290AC6AF007347AE /* Alamofire */ = {
+		83FAE2662992B2B100C946B4 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 83D3020028DB5EFA007EFF7E /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 839FBA3C28BA676E00BB64A5 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */

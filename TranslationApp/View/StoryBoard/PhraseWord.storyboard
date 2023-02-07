@@ -82,7 +82,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KOo-oN-UAX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-353" y="753"/>
+            <point key="canvasLocation" x="-5189" y="743"/>
         </scene>
         <!--Paging Phrase Word View Controller-->
         <scene sceneID="l0t-1A-7nO">
@@ -113,7 +113,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qJr-mp-XhZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1346.4000000000001" y="752.95566502463055"/>
+            <point key="canvasLocation" x="-3900" y="743"/>
         </scene>
         <!--Third Phrase Word View Controller-->
         <scene sceneID="dUd-tk-fGl">
