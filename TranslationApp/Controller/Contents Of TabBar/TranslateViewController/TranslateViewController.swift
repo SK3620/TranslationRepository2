@@ -320,7 +320,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         //        requestメソッドでAPIを呼ぶ
         // リクエスト成功か判定　encoder: URLEncodedFormParameterEncoder.default
         print("APIリスクエスト前実行")
-        AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
+        AF.request("https://api.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
 //            print("エラー？")
 //            print("Reponse: \(response)")
 //            switch response.result {
@@ -367,7 +367,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             "Content-Type": "application/x-www-form-urlencoded",
         ]
         // DeepL APIを実行
-        AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
+        AF.request("https://api.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
 //                                     リクエスト成功か判定
 //                                print("Reponse: \(response)")
 //                                switch(response.result){
