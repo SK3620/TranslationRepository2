@@ -47,12 +47,14 @@ class ChatListViewController: UIViewController {
         self.secondTabBarController.navigationItem.rightBarButtonItems = [editBarButtonBarItem]
 
         guard Auth.auth().currentUser != nil else {
+            self.secondTabBarController.navigationItem.title = "チャットリスト"
             self.chatListsData = []
             self.documentIdArray = []
             editBarButtonBarItem.isEnabled = false
             self.tableView.reloadData()
             return
         }
+        self.secondTabBarController.navigationItem.title = "チャットリスト(0)"
         self.getChatListDocument()
 
         GetDocument.observeIfYouAreAboutToBeAddedAsFriend { queryDocumentSnapshot in
