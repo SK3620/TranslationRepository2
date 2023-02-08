@@ -12,7 +12,6 @@ class SelectFolderForTranslateViewContoller: UIViewController, UITableViewDelega
     @IBOutlet private var tableView: UITableView!
 
     @IBOutlet private var selectButton: UIButton!
-    @IBOutlet private var backButton: UIButton!
 
     @IBOutlet private var folderNameLabel: UILabel!
     @IBOutlet private var label: UILabel!
@@ -28,6 +27,8 @@ class SelectFolderForTranslateViewContoller: UIViewController, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.settingsForNavigationBarAppearence()
+
         self.folderNameLabel.text = self.string
 
         self.selectButton.layer.borderWidth = 1
@@ -41,14 +42,22 @@ class SelectFolderForTranslateViewContoller: UIViewController, UITableViewDelega
 
         // translationFolderArrにデータがない場合
         if self.translationFolderArr.count == 0 {
-            self.label.text = "フォルダーを作成して下さい"
-            self.label.textColor = UIColor.orange
+            self.title = "フォルダーを作成して下さい"
+            self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.orange]
             self.selectButton.isEnabled = false
         } else {
             // データがあった場合
-            self.label.text = "保存先を選択して下さい"
+            self.title = "保存先を選択して下さい"
+            self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
             self.selectButton.isEnabled = false
         }
+    }
+
+    private func settingsForNavigationBarAppearence() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor.systemGray6
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -87,7 +96,7 @@ class SelectFolderForTranslateViewContoller: UIViewController, UITableViewDelega
     }
 
     @IBAction func backButton(_: Any) {
-        dismiss(animated: true)
+        self.dismiss(animated: true)
     }
 
     // 右下の選択ボタンタップ時
