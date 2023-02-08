@@ -320,7 +320,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
         //        requestメソッドでAPIを呼ぶ
         // リクエスト成功か判定　encoder: URLEncodedFormParameterEncoder.default
         print("APIリスクエスト前実行")
-        AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
+        AF.request("https://api.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
 //            print("エラー？")
 //            print("Reponse: \(response)")
 //            switch response.result {
@@ -367,7 +367,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             "Content-Type": "application/x-www-form-urlencoded",
         ]
         // DeepL APIを実行
-        AF.request("https://api-free.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
+        AF.request("https://api.deepl.com/v2/translate", method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default, headers: headers).responseDecodable(of: DeepLResult.self) { response in
 //                                     リクエスト成功か判定
 //                                print("Reponse: \(response)")
 //                                switch(response.result){
@@ -421,7 +421,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             // 入力されたテキスト
             translation.inputData = translateTextView1Text
             // 翻訳結果テキスト
-            translation.resultData = translateTextView2Text + "\n" + "メモ : "
+            translation.resultData = translateTextView2Text + "\n" + " "
             // 入力されたテキストと翻訳結果テキスト
             translation.inputAndResultData = translation.inputData + translation.resultData
             let translationArr = self.realm.objects(Translation.self)
@@ -466,12 +466,13 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
 
     // 右下のフォルダー選択ボタン押下時
     @IBAction func selectFolderButton(_: Any) {
-        let selectFolderForTranslateViewContoller = storyboard?.instantiateViewController(withIdentifier: "FolderList") as! SelectFolderForTranslateViewContoller
-        if let sheet = selectFolderForTranslateViewContoller.sheetPresentationController {
+        let navigationController = storyboard?.instantiateViewController(withIdentifier: "FolderList") as! UINavigationController
+        let selectFolderForTranslateViewContoller = navigationController.viewControllers[0] as! SelectFolderForTranslateViewContoller
+        if let sheet = navigationController.sheetPresentationController {
             sheet.detents = [.medium()]
         }
         selectFolderForTranslateViewContoller.translateViewController = self
-        present(selectFolderForTranslateViewContoller, animated: true, completion: nil)
+        present(navigationController, animated: true, completion: nil)
     }
 
     internal func setFolderNameStringOnButton2() {

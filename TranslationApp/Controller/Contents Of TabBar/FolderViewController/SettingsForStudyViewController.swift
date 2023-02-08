@@ -31,8 +31,8 @@ class SettingsForStudyViewController: UIViewController, UITableViewDelegate, UIT
     }
 
     private func navigationBarSettings() {
-        navigationController?.navigationBar.barTintColor = .systemGray6
-        navigationController?.navigationBar.backgroundColor = .systemGray6
+        navigationController?.navigationBar.barTintColor = .systemGray5
+        navigationController?.navigationBar.backgroundColor = .systemGray5
         title = "メニュー"
         navigationController?.navigationBar.titleTextAttributes = [
             // 文字の色

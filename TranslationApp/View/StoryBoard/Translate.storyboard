@@ -273,16 +273,16 @@
             </objects>
             <point key="canvasLocation" x="3084" y="1454.9261083743843"/>
         </scene>
-        <!--Select Folder For Translate View Contoller-->
+        <!--Title-->
         <scene sceneID="kfH-uX-e6r">
             <objects>
-                <viewController storyboardIdentifier="FolderList" id="6WN-eE-kDq" customClass="SelectFolderForTranslateViewContoller" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6WN-eE-kDq" customClass="SelectFolderForTranslateViewContoller" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aS4-re-lUj">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WhF-LM-S5U">
-                                <rect key="frame" x="79" y="84" width="235" height="20.333333333333329"/>
+                                <rect key="frame" x="79" y="128" width="235" height="596"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="235" id="SzE-Zk-ZPh"/>
                                 </constraints>
@@ -290,14 +290,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jpA-5j-fuJ">
-                                <rect key="frame" x="4.9999999999999964" y="67" width="58.666666666666657" height="34.333333333333343"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="戻る"/>
-                                <connections>
-                                    <action selector="backButton:" destination="6WN-eE-kDq" eventType="touchUpInside" id="D4u-kV-SLw"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zmf-2z-yIF">
                                 <rect key="frame" x="303" y="781" width="80" height="30"/>
                                 <constraints>
@@ -313,7 +305,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KZu-pE-BVF">
-                                <rect key="frame" x="0.0" y="114" width="393" height="654"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="665"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="FDJ-0V-jeY" detailTextLabel="lMp-kJ-6NO" style="IBUITableViewCellStyleSubtitle" id="flw-qC-u4L">
@@ -361,15 +353,19 @@
                             <constraint firstItem="zuu-YO-s8P" firstAttribute="trailing" secondItem="Zmf-2z-yIF" secondAttribute="trailing" constant="10" id="a6h-R1-nsY"/>
                             <constraint firstItem="zuu-YO-s8P" firstAttribute="trailing" secondItem="KZu-pE-BVF" secondAttribute="trailing" id="bJY-QT-Stl"/>
                             <constraint firstItem="KZu-pE-BVF" firstAttribute="leading" secondItem="zuu-YO-s8P" secondAttribute="leading" id="g0N-0b-y5U"/>
-                            <constraint firstItem="jpA-5j-fuJ" firstAttribute="leading" secondItem="aS4-re-lUj" secondAttribute="leading" constant="5" id="qdl-ba-Bw6"/>
-                            <constraint firstItem="KZu-pE-BVF" firstAttribute="top" secondItem="zuu-YO-s8P" secondAttribute="top" constant="55" id="vEi-Ke-alt"/>
-                            <constraint firstItem="jpA-5j-fuJ" firstAttribute="top" secondItem="zuu-YO-s8P" secondAttribute="top" constant="8" id="wSW-g9-KdY"/>
+                            <constraint firstItem="WhF-LM-S5U" firstAttribute="centerY" secondItem="aS4-re-lUj" secondAttribute="centerY" id="i7I-Na-8ep"/>
+                            <constraint firstItem="KZu-pE-BVF" firstAttribute="top" secondItem="zuu-YO-s8P" secondAttribute="top" id="vEi-Ke-alt"/>
                             <constraint firstItem="Zmf-2z-yIF" firstAttribute="centerY" secondItem="unD-CZ-rQj" secondAttribute="centerY" id="yzu-F1-b3M"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="yQg-HS-6A8"/>
+                    <navigationItem key="navigationItem" title="Title" id="3mn-PU-vOM">
+                        <barButtonItem key="leftBarButtonItem" title="戻る" id="SBH-Sx-DZy">
+                            <connections>
+                                <action selector="backButton:" destination="6WN-eE-kDq" id="GbO-3H-YTx"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
-                        <outlet property="backButton" destination="jpA-5j-fuJ" id="ZNY-J0-2sx"/>
                         <outlet property="folderNameLabel" destination="unD-CZ-rQj" id="Ych-dx-jON"/>
                         <outlet property="label" destination="WhF-LM-S5U" id="mik-id-Y7G"/>
                         <outlet property="selectButton" destination="Zmf-2z-yIF" id="wz5-cj-WEu"/>
@@ -378,7 +374,26 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0sg-re-qNX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3084" y="2151"/>
+            <point key="canvasLocation" x="4015" y="2208"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="5fx-x5-87J">
+            <objects>
+                <navigationController storyboardIdentifier="FolderList" automaticallyAdjustsScrollViewInsets="NO" id="xxZ-Dd-Rvy" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="glj-x0-h7d"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ps4-rf-OWC">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6WN-eE-kDq" kind="relationship" relationship="rootViewController" id="Kgy-tC-hgq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="afi-6B-gKU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3083" y="2208"/>
         </scene>
     </scenes>
     <resources>
