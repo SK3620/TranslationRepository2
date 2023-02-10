@@ -19,6 +19,7 @@ struct GetDocument {
             postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).order(by: "postedDate", descending: true)
         }
         var listener = listener
+        print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -50,7 +51,7 @@ struct GetDocument {
         SVProgressHUD.show(withStatus: "データ取得中...")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("uid", isEqualTo: uid).order(by: "postedDate", descending: true)
         var listener = listener
-        print(listener)
+        print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -77,6 +78,7 @@ struct GetDocument {
         SVProgressHUD.show(withStatus: "データ取得中...")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: uid).order(by: "commentedDate", descending: true)
         var listener = listener
+        print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -102,6 +104,7 @@ struct GetDocument {
         SVProgressHUD.show(withStatus: "データ取得中...")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("bookMarks", arrayContains: uid).order(by: "postedDate", descending: true)
         var listener = listener
+        print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -132,6 +135,7 @@ struct GetDocument {
     static func getCommentsDocuments(query: Query, listener: ListenerRegistration?, completion: @escaping ([SecondPostData]) -> Void) {
         SVProgressHUD.show(withStatus: "データ取得中")
         var listener = listener
+        print(listener as Any)
         listener = query.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -160,6 +164,7 @@ struct GetDocument {
         SVProgressHUD.show(withStatus: "データ取得中")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
         var listener = listener
+        print(listener as Any)
         listener = postsRef.addSnapshotListener { documentSnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -177,6 +182,7 @@ struct GetDocument {
     static func getOthersCommentsDocuments(query: Query, listener: ListenerRegistration?, postData: PostData, completion: @escaping ([SecondPostData]) -> Void) {
         SVProgressHUD.show(withStatus: "データ取得中")
         var listener = listener
+        print(listener as Any)
         listener = query.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
@@ -204,6 +210,7 @@ struct GetDocument {
     static func getChatListDocument(user: User, listener: ListenerRegistration?, completion: @escaping ([ChatList], [String]) -> Void) {
         let chatListRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("members", arrayContains: user.uid).order(by: "latestSentDate", descending: true)
         var listener = listener
+        print(listener as Any)
         listener = chatListRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("ChatLists情報の取得に失敗しました。\(error)")
@@ -254,6 +261,7 @@ struct GetDocument {
     static func getMessagesDocument(chatListData: ChatList, listener: ListenerRegistration?, completion: @escaping ([MessageEntity], [ChatRoom]) -> Void) {
         let messagesRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(chatListData.documentId!).collection("messages").order(by: "sentDate", descending: false)
         var listener = listener
+        print(listener as Any)
         listener = messagesRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error)")

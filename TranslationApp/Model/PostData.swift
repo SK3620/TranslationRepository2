@@ -10,7 +10,7 @@ import FirebaseStorage
 import UIKit
 
 class PostData: NSObject {
-    var documentId: String
+    let documentId: String
     var userName: String?
     var contentOfPost: String?
     var comment: String?

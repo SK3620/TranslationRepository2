@@ -186,6 +186,7 @@ struct BlockUnblock {
         SVProgressHUD.show(withStatus: "データを取得中...")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedBy", isEqualTo: user.uid).order(by: "blockedDate", descending: true)
         var listener = listener
+        print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
                 print("エラー\(error)")
