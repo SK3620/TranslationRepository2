@@ -97,20 +97,20 @@ struct GetDocument {
         }
     }
 
-    static func getBookMarkedDocuments(uid: String, listener: ListenerRegistration?, completion: @escaping ([PostData]) -> Void) {
+    static func getBookMarkedDocuments(uid: String, listener: ListenerRegistration?, completion: @escaping (Result<[PostData], Error>) -> Void) {
         SVProgressHUD.show(withStatus: "データ取得中...")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).whereField("bookMarks", arrayContains: uid).order(by: "postedDate", descending: true)
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                SVProgressHUD.dismiss()
+                completion(.failure(error))
+                return
             }
             if let querySnapshot = querySnapshot {
                 var postArray: [PostData] = []
                 if querySnapshot.documents.isEmpty {
-                    completion(postArray)
+                    completion(.success(postArray))
                     return
                 }
                 querySnapshot.documents.forEach { document in
@@ -121,7 +121,7 @@ struct GetDocument {
                         return
                     } else {
                         postArray.append(postData)
-                        completion(postArray)
+                        completion(.success(postArray))
                     }
                 }
             }

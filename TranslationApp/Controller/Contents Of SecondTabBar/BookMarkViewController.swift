@@ -53,12 +53,16 @@ class BookMarkViewController: UIViewController, UITableViewDelegate, UITableView
         }
 
         if let user = Auth.auth().currentUser {
-            // get the documents filtered with bookMarks
-            // the key 'bookMarks' has the array value which stores the uid of the person who
-            GetDocument.getBookMarkedDocuments(uid: user.uid, listener: self.listener) { postArray in
-                SVProgressHUD.dismiss()
-                self.postArray = postArray
-                self.tableView.reloadData()
+            GetDocument.getBookMarkedDocuments(uid: user.uid, listener: self.listener) { result in
+                switch result {
+                case let .failure(error):
+                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                    SVProgressHUD.dismiss()
+                case let .success(postArray):
+                    SVProgressHUD.dismiss()
+                    self.postArray = postArray
+                    self.tableView.reloadData()
+                }
             }
         }
     }
