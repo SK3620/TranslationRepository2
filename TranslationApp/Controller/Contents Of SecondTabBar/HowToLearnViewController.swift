@@ -60,11 +60,11 @@ class HowToLearnViewController: UIViewController, UITableViewDelegate, UITableVi
 
         GetDocument.getDocumentsForTimeline(user: user, topic: "学習法", listener: self.listener) { result in
             switch result {
-            case .success(let postArray):
+            case let .success(postArray):
                 self.postArray = postArray
                 SVProgressHUD.dismiss()
                 self.tableView.reloadData()
-            case .failure(let error):
+            case let .failure(error):
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error.localizedDescription)")
                 SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
             }

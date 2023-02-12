@@ -54,19 +54,24 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
             return
         }
 
-        GetDocument.getMyDocuments(uid: self.postData.uid!, listener: self.listener) { postArray in
-            SVProgressHUD.dismiss()
-            self.postArray = postArray
-            self.tableView.reloadData()
+        GetDocument.getMyDocuments(uid: self.postData.uid!, listener: self.listener) { result in
+            switch result {
+            case let .failure(error):
+                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+            case let .success(postArray):
+                self.postArray = postArray
+                self.tableView.reloadData()
 
-            self.likeNumber = 0
-            self.postNumber = 0
-            for postData in postArray {
-                self.likeNumber += postData.likes.count
+                self.likeNumber = 0
+                self.postNumber = 0
+                for postData in postArray {
+                    self.likeNumber += postData.likes.count
+                }
+                self.postNumber = self.postArray.count
+                // delegate method
+                self.delegate.setLikeAndPostNumberLabelForOthers(likeNumber: self.likeNumber, postNumber: self.postNumber)
             }
-            self.postNumber = self.postArray.count
-            // delegate method
-            self.delegate.setLikeAndPostNumberLabelForOthers(likeNumber: self.likeNumber, postNumber: self.postNumber)
         }
     }
 
