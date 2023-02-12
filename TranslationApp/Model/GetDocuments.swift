@@ -175,18 +175,18 @@ struct GetDocument {
     }
 
 //    For OthersCommentsHistoryVC
-    static func getOthersCommentsDocuments(query: Query, listener: ListenerRegistration?, postData: PostData, completion: @escaping ([SecondPostData]) -> Void) {
+    static func getOthersCommentsDocuments(query: Query, listener: ListenerRegistration?, postData: PostData, completion: @escaping (Result<[SecondPostData], Error>) -> Void) {
         SVProgressHUD.show(withStatus: "データ取得中")
         var listener = listener
         print(listener as Any)
         listener = query.addSnapshotListener { querySnapshot, error in
             if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                completion(.failure(error))
                 return
             }
             var secondPostArray: [SecondPostData] = []
             if querySnapshot!.documents.isEmpty {
-                completion(secondPostArray)
+                completion(.success(secondPostArray))
                 return
             }
             querySnapshot!.documents.forEach { queryDocumentSnapshot in
@@ -196,7 +196,7 @@ struct GetDocument {
                     print("ブロックしたユーザーのドキュメントを除外")
                 } else {
                     secondPostArray.append(secondPostData)
-                    completion(secondPostArray)
+                    completion(.success(secondPostArray))
                 }
             }
         }
