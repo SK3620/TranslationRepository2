@@ -54,14 +54,20 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
         self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
 
         if Auth.auth().currentUser != nil {
-            GetDocument.getSingleDocument(postData: self.postData, listener: self.listener) { postData in
-                self.postArray = []
-                self.postData = postData
-                self.postArray.append(postData)
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
+            GetDocument.getSingleDocument(postData: self.postData, listener: self.listener) { result in
+                switch result {
+                case let .failure(error):
+                    print("DEBUG_PRINT: データの取得が失敗しました。 \(error.localizedDescription)")
+                    SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                case let .success(postData):
+                    self.postArray = []
+                    self.postData = postData
+                    self.postArray.append(postData)
+                    SVProgressHUD.dismiss()
+                    self.tableView.reloadData()
+                }
             }
-
+            
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
             GetDocument.getOthersCommentsDocuments(query: commentsRef, listener: self.listener2, postData: self.postData) { secondPostArray in
                 self.secondPostArray = secondPostArray

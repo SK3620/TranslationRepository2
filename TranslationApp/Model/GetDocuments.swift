@@ -157,20 +157,19 @@ struct GetDocument {
     }
 
 //    For BookMarkCommentsSectionVC and CommentsHistoryVC, OthersCommentsHistoryVC, CommentsSectionVC
-    static func getSingleDocument(postData: PostData, listener: ListenerRegistration?, completion: @escaping (PostData) -> Void) {
+    static func getSingleDocument(postData: PostData, listener: ListenerRegistration?, completion: @escaping (Result<PostData, Error>) -> Void) {
         SVProgressHUD.show(withStatus: "データ取得中")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document(postData.documentId)
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { documentSnapshot, error in
             if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                SVProgressHUD.dismiss()
+                completion(.failure(error))
                 return
             }
             if let documentSnapshot = documentSnapshot {
                 let postData = PostData(document: documentSnapshot)
-                completion(postData)
+                completion(.success(postData))
             }
         }
     }

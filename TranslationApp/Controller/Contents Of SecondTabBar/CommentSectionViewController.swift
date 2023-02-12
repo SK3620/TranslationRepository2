@@ -59,17 +59,23 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
         self.settingsForNavigationControllerAndBar()
 
         if Auth.auth().currentUser != nil {
-            GetDocument.getSingleDocument(postData: self.postData, listener: self.listener) { postData in
-                self.postData = postData
-                self.postArray = []
-                self.postArray.append(postData)
-
-                let user = Auth.auth().currentUser!
-                if postData.blockedBy.contains(user.uid) {
+            GetDocument.getSingleDocument(postData: self.postData, listener: self.listener) { result in
+                switch result {
+                case let .failure(error):
+                    print("DEBUG_PRINT: データの取得が失敗しました。 \(error.localizedDescription)")
+                    SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                case let .success(postData):
+                    self.postData = postData
                     self.postArray = []
+                    self.postArray.append(postData)
+                    
+                    let user = Auth.auth().currentUser!
+                    if postData.blockedBy.contains(user.uid) {
+                        self.postArray = []
+                    }
+                    SVProgressHUD.dismiss()
+                    self.tableView.reloadData()
                 }
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
             }
 
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
