@@ -49,10 +49,15 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
             return
         }
 
-        GetDocument.getMyCommentsDocuments(uid: user.uid, listener: self.listener) { postArray in
-            SVProgressHUD.dismiss()
-            self.postArray = postArray
-            self.tableView.reloadData()
+        GetDocument.getMyCommentsDocuments(uid: user.uid, listener: self.listener) { result in
+            switch result {
+            case let .failure(error):
+                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                SVProgressHUD.dismiss()
+            case let .success(postArray):
+                self.postArray = postArray
+                self.tableView.reloadData()
+            }
         }
     }
 

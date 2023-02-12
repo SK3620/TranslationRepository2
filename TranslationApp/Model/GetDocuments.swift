@@ -72,21 +72,20 @@ struct GetDocument {
     }
 
 //    for postedCommentsHisotryVC and OthersPostedCommentsHistoryVC
-    static func getMyCommentsDocuments(uid: String, listener: ListenerRegistration?, completion: @escaping ([PostData]) -> Void) {
+    static func getMyCommentsDocuments(uid: String, listener: ListenerRegistration?, completion: @escaping (Result<[PostData], Error>) -> Void) {
         SVProgressHUD.show(withStatus: "データ取得中...")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("uid", isEqualTo: uid).order(by: "commentedDate", descending: true)
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                SVProgressHUD.dismiss()
+                completion(.failure(error))
                 return
             }
             // Create PostData based on the acquired document and make it into a postArray array.
             var postArray: [PostData] = []
             if querySnapshot!.documents.isEmpty {
-                completion(postArray)
+                completion(.success(postArray))
                 return
             }
             postArray = querySnapshot!.documents.map { document in
@@ -94,7 +93,7 @@ struct GetDocument {
                 let postData = PostData(document: document)
                 return postData
             }
-            completion(postArray)
+            completion(.success(postArray))
         }
     }
 

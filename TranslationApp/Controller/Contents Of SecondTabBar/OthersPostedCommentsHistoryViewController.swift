@@ -44,10 +44,16 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
             return
         }
         if Auth.auth().currentUser != nil {
-            GetDocument.getMyCommentsDocuments(uid: self.postData.uid!, listener: self.listener) { postArray in
-                self.postArray = postArray
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
+            GetDocument.getMyCommentsDocuments(uid: self.postData.uid!, listener: self.listener) { result in
+                switch result {
+                case let .failure(error):
+                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                    SVProgressHUD.dismiss()
+                case let .success(postArray):
+                    self.postArray = postArray
+                    SVProgressHUD.dismiss()
+                    self.tableView.reloadData()
+                }
             }
         }
     }
