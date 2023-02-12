@@ -59,11 +59,17 @@ class TimeLineViewController: UIViewController, UITableViewDelegate, UITableView
             return
         }
         self.label.text = ""
-
-        GetDocument.getDocumentsForTimeline(user: user, topic: nil, listener: self.listener) { postArray in
-            self.postArray = postArray
-            SVProgressHUD.dismiss()
-            self.tableView.reloadData()
+        
+        GetDocument.getDocumentsForTimeline(user: user, topic: nil, listener: self.listener) { result in
+            switch result {
+            case .success(let postArray):
+                self.postArray = postArray
+                SVProgressHUD.dismiss()
+                self.tableView.reloadData()
+            case .failure(let error):
+                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+            }
         }
     }
 

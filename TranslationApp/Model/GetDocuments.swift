@@ -10,7 +10,7 @@ import SVProgressHUD
 import UIKit
 
 struct GetDocument {
-    static func getDocumentsForTimeline(user: User, topic: String?, listener: ListenerRegistration?, completion: @escaping ([PostData]) -> Void) {
+    static func getDocumentsForTimeline(user: User, topic: String?, listener: ListenerRegistration?, completion: @escaping (Result<[PostData], Error>) -> Void) {
         SVProgressHUD.show(withStatus: "データを取得中...")
         var postsRef: Query
         if let topic = topic {
@@ -22,14 +22,13 @@ struct GetDocument {
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
-                print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                completion(.failure(error))
                 return
             }
             var postArray: [PostData] = []
             if querySnapshot!.documents.isEmpty {
                 print("ドキュメントがありません")
-                completion(postArray)
+                completion(.success(postArray))
                 return
             }
             querySnapshot!.documents.forEach { document in
@@ -40,7 +39,7 @@ struct GetDocument {
                     return
                 } else {
                     postArray.append(postData)
-                    completion(postArray)
+                    completion(.success(postArray))
                 }
             }
         }
