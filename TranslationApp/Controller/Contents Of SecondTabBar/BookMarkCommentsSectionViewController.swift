@@ -79,11 +79,17 @@ class BookMarkCommentsSectionViewController: UIViewController, UITableViewDelega
                 self.tableView.reloadData()
             }
 
-            let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
-            GetDocument.getCommentsDocuments(query: postsRef, listener: self.listener2) { secondPostArray in
-                self.secondPostArray = secondPostArray
-                SVProgressHUD.dismiss()
-                self.tableView.reloadData()
+            let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
+            GetDocument.getCommentsDocuments(query: commentsRef, listener: self.listener) { result in
+                switch result {
+                case let .failure(error):
+                    print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error.localizedDescription)")
+                    SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                case let .success(secondPostArray):
+                    self.secondPostArray = secondPostArray
+                    SVProgressHUD.dismiss()
+                    self.tableView.reloadData()
+                }
             }
         }
     }
