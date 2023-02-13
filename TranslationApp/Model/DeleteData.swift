@@ -130,17 +130,16 @@ struct DeleteData {
         }
     }
 
-    static func deleteDocumentInChatListsCollection(documentIdArray: [String], indexPath: IndexPath, completion: @escaping () -> Void) {
+    static func deleteDocumentInChatListsCollection(documentIdArray: [String], indexPath: IndexPath, completion: @escaping (Error?) -> Void) {
         let chatListsRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(documentIdArray[indexPath.row])
         chatListsRef.delete { error in
             if let error = error {
-                print("エラー\(error)")
-                SVProgressHUD.showError(withStatus: "削除に失敗しました")
+                completion(error)
             } else {
                 print("chatListsコレクション内のドキュメントの削除に成功しました")
                 SVProgressHUD.showSuccess(withStatus: "削除完了")
                 SVProgressHUD.dismiss(withDelay: 1.5) {
-                    completion()
+                    completion(nil)
                 }
             }
         }

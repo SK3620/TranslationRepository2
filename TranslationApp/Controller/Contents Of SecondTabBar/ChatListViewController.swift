@@ -199,7 +199,12 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
                     SVProgressHUD.showError(withStatus: "データの取得または、データの削除に失敗しました")
                     return
                 }
-                DeleteData.deleteDocumentInChatListsCollection(documentIdArray: self.documentIdArray, indexPath: indexPath) {
+                DeleteData.deleteDocumentInChatListsCollection(documentIdArray: self.documentIdArray, indexPath: indexPath) { error in
+                    if let error = error {
+                        print("削除に失敗しました\(error.localizedDescription)")
+                        SVProgressHUD.showError(withStatus: "削除に失敗しました")
+                        return
+                    }
                     self.documentIdArray.remove(at: indexPath.row)
                     self.chatListsData.remove(at: indexPath.row)
                     self.setTitle(numberOfFriends: self.chatListsData.count)
