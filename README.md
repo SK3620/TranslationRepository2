@@ -52,10 +52,65 @@ The fourth demo video includes the simple SNS feature like Twitter. It has posti
 
 https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4　　
 # Overall issues, points to be corrected, future measures, etc. (Japanese)  
-##### 課題  
+##### 課題1  
 Extensionを利用せずに、カスタムcell上のUIButtonなどをaddTarget()を利用してイベント処理を記述しているため、コードの可読性が低下している。  
 ##### 解決策  
 カスタムcell上のUIButtonなどは、カスタムcell内にAction接続し、タップ時に呼び出されるデリゲートメソッドを定義する。viewController側からの呼び出し時は、extension HogeViewController: CustomCellButtonTappedDelegate { タップ時の処理 } のように記述することで、コードの可読性が向上する。  
+##### 課題2  
+Segueの多用によって、storyboardが見づらくなる可能性がある。また、iOSアプリ開発の実務経験6年のメンターから、開発現場ではsegueはあまり使用せず、コードのみの画面遷移が基本であるとご指摘をいただいた。    
+##### 解決策  
+navigationController.pushViewControllerメソッドを利用して、コードのみでの画面遷移を心がける。  
+*例 let hogeViewController = self.storyboard?.instantiateViewController(withIdentifier: "Test") as! HogeViewController  
+self.navigationController?.pushViewController(hogeViewController, animated: true)*  
+##### 課題3  
+オブジェクト指向をあまり意識できていないため、コードが肥大化し、可読性が低下している。いいね機能、ブックマーク機能など、タップ時のFirebaseDatabaseへのデータ更新処理を大量のviewControllerに直接記述している。  
+##### 解決策  
+コードの見通しをよくするために、役割や機能ごとに処理を分ける必要がある。  
+FirebaseDatabaseへのデータ更新処理を行う専用の構造体をModelクラスとして作成することで、可読性を向上させる。  
+*例  
+Struct updateData {  
+    static func updateLikes(~){  
+              FirebaseDatabaseへのデータ更新処理  
+     }  
+    static func updateBookMarks(~){  
+              FirebaseDatabaseへのデータ更新処理  
+     }  
+}*  
+##### 課題4  
+一つのstoryBoardに含まれるviewControllerの数が少し多すぎるため、複数人による開発の際、互いにstoryboardをいじるとコンフリクトが生じる可能性がある。  
+##### 解決策4  
+複数人で開発を行う場合には、  
+・機能ごとにStoryboardを分ける  
+・1ViewController,1storyboardに分ける  
+・storyboardを使わず、xibを使って開発を行う  
+今回は機能ごとにstoryboardを分割したが、一つのstoryBoardに含まれるviewControllerの数が少し多い。もう少し、機能ごとにstoryboardを分割していく必要がある。  
+##### 課題5  
+Extensionを積極的に活用していないため、コードの可読性が低下している。  
+*例 HogeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CustomCellButtonTappedDelegate {}*  
+##### 解決策5  
+Extension HogeViewController: UITableViewDelegate, UITableViewDataSource {}  
+Extension HogeViewController: CustomCellButtonTappedDelegate {}  
+と記述することでコードの可読性を向上させる。  
+##### 課題6  
+適切なアクセス修飾子がつけられていないため、開発時に誤って想定外のところでアクセス、呼び出してしまう可能性がある。  
+##### 解決策6  
+新たにプロパティやメソッドなどの記述する際には、別の場所からアクセスしない限りは、とりあえず全てprivateと記述しておいた方が良い。  
+##### 課題7  
+開発初期時は、ただ、「機能すれば良い」というスタンスで闇雲にコードを書いていたため、可読性が非常に低い箇所が多数ある。  
+##### 解決策7  
+保守性を意識したコードを書く必要がある。  
+1. 変数名やメソッド名は分かりやすい名前を書く。  
+2. コメントはできる限りわかりやすく、無駄なものは書かない。  
+3. マジックナンバーは使わない。 変数を利用する。  
+4. ネストは深くしすぎない。 深くても２つまで。  
+5. インデントをしっかりつける。  
+6. プログラムは上から下に処理が流れるように記述する。　など  
+
+
+
+
+
+ 
 
 
 
