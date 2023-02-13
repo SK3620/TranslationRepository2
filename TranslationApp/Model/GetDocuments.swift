@@ -209,7 +209,8 @@ struct GetDocument {
         print(listener as Any)
         listener = chatListRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
-                print("ChatLists情報の取得に失敗しました。\(error)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                print("データの取得に失敗しました\(error.localizedDescription)")
                 return
             }
             print("ChatListsの情報の取得に成功しました")
@@ -233,21 +234,24 @@ struct GetDocument {
 //    in chatListVC
     // a process called when you got added as a friend by the other person (by a person who added you as thier friend)
     // when you are added, a person who added you as thier friend will automatically be displayed in the tableView
-    static func observeIfYouAreAboutToBeAddedAsFriend(completion: @escaping (QueryDocumentSnapshot) -> Void) {
+    static func observeIfYouAreAboutToBeAddedAsFriend(completion: @escaping (Result<QueryDocumentSnapshot, Error>) -> Void) {
         let user = Auth.auth().currentUser!
         let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("partnerUid", isEqualTo: user.uid)
         chatRef.getDocuments { querySnapshot, error in
             if let error = error {
-                print("友達追加した時の処理にて、getDocumenメソッドが失敗しました エラー内容：\(error)")
+                print("友達追加した時の処理にて、getDocumenメソッドが失敗しました エラー内容：\(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                completion(.failure(error))
+                return
             }
             if let querySnapshot = querySnapshot {
                 print("友達追加した時の処理にて、getDocumentメソッドが成功しました")
-                if querySnapshot.isEmpty {
+                if querySnapshot.documents.isEmpty {
                     print("友達追加時の処理にて、getDocumentメソッドで取得したquerySnapshotは空でしたので、returnを実行します")
                     return
                 }
                 querySnapshot.documents.forEach { queryDocumentSnapshot in
-                    completion(queryDocumentSnapshot)
+                    completion(.success(queryDocumentSnapshot))
                 }
             }
         }

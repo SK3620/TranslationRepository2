@@ -56,16 +56,21 @@ class ChatListViewController: UIViewController {
         }
         self.secondTabBarController.navigationItem.title = "チャットリスト(0)"
         self.getChatListDocument()
-
-        GetDocument.observeIfYouAreAboutToBeAddedAsFriend { queryDocumentSnapshot in
-            if self.documentIdArray.contains(queryDocumentSnapshot.documentID) {
+        
+        GetDocument.observeIfYouAreAboutToBeAddedAsFriend { result in
+            switch result {
+            case let .failure(error):
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                print("データの取得に失敗しました\(error.localizedDescription)")
+            case let .success(queryDocumentSnapshot):
+                if self.documentIdArray.contains(queryDocumentSnapshot.documentID) {
+                    self.tableView.reloadData()
+                    return
+                }
+                self.chatListsData.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot))
                 self.tableView.reloadData()
-                return
             }
-            self.chatListsData.append(ChatList(queryDocumentSnapshot: queryDocumentSnapshot))
-            self.tableView.reloadData()
         }
-
         editBarButtonBarItem.isEnabled = true
     }
 
