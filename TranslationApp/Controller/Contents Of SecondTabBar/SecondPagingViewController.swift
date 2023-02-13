@@ -141,36 +141,6 @@ class SecondPagingViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
-//    @objc func tappedSearchBarButtonItem(_: UIBarButtonItem) {
-//        if self.navigationController!.isNavigationBarHidden {
-//            self.navigationController?.setNavigationBarHidden(false, animated: true)
-//            let appearance = UINavigationBarAppearance()
-//            appearance.backgroundColor = UIColor.systemGray6
-//            self.navigationController?.navigationBar.standardAppearance = appearance
-//            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//
-//            // place a search bar on navigation bar
-//            self.setupSearchBarOnNavigationBar()
-//        } else {
-//            self.navigationController?.setNavigationBarHidden(true, animated: true)
-//        }
-//    }
-
-//    private func setupSearchBarOnNavigationBar() {
-//        if let navigationBarFrame = self.navigationController?.navigationBar.bounds {
-//            let searchBar = UISearchBar(frame: navigationBarFrame)
-//            searchBar.delegate = self
-//            searchBar.placeholder = "検索する"
-//            searchBar.tintColor = UIColor.gray
-//            searchBar.keyboardType = UIKeyboardType.default
-//            navigationItem.titleView = searchBar
-//            navigationItem.titleView?.frame = searchBar.frame
-//            self.searchBar = searchBar
-//            self.searchBar.enablesReturnKeyAutomatically = true
-//            self.setDoneOnKeyBoard()
-//        }
-//    }
-
     private func setDoneOnKeyBoard() {
         let doneToolbar = UIToolbar()
         doneToolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40)

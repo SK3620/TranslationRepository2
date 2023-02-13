@@ -327,15 +327,11 @@
 				837D41E829150F4C00A80342 /* SecondPostData.swift */,
 				8385EA13295476110034E0F6 /* ProfileData.swift */,
 				836226802981632200AB98A3 /* BlockData.swift */,
-				83CCFFA6298A0C6A0030BC9C /* GetDocuments.swift */,
-				837A82FB298C0644001049D4 /* WritingData.swift */,
-				837A82FD298C0C18001049D4 /* UpdateData.swift */,
-				837A82F9298BAA6C001049D4 /* DeleteData.swift */,
-				836226822981960100AB98A3 /* BlockUnblock.swift */,
-				835B38E1294C833500D42F50 /* MessageEntity.swift */,
-				835B38E3294C839F00D42F50 /* MessageSenderType.swift */,
 				835B38EB2950070100D42F50 /* ChatList.swift */,
 				8385EA0D2951858A0034E0F6 /* ChatRoom.swift */,
+				8387FD602999FB1C00A77BAF /* ManipulateDataViaFirebase */,
+				835B38E1294C833500D42F50 /* MessageEntity.swift */,
+				835B38E3294C839F00D42F50 /* MessageSenderType.swift */,
 				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
 				8356E9542905574500FD9236 /* History.swift */,
 				8356E9562905584500FD9236 /* Record.swift */,
@@ -349,8 +345,8 @@
 		8356E95029046E7000FD9236 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				839F18C9298CD61F0024DF51 /* StoryBoard */,
 				83071D0328B91AC90003734C /* LaunchScreen.storyboard */,
+				839F18C9298CD61F0024DF51 /* StoryBoard */,
 				83920A9E290B946100F1F2D6 /* CustomCellForIntroduction.xib */,
 				83C292172912E92D00386EE9 /* CustomCellForTimeLine.xib */,
 				83D8963629141D9500E570AD /* CustomCellForCommentSetion.xib */,
@@ -461,6 +457,18 @@
 				83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */,
 			);
 			path = CustomClass;
+			sourceTree = "<group>";
+		};
+		8387FD602999FB1C00A77BAF /* ManipulateDataViaFirebase */ = {
+			isa = PBXGroup;
+			children = (
+				83CCFFA6298A0C6A0030BC9C /* GetDocuments.swift */,
+				837A82FB298C0644001049D4 /* WritingData.swift */,
+				837A82FD298C0C18001049D4 /* UpdateData.swift */,
+				837A82F9298BAA6C001049D4 /* DeleteData.swift */,
+				836226822981960100AB98A3 /* BlockUnblock.swift */,
+			);
+			path = ManipulateDataViaFirebase;
 			sourceTree = "<group>";
 		};
 		8389C3F5290A6677007347AE /* Contents Of SecondTabBar */ = {
