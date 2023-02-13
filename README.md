@@ -52,6 +52,8 @@ The fourth demo video includes the simple SNS feature like Twitter. It has posti
 
 https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4　　
 # Overall issues, points to be corrected, future measures, etc. (Japanese)  
+### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の作業に向けて、今後の課題、修正すべき箇所を記述する。  
+
 ##### 課題1  
 Extensionを利用せずに、カスタムcell上のUIButtonなどをaddTarget()を利用してイベント処理を記述しているため、コードの可読性が低下している。  
 ##### 解決策  
