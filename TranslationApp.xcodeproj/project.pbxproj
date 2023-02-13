@@ -490,11 +490,9 @@
 			path = ViewControllersInSecondPagingVC;
 			sourceTree = "<group>";
 		};
-		8389C3F5290A6677007347AE /* Contents Of SecondTabBar */ = {
+		8387FD622999FFF800A77BAF /* OthersViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */,
-				8387FD612999FD8900A77BAF /* ViewControllersInSecondPagingVC */,
 				8385E72B2918C92F00DBDBAC /* OthersProfileViewController.swift */,
 				8385E72D2918D12800DBDBAC /* OthersIntroductionViewController.swift */,
 				8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */,
@@ -502,22 +500,40 @@
 				8385E7312918D16100DBDBAC /* OthersCommentsHistoryViewController.swift */,
 				83BC07EF291B84FC001FFE61 /* OthersBookMarkViewController.swift */,
 				83BC07F1291B8520001FFE61 /* OthersBookMarkCommentsSectionViewController.swift */,
-				83D896332914190500E570AD /* InputCommentViewController.swift */,
-				83D896312913F5CD00E570AD /* CommentSectionViewController.swift */,
-				830D9FF32912DE2000F8761B /* PostViewController.swift */,
+			);
+			path = OthersViewControllers;
+			sourceTree = "<group>";
+		};
+		8387FD63299A007B00A77BAF /* SelfViewControllers */ = {
+			isa = PBXGroup;
+			children = (
 				8389C3FD290ABDBC007347AE /* ProfileViewController.swift */,
-				83920AA3290BB2BE00F1F2D6 /* EditProfileViewController.swift */,
 				83A1D5C6290EC69D00B6F18A /* IntroductionViewController.swift */,
 				836E69B4290EB9CD00048398 /* PostsHistoryViewController.swift */,
 				83CE5510293F5FF300B9E698 /* PostedCommentsHistoryViewController.swift */,
 				8385E729291816C100DBDBAC /* BookMarkViewController.swift */,
 				83BC07ED291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift */,
 				832D60DC297FE278009F94A8 /* BlockListViewController.swift */,
-				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
 				835B38E5294FF58D00D42F50 /* ChatListViewController.swift */,
 				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,
+			);
+			path = SelfViewControllers;
+			sourceTree = "<group>";
+		};
+		8389C3F5290A6677007347AE /* Contents Of SecondTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				83920AA3290BB2BE00F1F2D6 /* EditProfileViewController.swift */,
 				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
 				83862E39297D22580032E05B /* TermsOfServiceViewController.swift */,
+				83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */,
+				8387FD612999FD8900A77BAF /* ViewControllersInSecondPagingVC */,
+				8387FD622999FFF800A77BAF /* OthersViewControllers */,
+				8387FD63299A007B00A77BAF /* SelfViewControllers */,
+				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
+				83D896312913F5CD00E570AD /* CommentSectionViewController.swift */,
+				83D896332914190500E570AD /* InputCommentViewController.swift */,
+				830D9FF32912DE2000F8761B /* PostViewController.swift */,
 			);
 			path = "Contents Of SecondTabBar";
 			sourceTree = "<group>";
