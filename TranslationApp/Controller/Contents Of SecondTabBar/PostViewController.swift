@@ -106,7 +106,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         }
         self.postButton.isEnabled = false
         self.backBarButtonItem.isEnabled = false
-        
+
         BlockUnblock.determineIfYouAreBeingBlocked { result in
             switch result {
             case let .failure(error):

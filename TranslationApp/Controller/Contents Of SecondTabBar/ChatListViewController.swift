@@ -56,7 +56,7 @@ class ChatListViewController: UIViewController {
         }
         self.secondTabBarController.navigationItem.title = "チャットリスト(0)"
         self.getChatListDocument()
-        
+
         GetDocument.observeIfYouAreAboutToBeAddedAsFriend { result in
             switch result {
             case let .failure(error):

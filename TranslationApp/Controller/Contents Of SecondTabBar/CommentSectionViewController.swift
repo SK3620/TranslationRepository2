@@ -68,7 +68,7 @@ class CommentSectionViewController: UIViewController, UITableViewDelegate, UITab
                     self.postData = postData
                     self.postArray = []
                     self.postArray.append(postData)
-                    
+
                     let user = Auth.auth().currentUser!
                     if postData.blockedBy.contains(user.uid) {
                         self.postArray = []

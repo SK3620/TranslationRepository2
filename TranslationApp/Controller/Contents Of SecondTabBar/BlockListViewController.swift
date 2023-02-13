@@ -41,10 +41,16 @@ class BlockListViewController: UIViewController, UICollectionViewDelegate, UICol
             self.blockListcollectionView.reloadData()
             return
         }
-        BlockUnblock.getDocumentOfBlockedUser(user: user, listener: self.listener) { blockArray in
-            SVProgressHUD.dismiss()
-            self.blockArray = blockArray
-            self.blockListcollectionView.reloadData()
+        BlockUnblock.getDocumentOfBlockedUser(user: user, listener: self.listener) { result in
+            switch result {
+            case let .failure(error):
+                print("データの取得に失敗しました\(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+            case let .success(blockArray):
+                SVProgressHUD.dismiss()
+                self.blockArray = blockArray
+                self.blockListcollectionView.reloadData()
+            }
         }
     }
 

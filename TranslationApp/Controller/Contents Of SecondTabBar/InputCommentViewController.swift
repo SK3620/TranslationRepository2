@@ -117,7 +117,7 @@ class InputCommentViewController: UIViewController {
             self.backBarButtonItem.isEnabled = true
             return
         }
-        
+
         BlockUnblock.determineIfYouAreBeingBlocked { result in
             switch result {
             case let .failure(error):

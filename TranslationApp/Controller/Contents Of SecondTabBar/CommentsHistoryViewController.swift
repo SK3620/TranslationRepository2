@@ -84,7 +84,7 @@ class CommentsHistoryViewController: UIViewController, UITableViewDelegate, UITa
                     self.tableView.reloadData()
                 }
             }
-            
+
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
             GetDocument.getCommentsDocuments(query: commentsRef, listener: self.listener) { result in
                 switch result {

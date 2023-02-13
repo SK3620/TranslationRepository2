@@ -52,14 +52,14 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
         super.viewWillAppear(true)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: nil, action: nil)
-        
+
         guard Auth.auth().currentUser != nil else {
             self.secondPostArray = []
             SVProgressHUD.dismiss()
             self.tableView.reloadData()
             return
         }
-        
+
         GetDocument.getSingleDocument(postData: self.postData, listener: self.listener) { result in
             switch result {
             case let .failure(error):
@@ -73,7 +73,7 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
                 self.tableView.reloadData()
             }
         }
-        
+
         let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).whereField("documentIdForPosts", isEqualTo: self.postData.documentId).order(by: "commentedDate", descending: true)
         GetDocument.getOthersCommentsDocuments(query: commentsRef, listener: self.listener, postData: self.postData) { result in
             switch result {

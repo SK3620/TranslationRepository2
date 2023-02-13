@@ -66,7 +66,7 @@ struct BlockUnblock {
         })
     }
 
-    static func determineIfYouCanAddFriend(uid: String, userName: String, completion: @escaping(Error?) -> Void) {
+    static func determineIfYouCanAddFriend(uid: String, userName: String, completion: @escaping (Error?) -> Void) {
         let user = Auth.auth().currentUser!
         let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedUser", isEqualTo: user.uid).whereField("blockedBy", isEqualTo: uid)
         blockRef.getDocuments(completion: { querySnapshot, error in
@@ -188,25 +188,24 @@ struct BlockUnblock {
     }
 
 //    in BlockListVC
-    static func getDocumentOfBlockedUser(user: User, listener: ListenerRegistration?, completion: @escaping ([BlockData]) -> Void) {
+    static func getDocumentOfBlockedUser(user: User, listener: ListenerRegistration?, completion: @escaping (Result<[BlockData], Error>) -> Void) {
         SVProgressHUD.show(withStatus: "データを取得中...")
         let postsRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedBy", isEqualTo: user.uid).order(by: "blockedDate", descending: true)
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
-                print("エラー\(error)")
-                SVProgressHUD.dismiss()
+                completion(.failure(error))
             }
             if let querySnapshot = querySnapshot {
                 var blockArray: [BlockData] = []
                 if querySnapshot.documents.isEmpty {
-                    completion(blockArray)
+                    completion(.success(blockArray))
                     return
                 }
                 querySnapshot.documents.forEach { queryDocumentSnapshot in
                     blockArray.append(BlockData(document: queryDocumentSnapshot))
-                    completion(blockArray)
+                    completion(.success(blockArray))
                 }
             }
         }
