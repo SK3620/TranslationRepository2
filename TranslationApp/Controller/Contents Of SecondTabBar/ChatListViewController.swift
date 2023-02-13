@@ -193,7 +193,12 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
         let alert = UIAlertController(title: "削除しますか？", message: "削除した場合、あなたと相手の全てのチャット履歴が削除されます", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "削除する", style: .destructive, handler: { _ in
-            DeleteData.deleteMessages(indexPath: indexPath, documentIdArray: self.documentIdArray) {
+            DeleteData.deleteMessages(indexPath: indexPath, documentIdArray: self.documentIdArray) { error in
+                if let error = error {
+                    print("データの取得または、データの削除に失敗しました\(error.localizedDescription)")
+                    SVProgressHUD.showError(withStatus: "データの取得または、データの削除に失敗しました")
+                    return
+                }
                 DeleteData.deleteDocumentInChatListsCollection(documentIdArray: self.documentIdArray, indexPath: indexPath) {
                     self.documentIdArray.remove(at: indexPath.row)
                     self.chatListsData.remove(at: indexPath.row)

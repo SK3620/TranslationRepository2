@@ -100,30 +100,28 @@ struct DeleteData {
     }
 
 //    in ChatListVC
-    static func deleteMessages(indexPath: IndexPath, documentIdArray: [String], completion: @escaping () -> Void) {
+    static func deleteMessages(indexPath: IndexPath, documentIdArray: [String], completion: @escaping (Error?) -> Void) {
         SVProgressHUD.show()
         let messageRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).document(documentIdArray[indexPath.row]).collection("messages")
         messageRef.getDocuments { querySnapshot, error in
             if let error = error {
-                print("エラー\(error)")
+                completion(error)
             }
             if let querySnapshot = querySnapshot {
                 if querySnapshot.isEmpty {
-                    print("空でした")
-                    completion()
+                    completion(nil)
                     return
                 }
                 var countedQuerySnapshot: Int = querySnapshot.documents.count
                 querySnapshot.documents.forEach { queryDocumentSnapshot in
                     queryDocumentSnapshot.reference.delete { error in
                         if let error = error {
-                            print("エラー\(error)")
-                            SVProgressHUD.showError(withStatus: "削除に失敗しました")
+                            completion(error)
                         } else {
                             countedQuerySnapshot -= 1
                             if countedQuerySnapshot == 0 {
                                 print("messagesコレクション内の全てのドキュメントの削除に成功しました")
-                                completion()
+                                completion(nil)
                             }
                         }
                     }
