@@ -55,7 +55,7 @@ https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736
 ##### 課題1
 デザイン、UI設計が好ましくない。（特にアプリの要であるStudyViewController画面のUI）  
 ##### 解決策  
-tableViewでも良いが、collectionViewを使用も検討してみる。  
+tableViewでも良いが、collectionViewの使用も検討してみる。  
 テキストとテキストの間隔に統一感がなく、空白があるため、CustomCell上のUILabelのレイアウト修正が必要。  
 全体的にテキストが凝縮されている感じがあり、indexPath.rowごとに区別がつきやすいデザインにする必要。→ UICollectionViewの使用が良いかも。  
 ##### 課題2  
