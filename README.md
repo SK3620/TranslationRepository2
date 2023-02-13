@@ -68,7 +68,7 @@ tableViewでも良いが、collectionViewの使用も検討してみる。
 ##### 解決策  
 3秒、5秒巻き戻しと早送り機能の実装。参考URL:https://nackpan.net/blog/blog/2020/02/15/play-movie-avplayerlayer-skip-seek/  
 # Overall issues, points to be corrected, future measures about source code (Japanese)   
-### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の作業に向けて、今後の課題、修正すべき箇所を記述する。  
+#### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の作業に向けて、今後の課題、修正すべき箇所を記述する。  
 
 ##### 課題1  
 Extensionを利用せずに、カスタムcell上のUIButtonなどをaddTarget()を利用してイベント処理を記述しているため、コードの可読性が低下している。  
