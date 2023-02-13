@@ -87,16 +87,17 @@ struct BlockUnblock {
         })
     }
 
-    static func determineIfHasAlreadyBeenBlocked(uid: String, completion: @escaping () -> Void) {
+    static func determineIfHasAlreadyBeenBlocked(uid: String, completion: @escaping (Error?) -> Void) {
         let user = Auth.auth().currentUser!
         let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedBy", isEqualTo: user.uid).whereField("blockedUser", isEqualTo: uid)
         blockRef.getDocuments(completion: { querySnapshot, error in
             if let error = error {
-                print("エラー\(error)")
+                completion(error)
+                return
             }
             if let querySnapshot = querySnapshot {
                 if querySnapshot.documents.isEmpty {
-                    completion()
+                    completion(nil)
                 } else {
                     print("からなので、すでにブロック済み")
                     SVProgressHUD.showError(withStatus: "すでにブロックされています")

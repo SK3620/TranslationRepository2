@@ -167,7 +167,12 @@ class OthersPostedCommentsHistoryViewController: UIViewController, UITableViewDe
         let alert = UIAlertController(title: "'\(postData.userName!)'さんをブロックしますか？", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "はい", style: .destructive, handler: { _ in
-            BlockUnblock.determineIfHasAlreadyBeenBlocked(uid: postData.uid!) {
+            BlockUnblock.determineIfHasAlreadyBeenBlocked(uid: postData.uid!) { error in
+                if let error = error {
+                    print("データの取得に失敗しました\(error.localizedDescription)")
+                    SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                    return
+                }
                 SVProgressHUD.showSuccess(withStatus: "'\(postData.userName!)'さんをブロックしました")
                 SVProgressHUD.dismiss(withDelay: 1.5) {
                     let user = Auth.auth().currentUser!
