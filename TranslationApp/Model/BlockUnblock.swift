@@ -11,21 +11,24 @@ import SVProgressHUD
 import UIKit
 
 struct BlockUnblock {
-    static func ifYouCanCommentOnThePost(postData: PostData, user: User, completion: @escaping (Bool) -> Void) {
+    static func ifYouCanCommentOnThePost(postData: PostData, user: User, completion: @escaping (Result<Bool, Error>) -> Void) {
         let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedUser", isEqualTo: user.uid).whereField("blockedBy", isEqualTo: postData.uid!)
         blockRef.getDocuments(completion: { querySnapshot, error in
             if let error = error {
-                print("エラーです\(error)")
+                completion(.failure(error))
             }
             if let querySnapshot = querySnapshot {
+                var bool: Bool!
                 if querySnapshot.documents.isEmpty {
                     print("あなたはブロックされていないため、コメントできます")
-                    completion(true)
+                    bool = true
+                    completion(.success(bool))
                 } else {
                     print("あなたはブロックされているため、コメントできません")
                     SVProgressHUD.showError(withStatus: "あなたは'\(postData.userName!)'さんによってブロックされているため、コメントできません")
                     SVProgressHUD.dismiss(withDelay: 2.5) {
-                        completion(false)
+                        bool = false
+                        completion(.success(bool))
                     }
                 }
             }

@@ -235,20 +235,28 @@ class OthersCommentsHistoryViewController: UIViewController, UITableViewDelegate
 
     @objc func tappedCommentButton(_: UIButton, forEvent _: UIEvent) {
         let user = Auth.auth().currentUser!
-        BlockUnblock.ifYouCanCommentOnThePost(postData: self.postData, user: user) { bool in
-            if bool == false {
-                return
+        BlockUnblock.ifYouCanCommentOnThePost(postData: self.postData, user: user) { result in
+            switch result {
+            case let .failure(error):
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                print("データの取得に失敗しました\(error.localizedDescription)")
+            case let .success(bool):
+                if bool == false {
+                    SVProgressHUD.dismiss()
+                    return
+                } else {
+                    let postData = self.postData
+                    let navigationController = self.storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
+                    if let sheet = navigationController.sheetPresentationController {
+                        sheet.detents = [.medium(), .large()]
+                    }
+                    let inputCommentViewContoller = navigationController.viewControllers[0] as! InputCommentViewController
+                    inputCommentViewContoller.postData = postData
+                    inputCommentViewContoller.othersCommentsHistoryViewController = self
+                    inputCommentViewContoller.textView_text = self.comment
+                    self.present(navigationController, animated: true, completion: nil)
+                }
             }
-            let postData = self.postData
-            let navigationController = self.storyboard!.instantiateViewController(withIdentifier: "InputComment") as! UINavigationController
-            if let sheet = navigationController.sheetPresentationController {
-                sheet.detents = [.medium(), .large()]
-            }
-            let inputCommentViewContoller = navigationController.viewControllers[0] as! InputCommentViewController
-            inputCommentViewContoller.postData = postData
-            inputCommentViewContoller.othersCommentsHistoryViewController = self
-            inputCommentViewContoller.textView_text = self.comment
-            self.present(navigationController, animated: true, completion: nil)
         }
     }
 

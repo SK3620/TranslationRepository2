@@ -264,13 +264,15 @@ struct GetDocument {
         print(listener as Any)
         listener = messagesRef.addSnapshotListener { querySnapshot, error in
             if let error = error {
-                print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error)")
+                print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                return
             }
             if let querySnapshot = querySnapshot {
                 let messageList: [MessageEntity] = []
                 var chatRoomArr: [ChatRoom] = []
                 var countedQuerySnaopshot: Int = querySnapshot.documents.count
-                if querySnapshot.isEmpty {
+                if querySnapshot.documents.isEmpty {
                     return
                 }
                 print("リスナーでmessagesコレクション内のドキュメント取得成功")
