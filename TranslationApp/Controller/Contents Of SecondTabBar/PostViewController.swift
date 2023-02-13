@@ -52,8 +52,14 @@ class PostViewController: UIViewController, UITextViewDelegate {
 
         self.setDoneToolBar()
 
-        WritingData.determinationOfIsProfileImageExisted { valueForIsProfileImageExisted in
-            self.valueForIsProfileImageExisted = valueForIsProfileImageExisted
+        WritingData.determinationOfIsProfileImageExisted { result in
+            switch result {
+            case let .failure(error):
+                print("データの取得に失敗しました\(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+            case let .success(valueForIsProfileImageExisted):
+                self.valueForIsProfileImageExisted = valueForIsProfileImageExisted
+            }
         }
     }
 

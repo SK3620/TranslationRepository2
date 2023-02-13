@@ -42,10 +42,15 @@ class InputCommentViewController: UIViewController {
 
         self.textView.endEditing(false)
 
-        WritingData.determinationOfIsProfileImageExisted { valueForIsProfileImageExisted in
-            self.valueForIsProfileImageExisted = valueForIsProfileImageExisted
+        WritingData.determinationOfIsProfileImageExisted { result in
+            switch result {
+            case let .failure(error):
+                print("データの取得に失敗しました\(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+            case let .success(valueForIsProfileImageExisted):
+                self.valueForIsProfileImageExisted = valueForIsProfileImageExisted
+            }
         }
-
         self.textView.text = self.textView_text
 
         self.postCommentButton.isEnabled = true

@@ -12,12 +12,13 @@ import UIKit
 
 struct WritingData {
 //    in PostVC
-    static func determinationOfIsProfileImageExisted(completion: @escaping (String) -> Void) {
+    static func determinationOfIsProfileImageExisted(completion: @escaping (Result<String, Error>) -> Void) {
         let user = Auth.auth().currentUser!
         let profileImagesRef = Firestore.firestore().collection(FireBaseRelatedPath.imagePathForDB).document("\(user.uid)'sProfileImage")
         profileImagesRef.getDocument { documentSnapshot, error in
             if let error = error {
-                print("エラー　\(error)")
+                completion(.failure(error))
+                return
             }
             var valueForIsProfileImageExisted: String
             if let documentSnapshot = documentSnapshot, let imagesDic = documentSnapshot.data() {
@@ -30,7 +31,7 @@ struct WritingData {
             } else {
                 valueForIsProfileImageExisted = "nil"
             }
-            completion(valueForIsProfileImageExisted)
+            completion(.success(valueForIsProfileImageExisted))
         }
     }
 
