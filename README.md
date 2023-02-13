@@ -50,8 +50,24 @@ https://user-images.githubusercontent.com/108386527/216684356-0ced6358-19c8-4e5b
 
 The fourth demo video includes the simple SNS feature like Twitter. It has posting, commenting, liking, bookmarking, chatting, reporting, blocking feature, etc.↓  
 
-https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4　　
-# Overall issues, points to be corrected, future measures, etc. (Japanese)  
+https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4  
+# Overall issues, points to be corrected, future measures about this app for users (Japanese) 
+##### 課題1
+デザイン、UI設計が好ましくない。（特にアプリの要であるStudyViewController画面のUI）  
+##### 解決策  
+tableViewでも良いが、collectionViewを使用も検討してみる。  
+テキストとテキストの間隔に統一感がなく、空白があるため、CustomCell上のUILabelのレイアウト修正が必要。  
+全体的にテキストが凝縮されている感じがあり、indexPath.rowごとに区別がつきやすいデザインにする必要。→ UICollectionViewの使用が良いかも。  
+##### 課題2  
+このアプリ機能の一つである、ユーザー同士で繋がれるfirebaseを活用した簡易版SNS機能の利用者数が少ない。  
+##### 解決策  
+模索中...  
+候補１ その日に学習したこと（１単語や１フレーズなどなんでもいい）を最低限１回以上投稿するように強制させるようにする。  
+##### 課題3  
+音声再生機能が不十分である。  
+##### 解決策  
+3秒、5秒巻き戻しと早送り機能の実装。参考URL:https://nackpan.net/blog/blog/2020/02/15/play-movie-avplayerlayer-skip-seek/  
+# Overall issues, points to be corrected, future measures about source code (Japanese)   
 ### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の作業に向けて、今後の課題、修正すべき箇所を記述する。  
 
 ##### 課題1  
