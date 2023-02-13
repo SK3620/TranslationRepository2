@@ -52,9 +52,9 @@ The fourth demo video includes the simple SNS feature like Twitter. It has posti
 
 https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4　　
 # Overall issues, points to be corrected, future measures, etc. (Japanese)  
-*課題*  
+##### 課題  
 Extensionを利用せずに、カスタムcell上のUIButtonなどをaddTarget()を利用してイベント処理を記述しているため、コードの可読性が低下している。  
-*解決策*
+##### 解決策  
 カスタムcell上のUIButtonなどは、カスタムcell内にAction接続し、タップ時に呼び出されるデリゲートメソッドを定義する。viewController側からの呼び出し時は、extension HogeViewController: CustomCellButtonTappedDelegate { タップ時の処理 } のように記述することで、コードの可読性が向上する。  
 
 
