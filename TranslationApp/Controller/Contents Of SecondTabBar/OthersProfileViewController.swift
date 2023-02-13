@@ -207,8 +207,13 @@ class OthersProfileViewController: UIViewController {
 
         let userName = self.postData.userName
         let uid = self.postData.uid
-        BlockUnblock.determineIfYouCanAddFriend(uid: uid!, userName: userName!) {
-            //        completionで処理
+        BlockUnblock.determineIfYouCanAddFriend(uid: uid!, userName: userName!) { error in
+            if let error = error {
+                print("データの取得に失敗しました\(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                return
+            }
+
             self.seeIfThePartnerIsAlreadyAdded(user: user) {
                 let dispatchGroup = DispatchGroup()
                 let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)

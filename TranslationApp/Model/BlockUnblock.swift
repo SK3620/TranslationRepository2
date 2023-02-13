@@ -66,17 +66,18 @@ struct BlockUnblock {
         })
     }
 
-    static func determineIfYouCanAddFriend(uid: String, userName: String, completion: @escaping () -> Void) {
+    static func determineIfYouCanAddFriend(uid: String, userName: String, completion: @escaping(Error?) -> Void) {
         let user = Auth.auth().currentUser!
         let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedUser", isEqualTo: user.uid).whereField("blockedBy", isEqualTo: uid)
         blockRef.getDocuments(completion: { querySnapshot, error in
             if let error = error {
-                print("エラー\(error)")
+                completion(error)
+                return
             }
             if let querySnapshot = querySnapshot {
                 if querySnapshot.documents.isEmpty {
                     print("あなたはまだブロックされていません")
-                    completion()
+                    completion(nil)
                 } else {
                     print("すでにあなたはブロックされている")
                     SVProgressHUD.showError(withStatus: "あなたは'\(userName)'さんによってブロックされているため友達追加できません")
