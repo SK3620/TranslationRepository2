@@ -68,7 +68,7 @@ struct WritingData {
     }
 
 //    in InputCommentVC
-    static func writeCommentData(postData: PostData, blockedBy: [String], text: String, today: String, valueForIsProfileImageExisted: String, completion: @escaping () -> Void) {
+    static func writeCommentData(postData: PostData, blockedBy: [String], text: String, today: String, valueForIsProfileImageExisted: String, completion: @escaping (Error?) -> Void) {
         if let user = Auth.auth().currentUser {
             let commentsDic = [
                 "uid": user.uid,
@@ -83,10 +83,10 @@ struct WritingData {
             let commentsRef = Firestore.firestore().collection(FireBaseRelatedPath.commentsPath).document()
             commentsRef.setData(commentsDic, merge: false) { error in
                 if let error = error {
-                    print("”comments”にへの書き込み失敗\(error)")
+                    completion(error)
                 } else {
                     print("”comments”への書き込み成功")
-                    completion()
+                    completion(nil)
                 }
             }
         }

@@ -130,7 +130,12 @@ class InputCommentViewController: UIViewController {
                 print("データの取得に失敗しました\(error.localizedDescription)")
             case let .success(blockedBy):
                 let today: String = self.getToday()
-                WritingData.writeCommentData(postData: self.postData, blockedBy: blockedBy, text: textView_text!, today: today, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!) {
+                WritingData.writeCommentData(postData: self.postData, blockedBy: blockedBy, text: textView_text!, today: today, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!) { error in
+                    if let error = error {
+                        print("データの書き込みに失敗しました\(error.localizedDescription)")
+                        SVProgressHUD.showError(withStatus: "データの書き込みに失敗しました")
+                        return
+                    }
                     self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
                 }
             }
