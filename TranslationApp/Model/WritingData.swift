@@ -36,7 +36,7 @@ struct WritingData {
     }
 
 //    in PostVC
-    static func writePostData(blockedBy: [String], text: String, valueForIsProfileImageExisted: String, array: [String], completion: @escaping () -> Void) {
+    static func writePostData(blockedBy: [String], text: String, valueForIsProfileImageExisted: String, array: [String], completion: @escaping(Error?) -> Void) {
         let user = Auth.auth().currentUser!
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document()
         let postDic = [
@@ -52,7 +52,7 @@ struct WritingData {
         SVProgressHUD.dismiss(withDelay: 1.5) {
             postRef.setData(postDic) { error in
                 if let error = error {
-                    print("エラーでした\(error)")
+                    completion(error)
                     return
                 }
                 let value = FieldValue.arrayUnion(array)
@@ -60,7 +60,7 @@ struct WritingData {
                     if let error = error {
                         print(error)
                     } else {
-                        completion()
+                        completion(nil)
                     }
                 }
             }

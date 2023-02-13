@@ -119,7 +119,12 @@ class PostViewController: UIViewController, UITextViewDelegate {
                 print("データの取得に失敗しました\(error.localizedDescription)")
                 SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
             case let .success(blockedBy):
-                WritingData.writePostData(blockedBy: blockedBy, text: self.textView.text!, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!, array: self.array) {
+                WritingData.writePostData(blockedBy: blockedBy, text: self.textView.text!, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!, array: self.array) { error in
+                    if let error = error {
+                        print("データの書き込みに失敗しました\(error.localizedDescription)")
+                        SVProgressHUD.showError(withStatus: "データの書き込みに失敗しました")
+                        return
+                    }
                     self.secondPagingViewController.savedTextView_text = ""
                     self.dismiss(animated: true, completion: nil)
                 }
