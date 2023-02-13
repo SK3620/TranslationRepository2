@@ -69,16 +69,16 @@ self.navigationController?.pushViewController(hogeViewController, animated: true
 FirebaseDatabaseへのデータ更新処理を行う専用の構造体をModelクラスとして作成することで、可読性を向上させる。  
 *例  
 Struct updateData {  
-    static func updateLikes(~){  
+    static func updateLikes(・・・){  
               FirebaseDatabaseへのデータ更新処理  
      }  
-    static func updateBookMarks(~){  
+    static func updateBookMarks(・・・){  
               FirebaseDatabaseへのデータ更新処理  
      }  
 }*  
 ##### 課題4  
 一つのstoryBoardに含まれるviewControllerの数が少し多すぎるため、複数人による開発の際、互いにstoryboardをいじるとコンフリクトが生じる可能性がある。  
-##### 解決策4  
+##### 解決策  
 複数人で開発を行う場合には、  
 ・機能ごとにStoryboardを分ける  
 ・1ViewController,1storyboardに分ける  
@@ -87,17 +87,17 @@ Struct updateData {
 ##### 課題5  
 Extensionを積極的に活用していないため、コードの可読性が低下している。  
 *例 HogeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CustomCellButtonTappedDelegate {}*  
-##### 解決策5  
+##### 解決策  
 Extension HogeViewController: UITableViewDelegate, UITableViewDataSource {}  
 Extension HogeViewController: CustomCellButtonTappedDelegate {}  
 と記述することでコードの可読性を向上させる。  
 ##### 課題6  
 適切なアクセス修飾子がつけられていないため、開発時に誤って想定外のところでアクセス、呼び出してしまう可能性がある。  
-##### 解決策6  
+##### 解決策  
 新たにプロパティやメソッドなどの記述する際には、別の場所からアクセスしない限りは、とりあえず全てprivateと記述しておいた方が良い。  
 ##### 課題7  
 開発初期時は、ただ、「機能すれば良い」というスタンスで闇雲にコードを書いていたため、可読性が非常に低い箇所が多数ある。  
-##### 解決策7  
+##### 解決策  
 保守性を意識したコードを書く必要がある。  
 1. 変数名やメソッド名は分かりやすい名前を書く。  
 2. コメントはできる限りわかりやすく、無駄なものは書かない。  
