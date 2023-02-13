@@ -37,18 +37,19 @@ struct BlockUnblock {
 
 //    check if you are being blocked by other users when they press the post button
 //    if the "blockedUser" in "blocking" collection is your uid, retrive the documents whose key ("blockedUser") is your uid
-    static func determineIfYouAreBeingBlocked(completion: @escaping ([String]) -> Void) {
+    static func determineIfYouAreBeingBlocked(completion: @escaping (Result<[String], Error>) -> Void) {
         let user = Auth.auth().currentUser!
         let blockRef = Firestore.firestore().collection(FireBaseRelatedPath.blocking).whereField("blockedUser", isEqualTo: user.uid)
         blockRef.getDocuments(completion: { querySnapshot, error in
             if let error = error {
-                print("エラー\(error)")
+                completion(.failure(error))
+                return
             }
             if let querySnapshot = querySnapshot {
                 var excuteClosureWhenZero: Int = querySnapshot.documents.count
                 if querySnapshot.documents.isEmpty {
                     print("誰からもブロックされていない")
-                    completion([])
+                    completion(.success([]))
                     return
                 }
                 var blockedBy: [String] = []
@@ -58,7 +59,7 @@ struct BlockUnblock {
                     let blockData = BlockData(document: queryDocumentSnapshot)
                     blockedBy.append(blockData.blockedBy!)
                     if excuteClosureWhenZero == 0 {
-                        completion(blockedBy)
+                        completion(.success(blockedBy))
                     }
                 }
             }

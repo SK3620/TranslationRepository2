@@ -106,11 +106,17 @@ class PostViewController: UIViewController, UITextViewDelegate {
         }
         self.postButton.isEnabled = false
         self.backBarButtonItem.isEnabled = false
-
-        BlockUnblock.determineIfYouAreBeingBlocked { blockedBy in
-            WritingData.writePostData(blockedBy: blockedBy, text: self.textView.text!, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!, array: self.array) {
-                self.secondPagingViewController.savedTextView_text = ""
-                self.dismiss(animated: true, completion: nil)
+        
+        BlockUnblock.determineIfYouAreBeingBlocked { result in
+            switch result {
+            case let .failure(error):
+                print("データの取得に失敗しました\(error.localizedDescription)")
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+            case let .success(blockedBy):
+                WritingData.writePostData(blockedBy: blockedBy, text: self.textView.text!, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!, array: self.array) {
+                    self.secondPagingViewController.savedTextView_text = ""
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
         }
     }

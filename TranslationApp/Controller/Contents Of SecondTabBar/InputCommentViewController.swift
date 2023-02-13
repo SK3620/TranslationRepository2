@@ -117,12 +117,17 @@ class InputCommentViewController: UIViewController {
             self.backBarButtonItem.isEnabled = true
             return
         }
-
-        BlockUnblock.determineIfYouAreBeingBlocked { blockedBy in
-            //        get the current date
-            let today: String = self.getToday()
-            WritingData.writeCommentData(postData: self.postData, blockedBy: blockedBy, text: textView_text!, today: today, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!) {
-                self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
+        
+        BlockUnblock.determineIfYouAreBeingBlocked { result in
+            switch result {
+            case let .failure(error):
+                SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
+                print("データの取得に失敗しました\(error.localizedDescription)")
+            case let .success(blockedBy):
+                let today: String = self.getToday()
+                WritingData.writeCommentData(postData: self.postData, blockedBy: blockedBy, text: textView_text!, today: today, valueForIsProfileImageExisted: self.valueForIsProfileImageExisted!) {
+                    self.excuteMultipleAsyncProcesses(textView_text: textView_text!, today: today)
+                }
             }
         }
     }
