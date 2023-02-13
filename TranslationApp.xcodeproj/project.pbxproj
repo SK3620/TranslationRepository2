@@ -322,22 +322,23 @@
 		8356E94F29046E4100FD9236 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				8356E95829055BCC00FD9236 /* PhraseWord.swift */,
+				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
+				8356E9542905574500FD9236 /* History.swift */,
+				8356E9562905584500FD9236 /* Record.swift */,
+				8356E95B2906407500FD9236 /* FirstMemo.swift */,
+				8356E95D290642D800FD9236 /* Speak.swift */,
 				839FBA3A28BA602700BB64A5 /* KeyManager.swift */,
+				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
+				8387FD602999FB1C00A77BAF /* ManipulateDataViaFirebase */,
 				83C2921A29137FF000386EE9 /* PostData.swift */,
 				837D41E829150F4C00A80342 /* SecondPostData.swift */,
 				8385EA13295476110034E0F6 /* ProfileData.swift */,
 				836226802981632200AB98A3 /* BlockData.swift */,
 				835B38EB2950070100D42F50 /* ChatList.swift */,
 				8385EA0D2951858A0034E0F6 /* ChatRoom.swift */,
-				8387FD602999FB1C00A77BAF /* ManipulateDataViaFirebase */,
 				835B38E1294C833500D42F50 /* MessageEntity.swift */,
 				835B38E3294C839F00D42F50 /* MessageSenderType.swift */,
-				837CD1B228BE264F00823D17 /* TranslationFolder.swift */,
-				8356E9542905574500FD9236 /* History.swift */,
-				8356E9562905584500FD9236 /* Record.swift */,
-				8356E95829055BCC00FD9236 /* PhraseWord.swift */,
-				8356E95B2906407500FD9236 /* FirstMemo.swift */,
-				8356E95D290642D800FD9236 /* Speak.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -367,7 +368,6 @@
 		8356E9522904708C00FD9236 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */,
 				83AD2C1A290A48AB009B0C84 /* SecondTabBarController.swift */,
 				8389C3F5290A6677007347AE /* Contents Of SecondTabBar */,
 				8356E95F2906467C00FD9236 /* Contents Of TabBar */,
@@ -379,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				8388DA5928C9E25D008DE6FF /* TabBarController.swift */,
+				832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */,
 				8356E9602906479700FD9236 /* PhraseWordViewController */,
 				8356E961290647D200FD9236 /* FolderViewController */,
 				8356E9622906480100FD9236 /* TranslateViewController */,
@@ -471,10 +472,9 @@
 			path = ManipulateDataViaFirebase;
 			sourceTree = "<group>";
 		};
-		8389C3F5290A6677007347AE /* Contents Of SecondTabBar */ = {
+		8387FD612999FD8900A77BAF /* ViewControllersInSecondPagingVC */ = {
 			isa = PBXGroup;
 			children = (
-				83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */,
 				8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */,
 				83C2CC98291D13EC00A671AE /* CorrectViewController.swift */,
 				83C2CC9A291D1BF600A671AE /* HowToLearnViewController.swift */,
@@ -486,6 +486,15 @@
 				83C2CCA6291D1D4100A671AE /* CertificationViewController.swift */,
 				83C2CCA8291D1D5E00A671AE /* EtcViewController.swift */,
 				838085F32926073900574D2D /* SearchViewController.swift */,
+			);
+			path = ViewControllersInSecondPagingVC;
+			sourceTree = "<group>";
+		};
+		8389C3F5290A6677007347AE /* Contents Of SecondTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				83D29A6A291BDC6000DFF928 /* SecondPagingViewController.swift */,
+				8387FD612999FD8900A77BAF /* ViewControllersInSecondPagingVC */,
 				8385E72B2918C92F00DBDBAC /* OthersProfileViewController.swift */,
 				8385E72D2918D12800DBDBAC /* OthersIntroductionViewController.swift */,
 				8385E72F2918D14300DBDBAC /* OthersPostsHistoryViewController.swift */,
@@ -509,7 +518,6 @@
 				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,
 				8389C3FB290A7C6A007347AE /* LoginViewController.swift */,
 				83862E39297D22580032E05B /* TermsOfServiceViewController.swift */,
-				83920AA1290BA6FB00F1F2D6 /* FireBaseRelatedPath.swift */,
 			);
 			path = "Contents Of SecondTabBar";
 			sourceTree = "<group>";
