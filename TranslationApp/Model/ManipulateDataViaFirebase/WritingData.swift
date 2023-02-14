@@ -36,7 +36,7 @@ struct WritingData {
     }
 
 //    in PostVC
-    static func writePostData(blockedBy: [String], text: String, valueForIsProfileImageExisted: String, array: [String], completion: @escaping(Error?) -> Void) {
+    static func writePostData(blockedBy: [String], text: String, valueForIsProfileImageExisted: String, array: [String], completion: @escaping (Error?) -> Void) {
         let user = Auth.auth().currentUser!
         let postRef = Firestore.firestore().collection(FireBaseRelatedPath.PostPath).document()
         let postDic = [

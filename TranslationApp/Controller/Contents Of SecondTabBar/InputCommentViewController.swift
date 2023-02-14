@@ -145,7 +145,7 @@ class InputCommentViewController: UIViewController {
     func getToday() -> String {
         let date = Date()
         let dateFormatter = DateFormatter()
-        // DateFormatter を使用して書式とロケールを指定する
+        // DateFormatter を使用して書式とロケールを指定する/Users/suzukikenta/Desktop/@--jhjhjuhyjyygthyjguyhytgygyznnnnn vvb¥¥¥9/TranslationApp/TranslationApp/Controller/Contents Of SecondTabBar/CommentSectionViewController.swift
         dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyy.M.d HH:mm", options: 0, locale: Locale(identifier: "ja_JP"))
         let today = dateFormatter.string(from: date)
         return today

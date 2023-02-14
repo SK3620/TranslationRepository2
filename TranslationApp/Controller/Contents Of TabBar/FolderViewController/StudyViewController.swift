@@ -157,8 +157,14 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController!.navigationBar.backgroundColor = .systemGray4
         self.navigationController!.navigationBar.barTintColor = .systemGray4
         let settingsBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.settingsBarButtonItemTapped(_:)))
-        self.navigationItem.rightBarButtonItems = [settingsBarButtonItem]
+        let toSecondStudyVCBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(self.tappedToSecondStudyVCBarButtonItem(_:)))
+        self.navigationItem.rightBarButtonItems = [settingsBarButtonItem, toSecondStudyVCBarButtonItem]
         // a process when settingsBarButtonItem is tapped is described in <extension StudyViewController: SettingsDelegate{}>
+    }
+
+    @objc func tappedToSecondStudyVCBarButtonItem(_: UIBarButtonItem) {
+        let secondStudyVC = self.storyboard?.instantiateViewController(withIdentifier: "secondStudy") as! SecondStudyViewController
+        self.navigationController?.pushViewController(secondStudyVC, animated: true)
     }
 
     private func appendInputDataAndResultDataToArray() {
