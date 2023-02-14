@@ -15,6 +15,7 @@
 		830D9FF42912DE2000F8761B /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830D9FF32912DE2000F8761B /* PostViewController.swift */; };
 		832D4CB028D848B5004C4D7C /* QuickMemoViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */; };
 		832D60DD297FE278009F94A8 /* BlockListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D60DC297FE278009F94A8 /* BlockListViewController.swift */; };
+		83516687299BA11100DB78BE /* SecondMemoForStudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83516686299BA11100DB78BE /* SecondMemoForStudyViewController.swift */; };
 		8356E9552905574500FD9236 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E9542905574500FD9236 /* History.swift */; };
 		8356E9572905584500FD9236 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E9562905584500FD9236 /* Record.swift */; };
 		8356E95929055BCC00FD9236 /* PhraseWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95829055BCC00FD9236 /* PhraseWord.swift */; };
@@ -147,6 +148,7 @@
 		830D9FF32912DE2000F8761B /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickMemoViewContoller.swift; sourceTree = "<group>"; };
 		832D60DC297FE278009F94A8 /* BlockListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListViewController.swift; sourceTree = "<group>"; };
+		83516686299BA11100DB78BE /* SecondMemoForStudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondMemoForStudyViewController.swift; sourceTree = "<group>"; };
 		8356E9542905574500FD9236 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		8356E9562905584500FD9236 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		8356E95829055BCC00FD9236 /* PhraseWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseWord.swift; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 				8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */,
 				83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */,
 				83AF317128CF037200FDA0E1 /* MemoForStudyViewController.swift */,
+				83516686299BA11100DB78BE /* SecondMemoForStudyViewController.swift */,
 			);
 			path = FolderViewController;
 			sourceTree = "<group>";
@@ -778,6 +781,7 @@
 				8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */,
 				83C2921B29137FF000386EE9 /* PostData.swift in Sources */,
 				83B9C20128D3050E006138E2 /* CustomCellForRecord.swift in Sources */,
+				83516687299BA11100DB78BE /* SecondMemoForStudyViewController.swift in Sources */,
 				83D29A6B291BDC6000DFF928 /* SecondPagingViewController.swift in Sources */,
 				836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */,
 				83BC07EE291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift in Sources */,

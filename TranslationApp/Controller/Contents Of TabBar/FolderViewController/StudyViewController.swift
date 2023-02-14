@@ -294,6 +294,9 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // display a context menu when tapped
         cell.cellEditButton.tag = indexPath.row
         cell.cellEditButton.addTarget(self, action: #selector(self.tappdCellEditButton(_:)), for: .touchUpInside)
+        
+        cell.memoButton.tag = indexPath.row
+        cell.memoButton.addTarget(self, action: #selector(<#T##@objc method#>), for: .touchUpInside)
 
         // maintain a cell layout by inserting text on label2.text if resultData on each cell has no characters
         self.maintainCellLayout(cell: cell, indexPath: indexPath)
@@ -360,6 +363,15 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.searchBar.text != "", self.translationArr[indexPath.row].resultData == "" {
             cell.label2.text = ""
         }
+    }
+    
+    @objc func tappedMemoButton(_ sender: UIButton){
+        let secondMemoForStudyViewController = storyboard?.instantiateViewController(withIdentifier: "SecondMemoView") as! SecondMemoForStudyViewController
+        if let sheet = secondMemoForStudyViewController.sheetPresentationController {
+            sheet.detents = [.medium()]
+        }
+        secondMemoForStudyViewController.folderNameString = self.folderNameString
+        present(secondMemoForStudyViewController, animated: true, completion: nil)
     }
 
     @objc func tappedCheckMarkButton(_ sender: UIButton) {

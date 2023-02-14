@@ -38,6 +38,8 @@ class Translation: Object {
     @objc dynamic var isDisplayed: Bool = false
 //    inputData + resultData
     @objc dynamic var inputAndResultData = ""
+    
+    @objc dynamic var secondMemo = ""
 
     override static func primaryKey() -> String? {
         return "id"

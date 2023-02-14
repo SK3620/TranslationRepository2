@@ -455,6 +455,61 @@
             </objects>
             <point key="canvasLocation" x="1380" y="1454.9261083743843"/>
         </scene>
+        <!--Second Memo For Study View Controller-->
+        <scene sceneID="yIa-JT-tln">
+            <objects>
+                <viewController storyboardIdentifier="SecondMemoView" id="78k-aB-ZlE" customClass="SecondMemoForStudyViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6lZ-oW-C28">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="162-OR-zZf">
+                                <rect key="frame" x="0.0" y="103" width="393" height="749"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b9X-C7-sz0">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <color key="barTintColor" systemColor="systemGray6Color"/>
+                                <items>
+                                    <navigationItem title="メモ" id="JYf-nf-Ekg">
+                                        <barButtonItem key="leftBarButtonItem" title="戻る" id="sta-NW-AxN">
+                                            <connections>
+                                                <action selector="backButton:" destination="78k-aB-ZlE" id="rUg-WC-9sX"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="保存する" style="done" id="wUK-I8-MnW">
+                                            <connections>
+                                                <action selector="saveButton:" destination="78k-aB-ZlE" id="xMC-34-Pj1"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="EGx-lz-fT9"/>
+                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="162-OR-zZf" secondAttribute="bottom" id="3Qo-v0-zig"/>
+                            <constraint firstItem="162-OR-zZf" firstAttribute="top" secondItem="b9X-C7-sz0" secondAttribute="bottom" id="B1g-e5-lRb"/>
+                            <constraint firstItem="162-OR-zZf" firstAttribute="trailing" secondItem="EGx-lz-fT9" secondAttribute="trailing" id="IBi-Ny-uYt"/>
+                            <constraint firstItem="b9X-C7-sz0" firstAttribute="trailing" secondItem="EGx-lz-fT9" secondAttribute="trailing" id="XPd-q3-ye2"/>
+                            <constraint firstItem="b9X-C7-sz0" firstAttribute="leading" secondItem="EGx-lz-fT9" secondAttribute="leading" id="YAa-WQ-GZQ"/>
+                            <constraint firstItem="162-OR-zZf" firstAttribute="leading" secondItem="EGx-lz-fT9" secondAttribute="leading" id="aWm-mP-h7i"/>
+                            <constraint firstItem="b9X-C7-sz0" firstAttribute="top" secondItem="EGx-lz-fT9" secondAttribute="top" id="jhz-eI-mze"/>
+                            <constraint firstItem="162-OR-zZf" firstAttribute="top" secondItem="b9X-C7-sz0" secondAttribute="bottom" id="nny-aq-2m9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="memoTextView" destination="162-OR-zZf" id="4R4-Gv-dyg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9VC-vF-Nlr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-416.03053435114504" y="2150.7042253521126"/>
+        </scene>
         <!--Memo For Study View Controller-->
         <scene sceneID="W1U-xQ-WZb">
             <objects>
