@@ -311,14 +311,11 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         switch result {
         case 0:
-            let image0 = UIImage(systemName: "star")
-            cell.checkMarkButton.setImage(image0, for: .normal)
+            cell.setImage(cell.checkMarkButton, "star")
         case 1:
-            let image1 = UIImage(systemName: "star.leadinghalf.filled")
-            cell.checkMarkButton.setImage(image1, for: .normal)
+            cell.setImage(cell.checkMarkButton, "star.leadinghalf.filled")
         case 2:
-            let image2 = UIImage(systemName: "star.fill")
-            cell.checkMarkButton.setImage(image2, for: .normal)
+            cell.setImage(cell.checkMarkButton, "star.fill")
         default:
             print("その他の値です")
         }
@@ -334,8 +331,6 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         switch isDisplayed {
         case false:
-            let image = UIImage(systemName: "ellipsis.circle")
-            cell.cellEditButton.setImage(image, for: .normal)
             cell.displayButton2.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
             cell.cellEditButton.isEnabled = true
             if indexPath.row == 0 {
@@ -354,8 +349,6 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let image1 = UIImage()
             cell.displayButton2.setImage(image1, for: .normal)
             cell.setData2(self.resultDataArr[indexPath.row])
-            let image = UIImage(systemName: "ellipsis.circle")
-            cell.cellEditButton.setImage(image, for: .normal)
             cell.centerLine.backgroundColor = UIColor.systemGray5
         }
     }

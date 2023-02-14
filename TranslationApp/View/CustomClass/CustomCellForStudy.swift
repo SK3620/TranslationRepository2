@@ -29,6 +29,8 @@ class CustomCellForStudy: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.setImage(self.memoButton, "square.and.pencil")
+        self.setImage(self.cellEditButton, "ellipsis.circle")
         let reconizer = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressButton(_:)))
         self.displayButton2.addGestureRecognizer(reconizer)
         self.displayButton1.addGestureRecognizer(reconizer)
@@ -54,5 +56,10 @@ class CustomCellForStudy: UITableViewCell {
 
     func setData2(_ resultData: String) {
         self.label2.text = resultData
+    }
+
+    internal func setImage(_ button: UIButton, _ string: String) {
+        let config = UIImage.SymbolConfiguration(pointSize: 22.5, weight: .regular, scale: .default)
+        button.setImage(UIImage(systemName: string, withConfiguration: config), for: .normal)
     }
 }
