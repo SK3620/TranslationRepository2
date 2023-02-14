@@ -20,6 +20,8 @@ class CustomCellForStudy: UITableViewCell {
     @IBOutlet var displayButton1: UIButton!
     @IBOutlet var displayButton2: UIButton!
     @IBOutlet var cellEditButton: UIButton!
+    @IBOutlet var memoButton: UIButton!
+    @IBOutlet var centerLine: UIView!
 
     var delegate: LongPressDetectionDelegate!
     var indexPath_row: Int!
@@ -47,9 +49,7 @@ class CustomCellForStudy: UITableViewCell {
     func setData(_ inputData: String, _ indexPath_row: Int) {
         self.label1.text = inputData
 
-        self.numberLabel.backgroundColor = .systemGray6
-
-        self.numberLabel.text = "\(indexPath_row + 1)"
+        self.numberLabel.text = "No.\(indexPath_row + 1)"
     }
 
     func setData2(_ resultData: String) {

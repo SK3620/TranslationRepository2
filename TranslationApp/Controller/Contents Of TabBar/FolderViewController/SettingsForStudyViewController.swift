@@ -20,7 +20,7 @@ class SettingsForStudyViewController: UIViewController, UITableViewDelegate, UIT
 
     var delegate: SettingsDelegate!
 
-    private var menuArr: [String] = ["お気に入り", "学習記録", "メモ", "太字を再生", "小文字を再生", "閉じる"]
+    private var menuArr: [String] = ["お気に入り", "学習記録", "メモ", "太字を再生", "細字を再生", "閉じる"]
 
     override func viewDidLoad() {
         super.viewDidLoad()

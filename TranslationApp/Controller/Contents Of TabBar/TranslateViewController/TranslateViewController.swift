@@ -421,7 +421,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             // 入力されたテキスト
             translation.inputData = translateTextView1Text
             // 翻訳結果テキスト
-            translation.resultData = translateTextView2Text + "\n" + " "
+            translation.resultData = translateTextView2Text
             // 入力されたテキストと翻訳結果テキスト
             translation.inputAndResultData = translation.inputData + translation.resultData
             let translationArr = self.realm.objects(Translation.self)

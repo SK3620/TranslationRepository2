@@ -94,7 +94,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCellForStudy")
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.separatorColor = .systemBlue
+        self.tableView.separatorColor = .clear
         self.tableView.allowsSelection = false
         self.tableView.layer.cornerRadius = 10
 
@@ -334,9 +334,10 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         switch isDisplayed {
         case false:
-            cell.cellEditButton.setImage(UIImage(), for: .normal)
+            let image = UIImage(systemName: "ellipsis.circle")
+            cell.cellEditButton.setImage(image, for: .normal)
             cell.displayButton2.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-            cell.cellEditButton.isEnabled = false
+            cell.cellEditButton.isEnabled = true
             if indexPath.row == 0 {
                 cell.label2.text = ""
                 let image = UIImage(systemName: "hand.tap")
@@ -344,8 +345,9 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             } else if indexPath.row != 0 {
                 let image = UIImage()
                 cell.displayButton2.setImage(image, for: .normal)
-                cell.label2.text = " "
+                cell.label2.text = ""
             }
+            cell.centerLine.backgroundColor = UIColor.clear
         case true:
             cell.cellEditButton.isEnabled = true
             cell.displayButton2.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
@@ -354,15 +356,16 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.setData2(self.resultDataArr[indexPath.row])
             let image = UIImage(systemName: "ellipsis.circle")
             cell.cellEditButton.setImage(image, for: .normal)
+            cell.centerLine.backgroundColor = UIColor.systemGray5
         }
     }
 
     private func maintainCellLayout(cell: CustomCellForStudy, indexPath: IndexPath) {
         if self.translationFolderArr.first?.results[indexPath.row].resultData == "" {
-            cell.label2.text = " "
+            cell.label2.text = ""
         }
         if self.searchBar.text != "", self.translationArr[indexPath.row].resultData == "" {
-            cell.label2.text = " "
+            cell.label2.text = ""
         }
     }
 
