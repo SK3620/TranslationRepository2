@@ -701,10 +701,12 @@ extension StudyViewController: ContextMenuDelegate {
                 selectFolderForStrudyViewController.inputData = self.translationFolderArr.first!.results[self.sender_tag].inputData
                 selectFolderForStrudyViewController.resultData = self.translationFolderArr.first!.results[self.sender_tag].resultData
                 selectFolderForStrudyViewController.inputAndResultData = self.translationFolderArr.first!.results[self.sender_tag].inputAndResultData
+                selectFolderForStrudyViewController.secondMemo = self.translationFolderArr.first!.results[self.sender_tag].secondMemo
             } else {
                 selectFolderForStrudyViewController.inputData = self.translationArr[self.sender_tag].inputData
                 selectFolderForStrudyViewController.resultData = self.translationArr[self.sender_tag].resultData
                 selectFolderForStrudyViewController.inputAndResultData = self.translationArr[self.sender_tag].inputAndResultData
+                selectFolderForStrudyViewController.secondMemo = self.translationArr[self.sender_tag].secondMemo
             }
 
             if let sheet = navigationController.sheetPresentationController {

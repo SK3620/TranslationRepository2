@@ -26,6 +26,7 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
     var inputData: String!
     var resultData: String!
     var inputAndResultData: String!
+    var secondMemo: String!
 
     private var string = "保存先 : "
 
@@ -87,6 +88,7 @@ class SelectFolderForStudyViewContoller: UIViewController, UITableViewDelegate, 
         translation.inputData = self.inputData
         translation.resultData = self.resultData
         translation.inputAndResultData = self.inputAndResultData
+        translation.secondMemo = self.secondMemo
 
         let allTranslation = self.realm.objects(Translation.self)
         if allTranslation.count != 0 {
