@@ -156,6 +156,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         )
 
+        config = Realm.Configuration(
+            schemaVersion: 16, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 16 {
+                    migration.create(Translation.className(), value: ["secondMemo": ""])
+                }
+            }
+        )
+
         Realm.Configuration.defaultConfiguration = config
 
         if let APIKEY = KeyManager().getValue(key: "apiKey2") as? String {

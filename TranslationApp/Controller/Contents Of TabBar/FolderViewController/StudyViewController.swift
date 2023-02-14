@@ -294,9 +294,9 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // display a context menu when tapped
         cell.cellEditButton.tag = indexPath.row
         cell.cellEditButton.addTarget(self, action: #selector(self.tappdCellEditButton(_:)), for: .touchUpInside)
-        
+
         cell.memoButton.tag = indexPath.row
-        cell.memoButton.addTarget(self, action: #selector(<#T##@objc method#>), for: .touchUpInside)
+        cell.memoButton.addTarget(self, action: #selector(self.tappedMemoButton(_:)), for: .touchUpInside)
 
         // maintain a cell layout by inserting text on label2.text if resultData on each cell has no characters
         self.maintainCellLayout(cell: cell, indexPath: indexPath)
@@ -364,13 +364,19 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.label2.text = ""
         }
     }
-    
-    @objc func tappedMemoButton(_ sender: UIButton){
+
+    @objc func tappedMemoButton(_ sender: UIButton) {
         let secondMemoForStudyViewController = storyboard?.instantiateViewController(withIdentifier: "SecondMemoView") as! SecondMemoForStudyViewController
         if let sheet = secondMemoForStudyViewController.sheetPresentationController {
             sheet.detents = [.medium()]
         }
-        secondMemoForStudyViewController.folderNameString = self.folderNameString
+        secondMemoForStudyViewController.translationId = self.translationFolderArr[0].results[sender.tag].id
+        secondMemoForStudyViewController.memo = self.translationFolderArr[0].results[sender.tag].secondMemo
+
+        if self.searchBar.text != "" {
+            secondMemoForStudyViewController.translationId = self.translationArr[sender.tag].id
+            secondMemoForStudyViewController.memo = self.translationArr[sender.tag].secondMemo
+        }
         present(secondMemoForStudyViewController, animated: true, completion: nil)
     }
 
