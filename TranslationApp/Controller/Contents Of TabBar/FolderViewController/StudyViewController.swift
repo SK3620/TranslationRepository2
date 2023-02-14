@@ -368,7 +368,16 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func tappedMemoButton(_ sender: UIButton) {
         let secondMemoForStudyViewController = storyboard?.instantiateViewController(withIdentifier: "SecondMemoView") as! SecondMemoForStudyViewController
         if let sheet = secondMemoForStudyViewController.sheetPresentationController {
-            sheet.detents = [.medium()]
+            if #available(iOS 16.0, *) {
+                sheet.detents = [
+                    .custom { context in 0.5 * context.maximumDetentValue },
+                    .custom { context in 0.3 * context.maximumDetentValue },
+                    .custom { context in 0.2 * context.maximumDetentValue },
+                ]
+            } else {
+                // Fallback on earlier versions
+                sheet.detents = [.medium(), .large()]
+            }
         }
         secondMemoForStudyViewController.translationId = self.translationFolderArr[0].results[sender.tag].id
         secondMemoForStudyViewController.memo = self.translationFolderArr[0].results[sender.tag].secondMemo
