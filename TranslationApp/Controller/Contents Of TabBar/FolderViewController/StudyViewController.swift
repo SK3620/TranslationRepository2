@@ -253,8 +253,10 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.nextCellButton.isEnabled = false
         }
         self.tableView.reloadData()
-        let indexPath = IndexPath(row: 0, section: 0)
-        self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        if self.inputDataArr.isEmpty != true {
+            let indexPath = IndexPath(row: 0, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        }
     }
 
     private func scrollToIndexPath_row() {
@@ -810,6 +812,7 @@ extension StudyViewController: ContextMenuDelegate {
 
     // a process to delete data
     func deleteButton() {
+        self.maintainScrollPosition(indexPath_rowForDeleting: self.sender_tag)
         let alert = UIAlertController(title: "本当に削除しますか？", message: "保存した文章を\n左スワイプで削除することもできます", preferredStyle: .alert)
         let cencel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in print("キャンセルボタンがタップされた。") })
         let delete = UIAlertAction(title: "削除", style: .destructive, handler: { _ in
@@ -857,6 +860,7 @@ extension StudyViewController: ContextMenuDelegate {
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
+            self.maintainScrollPosition(indexPath_rowForDeleting: indexPath.row)
             try! self.realm.write {
                 if self.searchBar.text != "" {
                     self.realm.delete(translationArr[indexPath.row])
@@ -877,6 +881,35 @@ extension StudyViewController: ContextMenuDelegate {
             self.playButton.isEnabled = false
             tableView.reloadData()
         }
+    }
+
+    private func maintainScrollPosition(indexPath_rowForDeleting: Int) {
+        let indexPath_row: Int = self.getIndexPathRowInfo().indexPath_row
+        guard indexPath_row != 0 else {
+            print("indexPath_rowの値が0だったため、returnしました。")
+            return
+        }
+        var updatedIndexPath_row: Int!
+        if indexPath_rowForDeleting <= indexPath_row {
+            updatedIndexPath_row = indexPath_row - 1
+        } else {
+            updatedIndexPath_row = indexPath_row
+        }
+        if self.searchBar.text != "" {
+            updatedIndexPath_row = indexPath_row - 1
+        }
+        try! self.realm.write {
+            let translationFolder = self.getIndexPathRowInfo()
+            translationFolder.indexPath_row = updatedIndexPath_row
+            self.realm.add(translationFolder, update: .modified)
+        }
+    }
+
+    private func getIndexPathRowInfo() -> TranslationFolder {
+        var translationFolderArr = try! Realm().objects(TranslationFolder.self)
+        let predicate = NSPredicate(format: "folderName == %@", self.folderNameString)
+        let translationFolder = translationFolderArr.filter(predicate).first
+        return translationFolder!
     }
 }
 
