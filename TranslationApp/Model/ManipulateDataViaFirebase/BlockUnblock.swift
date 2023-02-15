@@ -194,6 +194,9 @@ struct BlockUnblock {
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 completion(.failure(error))
             }

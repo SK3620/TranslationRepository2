@@ -60,6 +60,7 @@ class OthersPostsHistoryViewController: UIViewController, UITableViewDelegate, U
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error.localizedDescription)")
                 SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
             case let .success(postArray):
+                SVProgressHUD.dismiss()
                 self.postArray = postArray
                 self.tableView.reloadData()
 

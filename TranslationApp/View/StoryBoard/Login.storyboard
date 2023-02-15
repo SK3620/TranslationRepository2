@@ -82,7 +82,7 @@
         <!--Login View Controller-->
         <scene sceneID="mCw-ei-4hY">
             <objects>
-                <viewController storyboardIdentifier="Login" modalPresentationStyle="fullScreen" id="g62-H3-zD9" customClass="LoginViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Login" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="g62-H3-zD9" customClass="LoginViewController" customModule="DeepL保存翻訳" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Koa-ee-u8x">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

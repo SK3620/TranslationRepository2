@@ -94,7 +94,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCellForStudy")
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.separatorColor = .systemBlue
+        self.tableView.separatorColor = .clear
         self.tableView.allowsSelection = false
         self.tableView.layer.cornerRadius = 10
 
@@ -157,14 +157,8 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController!.navigationBar.backgroundColor = .systemGray4
         self.navigationController!.navigationBar.barTintColor = .systemGray4
         let settingsBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify"), style: .plain, target: self, action: #selector(self.settingsBarButtonItemTapped(_:)))
-        let toSecondStudyVCBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain, target: self, action: #selector(self.tappedToSecondStudyVCBarButtonItem(_:)))
-        self.navigationItem.rightBarButtonItems = [settingsBarButtonItem, toSecondStudyVCBarButtonItem]
+        self.navigationItem.rightBarButtonItems = [settingsBarButtonItem]
         // a process when settingsBarButtonItem is tapped is described in <extension StudyViewController: SettingsDelegate{}>
-    }
-
-    @objc func tappedToSecondStudyVCBarButtonItem(_: UIBarButtonItem) {
-        let secondStudyVC = self.storyboard?.instantiateViewController(withIdentifier: "secondStudy") as! SecondStudyViewController
-        self.navigationController?.pushViewController(secondStudyVC, animated: true)
     }
 
     private func appendInputDataAndResultDataToArray() {
@@ -180,6 +174,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.resultDataArr.append($0.resultData)
         }
         self.tableView.reloadData()
+        self.scrollToIndexPath_row()
     }
 
     func hideNavigationControllerOfTabBarController() {
@@ -218,6 +213,9 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // if no characters are entered in the search bar, display all data
         if self.searchBar.text == "" {
             self.displayAllData()
+            let indexPath_row: Int = self.translationFolderArr.first!.indexPath_row
+            let indexPath = IndexPath(row: indexPath_row, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         } else {
             // do a filter search
             self.doFilterSearch()
@@ -235,6 +233,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.inputDataArr.append($0.inputData)
             self.resultDataArr.append($0.resultData)
         }
+        self.tableView.reloadData()
     }
 
     private func doFilterSearch() {
@@ -253,6 +252,20 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.backCellButton.isEnabled = false
             self.nextCellButton.isEnabled = false
         }
+        self.tableView.reloadData()
+        if self.inputDataArr.isEmpty != true {
+            let indexPath = IndexPath(row: 0, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        }
+    }
+
+    private func scrollToIndexPath_row() {
+        var translationFolderArr = try! Realm().objects(TranslationFolder.self)
+        let predicate = NSPredicate(format: "folderName == %@", self.folderNameString)
+        translationFolderArr = translationFolderArr.filter(predicate)
+        let indexPath_row = translationFolderArr.first?.indexPath_row
+        let indexPath = IndexPath(row: indexPath_row!, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -301,6 +314,9 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.cellEditButton.tag = indexPath.row
         cell.cellEditButton.addTarget(self, action: #selector(self.tappdCellEditButton(_:)), for: .touchUpInside)
 
+        cell.memoButton.tag = indexPath.row
+        cell.memoButton.addTarget(self, action: #selector(self.tappedMemoButton(_:)), for: .touchUpInside)
+
         // maintain a cell layout by inserting text on label2.text if resultData on each cell has no characters
         self.maintainCellLayout(cell: cell, indexPath: indexPath)
 
@@ -317,14 +333,11 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         switch result {
         case 0:
-            let image0 = UIImage(systemName: "star")
-            cell.checkMarkButton.setImage(image0, for: .normal)
+            cell.setImage(cell.checkMarkButton, "star")
         case 1:
-            let image1 = UIImage(systemName: "star.leadinghalf.filled")
-            cell.checkMarkButton.setImage(image1, for: .normal)
+            cell.setImage(cell.checkMarkButton, "star.leadinghalf.filled")
         case 2:
-            let image2 = UIImage(systemName: "star.fill")
-            cell.checkMarkButton.setImage(image2, for: .normal)
+            cell.setImage(cell.checkMarkButton, "star.fill")
         default:
             print("その他の値です")
         }
@@ -340,9 +353,8 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         switch isDisplayed {
         case false:
-            cell.cellEditButton.setImage(UIImage(), for: .normal)
             cell.displayButton2.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-            cell.cellEditButton.isEnabled = false
+            cell.cellEditButton.isEnabled = true
             if indexPath.row == 0 {
                 cell.label2.text = ""
                 let image = UIImage(systemName: "hand.tap")
@@ -350,26 +362,50 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             } else if indexPath.row != 0 {
                 let image = UIImage()
                 cell.displayButton2.setImage(image, for: .normal)
-                cell.label2.text = " "
+                cell.label2.text = ""
             }
+            cell.centerLine.backgroundColor = UIColor.clear
         case true:
             cell.cellEditButton.isEnabled = true
             cell.displayButton2.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
             let image1 = UIImage()
             cell.displayButton2.setImage(image1, for: .normal)
             cell.setData2(self.resultDataArr[indexPath.row])
-            let image = UIImage(systemName: "ellipsis.circle")
-            cell.cellEditButton.setImage(image, for: .normal)
+            cell.centerLine.backgroundColor = UIColor.systemGray5
         }
     }
 
     private func maintainCellLayout(cell: CustomCellForStudy, indexPath: IndexPath) {
         if self.translationFolderArr.first?.results[indexPath.row].resultData == "" {
-            cell.label2.text = " "
+            cell.label2.text = ""
         }
         if self.searchBar.text != "", self.translationArr[indexPath.row].resultData == "" {
-            cell.label2.text = " "
+            cell.label2.text = ""
         }
+    }
+
+    @objc func tappedMemoButton(_ sender: UIButton) {
+        let secondMemoForStudyViewController = storyboard?.instantiateViewController(withIdentifier: "SecondMemoView") as! SecondMemoForStudyViewController
+        if let sheet = secondMemoForStudyViewController.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                sheet.detents = [
+                    .custom { context in 0.5 * context.maximumDetentValue },
+                    .custom { context in 0.3 * context.maximumDetentValue },
+                    .custom { context in 0.2 * context.maximumDetentValue },
+                ]
+            } else {
+                // Fallback on earlier versions
+                sheet.detents = [.medium(), .large()]
+            }
+        }
+        secondMemoForStudyViewController.translationId = self.translationFolderArr[0].results[sender.tag].id
+        secondMemoForStudyViewController.memo = self.translationFolderArr[0].results[sender.tag].secondMemo
+
+        if self.searchBar.text != "" {
+            secondMemoForStudyViewController.translationId = self.translationArr[sender.tag].id
+            secondMemoForStudyViewController.memo = self.translationArr[sender.tag].secondMemo
+        }
+        present(secondMemoForStudyViewController, animated: true, completion: nil)
     }
 
     @objc func tappedCheckMarkButton(_ sender: UIButton) {
@@ -435,6 +471,8 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         } else {
+            self.storesIndexPathRowInfoForTableViewScroll(sender: sender)
+
             let translationArr = self.translationFolderArr.first!.results
             let isDisplayed = translationArr[sender.tag].isDisplayed
             switch isDisplayed {
@@ -451,6 +489,19 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         self.tableView.reloadData()
+    }
+
+//    stores indexPath.row information to Realm
+    private func storesIndexPathRowInfoForTableViewScroll(sender: UIButton) {
+        let indexPath_row: Int = sender.tag
+
+        var translationFolderArr = try! Realm().objects(TranslationFolder.self)
+        let predicate = NSPredicate(format: "folderName == %@", self.folderNameString)
+        translationFolderArr = translationFolderArr.filter(predicate)
+        try! self.realm.write {
+            translationFolderArr.first?.indexPath_row = indexPath_row
+            self.realm.add(translationFolderArr.first!, update: .modified)
+        }
     }
 
     // display all resultData
@@ -684,10 +735,12 @@ extension StudyViewController: ContextMenuDelegate {
                 selectFolderForStrudyViewController.inputData = self.translationFolderArr.first!.results[self.sender_tag].inputData
                 selectFolderForStrudyViewController.resultData = self.translationFolderArr.first!.results[self.sender_tag].resultData
                 selectFolderForStrudyViewController.inputAndResultData = self.translationFolderArr.first!.results[self.sender_tag].inputAndResultData
+                selectFolderForStrudyViewController.secondMemo = self.translationFolderArr.first!.results[self.sender_tag].secondMemo
             } else {
                 selectFolderForStrudyViewController.inputData = self.translationArr[self.sender_tag].inputData
                 selectFolderForStrudyViewController.resultData = self.translationArr[self.sender_tag].resultData
                 selectFolderForStrudyViewController.inputAndResultData = self.translationArr[self.sender_tag].inputAndResultData
+                selectFolderForStrudyViewController.secondMemo = self.translationArr[self.sender_tag].secondMemo
             }
 
             if let sheet = navigationController.sheetPresentationController {
@@ -759,6 +812,7 @@ extension StudyViewController: ContextMenuDelegate {
 
     // a process to delete data
     func deleteButton() {
+        self.maintainScrollPosition(indexPath_rowForDeleting: self.sender_tag)
         let alert = UIAlertController(title: "本当に削除しますか？", message: "保存した文章を\n左スワイプで削除することもできます", preferredStyle: .alert)
         let cencel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in print("キャンセルボタンがタップされた。") })
         let delete = UIAlertAction(title: "削除", style: .destructive, handler: { _ in
@@ -806,6 +860,7 @@ extension StudyViewController: ContextMenuDelegate {
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
+            self.maintainScrollPosition(indexPath_rowForDeleting: indexPath.row)
             try! self.realm.write {
                 if self.searchBar.text != "" {
                     self.realm.delete(translationArr[indexPath.row])
@@ -826,6 +881,35 @@ extension StudyViewController: ContextMenuDelegate {
             self.playButton.isEnabled = false
             tableView.reloadData()
         }
+    }
+
+    private func maintainScrollPosition(indexPath_rowForDeleting: Int) {
+        let indexPath_row: Int = self.getIndexPathRowInfo().indexPath_row
+        guard indexPath_row != 0 else {
+            print("indexPath_rowの値が0だったため、returnしました。")
+            return
+        }
+        var updatedIndexPath_row: Int!
+        if indexPath_rowForDeleting <= indexPath_row {
+            updatedIndexPath_row = indexPath_row - 1
+        } else {
+            updatedIndexPath_row = indexPath_row
+        }
+        if self.searchBar.text != "" {
+            updatedIndexPath_row = indexPath_row - 1
+        }
+        try! self.realm.write {
+            let translationFolder = self.getIndexPathRowInfo()
+            translationFolder.indexPath_row = updatedIndexPath_row
+            self.realm.add(translationFolder, update: .modified)
+        }
+    }
+
+    private func getIndexPathRowInfo() -> TranslationFolder {
+        var translationFolderArr = try! Realm().objects(TranslationFolder.self)
+        let predicate = NSPredicate(format: "folderName == %@", self.folderNameString)
+        let translationFolder = translationFolderArr.filter(predicate).first
+        return translationFolder!
     }
 }
 

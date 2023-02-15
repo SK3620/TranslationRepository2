@@ -20,13 +20,17 @@ class CustomCellForStudy: UITableViewCell {
     @IBOutlet var displayButton1: UIButton!
     @IBOutlet var displayButton2: UIButton!
     @IBOutlet var cellEditButton: UIButton!
+    @IBOutlet var memoButton: UIButton!
+    @IBOutlet var centerLine: UIView!
 
-    var delegate: LongPressDetectionDelegate!
+    internal var delegate: LongPressDetectionDelegate!
     var indexPath_row: Int!
     var customCellForStudy: CustomCellForStudy!
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.setImage(self.memoButton, "square.and.pencil")
+        self.setImage(self.cellEditButton, "ellipsis.circle")
         let reconizer = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressButton(_:)))
         self.displayButton2.addGestureRecognizer(reconizer)
         self.displayButton1.addGestureRecognizer(reconizer)
@@ -47,12 +51,15 @@ class CustomCellForStudy: UITableViewCell {
     func setData(_ inputData: String, _ indexPath_row: Int) {
         self.label1.text = inputData
 
-        self.numberLabel.backgroundColor = .systemGray6
-
-        self.numberLabel.text = "\(indexPath_row + 1)"
+        self.numberLabel.text = "No.\(indexPath_row + 1)"
     }
 
     func setData2(_ resultData: String) {
         self.label2.text = resultData
+    }
+
+    internal func setImage(_ button: UIButton, _ string: String) {
+        let config = UIImage.SymbolConfiguration(pointSize: 22.5, weight: .regular, scale: .default)
+        button.setImage(UIImage(systemName: string, withConfiguration: config), for: .normal)
     }
 }

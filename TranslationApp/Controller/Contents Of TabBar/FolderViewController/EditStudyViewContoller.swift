@@ -102,7 +102,6 @@ class EditStudyViewContoller: UIViewController, UITextViewDelegate {
 
     //   a button to save
     @objc func tappedRightBarButtonItem(_: UIBarButtonItem) {
-        SVProgressHUD.show()
         let translationArr = self.realm.objects(Translation.self).filter("id == \(self.translationId)").first!
         try! self.realm.write {
             translationArr.inputData = textView1.text

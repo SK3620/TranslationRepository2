@@ -17,6 +17,8 @@ class TranslationFolder: Object {
 
     @objc dynamic var memo = ""
 
+    @objc dynamic var indexPath_row: Int = 0
+
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -38,6 +40,8 @@ class Translation: Object {
     @objc dynamic var isDisplayed: Bool = false
 //    inputData + resultData
     @objc dynamic var inputAndResultData = ""
+
+    @objc dynamic var secondMemo = ""
 
     override static func primaryKey() -> String? {
         return "id"

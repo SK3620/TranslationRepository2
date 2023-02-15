@@ -15,8 +15,7 @@
 		830D9FF42912DE2000F8761B /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830D9FF32912DE2000F8761B /* PostViewController.swift */; };
 		832D4CB028D848B5004C4D7C /* QuickMemoViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */; };
 		832D60DD297FE278009F94A8 /* BlockListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D60DC297FE278009F94A8 /* BlockListViewController.swift */; };
-		83516684299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83516682299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.swift */; };
-		83516685299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83516683299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.xib */; };
+		83516687299BA11100DB78BE /* SecondMemoForStudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83516686299BA11100DB78BE /* SecondMemoForStudyViewController.swift */; };
 		8356E9552905574500FD9236 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E9542905574500FD9236 /* History.swift */; };
 		8356E9572905584500FD9236 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E9562905584500FD9236 /* Record.swift */; };
 		8356E95929055BCC00FD9236 /* PhraseWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356E95829055BCC00FD9236 /* PhraseWord.swift */; };
@@ -53,7 +52,6 @@
 		83862E37297D183F0032E05B /* CustomCellForTermsOfService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */; };
 		83862E38297D183F0032E05B /* CustomCellForTermsOfService.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83862E36297D183F0032E05B /* CustomCellForTermsOfService.xib */; };
 		83862E3A297D22580032E05B /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83862E39297D22580032E05B /* TermsOfServiceViewController.swift */; };
-		8387FD65299B31A100A77BAF /* SecondStudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8387FD64299B31A100A77BAF /* SecondStudyViewController.swift */; };
 		8388DA5A28C9E25D008DE6FF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5928C9E25D008DE6FF /* TabBarController.swift */; };
 		8388DA5C28CA3770008DE6FF /* EditStudyViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */; };
 		8389C3FA290A7C5C007347AE /* TimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */; };
@@ -150,8 +148,7 @@
 		830D9FF32912DE2000F8761B /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		832D4CAF28D848B5004C4D7C /* QuickMemoViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickMemoViewContoller.swift; sourceTree = "<group>"; };
 		832D60DC297FE278009F94A8 /* BlockListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListViewController.swift; sourceTree = "<group>"; };
-		83516682299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellForSecondStudy.swift; sourceTree = "<group>"; };
-		83516683299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CollectionViewCellForSecondStudy.xib; path = CustomClass/CollectionViewCellForSecondStudy.xib; sourceTree = "<group>"; };
+		83516686299BA11100DB78BE /* SecondMemoForStudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondMemoForStudyViewController.swift; sourceTree = "<group>"; };
 		8356E9542905574500FD9236 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		8356E9562905584500FD9236 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		8356E95829055BCC00FD9236 /* PhraseWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseWord.swift; sourceTree = "<group>"; };
@@ -188,7 +185,6 @@
 		83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellForTermsOfService.swift; sourceTree = "<group>"; };
 		83862E36297D183F0032E05B /* CustomCellForTermsOfService.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCellForTermsOfService.xib; sourceTree = "<group>"; };
 		83862E39297D22580032E05B /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
-		8387FD64299B31A100A77BAF /* SecondStudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondStudyViewController.swift; sourceTree = "<group>"; };
 		8388DA5928C9E25D008DE6FF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStudyViewContoller.swift; sourceTree = "<group>"; };
 		8389C3F9290A7C5C007347AE /* TimeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
@@ -365,7 +361,6 @@
 				83B9C20028D3050E006138E2 /* CustomCellForRecord.xib */,
 				83B6AF1E28E7254000700DBF /* CustomCellForReview.xib */,
 				83862E36297D183F0032E05B /* CustomCellForTermsOfService.xib */,
-				83516683299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.xib */,
 				83071D0128B91AC90003734C /* Assets.xcassets */,
 				837A82FF298C2652001049D4 /* CustomClass */,
 			);
@@ -413,11 +408,11 @@
 			children = (
 				839FBA3228BA101200BB64A5 /* FolderViewController.swift */,
 				83F021B028C0CC56009FFDD2 /* StudyViewController.swift */,
-				8387FD64299B31A100A77BAF /* SecondStudyViewController.swift */,
 				83A7917728F6654300BF7C2D /* SettingsForStudyViewController.swift */,
 				8388DA5B28CA3770008DE6FF /* EditStudyViewContoller.swift */,
 				83A2E1AF29019CA100F1117A /* SelectFolderForStudyViewContoller.swift */,
 				83AF317128CF037200FDA0E1 /* MemoForStudyViewController.swift */,
+				83516686299BA11100DB78BE /* SecondMemoForStudyViewController.swift */,
 			);
 			path = FolderViewController;
 			sourceTree = "<group>";
@@ -464,7 +459,6 @@
 				83B9C1FF28D3050E006138E2 /* CustomCellForRecord.swift */,
 				83B6AF1D28E7254000700DBF /* CustomCellForReview.swift */,
 				83862E35297D183F0032E05B /* CustomCellForTermsOfService.swift */,
-				83516682299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.swift */,
 			);
 			path = CustomClass;
 			sourceTree = "<group>";
@@ -525,6 +519,7 @@
 				832D60DC297FE278009F94A8 /* BlockListViewController.swift */,
 				835B38E5294FF58D00D42F50 /* ChatListViewController.swift */,
 				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,
+				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
 			);
 			path = SelfViewControllers;
 			sourceTree = "<group>";
@@ -539,7 +534,6 @@
 				8387FD612999FD8900A77BAF /* ViewControllersInSecondPagingVC */,
 				8387FD622999FFF800A77BAF /* OthersViewControllers */,
 				8387FD63299A007B00A77BAF /* SelfViewControllers */,
-				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
 				83D896312913F5CD00E570AD /* CommentSectionViewController.swift */,
 				83D896332914190500E570AD /* InputCommentViewController.swift */,
 				830D9FF32912DE2000F8761B /* PostViewController.swift */,
@@ -693,7 +687,6 @@
 				83920AA0290B946100F1F2D6 /* CustomCellForIntroduction.xib in Resources */,
 				83966BF828E8C1060098A39E /* CustomCellForStudy.xib in Resources */,
 				83D3D062298FB55800C1781C /* OthersProfile.storyboard in Resources */,
-				83516685299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.xib in Resources */,
 				839F18CB298CD6D20024DF51 /* QuickMemo.storyboard in Resources */,
 				839F18CD298CDB440024DF51 /* PhraseWord.storyboard in Resources */,
 				83D3D052298F9FF600C1781C /* Translate.storyboard in Resources */,
@@ -788,6 +781,7 @@
 				8356E95C2906407500FD9236 /* FirstMemo.swift in Sources */,
 				83C2921B29137FF000386EE9 /* PostData.swift in Sources */,
 				83B9C20128D3050E006138E2 /* CustomCellForRecord.swift in Sources */,
+				83516687299BA11100DB78BE /* SecondMemoForStudyViewController.swift in Sources */,
 				83D29A6B291BDC6000DFF928 /* SecondPagingViewController.swift in Sources */,
 				836E69B5290EB9CD00048398 /* PostsHistoryViewController.swift in Sources */,
 				83BC07EE291ABCFC001FFE61 /* BookMarkCommentsSectionViewController.swift in Sources */,
@@ -842,7 +836,6 @@
 				83C2CCA3291D1CF500A671AE /* ListeningViewController.swift in Sources */,
 				8356E95E290642D800FD9236 /* Speak.swift in Sources */,
 				835B38E6294FF58D00D42F50 /* ChatListViewController.swift in Sources */,
-				83516684299B3CBF00DB78BE /* CollectionViewCellForSecondStudy.swift in Sources */,
 				83A7917828F6654300BF7C2D /* SettingsForStudyViewController.swift in Sources */,
 				83071CFB28B91AC70003734C /* SceneDelegate.swift in Sources */,
 				8396C0B32916ABF40034EDE7 /* CommentsHistoryViewController.swift in Sources */,
@@ -850,7 +843,6 @@
 				8385E7322918D16100DBDBAC /* OthersCommentsHistoryViewController.swift in Sources */,
 				83BC07F0291B84FC001FFE61 /* OthersBookMarkViewController.swift in Sources */,
 				837BB0EB2939B02100648011 /* AllPhraseWordViewController.swift in Sources */,
-				8387FD65299B31A100A77BAF /* SecondStudyViewController.swift in Sources */,
 				83C2CC9F291D1CA400A671AE /* GrammerViewController.swift in Sources */,
 				83C2CC9B291D1BF600A671AE /* HowToLearnViewController.swift in Sources */,
 				8385EA14295476110034E0F6 /* ProfileData.swift in Sources */,
@@ -1031,7 +1023,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp3";
 				PRODUCT_NAME = "DeepL保存翻訳";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1067,7 +1059,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TranslationApp3";
 				PRODUCT_NAME = "DeepL保存翻訳";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

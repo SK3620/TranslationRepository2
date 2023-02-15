@@ -234,6 +234,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             passwordTextField.placeholder = "パスワード(6文字以上)"
             passwordTextField.textAlignment = .center
             passwordTextField.delegate = self
+            passwordTextField.isSecureTextEntry = true
         }
 
         alert.addAction(UIAlertAction(title: "削除", style: .destructive, handler: { _ in

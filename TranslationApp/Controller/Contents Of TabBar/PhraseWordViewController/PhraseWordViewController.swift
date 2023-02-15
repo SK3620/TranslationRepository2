@@ -32,7 +32,7 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.separatorColor = UIColor.systemBlue
+        self.tableView.separatorColor = .clear
         self.tableView.delegate = self
         self.tableView.dataSource = self
 
@@ -146,9 +146,11 @@ class PhraseWordViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.label2.text = ""
                 cell.displayButton2.setImage(UIImage(), for: .normal)
             }
+            cell.centerLine.backgroundColor = .clear
         case true:
             cell.displayButton2.setImage(UIImage(), for: .normal)
             cell.setData2(self.resultDataList[indexPath.row])
+            cell.centerLine.backgroundColor = .systemGray5
         }
     }
 
