@@ -447,14 +447,6 @@
             </objects>
             <point key="canvasLocation" x="5123" y="156"/>
         </scene>
-        <!--Login-->
-        <scene sceneID="20D-qW-Gu7">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="Login" storyboardName="Login" id="5EI-Yx-DGg" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4R6-Ew-pqw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5111" y="-380"/>
-        </scene>
         <!--EditProfile-->
         <scene sceneID="V4E-9k-vYw">
             <objects>
@@ -464,6 +456,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M91-jx-QTQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6336" y="156"/>
+        </scene>
+        <!--Login-->
+        <scene sceneID="i8u-iS-P2h">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="Login" storyboardName="Login" id="qyh-ea-qHv" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vdj-ni-rrb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5123" y="-380"/>
         </scene>
         <!--InputComment-->
         <scene sceneID="ZV9-gv-Xo4">

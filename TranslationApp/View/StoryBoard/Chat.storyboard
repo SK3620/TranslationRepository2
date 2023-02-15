@@ -112,6 +112,14 @@
             </objects>
             <point key="canvasLocation" x="2538" y="-1670"/>
         </scene>
+        <!--Login-->
+        <scene sceneID="ujM-TQ-mXc">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="Login" storyboardName="Login" id="uLo-1Q-Qhy" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jgf-3a-OYI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1578" y="-2212"/>
+        </scene>
         <!--チャット-->
         <scene sceneID="8VV-rw-O4X">
             <objects>
