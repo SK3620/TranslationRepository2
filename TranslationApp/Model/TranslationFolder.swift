@@ -17,6 +17,8 @@ class TranslationFolder: Object {
 
     @objc dynamic var memo = ""
 
+    @objc dynamic var indexPath_row: Int = 0
+
     override static func primaryKey() -> String? {
         return "id"
     }

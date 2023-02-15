@@ -23,7 +23,7 @@ class CustomCellForStudy: UITableViewCell {
     @IBOutlet var memoButton: UIButton!
     @IBOutlet var centerLine: UIView!
 
-    var delegate: LongPressDetectionDelegate!
+    internal var delegate: LongPressDetectionDelegate!
     var indexPath_row: Int!
     var customCellForStudy: CustomCellForStudy!
 

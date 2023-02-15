@@ -174,6 +174,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.resultDataArr.append($0.resultData)
         }
         self.tableView.reloadData()
+        self.scrollToIndexPath_row()
     }
 
     func hideNavigationControllerOfTabBarController() {
@@ -212,6 +213,9 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // if no characters are entered in the search bar, display all data
         if self.searchBar.text == "" {
             self.displayAllData()
+            let indexPath_row: Int = self.translationFolderArr.first!.indexPath_row
+            let indexPath = IndexPath(row: indexPath_row, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
         } else {
             // do a filter search
             self.doFilterSearch()
@@ -229,6 +233,7 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.inputDataArr.append($0.inputData)
             self.resultDataArr.append($0.resultData)
         }
+        self.tableView.reloadData()
     }
 
     private func doFilterSearch() {
@@ -247,6 +252,18 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.backCellButton.isEnabled = false
             self.nextCellButton.isEnabled = false
         }
+        self.tableView.reloadData()
+        let indexPath = IndexPath(row: 0, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+    }
+
+    private func scrollToIndexPath_row() {
+        var translationFolderArr = try! Realm().objects(TranslationFolder.self)
+        let predicate = NSPredicate(format: "folderName == %@", self.folderNameString)
+        translationFolderArr = translationFolderArr.filter(predicate)
+        let indexPath_row = translationFolderArr.first?.indexPath_row
+        let indexPath = IndexPath(row: indexPath_row!, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -452,6 +469,8 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         } else {
+            self.storesIndexPathRowInfoForTableViewScroll(sender: sender)
+
             let translationArr = self.translationFolderArr.first!.results
             let isDisplayed = translationArr[sender.tag].isDisplayed
             switch isDisplayed {
@@ -468,6 +487,19 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         self.tableView.reloadData()
+    }
+
+//    stores indexPath.row information to Realm
+    private func storesIndexPathRowInfoForTableViewScroll(sender: UIButton) {
+        let indexPath_row: Int = sender.tag
+
+        var translationFolderArr = try! Realm().objects(TranslationFolder.self)
+        let predicate = NSPredicate(format: "folderName == %@", self.folderNameString)
+        translationFolderArr = translationFolderArr.filter(predicate)
+        try! self.realm.write {
+            translationFolderArr.first?.indexPath_row = indexPath_row
+            self.realm.add(translationFolderArr.first!, update: .modified)
+        }
     }
 
     // display all resultData

@@ -166,6 +166,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         )
 
+        config = Realm.Configuration(
+            schemaVersion: 17, // schemaVersionを2から3に増加。
+            migrationBlock: { migration, oldSchemaVersion in
+                // 設定前のschemaVersionが3より小さい場合、マイグレーションを実行。
+                if oldSchemaVersion < 17 {
+                    migration.create(TranslationFolder.className(), value: ["indexPath_row": 0])
+                }
+            }
+        )
+
         Realm.Configuration.defaultConfiguration = config
 
         if let APIKEY = KeyManager().getValue(key: "apiKey2") as? String {
