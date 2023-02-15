@@ -519,6 +519,7 @@
 				832D60DC297FE278009F94A8 /* BlockListViewController.swift */,
 				835B38E5294FF58D00D42F50 /* ChatListViewController.swift */,
 				835B38DF294C82B000D42F50 /* ChatRoomViewController.swift */,
+				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
 			);
 			path = SelfViewControllers;
 			sourceTree = "<group>";
@@ -533,7 +534,6 @@
 				8387FD612999FD8900A77BAF /* ViewControllersInSecondPagingVC */,
 				8387FD622999FFF800A77BAF /* OthersViewControllers */,
 				8387FD63299A007B00A77BAF /* SelfViewControllers */,
-				8396C0B22916ABF40034EDE7 /* CommentsHistoryViewController.swift */,
 				83D896312913F5CD00E570AD /* CommentSectionViewController.swift */,
 				83D896332914190500E570AD /* InputCommentViewController.swift */,
 				830D9FF32912DE2000F8761B /* PostViewController.swift */,

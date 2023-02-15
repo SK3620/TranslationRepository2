@@ -52,6 +52,10 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                print("ログアウト後、実行しないように。")
+                return
+            }
             if let error = error {
                 completion(.failure(error))
                 return
@@ -78,6 +82,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 completion(.failure(error))
                 return
@@ -103,6 +110,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 completion(.failure(error))
                 return
@@ -134,6 +144,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = query.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 completion(.failure(error))
                 return
@@ -163,6 +176,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { documentSnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 completion(.failure(error))
                 return

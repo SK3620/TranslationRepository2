@@ -55,6 +55,7 @@ class PostedCommentsHistoryViewController: UIViewController, UITableViewDelegate
                 print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
                 SVProgressHUD.dismiss()
             case let .success(postArray):
+                SVProgressHUD.dismiss()
                 self.postArray = postArray
                 self.tableView.reloadData()
             }
