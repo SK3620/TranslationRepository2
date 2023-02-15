@@ -21,6 +21,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 completion(.failure(error))
                 return
@@ -53,7 +56,6 @@ struct GetDocument {
         print(listener as Any)
         listener = postsRef.addSnapshotListener { querySnapshot, error in
             guard Auth.auth().currentUser != nil else {
-                print("ログアウト後、実行しないように。")
                 return
             }
             if let error = error {
@@ -196,6 +198,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = query.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 completion(.failure(error))
                 return
@@ -224,6 +229,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = chatListRef.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
                 print("データの取得に失敗しました\(error.localizedDescription)")
@@ -254,6 +262,9 @@ struct GetDocument {
         let user = Auth.auth().currentUser!
         let chatRef = Firestore.firestore().collection(FireBaseRelatedPath.chatListsPath).whereField("partnerUid", isEqualTo: user.uid)
         chatRef.getDocuments { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 print("友達追加した時の処理にて、getDocumenメソッドが失敗しました エラー内容：\(error.localizedDescription)")
                 SVProgressHUD.showError(withStatus: "データの取得に失敗しました")
@@ -279,6 +290,9 @@ struct GetDocument {
         var listener = listener
         print(listener as Any)
         listener = messagesRef.addSnapshotListener { querySnapshot, error in
+            guard Auth.auth().currentUser != nil else {
+                return
+            }
             if let error = error {
                 print("リスナーでmessagesコレクション内のドキュメント取得失敗:エラー内容\(error.localizedDescription)")
                 SVProgressHUD.showError(withStatus: "データの取得に失敗しました")

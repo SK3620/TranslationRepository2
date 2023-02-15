@@ -18,6 +18,7 @@ class CustomCellForPhraseWord: UITableViewCell {
 
     @IBOutlet private var numberLabel: UILabel!
 
+    @IBOutlet var centerLine: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         self.label1.numberOfLines = 0
@@ -32,9 +33,7 @@ class CustomCellForPhraseWord: UITableViewCell {
     func setData1(_ inputData: String, _ indexPath_row: Int) {
         self.label1.text = inputData
 
-        self.numberLabel.backgroundColor = UIColor.systemGray6
-
-        self.numberLabel.text = "\(indexPath_row + 1)"
+        self.numberLabel.text = "No.\(indexPath_row + 1)"
     }
 
     func setData2(_ resultData: String) {

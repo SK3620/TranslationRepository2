@@ -28,7 +28,7 @@ class AllPhraseWordViewController: UIViewController, UITableViewDataSource, UITa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.separatorColor = UIColor.systemBlue
+        self.tableView.separatorColor = UIColor.clear
         self.tableView.delegate = self
         self.tableView.dataSource = self
 
@@ -139,9 +139,11 @@ class AllPhraseWordViewController: UIViewController, UITableViewDataSource, UITa
                 cell.label2.text = ""
                 cell.displayButton2.setImage(UIImage(), for: .normal)
             }
+            cell.centerLine.backgroundColor = .clear
         case true:
             cell.displayButton2.setImage(UIImage(), for: .normal)
             cell.setData2(self.resultDataList[indexPath.row])
+            cell.centerLine.backgroundColor = .systemGray5
         }
     }
 
