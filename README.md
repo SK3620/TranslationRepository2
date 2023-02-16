@@ -52,12 +52,11 @@ The fourth demo video includes the simple SNS feature like Twitter. It has posti
 
 https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4  
 # Overall issues, points to be corrected, future measures about this app for users (Japanese) 
-##### 課題1
+##### 課題1 (version1.2, 1.3にて解決済み)  
 デザイン、UI設計が好ましくない。（特にアプリの要であるStudyViewController画面のUI）  
 ##### 解決策  
-tableViewでも良いが、collectionViewの使用も検討してみる。  
-テキストとテキストの間隔に統一感がなく、空白があるため、CustomCell上のUILabelのレイアウト修正が必要。  
-全体的にテキストが凝縮されている感じがあり、indexPath.rowごとに区別がつきやすいデザインにする必要。→ UICollectionViewの使用が良いかも。  
+indexPath.rowごとに、テキストとテキストの間隔に統一感がなく、空白があるため、CustomCell上のUI部品のレイアウト修正が必要。  
+全体的にテキストが凝縮されている感じがあり、indexPath.rowごとに区別がつきやすいデザインにする必要。  
 ##### 課題2  
 このアプリ機能の一つである、ユーザー同士で繋がれるfirebaseを活用した簡易版SNS機能の利用者数が少ない。  
 ##### 解決策  
@@ -68,7 +67,7 @@ tableViewでも良いが、collectionViewの使用も検討してみる。
 ##### 解決策  
 3秒、5秒巻き戻しと早送り機能の実装。参考URL:https://nackpan.net/blog/blog/2020/02/15/play-movie-avplayerlayer-skip-seek/  
 # Overall issues, points to be corrected, future measures about source code (Japanese)   
-#### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の作業に向けて、今後の課題、修正すべき箇所を記述する。  
+#### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の修正作業に向けて、今後の課題、修正すべき箇所を記述しておく。  
 
 ##### 課題1  
 Extensionを利用せずに、カスタムcell上のUIButtonなどをaddTarget()を利用してイベント処理を記述しているため、コードの可読性が低下している。  
