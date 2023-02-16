@@ -52,23 +52,22 @@ The fourth demo video includes the simple SNS feature like Twitter. It has posti
 
 https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4  
 # Overall issues, points to be corrected, future measures about this app for users (Japanese) 
-##### 課題1
+##### 課題1 (version1.2, 1.3にて解決済み)  
 デザイン、UI設計が好ましくない。（特にアプリの要であるStudyViewController画面のUI）  
 ##### 解決策  
-tableViewでも良いが、collectionViewの使用も検討してみる。  
-テキストとテキストの間隔に統一感がなく、空白があるため、CustomCell上のUILabelのレイアウト修正が必要。  
-全体的にテキストが凝縮されている感じがあり、indexPath.rowごとに区別がつきやすいデザインにする必要。→ UICollectionViewの使用が良いかも。  
+indexPath.rowごとに、テキストとテキストの間隔に統一感がなく、空白があるため、CustomCell上のUI部品のレイアウト修正が必要。  
+全体的にテキストが凝縮されている感じがあり、indexPath.rowごとに区別がつきやすいデザインにする必要。  
 ##### 課題2  
 このアプリ機能の一つである、ユーザー同士で繋がれるfirebaseを活用した簡易版SNS機能の利用者数が少ない。  
 ##### 解決策  
 模索中...  
-候補１ その日に学習したこと（１単語や１フレーズなどなんでもいい）を最低限１回以上投稿するように強制させる。
+候補１ その日に学習したこと（１単語や１フレーズなどなんでもいい）を最低限１回以上投稿するように強制させる。（投稿することで、何かしらの制限を解除できるという仕組みを作る。）  
 ##### 課題3  
 音声再生機能が不十分である。  
 ##### 解決策  
 3秒、5秒巻き戻しと早送り機能の実装。参考URL:https://nackpan.net/blog/blog/2020/02/15/play-movie-avplayerlayer-skip-seek/  
 # Overall issues, points to be corrected, future measures about source code (Japanese)   
-#### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の作業に向けて、今後の課題、修正すべき箇所を記述する。  
+#### 就活準備のため、swiftファイルが多く修正すべき箇所が非常に多いが故に修正にかなりの時間を要するため、就活後の修正作業に向けて、今後の課題、修正すべき箇所を記述しておく。  
 
 ##### 課題1  
 Extensionを利用せずに、カスタムcell上のUIButtonなどをaddTarget()を利用してイベント処理を記述しているため、コードの可読性が低下している。  
@@ -81,7 +80,7 @@ navigationController.pushViewControllerメソッドを利用して、コード�
 *例 let hogeViewController = self.storyboard?.instantiateViewController(withIdentifier: "Test") as! HogeViewController  
 self.navigationController?.pushViewController(hogeViewController, animated: true)*  
 ##### 課題3  
-オブジェクト指向をあまり意識できていないため、コードが肥大化し、可読性が低下している。いいね機能、ブックマーク機能など、タップ時のFirebaseDatabaseへのデータ更新処理を大量のviewControllerに直接記述している。  
+オブジェクト指向をあまり意識できていないため、コードが肥大化し、可読性が低下している。いいね機能、ブックマーク機能、データ削除など、タップ時のFirebaseDatabaseやRealmへのデータ操作処理を大量のviewControllerに直接記述している。  
 ##### 解決策  
 コードの見通しをよくするために、役割や機能ごとに処理を分ける必要がある。  
 FirebaseDatabaseへのデータ更新処理を行う専用の構造体をModelクラスとして作成することで、可読性を向上させる。  
