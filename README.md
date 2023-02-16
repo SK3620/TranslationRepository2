@@ -61,7 +61,7 @@ indexPath.rowごとに、テキストとテキストの間隔に統一感がな�
 このアプリ機能の一つである、ユーザー同士で繋がれるfirebaseを活用した簡易版SNS機能の利用者数が少ない。  
 ##### 解決策  
 模索中...  
-候補１ その日に学習したこと（１単語や１フレーズなどなんでもいい）を最低限１回以上投稿するように強制させる。
+候補１ その日に学習したこと（１単語や１フレーズなどなんでもいい）を最低限１回以上投稿するように強制させる。（投稿することで、何かしらの制限を解除できるという仕組みを作る。）  
 ##### 課題3  
 音声再生機能が不十分である。  
 ##### 解決策  
@@ -80,7 +80,7 @@ navigationController.pushViewControllerメソッドを利用して、コード�
 *例 let hogeViewController = self.storyboard?.instantiateViewController(withIdentifier: "Test") as! HogeViewController  
 self.navigationController?.pushViewController(hogeViewController, animated: true)*  
 ##### 課題3  
-オブジェクト指向をあまり意識できていないため、コードが肥大化し、可読性が低下している。いいね機能、ブックマーク機能など、タップ時のFirebaseDatabaseへのデータ更新処理を大量のviewControllerに直接記述している。  
+オブジェクト指向をあまり意識できていないため、コードが肥大化し、可読性が低下している。いいね機能、ブックマーク機能、データ削除など、タップ時のFirebaseDatabaseやRealmへのデータ操作処理を大量のviewControllerに直接記述している。  
 ##### 解決策  
 コードの見通しをよくするために、役割や機能ごとに処理を分ける必要がある。  
 FirebaseDatabaseへのデータ更新処理を行う専用の構造体をModelクラスとして作成することで、可読性を向上させる。  
