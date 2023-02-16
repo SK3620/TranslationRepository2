@@ -906,7 +906,7 @@ extension StudyViewController: ContextMenuDelegate {
     }
 
     private func getIndexPathRowInfo() -> TranslationFolder {
-        var translationFolderArr = try! Realm().objects(TranslationFolder.self)
+        let translationFolderArr = try! Realm().objects(TranslationFolder.self)
         let predicate = NSPredicate(format: "folderName == %@", self.folderNameString)
         let translationFolder = translationFolderArr.filter(predicate).first
         return translationFolder!
