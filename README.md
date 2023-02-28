@@ -53,15 +53,18 @@ The fourth demo video includes the simple SNS feature like Twitter. It has posti
 https://user-images.githubusercontent.com/108386527/216686680-a577e982-f68e-4736-88d7-9c1342074929.mp4  
 # Overall issues, points to be corrected, future measures about this app for users (Japanese) 
 ##### 課題1 (version1.2, 1.3にて解決済み)  
-デザイン、UI設計が好ましくない。（特にアプリの要であるStudyViewController画面のUI）  
+StudyViewController, PhraseWordViewController画面のデザイン・UIが好ましくない。  
 ##### 解決策  
 indexPath.rowごとに、テキストとテキストの間隔に統一感がなく、空白があるため、CustomCell上のUI部品のレイアウト修正が必要。  
 全体的にテキストが凝縮されている感じがあり、indexPath.rowごとに区別がつきやすいデザインにする必要。  
 ##### 課題2  
-このアプリ機能の一つである、ユーザー同士で繋がれるfirebaseを活用した簡易版SNS機能の利用者数が少ない。  
+このアプリ機能の一つである、ユーザー同士で繋がれるfirebaseを活用した簡易版SNS機能の利用者数が非常に少ない。  
+原因としては、企画段階で「簡易版SNS機能を利用することでユーザーが得られるメリット」について十分に検討できておらず、ユーザー目線に立てていなかったこと。  
+（企画段階ではSNS機能を利用してユーザー同士で英語に関する情報交換や教え合いなどが行えるようにすることで、ユーザーの英語学習に対するモチベーション向上などをメリットとして提供できると考えていた。しかし、それらはTwitterやHelloTalkなどで既に実現されている上、機能も似ており、まったく差別化できていない）  
 ##### 解決策  
 模索中...  
 候補１ その日に学習したこと（１単語や１フレーズなどなんでもいい）を最低限１回以上投稿するように強制させる。（投稿することで、何かしらの制限を解除できるという仕組みを作る。）  
+候補2 差別化できる機能の実装。  
 ##### 課題3  
 音声再生機能が不十分である。  
 ##### 解決策  
