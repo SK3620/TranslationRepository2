@@ -72,6 +72,9 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.translateTextView1.font = UIFont.boldSystemFont(ofSize: 20)
+        self.translateTextView2.font = UIFont.boldSystemFont(ofSize: 20)
+
         self.translateTextView1.delegate = self
 
 //        translateTextView2（下のtextView）タップして、viewをキーボードの高さ分あげるためのNotificationCenter
@@ -280,7 +283,6 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     }
 
     // 入力があるたびに呼ばれる
-    /*
     func textViewDidChange(_ textView: UITextView) {
         guard textView == self.translateTextView1 else { return }
 
@@ -290,16 +292,17 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             self.label1.text = "ドラマや映画のフレーズや単語、自英作文などを入力して作成したフォルダーに保存しよう！"
         }
 
-        if self.languageLabel1.text == "Japanese" {
-            self.translateJapanese()
-        } else {
-            self.translateEnglish()
-        }
+//         if self.languageLabel1.text == "Japanese" {
+//             self.translateJapanese()
+//         } else {
+//             self.translateEnglish()
+//         }
     }
-     */
 
     // 英語を訳す
     private func translateEnglish() {
+        self.translateButton.isEnabled = false
+        SVProgressHUD.show(withStatus: "翻訳中")
         let authKey1 = KeyManager().getValue(key: "apiKey") as! String
 
         //            前後のスペースと改行を削除
@@ -339,17 +342,24 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     // 結果のテキストを取得&画面に反映
                     let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
                     self.translateTextView2.text = text
+                    SVProgressHUD.showSuccess(withStatus: "翻訳完了")
+                    SVProgressHUD.dismiss(withDelay: 1.5)
                 } catch {
                     debugPrint("デコード失敗")
+                    SVProgressHUD.showError(withStatus: "翻訳できませんでした")
                 }
             } else {
                 debugPrint("APIリクエストエラー")
+                SVProgressHUD.showError(withStatus: "翻訳できませんでした")
             }
+            self.translateButton.isEnabled = true
         }
     }
 
     // 日本語を訳す
     private func translateJapanese() {
+        self.translateButton.isEnabled = false
+        SVProgressHUD.show(withStatus: "翻訳中...")
         // APIKey.plistに保存したDeepLの認証キーを取得
         let authKey1 = KeyManager().getValue(key: "apiKey") as! String
 
@@ -389,12 +399,17 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     // 結果のテキストを取得&画面に反映
                     let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
                     self.translateTextView2.text = text
+                    SVProgressHUD.showSuccess(withStatus: "翻訳完了")
+                    SVProgressHUD.dismiss(withDelay: 1.5)
                 } catch {
                     debugPrint("デコード失敗")
+                    SVProgressHUD.showError(withStatus: "翻訳できませんでした")
                 }
             } else {
                 debugPrint("APIリクエストエラー")
+                SVProgressHUD.showError(withStatus: "翻訳できませんでした")
             }
+            self.translateButton.isEnabled = true
         }
     }
 
