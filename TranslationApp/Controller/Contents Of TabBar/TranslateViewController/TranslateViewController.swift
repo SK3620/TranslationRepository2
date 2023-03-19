@@ -280,6 +280,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     }
 
     // 入力があるたびに呼ばれる
+    /*
     func textViewDidChange(_ textView: UITextView) {
         guard textView == self.translateTextView1 else { return }
 
@@ -295,6 +296,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             self.translateEnglish()
         }
     }
+     */
 
     // 英語を訳す
     private func translateEnglish() {
