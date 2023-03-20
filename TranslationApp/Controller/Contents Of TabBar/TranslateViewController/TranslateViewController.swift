@@ -72,8 +72,8 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.translateTextView1.font = UIFont.boldSystemFont(ofSize: 20)
-        self.translateTextView2.font = UIFont.boldSystemFont(ofSize: 20)
+        self.translateTextView1.font = UIFont.boldSystemFont(ofSize: 15)
+        self.translateTextView2.font = UIFont.boldSystemFont(ofSize: 15)
 
         self.translateTextView1.delegate = self
 
