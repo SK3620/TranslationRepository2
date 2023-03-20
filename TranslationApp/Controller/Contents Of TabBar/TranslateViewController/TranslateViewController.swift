@@ -342,6 +342,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     // 結果のテキストを取得&画面に反映
                     let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
                     self.translateTextView2.text = text
+                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                     SVProgressHUD.showSuccess(withStatus: "翻訳完了")
                     SVProgressHUD.dismiss(withDelay: 1.5)
                 } catch {
@@ -399,6 +400,7 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
                     // 結果のテキストを取得&画面に反映
                     let text = result.translations[0].text.trimmingCharacters(in: .whitespaces)
                     self.translateTextView2.text = text
+                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                     SVProgressHUD.showSuccess(withStatus: "翻訳完了")
                     SVProgressHUD.dismiss(withDelay: 1.5)
                 } catch {

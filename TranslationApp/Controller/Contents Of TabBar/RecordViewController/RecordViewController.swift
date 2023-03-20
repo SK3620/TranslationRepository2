@@ -258,6 +258,7 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             try! self.realm.write {
                 recordArrFilter[sender.tag].isChecked = true
                 realm.add(recordArrFilter, update: .modified)
+                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                 SVProgressHUD.showSuccess(withStatus: "復習が完了しました")
                 SVProgressHUD.dismiss(withDelay: 1.5)
             }
@@ -268,7 +269,6 @@ class RecordViewController: UIViewController, FSCalendarDelegate, FSCalendarData
             }
         }
         self.tableView.reloadData()
-        print("りりりり")
     }
 
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -265,9 +265,8 @@ class ReviewViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             SVProgressHUD.show()
             SVProgressHUD.showSuccess(withStatus: "復習が完了しました")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { () in
-                SVProgressHUD.dismiss()
-            }
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+            SVProgressHUD.dismiss(withDelay: 1.5)
         case true:
             try! self.realm.write {
                 resultsArr[sender.tag].isChecked = false
