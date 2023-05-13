@@ -453,7 +453,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qYH-tN-VmY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1380" y="1454.9261083743843"/>
+            <point key="canvasLocation" x="1379.3893129770993" y="1454.2253521126761"/>
         </scene>
         <!--Second Memo For Study View Controller-->
         <scene sceneID="yIa-JT-tln">

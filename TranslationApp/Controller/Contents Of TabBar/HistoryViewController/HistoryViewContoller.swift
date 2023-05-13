@@ -15,9 +15,9 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     @IBOutlet private var view1: UIView!
 
-    @IBOutlet private var label1: UILabel!
-
     @IBOutlet private var searchBar: UISearchBar!
+
+    private var centerLabel: UILabel!
 
     private let realm = try! Realm()
     private var historyArr: Results<Histroy> = try! Realm().objects(Histroy.self).sorted(byKeyPath: "date", ascending: true)
@@ -43,6 +43,16 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         let nib = UINib(nibName: "CustomCellForHistory", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "CustomCell")
+
+        let centerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        centerLabel.textColor = UIColor.systemOrange
+        centerLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+        centerLabel.textAlignment = .center
+//        tableViewのbackgroundViewとしてラベルを表示
+        self.tableView.backgroundView = centerLabel
+        centerLabel.center = self.tableView.center
+        centerLabel.numberOfLines = 0
+        self.centerLabel = centerLabel
     }
 
     // set done bar on keyboard
@@ -68,11 +78,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         self.historyArr = self.realm.objects(Histroy.self).sorted(byKeyPath: "date", ascending: true)
         if self.historyArr.count == 0 {
-            self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
+            self.centerLabel.text = "翻訳して保存すると、翻訳履歴が表示されます"
 //            self.editButton.isEnabled = false
         } else {
 //            self.editButton.isEnabled = true
-            self.label1.text = ""
+            self.centerLabel.text = ""
         }
 
 //        文字列検索をしている場合
@@ -149,11 +159,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         // if there is no history data
         if self.historyArr.count == 0 {
             tableView.isEditing = false
-            self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
+            self.centerLabel.text = "翻訳して保存すると、翻訳履歴が表示されます"
         } else {
             // if there is history data
             tableView.isEditing = false
-            self.label1.text = ""
+            self.centerLabel.text = ""
         }
         return self.historyArr.count
     }
@@ -224,7 +234,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 print("エラー")
             }
             self.historyArr = self.realm.objects(Histroy.self)
-            self.label1.text = "翻訳して保存すると、翻訳履歴が表示されます"
+            self.centerLabel.text = "翻訳して保存すると、翻訳履歴が表示されます"
             self.tableView.reloadData()
         })
         alert.addAction(cancel)
