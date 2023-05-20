@@ -530,6 +530,12 @@ PODS:
   - Realm/Headers (10.20.0)
   - RealmSwift (10.20.0):
     - Realm (= 10.20.0)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxSwift (6.5.0)
   - SDWebImage (5.13.4):
     - SDWebImage/Core (= 5.13.4)
   - SDWebImage/Core (5.13.4)
@@ -552,6 +558,8 @@ DEPENDENCIES:
   - MessageKit
   - Parchment (~> 3.0)
   - RealmSwift (= 10.20.0)
+  - RxCocoa
+  - RxSwift
   - SideMenu (~> 6.0)
   - SVProgressHUD
   - SwiftFormat/CLI
@@ -589,6 +597,9 @@ SPEC REPOS:
     - PromisesObjC
     - Realm
     - RealmSwift
+    - RxCocoa
+    - RxRelay
+    - RxSwift
     - SDWebImage
     - SideMenu
     - SVProgressHUD
@@ -626,11 +637,14 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Realm: ae32bdc1da7d19c7617e0400201a77acd4a211b9
   RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
+  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftFormat: 61cda3819dc3a7d69795ce0430e1e1d53c4a4fb2
 
-PODFILE CHECKSUM: bda497d770c13838747877012fa95f7cb3c67367
+PODFILE CHECKSUM: a6f3d0da349343bf4a8b73e8124b5ba694cdb244
 
 COCOAPODS: 1.11.3

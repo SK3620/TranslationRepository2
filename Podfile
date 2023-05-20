@@ -23,6 +23,8 @@ target 'TranslationApp' do
   pod 'Parchment', '~> 3.0'
   pod 'MessageKit'
   pod 'FirebaseDatabase'
+  pod 'RxSwift'
+  pod 'RxCocoa'
   post_install do |installer|
    installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
