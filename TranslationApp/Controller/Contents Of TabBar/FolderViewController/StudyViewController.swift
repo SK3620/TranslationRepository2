@@ -655,32 +655,58 @@ class StudyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     //    reading speed
-    @IBAction func speakSpeedButton(_: Any) {
-        switch self.speakSpeed {
-        case 0.5:
-            self.speakSpeedButton.setTitle("1.25x", for: .normal)
-            self.speakSpeed = 0.525
-        case 0.525:
-            self.speakSpeedButton.setTitle("1.5x", for: .normal)
-            self.speakSpeed = 0.55
-        case 0.55:
-            self.speakSpeedButton.setTitle("1.75x", for: .normal)
-            self.speakSpeed = 0.575
-        case 0.575:
-            self.speakSpeedButton.setTitle("2.0x", for: .normal)
-            self.speakSpeed = 0.6
-        case 0.6:
+    @IBAction func speakSpeedButton(_ sender: UIButton) {
+        self.configureMenuButtonForSpeakSpeedButton(speakSpeedButton: sender)
+    }
+
+    private func configureMenuButtonForSpeakSpeedButton(speakSpeedButton _: UIButton) {
+        print("speakSpeedButton実行1")
+        var actions: [UIMenuElement] = []
+        if #available(iOS 16.0, *) {
+            self.speakSpeedButton.preferredMenuElementOrder = .fixed
+        } else {
+//            Fallback on earlier versions
+            print("iOS16が16.0ではないため、preferredMenuElmentOrder = .fixed が有効になりません。")
+        }
+
+        print("speakSpeedButton実行2")
+        actions.append(UIAction(title: "0.5x", handler: { _ in
             self.speakSpeedButton.setTitle("0.5x", for: .normal)
             self.speakSpeed = 0.3
-        case 0.3:
+        }))
+
+        actions.append(UIAction(title: "0.75x", handler: { _ in
             self.speakSpeedButton.setTitle("0.75x", for: .normal)
             self.speakSpeed = 0.4
-        case 0.4:
+        }))
+
+        actions.append(UIAction(title: "1.0x", handler: { _ in
             self.speakSpeedButton.setTitle("1.0x", for: .normal)
             self.speakSpeed = 0.5
-        default:
-            print("nil")
-        }
+        }))
+
+        actions.append(UIAction(title: "1.25x", handler: { _ in
+            self.speakSpeedButton.setTitle("1.25x", for: .normal)
+            self.speakSpeed = 0.525
+        }))
+
+        actions.append(UIAction(title: "1.5x", handler: { _ in
+            self.speakSpeedButton.setTitle("1.5x", for: .normal)
+            self.speakSpeed = 0.55
+        }))
+
+        actions.append(UIAction(title: "1.75x", handler: { _ in
+            self.speakSpeedButton.setTitle("1.75x", for: .normal)
+            self.speakSpeed = 0.575
+        }))
+
+        actions.append(UIAction(title: "2.0x", handler: { _ in
+            self.speakSpeedButton.setTitle("2.0x", for: .normal)
+            self.speakSpeed = 0.6
+        }))
+
+        self.speakSpeedButton.menu = UIMenu(title: "", options: .displayInline, children: actions)
+        self.speakSpeedButton.showsMenuAsPrimaryAction = true
     }
 
     // male voice or female voice
