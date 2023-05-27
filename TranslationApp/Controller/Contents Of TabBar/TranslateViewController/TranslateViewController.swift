@@ -470,7 +470,11 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             }
 
             SVProgressHUD.showSuccess(withStatus: "'\(folderNameString)' へ保存しました")
-            SVProgressHUD.dismiss(withDelay: 1.5)
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+            self.saveButton.isEnabled = false
+            SVProgressHUD.dismiss(withDelay: 1.5) {
+                self.saveButton.isEnabled = true
+            }
         }
     }
 
