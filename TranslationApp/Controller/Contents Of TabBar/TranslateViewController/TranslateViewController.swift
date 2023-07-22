@@ -583,7 +583,6 @@ class TranslateViewController: UIViewController, UITextViewDelegate {
             // Fallback on earlier versions
             print("iOSが16.0ではないため、preferredMenuElementOrder = .fixed が有効になりません。")
         }
-
         actions.append(UIAction(title: "英語音声", handler: { _ in
             if volumeButton == self.volumeButton1 {
                 self.implementSpeaking(translateTextView: self.translateTextView1, language: "en-US")

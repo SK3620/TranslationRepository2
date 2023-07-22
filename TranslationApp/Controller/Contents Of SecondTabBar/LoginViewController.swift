@@ -122,7 +122,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     internal func createAccount() {
         if let address = self.mailAddressTextField.text, let password = self.passwordTextField.text, let displayName = displayNameTextField.text {
-            SVProgressHUD.show(withStatus: "アカウント作成中...")
+            SVProgressHUD.show(withStatus: "アカウント：作成中...")
             // Create user with address and password Successfully create user, automatically log in
             let trimmedAddress = address.trimmingCharacters(in: .whitespaces)
             let trimmedPassword = password.trimmingCharacters(in: .whitespaces)
@@ -179,6 +179,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             // Do nothing when either the address or password name is not entered
             if address.isEmpty || password.isEmpty {
                 SVProgressHUD.showError(withStatus: "必要項目を入力してください")
+                SVProgressHUD.dismiss(withDelay: 1.5)
                 return
             }
             SVProgressHUD.show()
